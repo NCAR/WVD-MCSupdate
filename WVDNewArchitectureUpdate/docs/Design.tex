@@ -94,7 +94,7 @@ A template was made to standardize all labview control for WV DIAL. The back pan
 
 
 \begin{figure}[!h]\centering
-\includegraphics[height=3in]{Figures/MainVITemplateBackPanel.eps}
+\includegraphics[height=3in]{Figures/MainVITemplateBackPanel.pdf}
 \caption{A picture of the idle loop stage of the VI template for the individual element control. In the idle loop, 3 while loops run. The top loop is waiting for user input or executing commands that are needed to maintain control of the hardware. The middle loop is waiting for user commands or idle commands and is executing them. Critically, this function is called in re-entrant execution mode as it is copied in all functions. The lowest loop is visualizing data as it is being recorded. The top loop should be filled with system specific commands relating to system specific controls.}\label{Fig:VITemplateBP}
 \end{figure}
 
@@ -106,7 +106,7 @@ The multiple function concept requires one functional distinction. One concept i
 A template for the individual control elements is given in Figure \ref{Fig:VITemplate}. It is based on a queue structure in the back panel that allows both user commands and automatic commands to fill the queue that is then emptied by a single hardware function. There are 3 main boxes, the first is in the top left (labeled as ``Place Commands Here") for all of the user controls and everything the user needs to see. This will be different for each control. Within that box is a smaller box that would be the same for all controls that help locate the current status of the queue. The second box directly below would appear if the control were running as a stand alone but be hidden if the control were running as child. This really only needs to be in one place and is constant for all functions. The final box to the right is always hidden but is the storage place for all hidden variables that need to be defined but that the user does not need to see. 
 
 \begin{figure}[!h]\centering
-\includegraphics[height=3in]{Figures/MainVITemplate.eps}
+\includegraphics[height=3in]{Figures/MainVITemplate.pdf}
 \caption{The front panel of the main VI template. The software at runtime will hide the unnecessary controls and shrink the front panel window the the appropriate size indicated by the outer boxes. If the VI is run as a child (called from a higher VI) the Global Buttons disappear. }\label{Fig:VITemplate}
 \end{figure}
 
@@ -117,7 +117,7 @@ This standardization is not critical for running all VIs as stand alone, however
 For the case that these individual controls are to be run automatically in parallel, an organizational problem arises. Assuming the code running the individual controls as children knows what functions to open and in what order, it is still possible that a user accidentally closes one function or a mess of VIs appears. To solve this, all front panels of the VIs running are projected into a single container. The container itself has very little code running but is just there to contain all of the sub-VIs. This container is shown in Figure \ref{Fig:VIContainer}.
 
 \begin{figure}[!h]\centering
-\includegraphics[height=3in]{Figures/MainVIContainer.eps}
+\includegraphics[height=3in]{Figures/MainVIContainer.pdf}
 \caption{The front panel of the main VI container. If multiple VIs are called and run simultaneously, their front panels are projected into the main container to allow for a simple control for the user but also allows maximum flexibility in VI execution.}\label{Fig:VIContainer}
 \end{figure}
 
@@ -129,7 +129,7 @@ To my knowledge, the only problem with this approach is that sub-panels can not 
 Instead of using default variables in Labview, the default configuration for each sub program will be stored in a configuration file. This ensures that operational hardware configurations are decoupled from any software upgrades or changes. Additionally, it makes it always possible to return the software to a known pre-set operational state and makes it more difficult for users to unknowingly modify the hardware's initial state. The current plan is to allow the user with the proper credentials (see Section \ref{Sec:Password} for more details) to write new configure files from Labview directly to save a current state. That state file can be version controlled via Git to track its changes over time. An example of a simplified configure file is given in Figure \ref{Fig:ConfigureFile}. 
 
 \begin{figure}[!h]\centering
-\includegraphics[height=3in]{Figures/ConfigureFileExample.eps}
+\includegraphics[height=3in]{Figures/ConfigureFileExample.pdf}
 \caption{An example of the structure of a configure file. Variables are identified by a single name followed by two semi-colons. The next line has the required values delimitated by a single semi-colon with the end of line denoted by a double semi-colon.}\label{Fig:ConfigureFile}
 \end{figure}
 
