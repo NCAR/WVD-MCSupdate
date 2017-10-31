@@ -1,0 +1,11 @@
+
+\section{Known Issues and How This Proposal Affects Them}
+
+\begin{enumerate}
+\item{Data for on and offline wavelengths written in two different files. Matt mentioned this as a possible problem that I believe is linked to the serial nature of laser locking and data collection. By making the two asynchronous and including a laser locking flag instead of waiting for ti to complete, one can read data from the MCS and write data in 2 sets and not 4. Just have to make sure that a file can not be initialized before writing is complete.}
+\item{Single errors crash the whole system. This overall design is more fault tolerant. Additionally, error logging will be included in the initial version such that we can record what is crashing the system and come up with systematic ways to deal with it.}
+\item{Slow laser locking: This outline is agnostic to the type of locking but can certainly accommodate a new PID or simple integral locking scheme. }
+\item{Blue screen of death! The hope is that making each communication a smaller piece allows for easier debugging of the culprit. (NOTE: moving to the new micro form factor computer may have solved this issue, coninuing testing needed to confirm}
+\end{enumerate}
+
+\newpage

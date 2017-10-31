@@ -1,0 +1,93 @@
+
+\section{Labview Details}
+\subsection{Color Coding}
+\subsubsection{Front Panel}
+\subsubsection{Back Panel}
+
+I always forget the Labview standard back panel color coding scheme so I thought I would just write it down. The things I think are needed are given in Table \ref{Tab:BPColorCoding}. 
+
+\begin{table}[h]
+\centering
+\caption{Labview Standard back panel color coding scheme.}
+\begin{tabular}{clc}
+\hline\hline
+Color	& Type								& Picture															\\
+\hline
+Blue		& 									& 																\\\hline
+		& Integrers							& \includegraphics[height=0.2in]{Figures/ColorCoding_Int.eps}					\\\hline
+		& VI or Queue Reference					& \includegraphics[height=0.2in]{Figures/ColorCoding_VIReference.eps}			\\\hline
+Green	&									&																\\\hline
+		& Boolean								& \includegraphics[height=0.2in]{Figures/ColorCoding_Bool.eps}				\\\hline
+		& File Path							& \includegraphics[height=0.2in]{Figures/ColorCoding_FilePath.eps}				\\\hline
+		& Error Cluster							& \includegraphics[height=0.2in]{Figures/ColorCoding_Error.eps}				\\\hline
+		& Robert's functions	(might like to change this) 	& \includegraphics[height=0.4in]{Figures/ColorCoding_Custom.eps}				\\\hline
+Orange	& 									& 																\\\hline
+		& Double								& \includegraphics[height=0.2in]{Figures/ColorCoding_Float.eps}				\\\hline
+Pink		&									&																\\\hline
+		& Cluster								& \includegraphics[height=0.2in]{Figures/ColorCoding_Cluster.eps}				\\\hline
+		& String								& \includegraphics[height=0.2in]{Figures/ColorCoding_String.eps}				\\\hline
+Purple	& Hardware Resource					& \includegraphics[height=0.2in]{Figures/ColorCoding_HardwareReference.eps}	\\\hline
+\end{tabular}\label{Tab:BPColorCoding}\end{table}
+
+
+
+
+%\subsection{Variable Definitions}
+%\begin{itemize}
+%\item{Global Variables}
+%\item{Type Definitions}
+%\begin{itemize}
+%\item{Type Def 1}
+%\item{Type Def 2}
+%\item{Type Def 3}
+%\end{itemize}
+%\end{itemize}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Priority Settings}
+Because the main structure of the software is as a queue, it is possible to remove elements from the queue before they are executed, put things on top of the queue in front of other commands, or put things at the bottom. Additionally, for performing commands that occur in steps, the queue is an ideal solution for organizing commands. Each of these possibilities is governed by a priority setting. For normal operation, the string commands are added to the bottom of the queue. If that queue is full or has several items in it, a standard command will not take precedent over other commands. However, if for example an error occurs, the error logger is given precedent over other commands because the current state of the system is sought. Furthermore, it is reasonable to assume that if an error occurs, some action will need to be performed in order to recover the system back to its operational state.  Finally, the user abort command has first priority and has the ability to flush the queue of other commands. This command flushes the queue of current commands and inserts the set of commands to shut the system down.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Password Settings} \label{Sec:Password}
+
+% Things that will require a password: Writing configure files
+
+There are three password levels. They allow various things to happen such as bypassing the hardware warmup cycle or changing laser settings or turning off key components. Each level requires a password then the level permissions are hardwired into the code. A list of password protected actions is given here where the level is specified as either 1,2, or 3. 3 is the highest and 1 is the lowest. The hardware will begin at 0, which is recognized as unset. To prevent the user with a lower access level to attempt to use a sensitive command, the main programs set the visibility of certain controls such that they disappear with lower access.
+
+The levels are complete access (or developer access), access to all but the most sensitive features (called administrative access), and general access. The passwords for each level are:
+
+\begin{enumerate}
+\item{developer: \%1543Lidar}
+\item{administrative: !532Lid@r}
+\item{general: SoundAndFury}
+\end{enumerate}
+
+Once a password level is recognized, all the privileges of the lower levels comes with the highest. That said, there are two passwords to downgrade access from a higher to a lower level. Note that if one is signed in with developer access and tries to downgrade to general access with the above given password, the password function will maintain the current access level. The two downgrading passwords are for completely unsetting the permissions and going back to general access. The passwords are respectively listed as:
+
+\begin{enumerate}
+\item{Clear}
+\item{Revert}
+\end{enumerate}
+
+All passwords are case sensitive.
+
+There is one way to beat the password protection provided by the visibility and password functions which is possible but not likely. As the main function executes most of the user desired functions by creating and executing string commands, the main way to defeat the password options is to open and directly use the string execution commands. The commands are defaulted to do nothing if not entered exactly correctly but will do nothing if the user types the correct string commands. If for example, the string command is incomplete or the case sensitive commands do not match exactly what the execution function is looking for, an return string will note that the command is unrecognized. 
+
+A list of actions that require passwords and the level required that is proposed is given below.
+
+\begin{longtable}{ccl}
+Command				& Level  	& Reason										\\
+\hline
+Writing configure files	& 2		& Default states change but hopefully not by accident	\\
+\hline
+\label{Tab:PasswordDetails}\end{longtable}
+
+\newpage
+
