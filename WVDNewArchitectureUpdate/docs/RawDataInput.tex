@@ -17,7 +17,7 @@ Steps of unpacking a single day of data:
 		\item{Interpolate slower data to highest cadence data (likely housekeeping and weather station data to photon count time grid)}
 		\item{Collect all data into a single daily file with a single time dimension}
 		\item{Fill in missing data in time (if any time gaps exist) with nan values}
-		\item{Combine laser locking, receiver temperature, and all other data flags into a single flag}
+		\item{Combine laser locking, receiver temperature, and all other data flags and create a single quality control flag: (Use Data, Data Warning, or Don't Use)}
 	\end{enumerate}
 \end{enumerate}
 
