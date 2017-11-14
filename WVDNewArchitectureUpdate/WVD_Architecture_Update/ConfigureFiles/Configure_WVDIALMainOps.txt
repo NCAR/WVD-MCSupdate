@@ -1,0 +1,17 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the Water Vapor DIAL Main tabview program. 
+
+Tab Names;;
+Main Controls; Laser Locking; MCS ; Weather Station; Unused; Unused; Unused; Unused; Unused;;
+
+Global Variables;;
+630;943;;
+
+Relative File Paths;;
+Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemLaserLocking2.vi;
+Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemMCS2.vi;
+Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemWeatherStation2.vi;;
+
+Function Types;;
+0;4;1;5;;
