@@ -9,7 +9,7 @@ Global Variables;;
 400;700;;
 
 Relative File Paths;;
-Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemTemplate.vi;;
+.\IndividualControls.llb\ControlSystemTemplate.vi;;
 
 Function Types;;
 0;7;;
