@@ -9,9 +9,9 @@ Global Variables;;
 630;943;;
 
 Relative File Paths;;
-Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemMCS2.vi;
-Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemLaserLocking2.vi;
-Freundlein:Users:Bobby:Desktop:NCARLabviewTesting:IndividualControls.llb:ControlSystemWeatherStation2.vi;;
+.\IndividualControls.llb\ControlSystemMCS2.vi;
+.\IndividualControls.llb\ControlSystemLaserLocking2.vi;
+.\IndividualControls.llb\ControlSystemWeatherStation2.vi;;
 
 Function Types;;
 0;1;4;5;;
