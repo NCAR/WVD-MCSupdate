@@ -1,0 +1,28 @@
+ANDI
+File Protocol
+
+ANDI, (ANalytical Data Interchange protocol), is a file protocol for saving chromatography and mass spectrometry data. It was implemented by the Analytical Instrument Association and is based on, 
+a subset of, the NetCDF file protocol. The general idea behind ANDI is to have a common file protocol to allow easy exchange of chromatography and mass spectrometry data. For more information you 
+can try these links.
+
+http://www.astm.org/
+http://pubs.acs.org/hotartcl/tcaw/98/may/stan.html
+http://www.astm.org/cgi-bin/SoftCart.exe/DATABASE.CART/PAGES/E1947.htm?L+mystore+rpwd2606
+http://www.astm.org/cgi-bin/SoftCart.exe/DATABASE.CART/PAGES/E1948.htm?L+mystore+rpwd2606
+
+NetCDF
+File Protocol
+
+NetCDF, (Network Common Data Form), is a general purpose file protocol for saving scientific data of any kind. NetCDF was developed by the Unidata Program Center in Boulder, Colorado. The general 
+idea behind NetCDF is to have a common file protocol to allow easy exchange of any type of scientific data. For more information this link should tell you all you need to know.
+
+http://www.unidata.ucar.edu/
+
+Using LabVIEW with
+ANDI and NetCDF
+
+Using LabVIEW, we needed to be able to read "centroided mass spectrometry data" saved in the ANDI file format. The VIs in this example are the initial ones developed to read this data. They 
+should be enough of an example for someone wanting to make their own ANDI or NetCDF VIs. Keep in mind though that they are not fully finished or tested. They also require the "netcdf.dll" in 
+order to work.
+
+
