@@ -13,7 +13,7 @@ C:\Users\eol-lidar-admin\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture
 
 FilePaths;;
 MCSData;
-.\\Data\;
+.\Data\;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
