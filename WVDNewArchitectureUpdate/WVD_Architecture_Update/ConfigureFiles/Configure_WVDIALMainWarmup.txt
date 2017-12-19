@@ -9,9 +9,9 @@ Global Variables;;
 630;943;;
 
 Relative File Paths;;
-.\IndividualControls.llb\ControlSystemMCS.vi;
-.\IndividualControls.llb\ControlSystemLaserLocking.vi;
-.\IndividualControls.llb\ControlSystemWeatherStation.vi;;
+.\MCS_NCAR.llb\ControlSystemMCS.vi;
+.\LaserLocking.llb\ControlSystemLaserLocking.vi;
+.\WeatherStation.llb\ControlSystemWeatherStation.vi;;
 
 Function Types;;
 0;1;4;5;;

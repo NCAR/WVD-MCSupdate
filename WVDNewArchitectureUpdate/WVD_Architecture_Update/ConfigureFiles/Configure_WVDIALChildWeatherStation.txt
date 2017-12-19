@@ -10,9 +10,9 @@ Child Variables;;
 
 FilePaths;;
 WeatherStationData;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\Data\;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\Log.llb\Log_SetUserComment.vi;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\Idle.llb\Idle_Password.vi;;
+.\WVD_Architecture_Update\Data\;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
 
 Plot Bounds;;
 1;2;3;4;5;6;7;8;;

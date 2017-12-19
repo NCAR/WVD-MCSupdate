@@ -9,7 +9,7 @@ Global Variables;;
 630;943;;
 
 Relative File Paths;;
-.\IndividualControls.llb\ControlSystemTemplate.vi;;
+.\Template.llb\ControlSystemTemplate.vi;;
 
 Function Types;;
 0;7;;
