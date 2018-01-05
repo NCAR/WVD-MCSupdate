@@ -3,14 +3,15 @@ Written For: NCAR
 This file is used to define the initial state of the Water Vapor DIAL Main labview program loading just the template. 
 
 Tab Names;;
-Main Controls; Template; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main Controls; MCS; MCS Controls; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 Global Variables;;
 630;943;;
 
 Relative File Paths;;
-.\Template.llb\ControlSystemTemplate.vi;;
+.\MCS_NCAR.llb\ControlSystemMCS.vi;
+.\MCSControls_NCAR.llb\ControlSystemMCSControls.vi;;
 
 Function Types;;
-0;7;;
+0;1;2;;
 
