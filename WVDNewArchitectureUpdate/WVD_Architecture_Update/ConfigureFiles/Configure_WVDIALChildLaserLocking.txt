@@ -1,0 +1,48 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the template in the Water Vapor DIAL Main labview program.
+ 
+Laser Types;;
+0;1;2;3;4;;
+
+Wavelength;;
+828.19;828.29;780.24;770;770.10;;
+
+Tolerance;;
+0.00001;0.00005;0.000025;0.00001;0.00001;;
+
+Temperature;;
+23;24;25;26;27;;
+
+Current;;
+160;165;170;160;160;;
+
+P Gain;;
+0;1;2;3;4;;
+
+I Gain;;
+3;4;5;4;5;;
+
+D Gain;;
+6;7;8;9;10;;
+
+Lock Step Size;;
+0.0005;0.0006;0.0007;0.0008;0.0009;;
+
+Time Limit;;
+10;8;10;10;10;;
+
+Locking On;;
+1;1;1;1;1;;
+
+Locking Type;;
+1;1;1;1;1;;
+
+Scan Strategy;;
+0;3;2;0;3;1;0;3;2;0;3;4;;
+
+File Paths;;
+\Data\;
+LaserLockingData;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
