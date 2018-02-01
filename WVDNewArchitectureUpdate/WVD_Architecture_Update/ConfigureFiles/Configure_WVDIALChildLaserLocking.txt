@@ -41,8 +41,18 @@ Locking Type;;
 Scan Strategy;;
 0;3;2;0;3;1;0;3;2;0;3;4;;
 
+Etalon Types;;
+0;1;2;;
+
+Etalon Temperature;;
+24.5;25.6;26.7;;
+
+Etalon TEC On;;
+1;1;1;;
+
 File Paths;;
-\Data\;
+.\Data\;
 LaserLockingData;
+EtalonData;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
