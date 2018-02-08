@@ -1,0 +1,43 @@
+Written By: Brad Schoenrock
+Written For: NCAR
+This file is used to define the initial state of advanced visualization routines in the WVD labview program. 
+
+Path To Hitran;;
+C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\ConfigureFiles\815nm_841nm_HITRAN_2008.csv;;
+
+Number of Bins;;
+560;;
+
+Number of Accumulates;;
+14285;;
+
+Time Resolution Per Bin ns;;
+250;;
+
+Data Reads number of loops;;
+1;;
+
+Total Dial Integration Time Minutes;;
+3;;
+
+Total Aerosol Integration Time Minutes;;
+0.08;;
+
+Smoothing Range;;
+75;;
+
+Receiver Scale Factor;;
+0.75;;
+
+background length;;
+25;;
+
+dead time;;
+3.7e-8;;
+
+FilePaths;;
+MCSData;
+.\Data\;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
