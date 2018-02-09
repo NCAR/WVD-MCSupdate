@@ -6,7 +6,7 @@ Tab Names;;
 Main Controls; Template; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 Global Variables;;
-630;943;;
+540;985;;
 
 Relative File Paths;;
 .\Template.llb\ControlSystemTemplate.vi;;

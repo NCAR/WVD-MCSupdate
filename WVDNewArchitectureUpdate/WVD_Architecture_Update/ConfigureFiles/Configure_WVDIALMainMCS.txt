@@ -6,7 +6,7 @@ Tab Names;;
 Main Controls; MCS; MCS Controls; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 Global Variables;;
-630;943;;
+540;985;;
 
 Relative File Paths;;
 .\MCS_NCAR.llb\ControlSystemMCS.vi;
