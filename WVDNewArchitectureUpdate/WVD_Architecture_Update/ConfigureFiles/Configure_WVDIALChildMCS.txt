@@ -8,6 +8,12 @@ UDP Comms;;
 Channel Multiplier Controls;;
 1;1;;
 
+Power Channel Cluster;;
+1; 0; 6; 2; 3;;
+
+Data Channel Cluster;;
+0; 8; 2; 3; 4; 5;;
+
 Path to MCSControls;;
 C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\MCSControls_NCAR.llb\ControlSystemMCSControls.vi;;
 
