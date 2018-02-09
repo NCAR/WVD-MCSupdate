@@ -2,12 +2,11 @@ Written By: Brad Schoenrock
 Written For: NCAR
 This file is used to define the initial state of the NCAR MCSControls in the WVD labview program. 
 
-
 Demux Channel Enable;;
 false; false; false; false;;
 
 Sync Enable;;
-false; false; false;;
+false; false; true;;
 
 Channel Enable;;
 false; false; false; true; false; false; false; false; true; true; false; true;;
@@ -61,7 +60,7 @@ Time Reset;;
 false;;
 
 Relative Time Step;;
-0;;
+20000000;;
 
 Sync Input Polarity;;
 false; false; false;;
