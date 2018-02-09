@@ -6,7 +6,7 @@ Comm Port;;
 COM4;;
 
 Child Variables;;
-5;50;;
+5;50;1440;4;;
 
 FilePaths;;
 WeatherStationData;
