@@ -12,52 +12,52 @@ Misc;;
 15; 100; 1; 0;;
 
 Laser Types;;
-0;1;2;3;4;;
-
-Wavelength;;
-828.19;828.29;780.24;770;770.10;;
-
-Tolerance;;
-0.00001;0.00005;0.000025;0.00001;0.00001;;
-
-Temperature;;
-23;24;25;26;27;;
-
-Current;;
-160;165;170;160;160;;
-
-P Gain;;
-0;1;2;3;4;;
-
-I Gain;;
-3;4;5;4;5;;
-
-D Gain;;
-6;7;8;9;10;;
-
-Lock Step Size;;
-0.0005;0.0006;0.0007;0.0008;0.0009;;
-
-Time Limit;;
-10;8;10;10;10;;
-
-Locking On;;
-1;1;1;1;1;;
-
-Locking Type;;
-1;1;1;1;1;;
-
-Scan Strategy;;
-0;3;2;0;3;1;0;3;2;0;3;4;;
-
-Etalon Types;;
 0;1;2;;
 
+Wavelength;;
+828.19504;828.29465;780.24612;;
+
+Tolerance;;
+0.00005;0.00005;0.000075;;
+
+Temperature;;
+23.096;29.833;16.141;;
+
+Current;;
+175;175;160;;
+
+P Gain;;
+0;1;2;;
+
+I Gain;;
+3;4;5;;
+
+D Gain;;
+6;7;8;;
+
+Lock Step Size;;
+0.0005;0.0005;0.0005;;
+
+Time Limit;;
+10;8;10;;
+
+Locking On;;
+0;0;0;;
+
+Locking Type;;
+1;1;1;;
+
+Scan Strategy;;
+0;1;2;;
+
+Etalon Types;;
+0;1;;
+
 Etalon Temperature;;
-24.5;25.6;26.7;;
+21.75;30.0;;
 
 Etalon TEC On;;
-1;1;1;;
+1;1;;
 
 File Paths;;
 .\Data\LaserLocking\;
@@ -67,13 +67,13 @@ EtalonData;
 .\ContainerResources.llb\Idle_Password.vi;;
 
 Thor8000 Locations;;
-COM3; COM16;;
+GPIB0::10::INSTR;;
 
 Thor8000 Slots;;
-0;1;2;3;10;11;4;5;6;7;8;9;12;13;13;13;;
+0;1;2;3;10;11;4;5;;
 
 Wavemeter Comm Port;;
-COM12;;
+COM3;;
 
 
 
