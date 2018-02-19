@@ -87,7 +87,7 @@ PIN Pulse Durration Ave;;
 0; 0; 0; 0; 0; 0;;
 
 Power Mon In DEMUX Select;;
-DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX1; DEMUX0; 
+DEMUX0; DEMUX1; DEMUX0; DEMUX0; DEMUX0; DEMUX0;; 
 
 Power Mon Volt Ref Threshold;;
 20960;;
