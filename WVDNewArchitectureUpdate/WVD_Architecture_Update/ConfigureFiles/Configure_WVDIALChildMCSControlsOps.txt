@@ -102,8 +102,7 @@ SYNC In Volt Threshold;;
 26208;;
 
 FilePaths;;
-MCSData;
-.\Data\;
+.\Data\MCSControls\;
+MCSState;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
-
