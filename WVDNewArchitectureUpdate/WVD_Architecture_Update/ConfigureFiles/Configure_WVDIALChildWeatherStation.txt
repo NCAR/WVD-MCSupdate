@@ -9,8 +9,8 @@ Child Variables;;
 5;50;1440;4;;
 
 FilePaths;;
-WeatherStationData;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\Data\;
+.\Data\WeatherStation\;
+WeatherStation;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 

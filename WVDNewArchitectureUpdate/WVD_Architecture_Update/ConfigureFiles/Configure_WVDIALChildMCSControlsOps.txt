@@ -9,7 +9,7 @@ Sync Enable;;
 false; false; true;;
 
 Channel Enable;;
-true; true; true; true; true; true; true; true; true; true; true; true;;
+false; false; false; true; false; false; false; false; true; true; false; true;;
 
 User Reset;;
 false;;
@@ -30,7 +30,7 @@ Sync Select;;
 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;;
 
 Sync Test Mode Config;;
-31;;
+0;;
 
 Channel DEMUX Selector;;
 false;;
@@ -42,10 +42,10 @@ Pulse Period;;
 0;;
 
 Sync Test Mode Select;;
-Insert Pulse;;
+Normal Operations;;
 
 Data Input Test Mode;;
-Ramp;;
+Normal Operations;;
 
 Throttle Mode;;
 100 ms;;
@@ -78,16 +78,16 @@ Power Mon Acc Mode;;
 Accum 2^N pulses;;
 
 Power Mon Test Mode;;
-Pulse;;
+Normal Operations;;
 
 Power Mon Chan Enable;;
-true; true; true; true; true; true; true; true; true; true; true; true;;
+false; false; false; false; false; true; false; false; false; false; true; true;;
 
 PIN Pulse Durration Ave;;
 0; 0; 0; 0; 0; 0;;
 
 Power Mon In DEMUX Select;;
-DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX0;;
+DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX1; DEMUX0;;
 
 Power Mon Volt Ref Threshold;;
 20960;;
@@ -102,8 +102,8 @@ SYNC In Volt Threshold;;
 26208;;
 
 FilePaths;;
-.\Data\MCSControls\;
-MCSState;
+MCSData;
+.\Data\;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
