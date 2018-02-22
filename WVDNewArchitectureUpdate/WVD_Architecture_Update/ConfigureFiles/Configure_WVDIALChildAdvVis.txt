@@ -36,8 +36,8 @@ dead time;;
 3.7e-8;;
 
 FilePaths;;
-MCSData;
-.\Data\;
+.\Data\AdvVis\;
+AdvVisLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
