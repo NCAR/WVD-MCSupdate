@@ -21,6 +21,7 @@ FilePaths;;
 .\Data\MCS\;
 MCSData;
 MCSPower;
+MCSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 

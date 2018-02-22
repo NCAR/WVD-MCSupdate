@@ -11,6 +11,7 @@ Child Variables;;
 FilePaths;;
 .\Data\WeatherStation\;
 WeatherStation;
+WSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 

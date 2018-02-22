@@ -63,6 +63,7 @@ File Paths;;
 .\Data\LaserLocking\;
 LaserLockingData;
 EtalonData;
+LaserLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
