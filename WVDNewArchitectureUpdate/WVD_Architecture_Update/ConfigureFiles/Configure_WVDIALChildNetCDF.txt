@@ -5,8 +5,10 @@ This file is used to define the initial state of the NetCDF writer in the Water 
 VariousPaths;;
 C:\Users\eol-lidar-admin\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update;
 C:\Users\eol-lidar-admin\AppData\Local\Continuum\anaconda3\python.exe;
-C:\Users\eol-lidar-admin\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\MyScript.py;
-thing1; thing2;;
+C:\Users\eol-lidar-admin\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\MyScript.py;;
+
+HoursToBackProcess;;
+3;;
 
 FilePaths;;
 .\Data\NetCDF\;
