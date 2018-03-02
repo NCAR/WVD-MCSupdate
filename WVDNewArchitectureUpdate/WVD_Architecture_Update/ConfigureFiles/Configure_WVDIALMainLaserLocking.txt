@@ -12,5 +12,5 @@ Relative File Paths;;
 .\WavelengthLocking.llb\ControlSystemWavelengthLocking.vi;;
 
 Function Types;;
-0;8;;
+0;9;;
 

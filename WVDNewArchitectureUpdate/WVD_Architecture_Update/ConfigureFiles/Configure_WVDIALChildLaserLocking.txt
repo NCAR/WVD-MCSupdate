@@ -9,7 +9,7 @@ Inner Tab Names;;
 Laser Temperatures; Laser Wavelengths; Etalon Temperatures;;
 
 Misc;; 
-15; 100; 1; 0;;
+15; 1000; 1; 0;;
 
 Laser Types;;
 0;1;2;;
@@ -21,10 +21,10 @@ Tolerance;;
 0.00005;0.00005;0.000075;;
 
 Temperature;;
-23.096;29.833;16.141;;
+23.044;29.209;16.155;;
 
 Current;;
-175;175;160;;
+175;160;160;;
 
 P Gain;;
 0;1;2;;
@@ -36,13 +36,13 @@ D Gain;;
 6;7;8;;
 
 Lock Step Size;;
-0.01;0.0005;0.015;;
+0.001;0.001;0.001;;
 
 Time Limit;;
-30;8;30;;
+30;30;30;;
 
 Locking On;;
-1;0;1;;
+1;1;1;;
 
 Locking Type;;
 1;1;1;;
