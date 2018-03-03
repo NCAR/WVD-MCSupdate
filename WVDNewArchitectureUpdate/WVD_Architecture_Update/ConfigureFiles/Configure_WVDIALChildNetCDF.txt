@@ -11,8 +11,8 @@ HoursToBackProcess;;
 3;;
 
 FilePaths;;
-.\Data\NetCDF\;
-NetCDF;
+.\Data\NetCDFChild\;
+NetCDFChild;
 NetCDFLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
