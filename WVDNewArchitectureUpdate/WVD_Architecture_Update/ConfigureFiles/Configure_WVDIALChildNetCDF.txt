@@ -10,6 +10,10 @@ C:\Users\eol-lidar-admin\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture
 HoursToBackProcess;;
 3;;
 
+UpdatePeriodMin;;
+60;;
+
+
 FilePaths;;
 .\Data\NetCDFChild\;
 NetCDFChild;
