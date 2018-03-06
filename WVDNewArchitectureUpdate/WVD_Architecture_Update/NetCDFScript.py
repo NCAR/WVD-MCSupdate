@@ -101,25 +101,28 @@ def main():
                         Wavelength = []
                         WaveDiff = []
                         IsLocked = []
+                        TempDesired = []
+                        TempMeas = []
                         Current = []
-                        CurrDiff = []
                         Timestamp = []
-
+                        Datestamp = []
+                        
                         #read in file line by line
                         with open(file) as f:
                             for line in f:
                                 # split up the line into numbers in list
                                 linelist = line.split()
                                 # making sure the line has the appropriate number of entries for the expected format
-                                if len(linelist) == 8: 
+                                if len(linelist) == 9: 
                                     LaserNum.append(linelist[0])
                                     Wavelength.append(linelist[1])
                                     WaveDiff.append(linelist[2])
                                     IsLocked.append(linelist[3])
-                                    Current.append(linelist[4])
-                                    CurrDiff.append(linelist[5])
-                                    Timestamp.append(linelist[6])
-                                    # linelist[7] is date, but that is not needed.
+                                    TempDesired.append(linelist[4])
+                                    TempMeas.append(linelist[5])
+                                    Current.append(linelist[6])
+                                    Timestamp.append(linelist[7])
+                                    Datestamp.append(linelist[8])
                                     
                             ensure_dir(sys.argv[1]+"\\Data\\NetCDFOutput\\"+file[-19:-11]+"\\")
                             LLncfile = Dataset(sys.argv[1]+"\\Data\\NetCDFOutput\\"+file[-19:-11]+"\\LLsample"+file[-10:-4]+".nc",'w')
@@ -129,22 +132,36 @@ def main():
 
                             # add in variables that are expected to be the same size as timestamp which is the master dimension 
                             TimestampData = LLncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+                            DatestampData = LLncfile.createVariable('Datestamp',dtype('float').char,('Timestamp'))
                             LaserNumData = LLncfile.createVariable('LaserNum',dtype('float').char,('Timestamp'))
                             WavelengthData = LLncfile.createVariable('Wavelength',dtype('float').char,('Timestamp'))
                             WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float').char,('Timestamp'))
                             IsLockedData = LLncfile.createVariable('IsLocked',dtype('float').char,('Timestamp'))
+                            TempDesiredData = LLncfile.createVariable('TempDesired',dtype('float').char,('Timestamp'))
+                            TempMeasData = LLncfile.createVariable('TempMeas',dtype('float').char,('Timestamp'))
                             CurrentData = LLncfile.createVariable('Current',dtype('float').char,('Timestamp'))
-                            CurrDiffData = LLncfile.createVariable('CurrDiff',dtype('float').char,('Timestamp'))
 
                             # filling the variables that are now in the NetCDF file
                             TimestampData[:] = Timestamp
+                            DatestampData[:] = Datestamp
                             LaserNumData[:] = LaserNum
                             WavelengthData[:] = Wavelength
                             WaveDiffData[:] = WaveDiff
                             IsLockedData[:] = IsLocked
+                            TempDesiredData[:] = TempDesired
+                            TempMeasData[:] = TempMeas
                             CurrentData[:] = Current
-                            CurrDiffData[:] = CurrDiff
-                            
+
+                            LLncfile.description = "Laser Locking sample file"
+
+                            TimestampData.units = "Fractional Hours"
+                            DatestampData.units = "yyyymmdd"
+                            WavelengthData.units = "nm"
+                            WaveDiffData.units = "nm"
+                            TempDesiredData.units = "C"
+                            TempMeasData.units = "C"
+                            CurrentData.units = "amp"
+
                             LLncfile.close()
 
                     # read in file, process into NetCDF, and write out file
@@ -154,6 +171,7 @@ def main():
                         TempDiff = []
                         IsLocked = []
                         Timestamp = []
+                        Datestamp = []
 
                         with open(file) as f:
                             for line in f:
@@ -164,24 +182,34 @@ def main():
                                     TempDiff.append(linelist[2])
                                     IsLocked.append(linelist[3])
                                     Timestamp.append(linelist[4])
-                                    # linelist[5] is date, but that is not needed. 
+                                    Datestamp.append(linelist[5]) 
                             ensure_dir(sys.argv[1]+"\\Data\\NetCDFOutput\\"+file[-19:-11]+"\\")
                             Etalonncfile = Dataset(sys.argv[1]+"\\Data\\NetCDFOutput\\"+file[-19:-11]+"\\Etalonsample"+file[-10:-4]+".nc",'w')
 
                             Etalonncfile.createDimension('Timestamp',len(Timestamp))
 
                             TimestampData = Etalonncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+                            DatestampData = Etalonncfile.createVariable('Datestamp',dtype('float').char,('Timestamp'))
                             EtalonNumData = Etalonncfile.createVariable('EtalonNum',dtype('float').char,('Timestamp'))
                             TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
                             TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float').char,('Timestamp'))
                             IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('float').char,('Timestamp'))
 
                             TimestampData[:] = Timestamp
+                            DatestampData[:] = Datestamp
                             EtalonNumData[:] = EtalonNum
                             TemperatureData[:] = Temperature
                             TempDiffData[:] = TempDiff
                             IsLockedData[:] = IsLocked
-                            
+
+                            Etalonncfile.description = "Etalon sample file"
+
+                            TimestampData.units = "Fractional Hours"
+                            DatestampData.units = "yyyymmdd"
+                            EtalonNumData.units = "Assigned Etalon Number"
+                            TemperatureData.units = "C"
+                            TempDiffData.units = "C"
+
                             Etalonncfile.close()
                                     
                 # ----------------------- MCS ------------------
@@ -304,6 +332,17 @@ def main():
                             FrameCtrData[:] = FrameCtr
                             DataArrayData[:] = DataArray
 
+                            MCSncfile.description = "MCS sample file"
+
+                            TimestampData.units = "Fractional Hours"
+                            ProfPerHistData.units = "n Profiles"
+                            ChannelData.units = "Channel number"
+                            CntsPerBinData.units = "Counts per bin"
+                            NBinsData.units = "n Bins"
+                            RTimeData.units = "ms operational"
+                            FrameCtrData.units = "n Frames processed"
+                            DataArrayData.units = "Photon Counts Returned"
+                            
                             MCSncfile.close()
 
                     # read in and process power files
@@ -311,11 +350,10 @@ def main():
                         Timestamp = []
                         PowerCh = []
 
-                        # i < 12 because there are exactly 12 power channels that are reporting,
-                        # there will never be a power frame which is sent with less than or more than 12 entries.
-                        # same thing for j < 12 below
+                        nChannels = 12
+                        
                         i=0
-                        while i < 12:
+                        while i < nChannels:
                             i=i+1
                             PowerCh.append([])
                         
@@ -333,7 +371,7 @@ def main():
                                 Timestamp.append(TS[0])
 
                                 j=0
-                                while j < 12:
+                                while j < nChannels:
                                     a = ord(couple_bytes[4*j+26:4*j+27])
                                     b = ord(couple_bytes[4*j+27:4*j+28])*2**8
                                     c = ord(couple_bytes[4*j+28:4*j+29])*2**16
@@ -345,35 +383,19 @@ def main():
                             Powncfile = Dataset(sys.argv[1]+"\\Data\\NetCDFOutput\\"+Powerfile[-19:-11]+"\\Powsample"+Powerfile[-10:-4]+".nc",'w')
 
                             Powncfile.createDimension('Timestamp',len(Timestamp))
-
+                            Powncfile.createDimension('nChannels',nChannels)
+                            
                             TimestampData = Powncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
-                            PowCh1Data = Powncfile.createVariable('PowerChan1',dtype('float').char,('Timestamp'))
-                            PowCh2Data = Powncfile.createVariable('PowerChan2',dtype('float').char,('Timestamp'))
-                            PowCh3Data = Powncfile.createVariable('PowerChan3',dtype('float').char,('Timestamp'))
-                            PowCh4Data = Powncfile.createVariable('PowerChan4',dtype('float').char,('Timestamp'))
-                            PowCh5Data = Powncfile.createVariable('PowerChan5',dtype('float').char,('Timestamp'))
-                            PowCh6Data = Powncfile.createVariable('PowerChan6',dtype('float').char,('Timestamp'))
-                            PowCh7Data = Powncfile.createVariable('PowerChan7',dtype('float').char,('Timestamp'))
-                            PowCh8Data = Powncfile.createVariable('PowerChan8',dtype('float').char,('Timestamp'))
-                            PowCh9Data = Powncfile.createVariable('PowerChan9',dtype('float').char,('Timestamp'))
-                            PowCh10Data = Powncfile.createVariable('PowerChan10',dtype('float').char,('Timestamp'))
-                            PowCh11Data = Powncfile.createVariable('PowerChan11',dtype('float').char,('Timestamp'))
-                            PowCh12Data = Powncfile.createVariable('PowerChan12',dtype('float').char,('Timestamp'))
-                           
+                            PowChData = Powncfile.createVariable('PowerChan',dtype('float').char,('Timestamp','nChannels'))
+
                             TimestampData[:] = Timestamp
-                            PowCh1Data[:] = PowerCh[0]
-                            PowCh2Data[:] = PowerCh[1]
-                            PowCh3Data[:] = PowerCh[2]
-                            PowCh4Data[:] = PowerCh[3]
-                            PowCh5Data[:] = PowerCh[4]
-                            PowCh6Data[:] = PowerCh[5]
-                            PowCh7Data[:] = PowerCh[6]
-                            PowCh8Data[:] = PowerCh[7]
-                            PowCh9Data[:] = PowerCh[8]
-                            PowCh10Data[:] = PowerCh[9]
-                            PowCh11Data[:] = PowerCh[10]
-                            PowCh12Data[:] = PowerCh[11]
-                                                        
+                            PowChData[:] = PowerCh
+
+                            Powncfile.description = "Power sample file"
+
+                            TimestampData.units = "Fractional Hours"
+                            PowChData.units = "PIN count"
+                                                                             
                             Powncfile.close()
 
                                     
@@ -417,6 +439,14 @@ def main():
                             RelHumData[:] = RelHum
                             PressureData[:] = Pressure
                             AbsHumData[:] = AbsHum
+
+                            WSncfile.description = "WSsample file"
+                            
+                            TimestampData.units = "Fractional Hours"
+                            TemperatureData.units = "C"
+                            RelHumData.units = "g/m^3"
+                            PressureData.units = "mb"
+                            AbsHumData.units = "g/m^3"
                             
                             WSncfile.close()
 
