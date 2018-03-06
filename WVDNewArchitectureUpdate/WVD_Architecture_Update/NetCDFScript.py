@@ -39,7 +39,7 @@ def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
         if float(day) == float(ThenDate):
             for file in TempFileList:
                 if file[:len(dataname)] == dataname and file[-4:] == datatype:
-                    if float(file[-10:-4]) > ThenTime:
+                    if float(file[-10:-4])/10000 > ThenTime:
                         FileList.append(DataPath + day + "\\" + file)
         elif float(day) > float(ThenDate):
             for file in TempFileList:
