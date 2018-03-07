@@ -3,7 +3,7 @@ Written For: NCAR
 This file is used to define the initial state of the Water Vapor DIAL Main labview program in operational mode. 
 
 Tab Names;;
-Main Controls; MCS; MCS Controls; Laser Locking; Weather Station; Adv. Visualization; DataNetCDF; Unused; Unused;;
+Main Controls; Raw Data; MCS Controls; Laser Locking; Weather Station; Adv. Visualization; DataNetCDF; Unused; Unused;;
 
 Global Variables;;
 540;985;;
