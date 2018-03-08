@@ -10,6 +10,7 @@ import time
 import datetime
 import struct
 import binascii
+import math
 
 from datetime import timedelta 
 from netCDF4 import Dataset
@@ -54,16 +55,25 @@ def main():
     print ("Hello World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S:%f"))
                
     if len(sys.argv) > 1:# check that enough arguments were passed
+
+        # LastHour variables used to find NetCDF Logging files for error and other logging. 
+        LastHour = (datetime.datetime.now()-timedelta(hours=float(1))).strftime("%H")
+        LastMin = (datetime.datetime.now()-timedelta(hours=float(1))).strftime("%M")
+        LastSec = (datetime.datetime.now()-timedelta(hours=float(1))).strftime("%S")
+        LastMicroSec = (datetime.datetime.now()-timedelta(hours=float(1))).strftime("%f")
+        LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
+        
         if os.path.isdir(sys.argv[1]+"\\Data\\"): # the first should be the directory where the Data folder is located.
+
+            #check if NetCDF directory exists & create if needed
+            NetCDFOtuputPath = sys.argv[1]+"\\Data\\NetCDFOutput\\"
+            ensure_dir(NetCDFOtuputPath)
+            NowDate = datetime.datetime.now().strftime("%Y%m%d")
+
             if is_number(sys.argv[2]): # the second should be a number of hours worth of files that we want to process
                 print ("go back",sys.argv[2],"hours")
 
-                #check if NetCDF directory exists & create if needed
-                NetCDFOtuputPath = sys.argv[1]+"\\Data\\NetCDFOutput\\"
-                ensure_dir(NetCDFOtuputPath)
-
                 # create datestamps for now and for sys.argv[2] hours ago so we know which files to load
-                NowDate = datetime.datetime.now().strftime("%Y%m%d")
                 ThenDate = (datetime.datetime.now() - timedelta(hours=float(sys.argv[2]))).strftime("%Y%m%d")
                 print ("Now Date = " , NowDate)
                 print ("Then Date = " , ThenDate)
@@ -81,10 +91,11 @@ def main():
                 ThenSec = (datetime.datetime.now()-timedelta(hours=float(sys.argv[2]))).strftime("%S")
                 ThenMicroSec = (datetime.datetime.now()-timedelta(hours=float(sys.argv[2]))).strftime("%f")
                 ThenTime = float(ThenHour) + float(ThenMin)/60 + float(ThenSec)/3600 + float(ThenMicroSec)/3600000000
-                  
-                print ("Now Time = " , NowTime )
+                               
+                print ("Now Time = " , NowTime)
                 print ("Then Time = " , ThenTime)
-
+                print ("Last Time = " , LastTime)
+                
                 # ----------------------- Laser Locking ------------------
                 LLDataPath = sys.argv[1]+"\\Data\\"+"LaserLocking\\"
                 if os.path.isdir(LLDataPath):
@@ -291,7 +302,12 @@ def main():
                                         chan = chan - 64
                                      
                                     if chan != channel:
-                                        print ("WARNING: channel number read from data entry does not match header")
+                                        ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
+                                        ensure_dir(ErrorFile)
+                                        fh = open(ErrorFile, "a")
+                                        write("ERROR: channel number read from data entry does not match header")
+                                        fh.close
+                                        
                                     DataVal.append( ord(data[2:3])*2**16 + ord(data[1:2])*2**8 + ord(data[0:1] ))
                                     v=v+1
                                 DataArray.append(DataVal)
@@ -301,7 +317,11 @@ def main():
                                 ReadIndex = ReadIndex+4
 
                                 if ord(data[0:1]) != 255:
-                                    print ("WARNING: Length of data frame does not match number of bins")
+                                    ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
+                                    ensure_dir(ErrorFile)
+                                    fh = open(ErrorFile, "a")
+                                    write("ERROR: Length of data frame does not match number of bins")
+                                    fh.close
                                 # throw away extra bits on end of data frame so next is alligned
                                 data = file.read(8)
                                 ReadIndex = ReadIndex+8
@@ -335,9 +355,9 @@ def main():
                             MCSncfile.description = "MCS sample file"
 
                             TimestampData.units = "Fractional Hours"
-                            ProfPerHistData.units = "n Profiles"
+                            ProfPerHistData.units = "n shots per histogram"
                             ChannelData.units = "Channel number"
-                            CntsPerBinData.units = "Counts per bin"
+                            CntsPerBinData.units = "MCS Clock Counts per bin"
                             NBinsData.units = "n Bins"
                             RTimeData.units = "ms operational"
                             FrameCtrData.units = "n Frames processed"
@@ -444,18 +464,27 @@ def main():
                             
                             TimestampData.units = "Fractional Hours"
                             TemperatureData.units = "C"
-                            RelHumData.units = "g/m^3"
+                            RelHumData.units = "%"
                             PressureData.units = "mb"
-                            AbsHumData.units = "g/m^3"
+                            AbsHumData.units = "g/kg"
                             
                             WSncfile.close()
 
             # if is_number(sys.argv[2]):
             else:
-                print (sys.argv[1],"is a dir, but",sys.argv[2],"is not a number")
-            
+                ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
+                ensure_dir(ErrorFile)
+                fh = open(ErrorFile, "a")
+                write("ERROR:", sys.argv[1],"is a dir, but",sys.argv[2],"is not a number")
+                fh.close
+           
         # if os.path.isdir(sys.argv[1]+"\\Data\\"):        
         else:
+            ErrorFile = sys.argv[1]+"\\NetCDFPythonErrors"+LastTime+".txt"
+            ensure_dir(ErrorFile)
+            fh = open(ErrorFile, "a")
+            write("ERROR: ",sys.argv[1],"is not a dir, looking for directory containing Data")
+            fh.close
             print (sys.argv[1],"is not a dir, looking for directory containing Data")
 
     print ("Goodnight World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S:%f"))
