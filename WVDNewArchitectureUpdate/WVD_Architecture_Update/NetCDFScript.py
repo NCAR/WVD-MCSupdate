@@ -12,7 +12,7 @@ import struct
 import binascii
 import math
 import shutil
-
+import numpy as np
 from datetime import timedelta 
 from netCDF4 import Dataset
 from numpy import arange, dtype # array module from http://numpy.scipy.org
@@ -105,7 +105,60 @@ def main():
                 print ("Now Time = " , NowTime)
                 print ("Then Time = " , ThenTime)
                 print ("Last Time = " , LastTime)
-                
+                                             
+                # ----------------------- Weather Station ------------------
+                WSDataPath = sys.argv[1]+"\\Data\\"+"WeatherStation\\"
+                if os.path.isdir(WSDataPath):
+                    print (WSDataPath)
+
+                    WSFileList = getFiles(WSDataPath , "WeatherStation", ".txt", ThenDate, ThenTime)
+                                
+                    for file in WSFileList: # read in file, process into NetCDF, and write out file
+                        Temperature = []
+                        RelHum = []
+                        Pressure = []
+                        AbsHum = []
+                        Timestamp = []
+                                                
+                        with open(file) as f:
+                            for line in f:
+                                linelist = line.split()
+                                if len(linelist) == 5:
+                                    Temperature.append(linelist[0])
+                                    RelHum.append(linelist[1])
+                                    Pressure.append(linelist[2])
+                                    AbsHum.append(linelist[3])
+                                    Timestamp.append(linelist[4])
+                                    
+                            ensure_dir(NetCDFOutputPath+file[-19:-11]+"\\")
+                            ensure_dir(LocalNetCDFOutputPath+file[-19:-11]+"\\")
+                            WSncfile = Dataset(LocalNetCDFOutputPath+file[-19:-11]+"\\WSsample"+file[-10:-4]+".nc",'w')
+
+                            WSncfile.createDimension('Timestamp',len(Timestamp))
+
+                            TimestampData = WSncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+                            TemperatureData = WSncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
+                            RelHumData = WSncfile.createVariable('RelHum',dtype('float').char,('Timestamp'))
+                            PressureData = WSncfile.createVariable('Pressure',dtype('float').char,('Timestamp'))
+                            AbsHumData = WSncfile.createVariable('AbsHum',dtype('float').char,('Timestamp'))
+
+                            TimestampData[:] = Timestamp
+                            TemperatureData[:] = Temperature
+                            RelHumData[:] = RelHum
+                            PressureData[:] = Pressure
+                            AbsHumData[:] = AbsHum
+
+                            WSncfile.description = "WSsample file"
+                            
+                            TimestampData.units = "Fractional Hours"
+                            TemperatureData.units = "C"
+                            RelHumData.units = "%"
+                            PressureData.units = "mb"
+                            AbsHumData.units = "g/kg"
+                            
+                            WSncfile.close()
+
+
                 # ----------------------- Laser Locking ------------------
                 LLDataPath = sys.argv[1]+"\\Data\\"+"LaserLocking\\"
                 if os.path.isdir(LLDataPath):
@@ -245,6 +298,62 @@ def main():
                     MCSFileList = getFiles(MCSDataPath , "MCSData", ".bin", ThenDate, ThenTime)
                     MCSPowerList = getFiles(MCSDataPath , "MCSPower", ".bin", ThenDate, ThenTime)
 
+                    # read in and process power files
+                    for Powerfile in MCSPowerList:
+                        Timestamp = []
+                        PowerCh = []
+
+                        nChannels = 12
+                        
+                        i=0
+                        while i < nChannels:
+                            i=i+1
+                            PowerCh.append([])
+                        
+                        with open(Powerfile, "rb") as file:
+                            file.seek(0)  # Go to beginning
+
+                            # k is the number of entries in the power file. Each power entry is 86 bytes long. 
+                            k=0
+                            while k < (os.path.getsize(Powerfile))/86:
+                                k = k + 1
+
+                                couple_bytes = file.read(86)
+
+                                TS = struct.unpack('>d',couple_bytes[:8])
+                                Timestamp.append(TS[0])
+
+                                j=0
+                                while j < nChannels:
+                                    a = ord(couple_bytes[4*j+26:4*j+27])
+                                    b = ord(couple_bytes[4*j+27:4*j+28])*2**8
+                                    c = ord(couple_bytes[4*j+28:4*j+29])*2**16
+                                    d = ord(couple_bytes[4*j+29:4*j+30])*2**24 
+                                    PowerCh[j].append( a + b + c + d )
+                                    j=j+1
+                            
+                            ensure_dir(NetCDFOutputPath+Powerfile[-19:-11]+"\\")
+                            ensure_dir(LocalNetCDFOutputPath+Powerfile[-19:-11]+"\\")
+                            Powncfile = Dataset(LocalNetCDFOutputPath+Powerfile[-19:-11]+"\\Powsample"+Powerfile[-10:-4]+".nc",'w')
+
+                            Powncfile.createDimension('Timestamp',len(Timestamp))
+                            Powncfile.createDimension('nChannels',nChannels)
+                            
+                            TimestampData = Powncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
+                            PowChData = Powncfile.createVariable('PowerChan',dtype('float32').char,('Timestamp','nChannels'))
+
+                            TimestampData[:] = Timestamp
+                            PowChData[:] = PowerCh
+
+                            Powncfile.description = "Power sample file"
+
+                            TimestampData.units = "Fractional Hours"
+                            PowChData.units = "PIN count"
+                                                                             
+                            Powncfile.close()
+
+
+
                     # read in and process MCS Data files
                     for MCSfile in MCSFileList:
 
@@ -257,6 +366,7 @@ def main():
                         RTime = []
                         FrameCtr = []
                         DataArray = []
+                        np.array(DataArray, dtype='f')
                         
                         with open(MCSfile , 'rb') as file:
                             thing = file.read()
@@ -302,6 +412,7 @@ def main():
 
                                 v=0
                                 DataVal = []
+                                np.array(DataVal,dtype='f')
                                 while v < nBins:
                                     data = file.read(4)
                                     ReadIndex = ReadIndex+4
@@ -321,7 +432,7 @@ def main():
                                         write("ERROR: channel number read from data entry does not match header - ",NowTime)
                                         fh.close
                                         
-                                    DataVal.append( ord(data[2:3])*2**16 + ord(data[1:2])*2**8 + ord(data[0:1] ))
+                                    DataVal.append(ord(data[2:3])*2**16 + ord(data[1:2])*2**8 + ord(data[0:1]))
                                     v=v+1
                                 DataArray.append(DataVal)
             
@@ -346,15 +457,15 @@ def main():
                             MCSncfile.createDimension('Timestamp',len(Timestamp))
                             MCSncfile.createDimension('nBins',max(NBins))
                             
-                            TimestampData = MCSncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
-                            ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float').char,('Timestamp'))
-                            ChannelData = MCSncfile.createVariable('Channel',dtype('float').char,('Timestamp'))
-                            SyncData = MCSncfile.createVariable('Sync',dtype('float').char,('Timestamp'))
-                            CntsPerBinData = MCSncfile.createVariable('CntsPerBin',dtype('float').char,('Timestamp'))
-                            NBinsData = MCSncfile.createVariable('NBins',dtype('float').char,('Timestamp'))
-                            RTimeData = MCSncfile.createVariable('RTime',dtype('float').char,('Timestamp'))
-                            FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float').char,('Timestamp'))
-                            DataArrayData = MCSncfile.createVariable('DataArray',dtype('float').char,('nBins','Timestamp'))
+                            TimestampData = MCSncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
+                            ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float32').char,('Timestamp'))
+                            ChannelData = MCSncfile.createVariable('Channel',dtype('float32').char,('Timestamp'))
+                            SyncData = MCSncfile.createVariable('Sync',dtype('float32').char,('Timestamp'))
+                            CntsPerBinData = MCSncfile.createVariable('CntsPerBin',dtype('float32').char,('Timestamp'))
+                            NBinsData = MCSncfile.createVariable('NBins',dtype('float32').char,('Timestamp'))
+                            RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('Timestamp'))
+                            FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float32').char,('Timestamp'))
+                            DataArrayData = MCSncfile.createVariable('DataArray',dtype('float32').char,('nBins','Timestamp'))
 
                             TimestampData[:] = Timestamp
                             ProfPerHistData[:] = ProfPerHist
@@ -379,121 +490,18 @@ def main():
                             
                             MCSncfile.close()
 
-                    # read in and process power files
-                    for Powerfile in MCSPowerList:
-                        Timestamp = []
-                        PowerCh = []
-
-                        nChannels = 12
-                        
-                        i=0
-                        while i < nChannels:
-                            i=i+1
-                            PowerCh.append([])
-                        
-                        with open(Powerfile, "rb") as file:
-                            file.seek(0)  # Go to beginning
-
-                            # k is the number of entries in the power file. Each power entry is 86 bytes long. 
-                            k=0
-                            while k < (os.path.getsize(Powerfile))/86:
-                                k = k + 1
-
-                                couple_bytes = file.read(86)
-
-                                TS = struct.unpack('>d',couple_bytes[:8])
-                                Timestamp.append(TS[0])
-
-                                j=0
-                                while j < nChannels:
-                                    a = ord(couple_bytes[4*j+26:4*j+27])
-                                    b = ord(couple_bytes[4*j+27:4*j+28])*2**8
-                                    c = ord(couple_bytes[4*j+28:4*j+29])*2**16
-                                    d = ord(couple_bytes[4*j+29:4*j+30])*2**24 
-                                    PowerCh[j].append( a + b + c + d )
-                                    j=j+1
-                            
-                            ensure_dir(NetCDFOutputPath+Powerfile[-19:-11]+"\\")
-                            ensure_dir(LocalNetCDFOutputPath+Powerfile[-19:-11]+"\\")
-                            Powncfile = Dataset(LocalNetCDFOutputPath+Powerfile[-19:-11]+"\\Powsample"+Powerfile[-10:-4]+".nc",'w')
-
-                            Powncfile.createDimension('Timestamp',len(Timestamp))
-                            Powncfile.createDimension('nChannels',nChannels)
-                            
-                            TimestampData = Powncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
-                            PowChData = Powncfile.createVariable('PowerChan',dtype('float').char,('Timestamp','nChannels'))
-
-                            TimestampData[:] = Timestamp
-                            PowChData[:] = PowerCh
-
-                            Powncfile.description = "Power sample file"
-
-                            TimestampData.units = "Fractional Hours"
-                            PowChData.units = "PIN count"
-                                                                             
-                            Powncfile.close()
-
-                                    
-                # ----------------------- Weather Station ------------------
-                WSDataPath = sys.argv[1]+"\\Data\\"+"WeatherStation\\"
-                if os.path.isdir(WSDataPath):
-                    print (WSDataPath)
-
-                    WSFileList = getFiles(WSDataPath , "WeatherStation", ".txt", ThenDate, ThenTime)
-                                
-                    for file in WSFileList: # read in file, process into NetCDF, and write out file
-                        Temperature = []
-                        RelHum = []
-                        Pressure = []
-                        AbsHum = []
-                        Timestamp = []
-                                                
-                        with open(file) as f:
-                            for line in f:
-                                linelist = line.split()
-                                if len(linelist) == 5:
-                                    Temperature.append(linelist[0])
-                                    RelHum.append(linelist[1])
-                                    Pressure.append(linelist[2])
-                                    AbsHum.append(linelist[3])
-                                    Timestamp.append(linelist[4])
-                                    
-                            ensure_dir(NetCDFOutputPath+file[-19:-11]+"\\")
-                            ensure_dir(LocalNetCDFOutputPath+file[-19:-11]+"\\")
-                            WSncfile = Dataset(LocalNetCDFOutputPath+file[-19:-11]+"\\WSsample"+file[-10:-4]+".nc",'w')
-
-                            WSncfile.createDimension('Timestamp',len(Timestamp))
-
-                            TimestampData = WSncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
-                            TemperatureData = WSncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
-                            RelHumData = WSncfile.createVariable('RelHum',dtype('float').char,('Timestamp'))
-                            PressureData = WSncfile.createVariable('Pressure',dtype('float').char,('Timestamp'))
-                            AbsHumData = WSncfile.createVariable('AbsHum',dtype('float').char,('Timestamp'))
-
-                            TimestampData[:] = Timestamp
-                            TemperatureData[:] = Temperature
-                            RelHumData[:] = RelHum
-                            PressureData[:] = Pressure
-                            AbsHumData[:] = AbsHum
-
-                            WSncfile.description = "WSsample file"
-                            
-                            TimestampData.units = "Fractional Hours"
-                            TemperatureData.units = "C"
-                            RelHumData.units = "%"
-                            PressureData.units = "mb"
-                            AbsHumData.units = "g/kg"
-                            
-                            WSncfile.close()
-
-            
+       
             if LocalNetCDFOutputPath != NetCDFOutputPath:
+                #print ("in here")
                 day_dirs_list = os.listdir(LocalNetCDFOutputPath)
                 for day_dir in day_dirs_list:
+                    #print (day_dir)
                     src_file_names = os.listdir(LocalNetCDFOutputPath+day_dir)
                     for file_name in src_file_names:
-                        full_file_name = LocalNetCDFOutputPath+day_dir+file_name
+                        full_file_name = os.path.join(LocalNetCDFOutputPath+day_dir, file_name)
                         if (os.path.isfile(full_file_name)):
+                            #print (full_file_name)
+                            #print (NetCDFOutputPath+day_dir)
                             shutil.copy(full_file_name, NetCDFOutputPath+day_dir)
         
             # if is_number(sys.argv[3]):
