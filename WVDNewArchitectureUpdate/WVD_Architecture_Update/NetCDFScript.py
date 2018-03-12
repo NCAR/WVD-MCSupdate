@@ -337,7 +337,7 @@ def main():
                             NBinsData = MCSncfile.createVariable('NBins',dtype('float').char,('Timestamp'))
                             RTimeData = MCSncfile.createVariable('RTime',dtype('float').char,('Timestamp'))
                             FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float').char,('Timestamp'))
-                            DataArrayData = MCSncfile.createVariable('DataArray',dtype('float').char,('Timestamp','nBins'))
+                            DataArrayData = MCSncfile.createVariable('DataArray',dtype('float').char,('nBins','Timestamp'))
 
                             TimestampData[:] = Timestamp
                             ProfPerHistData[:] = ProfPerHist
