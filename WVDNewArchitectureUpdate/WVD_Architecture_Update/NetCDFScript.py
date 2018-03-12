@@ -497,6 +497,7 @@ def main():
                 for day_dir in day_dirs_list:
                     #print (day_dir)
                     src_file_names = os.listdir(LocalNetCDFOutputPath+day_dir)
+                    ensure_dir(NetCDFOutputPath+day_dir)
                     for file_name in src_file_names:
                         full_file_name = os.path.join(LocalNetCDFOutputPath+day_dir, file_name)
                         if (os.path.isfile(full_file_name)):
