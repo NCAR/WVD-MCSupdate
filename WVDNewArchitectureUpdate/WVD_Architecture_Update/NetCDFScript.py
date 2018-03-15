@@ -302,6 +302,11 @@ def main():
                     for Powerfile in MCSPowerList:
                         Timestamp = []
                         PowerCh = []
+                        HSRLPowCh = 0
+                        OnlineH2OCh = 0
+                        OfflineH2OCh = 0
+                        OnlineO2Ch = 0
+                        OfflineO2Ch = 0
 
                         nChannels = 12
                         
@@ -313,25 +318,42 @@ def main():
                         with open(Powerfile, "rb") as file:
                             file.seek(0)  # Go to beginning
 
-                            # k is the number of entries in the power file. Each power entry is 86 bytes long. 
-                            k=0
-                            while k < (os.path.getsize(Powerfile))/86:
+                            k=0 # k is the number of entries in the power file. 
+                            Mybytes = 146 # this is the number of bytes per power return.
+                            
+                            while k < (os.path.getsize(Powerfile))/Mybytes:
                                 k = k + 1
+                                couple_bytes = file.read(Mybytes)
 
-                                couple_bytes = file.read(86)
-
+                                if k != 1:
+                                    # checking if channel assignments changed mid file.
+                                    # The resulting NetCDF file will have assignments based on the assignments that are in the last entry
+                                    # but will log the error as below. 
+                                    if HSRLPowCh != ord(couple_bytes[23:24])-48 or OnlineH2OCh != ord(couple_bytes[34:35])-48 or OfflineH2OCh != ord(couple_bytes[46:47])-48 or OnlineO2Ch != ord(couple_bytes[56:57])-48 or OfflineO2Ch != ord(couple_bytes[67:68])-48:
+                                        ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+str(NowDate)+"\\NetCDFPythonErrors"+str(LastTime)+".txt"
+                                        ensure_dir(ErrorFile)
+                                        fh = open(ErrorFile, "a")
+                                        fh.write("ERROR: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime))
+                                        fh.close    
+                                        
+                                HSRLPowCh = ord(couple_bytes[23:24])-48
+                                OnlineH2OCh = ord(couple_bytes[34:35])-48 
+                                OfflineH2OCh = ord(couple_bytes[46:47])-48
+                                OnlineO2Ch = ord(couple_bytes[56:57])-48
+                                OfflineO2Ch = ord(couple_bytes[67:68])-48
+                                
                                 TS = struct.unpack('>d',couple_bytes[:8])
                                 Timestamp.append(TS[0])
 
                                 j=0
                                 while j < nChannels:
-                                    a = ord(couple_bytes[4*j+26:4*j+27])
-                                    b = ord(couple_bytes[4*j+27:4*j+28])*2**8
-                                    c = ord(couple_bytes[4*j+28:4*j+29])*2**16
-                                    d = ord(couple_bytes[4*j+29:4*j+30])*2**24 
+                                    a = ord(couple_bytes[4*j+82:4*j+83])
+                                    b = ord(couple_bytes[4*j+83:4*j+84])*2**8
+                                    c = ord(couple_bytes[4*j+84:4*j+85])*2**16
+                                    d = ord(couple_bytes[4*j+85:4*j+86])*2**24
                                     PowerCh[j].append( a + b + c + d )
                                     j=j+1
-                            
+
                             ensure_dir(NetCDFOutputPath+Powerfile[-19:-11]+"\\")
                             ensure_dir(LocalNetCDFOutputPath+Powerfile[-19:-11]+"\\")
                             Powncfile = Dataset(LocalNetCDFOutputPath+Powerfile[-19:-11]+"\\Powsample"+Powerfile[-10:-4]+".nc",'w')
@@ -341,18 +363,32 @@ def main():
                             
                             TimestampData = Powncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
                             PowChData = Powncfile.createVariable('PowerChan',dtype('float32').char,('Timestamp','nChannels'))
-
+                            HSRLPowChData = Powncfile.createVariable('HSRLPowCh',dtype('int').char,())
+                            OnlineH2OChData = Powncfile.createVariable('OnlineH2OChannel',dtype('int').char,())
+                            OfflineH2OChData = Powncfile.createVariable('OfflineH2OChannel',dtype('int').char,())
+                            OnlineO2ChData = Powncfile.createVariable('OnlineO2Channel',dtype('int').char,())
+                            OfflineO2ChData = Powncfile.createVariable('OfflineO2Channel',dtype('int').char,())
+                                                            
                             TimestampData[:] = Timestamp
                             PowChData[:] = PowerCh
-
+                            HSRLPowChData[:] = HSRLPowCh
+                            OnlineH2OChData[:] = OnlineH2OCh
+                            OfflineH2OChData[:] = OfflineH2OCh
+                            OnlineO2ChData[:] = OnlineO2Ch
+                            OfflineO2ChData[:] = OfflineO2Ch
+                            
                             Powncfile.description = "Power sample file"
 
                             TimestampData.units = "Fractional Hours"
                             PowChData.units = "PIN count"
-                                                                             
+                                        
+                            HSRLPowChData.description = "MCS Power Channel Assignment for HSRL"
+                            OnlineH2OChData.description = "MCS Power Channel Assignment for H2O Online"
+                            OfflineH2OChData.description = "MCS Power Channel Assignment for H2O Offline"
+                            OnlineO2ChData.description = "MCS Power Channel Assignment for O2 Online"
+                            OfflineO2ChData.description = "MCS Power Channel Assignment for O2 Offline"
+                                                                
                             Powncfile.close()
-
-
 
                     # read in and process MCS Data files
                     for MCSfile in MCSFileList:
@@ -368,6 +404,13 @@ def main():
                         DataArray = []
                         np.array(DataArray, dtype='f')
                         
+                        OnlineH2OCh = 0 
+                        OfflineH2OCh = 0
+                        CombinedHSRLCh = 0
+                        MolecularHSRLCh = 0
+                        OnlineO2Ch = 0
+                        OfflineO2Ch = 0
+                        
                         with open(MCSfile , 'rb') as file:
                             thing = file.read()
                             file_length=len(thing)
@@ -375,18 +418,53 @@ def main():
 
                             #as i read i will add to ReadIndex based on number of bytes read
                             ReadIndex=0
+                            headerBytes = 127
                         
-                            while ReadIndex+38 < file_length:
-                                # there are 38 bytes in the timestamp and header combo. 
-                                data = file.read(38)
-                                ReadIndex = ReadIndex+38
+                            while ReadIndex+headerBytes < file_length:
+
+                                data = file.read(headerBytes)
+                                #print (data[:headerBytes])
+                                
+                                ReadIndex = ReadIndex+headerBytes
                                 TS = struct.unpack('>d',data[:8])
+                                #print (TS)
                                 Timestamp.append(TS[0])
 
-                                profPerHist = ord(data[23:24]) * 2**8 + ord(data[22:23])
+                                if ReadIndex != headerBytes:
+                                    # checking if channel assignments changed mid file.
+                                    # The resulting NetCDF file will have assignments based on the assignments that are in the last entry
+                                    # but will log the error as below. 
+                                    if OnlineH2OCh != ord(data[29:30])-48 or OfflineH2OCh != ord(data[42:43])-48 or CombinedHSRLCh != ord(data[57:58])-48 or MolecularHSRLCh != ord(data[73:74])-48 or OnlineO2Ch != ord(data[84:85])-48 or OfflineO2Ch != ord(data[96:97])-48:
+                                        ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+str(NowDate)+"\\NetCDFPythonErrors"+str(LastTime)+".txt"
+                                        ensure_dir(ErrorFile)
+                                        fh = open(ErrorFile, "a")
+                                        fh.write("ERROR: Data Channel Assignments changed mid file in " + file + " - " + str(NowTime))
+                                        fh.close    
+  
+                                OnlineH2OCh = ord(data[29:30])-48 # 48 is the number to subtract from ascii to get the numerical values
+                                if ord(data[28:29]) == 49: # a two digit channel assignment so add 10 
+                                    OnlineH2OCh = OnlineH2OCh + 10                             
+                                OfflineH2OCh = ord(data[42:43])-48
+                                if ord(data[41:42]) == 49: 
+                                    OfflineH2OCh = OfflineH2OCh + 10     
+                                CombinedHSRLCh = ord(data[57:58])-48
+                                if ord(data[56:57]) == 49: 
+                                    CombinedHSRLCh = CombinedHSRLCh + 10     
+                                MolecularHSRLCh = ord(data[73:74])-48
+                                if ord(data[72:73]) == 49: 
+                                    MolecularHSRLCh = MolecularHSRLCh + 10     
+                                OnlineO2Ch = ord(data[84:85])-48
+                                if ord(data[83:84]) == 49: 
+                                    OnlineO2Ch = OnlineO2Ch + 10     
+                                OfflineO2Ch = ord(data[96:97])-48
+                                if ord(data[95:96]) == 49: 
+                                    OfflineO2Ch = OfflineO2Ch + 10     
+
+                                profPerHist = ord(data[112:113]) * 2**8 + ord(data[111:112])
+                                #print (profPerHist)
                                 ProfPerHist.append(profPerHist)
 
-                                channel = ord(data[25:26])
+                                channel = ord(data[114:115])
                                 sync = 0;
                                 #seperating sync bits from channel
                                 if(channel >= 128):
@@ -398,21 +476,26 @@ def main():
                                 Channel.append(channel)
                                 Sync.append(sync)
 
-                                cntsPerBin = ord(data[27:28]) * 2**8 + ord(data[26:27])
+                                cntsPerBin = ord(data[116:117]) * 2**8 + ord(data[115:116])
+                                #print (cntsPerBin)
                                 CntsPerBin.append(cntsPerBin)
 
-                                nBins = ord(data[29:30]) * 2**8 + ord(data[28:29])
+                                nBins = ord(data[118:119]) * 2**8 + ord(data[117:118])
+                                #print (nBins)
                                 NBins.append(nBins)
 
-                                rTime = ord(data[32:33])*2**16 + ord(data[31:32])*2**8 + ord(data[30:31])
+                                rTime = ord(data[121:122])*2**16 + ord(data[120:121])*2**8 + ord(data[119:120])
+                                #print (rTime)
                                 RTime.append(rTime)
 
-                                frameCtr = ord(data[33:34])
+                                frameCtr = ord(data[122:123])
+                                #print (frameCtr)
                                 FrameCtr.append(frameCtr)
 
                                 v=0
                                 DataVal = []
                                 np.array(DataVal,dtype='f')
+
                                 while v < nBins:
                                     data = file.read(4)
                                     ReadIndex = ReadIndex+4
@@ -426,7 +509,10 @@ def main():
                                         chan = chan - 64
                                      
                                     if chan != channel:
-                                        ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
+                                        print (str(sys.argv[1]))
+                                        print (str(NowDate))
+                                        print (str(LastTime))
+                                        ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+str(NowDate)+"\\NetCDFPythonErrors"+str(LastTime)+".txt"
                                         ensure_dir(ErrorFile)
                                         fh = open(ErrorFile, "a")
                                         write("ERROR: channel number read from data entry does not match header - ",NowTime)
@@ -439,12 +525,12 @@ def main():
                                 # confirming footer word was where expected
                                 data = file.read(4)
                                 ReadIndex = ReadIndex+4
-
+                                #print ("footer? = " , data)
                                 if ord(data[0:1]) != 255:
-                                    ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
+                                    ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+str(NowDate)+"\\NetCDFPythonErrors"+str(LastTime)+".txt"
                                     ensure_dir(ErrorFile)
                                     fh = open(ErrorFile, "a")
-                                    write("ERROR: Length of data frame does not match number of bins - ",NowTime)
+                                    fh.write("ERROR: Length of data frame does not match number of bins - " + str(NowTime))
                                     fh.close
                                 # throw away extra bits on end of data frame so next is alligned
                                 data = file.read(8)
@@ -466,6 +552,12 @@ def main():
                             RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('Timestamp'))
                             FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float32').char,('Timestamp'))
                             DataArrayData = MCSncfile.createVariable('DataArray',dtype('float32').char,('nBins','Timestamp'))
+                            OnlineH2OChData = MCSncfile.createVariable('OnlineH2OCh',dtype('int').char,())
+                            OfflineH2OChData = MCSncfile.createVariable('OfflineH2OCh',dtype('int').char,())
+                            CombinedHSRLChData = MCSncfile.createVariable('CombinedHSRLCh',dtype('int').char,())
+                            MolecularHSRLChData = MCSncfile.createVariable('MolecularHSRLCh',dtype('int').char,())
+                            OnlineO2ChData = MCSncfile.createVariable('OnlineO2Ch',dtype('int').char,())
+                            OfflineO2ChData = MCSncfile.createVariable('OfflineO2Ch',dtype('int').char,())
 
                             TimestampData[:] = Timestamp
                             ProfPerHistData[:] = ProfPerHist
@@ -476,6 +568,12 @@ def main():
                             RTimeData[:] = RTime
                             FrameCtrData[:] = FrameCtr
                             DataArrayData[:] = DataArray
+                            OnlineH2OChData[:] = OnlineH2OCh
+                            OfflineH2OChData[:] = OfflineH2OCh
+                            CombinedHSRLChData[:] = CombinedHSRLCh
+                            MolecularHSRLChData[:] = MolecularHSRLCh
+                            OnlineO2ChData[:] = OnlineO2Ch
+                            OfflineO2ChData[:] = OfflineO2Ch
 
                             MCSncfile.description = "MCS sample file"
 
@@ -488,8 +586,14 @@ def main():
                             FrameCtrData.units = "n Frames processed"
                             DataArrayData.units = "Photon Counts Returned"
                             
+                            OnlineH2OChData.description = "MCS Channel Assignment for H2O Online"
+                            OfflineH2OChData.description = "MCS Channel Assignment for H2O Offline"
+                            CombinedHSRLChData.description = "MCS Channel Assignment for HSRL Combined"
+                            MolecularHSRLChData.description = "MCS Channel Assignment for HSRL Molecular"
+                            OnlineO2ChData.description = "MCS Channel Assignment for O2 Online"
+                            OfflineO2ChData.description = "MCS Channel Assignment for O2 Online"
+                            
                             MCSncfile.close()
-
        
             if LocalNetCDFOutputPath != NetCDFOutputPath:
                 #print ("in here")
