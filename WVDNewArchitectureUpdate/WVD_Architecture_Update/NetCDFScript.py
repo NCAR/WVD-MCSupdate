@@ -79,7 +79,7 @@ def readHeaderInfo():
         return header
 
 # ----------------------- Weather Station ------------------                 
-def processWS(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
+def processWS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
     WSDataPath = sys.argv[1]+"\\Data\\"+"WeatherStation\\"
     if os.path.isdir(WSDataPath):
         print (WSDataPath)
@@ -138,7 +138,7 @@ def processWS(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
 
 
 # ----------------------- Laser Locking ------------------
-def processLL(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
+def processLL(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
     LLDataPath = sys.argv[1]+"\\Data\\"+"LaserLocking\\"
     if os.path.isdir(LLDataPath):
         print (LLDataPath)
@@ -281,7 +281,7 @@ def processLL(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
 
                      
 # ----------------------- MCS ------------------
-def processMCS(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
+def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
   
     MCSDataPath = sys.argv[1]+"\\Data\\"+"MCS\\"
     if os.path.isdir(MCSDataPath):
@@ -329,11 +329,29 @@ def processMCS(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
                             fh.write("ERROR: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime))
                             fh.close    
 
+                    print (couple_bytes[:])
+                    print (ord(couple_bytes[23:24])-48)
+                    print (ord(couple_bytes[24:25])-48)
+                    print (ord(couple_bytes[25:26])-48)
+                    print (ord(couple_bytes[26:27])-48)
+                    print (ord(couple_bytes[27:28])-48)
+                    print (ord(couple_bytes[28:29])-48)
+                    print (ord(couple_bytes[29:30])-48)
+                    print ( '\n' ) 
+                    
                     HSRLPowCh = ord(couple_bytes[23:24])-48
                     OnlineH2OCh = ord(couple_bytes[34:35])-48 
                     OfflineH2OCh = ord(couple_bytes[46:47])-48
                     OnlineO2Ch = ord(couple_bytes[56:57])-48
                     OfflineO2Ch = ord(couple_bytes[67:68])-48
+
+                    print (HSRLPowCh)
+                    print (OnlineH2OCh)
+                    print (OfflineH2OCh)
+                    print (OnlineO2Ch)
+                    print (OfflineO2Ch)
+
+
                     
                     TS = struct.unpack('>d',couple_bytes[:8])
                     Timestamp.append(TS[0])
@@ -665,11 +683,11 @@ def main():
 
         header = readHeaderInfo()
 
-        processWS(ThenDate,ThenTime,LocalOutputPath + "NetCDFOutput\\",header)
+        processWS(ThenDate,ThenTime,NowDate,LocalOutputPath + "NetCDFOutput\\",header)
        
-        processLL(ThenDate,ThenTime,LocalOutputPath + "NetCDFOutput\\",header)
+        processLL(ThenDate,ThenTime,NowDate,LocalOutputPath + "NetCDFOutput\\",header)
 
-        processMCS(ThenDate,ThenTime,LocalOutputPath + "NetCDFOutput\\",header)
+        processMCS(ThenDate,ThenTime,NowDate,LocalOutputPath + "NetCDFOutput\\",header)
 
 
         # copy NetCDF files to external drive if applicable. 
