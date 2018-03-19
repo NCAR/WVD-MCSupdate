@@ -1,0 +1,9 @@
+site name	FL1
+lat	40.0150°N
+long	105.2705°W
+altitude	5430
+pointing angle	0
+paper references	Fake paper here
+contact info	Brad Schoenrock - brads@ucar.edu
+dial unit number	DIAL2
+project	Testing for Relampago
