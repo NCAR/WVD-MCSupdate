@@ -52,23 +52,25 @@ def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
                     FileList.append(DataPath + day + "\\" + file)
     return FileList
 
-def recursive_overwrite(src, dest, ignore=None):
-    if os.path.isdir(src):
-        if not os.path.isdir(dest):
-            os.makedirs(dest)
-        files = os.listdir(src)
-        if ignore is not None:
-            ignored = ignore(src, files)
-        else:
-            ignored = set()
-        for f in files:
-            if f not in ignored:
-                recursive_overwrite(os.path.join(src, f), 
-                                    os.path.join(dest, f), 
-                                    ignore)
-    else:
-        shutil.copyfile(src, dest)
+# not being used, but keeping this function here in case we wish to use it in the future.
+# copies entire directory recursivly overwriting whatever is there. 
+#def recursive_overwrite(src, dest, ignore=None):
+#    if os.path.isdir(src):
+#        if not os.path.isdir(dest):
+#            os.makedirs(dest)
+#        files = os.listdir(src)
+#        if ignore is not None:
+#            ignored = ignore(src, files)
+#        else:
+#            ignored = set()
+#        for f in files:
+#            if f not in ignored:
+#                recursive_overwrite(os.path.join(src, f), os.path.join(dest, f), 
+#                                    ignore)
+#    else:
+#        shutil.copyfile(src, dest)
 
+# reads in config file which hold information for headers of NetCDF files
 def readHeaderInfo():
     with open(sys.argv[1]+"\\ConfigureFiles\\Configure_WVDIALPythonNetCDFHeader.txt") as f:
         reader = csv.reader(f, delimiter="\t")
@@ -91,7 +93,7 @@ def processWS(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
             AbsHum = []
             Timestamp = []
                                     
-            with open(file) as f:
+            with open(file) as f: # read in file,
                 for line in f:
                     linelist = line.split()
                     if len(linelist) == 5:
@@ -100,35 +102,36 @@ def processWS(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
                         Pressure.append(linelist[2])
                         AbsHum.append(linelist[3])
                         Timestamp.append(linelist[4])
-                        
+
+                # make sure output path exists
                 ensure_dir(LocalNetCDFOutputPath+file[-19:-11]+"\\")
                 WSncfile = Dataset(LocalNetCDFOutputPath+file[-19:-11]+"\\WSsample"+file[-10:-4]+".nc",'w')
-
+                # timestamp defines the dimentions of variables
                 WSncfile.createDimension('Timestamp',len(Timestamp))
-
+                # creates variables
                 TimestampData = WSncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
                 TemperatureData = WSncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
                 RelHumData = WSncfile.createVariable('RelHum',dtype('float').char,('Timestamp'))
                 PressureData = WSncfile.createVariable('Pressure',dtype('float').char,('Timestamp'))
                 AbsHumData = WSncfile.createVariable('AbsHum',dtype('float').char,('Timestamp'))
-
+                #fills variables
                 TimestampData[:] = Timestamp
                 TemperatureData[:] = Temperature
                 RelHumData[:] = RelHum
                 PressureData[:] = Pressure
                 AbsHumData[:] = AbsHum
-
+                # brief description of file
                 WSncfile.description = "Weather Station data file: taken at surface level "
-
+                # load up header information for file
                 for entry in header:
                     WSncfile.setncattr(entry[0],entry[1])
-                
+                # give variables units
                 TimestampData.units = "Fractional Hours"
                 TemperatureData.units = "C"
                 RelHumData.units = "%"
                 PressureData.units = "mb"
                 AbsHumData.units = "g/kg"
-
+                # and finally close file 
                 WSncfile.close()
 
 
@@ -155,7 +158,7 @@ def processLL(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
             TempMeas = []
             Current = []
             Timestamp = []
-            Datestamp = []
+            Datestamp = [] # was removed to avoid confusion. redundant information anyway
             
             #read in file line by line
             with open(file) as f:
@@ -227,7 +230,7 @@ def processLL(ThenDate,ThenTime,LocalNetCDFOutputPath,header):
             TempDiff = []
             IsLocked = []
             Timestamp = []
-            Datestamp = []
+            Datestamp = [] # was removed to avoid confusion. redundant information anyway
 
             with open(file) as f:
                 for line in f:

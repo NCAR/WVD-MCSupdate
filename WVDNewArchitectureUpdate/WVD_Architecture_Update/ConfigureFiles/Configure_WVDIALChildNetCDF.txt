@@ -2,19 +2,26 @@ Written By: BradSchoenrock
 Written For: NCAR
 This file is used to define the initial state of the NetCDF writer in the Water Vapor DIAL Main labview program. 
 
-VariousPaths are paths to the - working directory of the MCS - path to python executable - path to python script - path where output NetCDFs are written
+### VariousPaths are paths to the - 
+### working directory of the MCS - 
+### path to python executable - 
+### path to python script - 
+### path where output NetCDFs are written
 VariousPaths;;
 C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update;
 C:\Users\eol-lidar\AppData\Local\Continuum\anaconda3\python.exe;
 C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\NetCDFScript.py;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\;;
+C:\Users\eol-lidar\Desktop\;;
 
+### how many hours of data do we want to back process
 HoursToBackProcess;;
 3;;
 
+### how frequently do we want to check 
 UpdatePeriodMin;;
 10;;
 
+### paths to error and comment logging
 FilePaths;;
 .\Data\NetCDFChild\;
 NetCDFChild;
