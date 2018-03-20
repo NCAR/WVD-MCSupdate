@@ -328,16 +328,6 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                             fh = open(ErrorFile, "a")
                             fh.write("ERROR: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime))
                             fh.close    
-
-                    print (couple_bytes[:])
-                    print (ord(couple_bytes[23:24])-48)
-                    print (ord(couple_bytes[24:25])-48)
-                    print (ord(couple_bytes[25:26])-48)
-                    print (ord(couple_bytes[26:27])-48)
-                    print (ord(couple_bytes[27:28])-48)
-                    print (ord(couple_bytes[28:29])-48)
-                    print (ord(couple_bytes[29:30])-48)
-                    print ( '\n' ) 
                     
                     HSRLPowCh = ord(couple_bytes[23:24])-48
                     OnlineH2OCh = ord(couple_bytes[34:35])-48 
@@ -345,14 +335,6 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                     OnlineO2Ch = ord(couple_bytes[56:57])-48
                     OfflineO2Ch = ord(couple_bytes[67:68])-48
 
-                    print (HSRLPowCh)
-                    print (OnlineH2OCh)
-                    print (OfflineH2OCh)
-                    print (OnlineO2Ch)
-                    print (OfflineO2Ch)
-
-
-                    
                     TS = struct.unpack('>d',couple_bytes[:8])
                     Timestamp.append(TS[0])
                     
@@ -473,7 +455,7 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                     OfflineO2Ch = ord(data[96:97])-48
                     if ord(data[95:96]) == 49: 
                         OfflineO2Ch = OfflineO2Ch + 10     
-
+                    
                     profPerHist = ord(data[112:113]) * 2**8 + ord(data[111:112])
                     #print (profPerHist)
                     ProfPerHist.append(profPerHist)
@@ -691,23 +673,23 @@ def main():
 
 
         # copy NetCDF files to external drive if applicable. 
-        if LocalOutputPath != OutputPath:
-            #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
-            data_dirs_list = os.listdir(LocalOutputPath)
-            print (data_dirs_list)
-            for data_dir in data_dirs_list:
-                day_dirs_list = os.listdir(LocalOutputPath+data_dir)
-                #print (day_dirs_list)
-                for day_dir in day_dirs_list:
-                    #print (day_dir)
-                    if day_dir <= ThenDate:
-                        src_file_names = os.listdir(LocalOutputPath+data_dir+"\\"+day_dir)
-                        ensure_dir(OutputPath+data_dir+"\\"+day_dir+"\\")
-                        for file_name in src_file_names:
-                            full_file_name = os.path.join(LocalOutputPath+data_dir+"\\"+day_dir, file_name)
-                            if (os.path.isfile(full_file_name)):
-                                shutil.copy(full_file_name, OutputPath+data_dir+"\\"+day_dir)
-            
+#        if LocalOutputPath != OutputPath:
+#            #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
+#            data_dirs_list = os.listdir(LocalOutputPath)
+#            print (data_dirs_list)
+#            for data_dir in data_dirs_list:
+#                day_dirs_list = os.listdir(LocalOutputPath+data_dir)
+#                #print (day_dirs_list)
+#                for day_dir in day_dirs_list:
+#                    #print (day_dir)
+#                    if day_dir <= ThenDate:
+#                        src_file_names = os.listdir(LocalOutputPath+data_dir+"\\"+day_dir)
+#                        ensure_dir(OutputPath+data_dir+"\\"+day_dir+"\\")
+#                        for file_name in src_file_names:
+#                            full_file_name = os.path.join(LocalOutputPath+data_dir+"\\"+day_dir, file_name)
+#                            if (os.path.isfile(full_file_name)):
+#                                shutil.copy(full_file_name, OutputPath+data_dir+"\\"+day_dir)
+
     
     # if os.path.isdir(sys.argv[1]+"\\Data\\"):        
     else:
