@@ -79,7 +79,7 @@ def readHeaderInfo():
         return header
 
 # ----------------------- Weather Station ------------------                 
-def processWS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
+def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
     WSDataPath = sys.argv[1]+"\\Data\\"+"WeatherStation\\"
     if os.path.isdir(WSDataPath):
         print (WSDataPath)
@@ -138,7 +138,7 @@ def processWS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
 
 
 # ----------------------- Laser Locking ------------------
-def processLL(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
+def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
     LLDataPath = sys.argv[1]+"\\Data\\"+"LaserLocking\\"
     if os.path.isdir(LLDataPath):
         print (LLDataPath)
@@ -219,7 +219,7 @@ def processLL(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                 CurrentData.units = "amp"
 
                 WavelengthData.description = "Wavelength measured by wavemeter"
-                WaveDiffData.description = "Difference between measured and desired wavelength (absolute value?)"
+                WaveDiffData.description = "Measured wavelength - Desired wavelenth"
 
                 LLncfile.close()
 
@@ -273,15 +273,13 @@ def processLL(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                 TemperatureData.units = "C"
                 TempDiffData.units = "C"
 
-                WavelengthData.description = "Wavelength measured by wavemeter"
-
                 Etalonncfile.close()
 
 
 
                      
 # ----------------------- MCS ------------------
-def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
+def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
   
     MCSDataPath = sys.argv[1]+"\\Data\\"+"MCS\\"
     if os.path.isdir(MCSDataPath):
@@ -300,14 +298,16 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
             OfflineH2OCh = 0
             OnlineO2Ch = 0
             OfflineO2Ch = 0
-
+            ChannelAssign = []
+    
             nChannels = 12
             
             i=0
             while i < nChannels:
                 i=i+1
                 PowerCh.append([])
-            
+                ChannelAssign.append("Unassigned")
+           
             with open(Powerfile, "rb") as file:
                 file.seek(0)  # Go to beginning
 
@@ -334,10 +334,16 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                     OfflineH2OCh = ord(couple_bytes[46:47])-48
                     OnlineO2Ch = ord(couple_bytes[56:57])-48
                     OfflineO2Ch = ord(couple_bytes[67:68])-48
-
+            
+                    ChannelAssign[HSRLPowCh] = "HSRL"
+                    ChannelAssign[OnlineH2OCh] = "OnlineH2O"
+                    ChannelAssign[OfflineH2OCh] = "OfflineH2O"
+                    ChannelAssign[OnlineO2Ch] = "OnlineO2"
+                    ChannelAssign[OfflineO2Ch] = "OfflineO2"
+                    
                     TS = struct.unpack('>d',couple_bytes[:8])
                     Timestamp.append(TS[0])
-                    
+
                     j=0
                     while j < nChannels:
                         a = ord(couple_bytes[4*j+86:4*j+87])
@@ -353,22 +359,14 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
 
                 Powncfile.createDimension('Timestamp',len(Timestamp))
                 Powncfile.createDimension('nChannels',nChannels)
-                
+                                
                 TimestampData = Powncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
                 PowChData = Powncfile.createVariable('Power',dtype('float32').char,('nChannels','Timestamp'))
-                HSRLPowChData = Powncfile.createVariable('HSRLPowerChannel',dtype('int').char,())
-                OnlineH2OChData = Powncfile.createVariable('OnlineH2OPowerChannel',dtype('int').char,())
-                OfflineH2OChData = Powncfile.createVariable('OfflineH2OPowerChannel',dtype('int').char,())
-                OnlineO2ChData = Powncfile.createVariable('OnlineO2PowerChannel',dtype('int').char,())
-                OfflineO2ChData = Powncfile.createVariable('OfflineO2PowerChannel',dtype('int').char,())
-                                                
+                ChannelAssignData = Powncfile.createVariable('ChannelAssignment','S1',('nChannels'))
+                
                 TimestampData[:] = Timestamp
                 PowChData[:] = PowerCh
-                HSRLPowChData[:] = HSRLPowCh
-                OnlineH2OChData[:] = OnlineH2OCh
-                OfflineH2OChData[:] = OfflineH2OCh
-                OnlineO2ChData[:] = OnlineO2Ch
-                OfflineO2ChData[:] = OfflineO2Ch
+                ChannelAssignData[:] = ChannelAssign
                 
                 Powncfile.description = "Channel Power data file"
 
@@ -377,13 +375,9 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                 
                 TimestampData.units = "Fractional Hours"
                 PowChData.units = "PIN count"
-                            
-                HSRLPowChData.description = "MCS Power Channel Assignment for HSRL"
-                OnlineH2OChData.description = "MCS Power Channel Assignment for H2O Online"
-                OfflineH2OChData.description = "MCS Power Channel Assignment for H2O Offline"
-                OnlineO2ChData.description = "MCS Power Channel Assignment for O2 Online"
-                OfflineO2ChData.description = "MCS Power Channel Assignment for O2 Offline"
-                                                    
+                
+                ChannelAssignData.description = "Channel Assignments"
+
                 Powncfile.close()
 
         # read in and process MCS Data files
@@ -399,14 +393,15 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
             FrameCtr = []
             DataArray = []
             np.array(DataArray, dtype='f')
+            ChannelAssign = []
+
+            nChannels = 12
             
-            OnlineH2OCh = 0 
-            OfflineH2OCh = 0
-            CombinedHSRLCh = 0
-            MolecularHSRLCh = 0
-            OnlineO2Ch = 0
-            OfflineO2Ch = 0
-            
+            i=0
+            while i < nChannels:
+                i=i+1
+                ChannelAssign.append("Unassigned")
+           
             with open(MCSfile , 'rb') as file:
                 thing = file.read()
                 file_length=len(thing)
@@ -455,20 +450,26 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                     OfflineO2Ch = ord(data[96:97])-48
                     if ord(data[95:96]) == 49: 
                         OfflineO2Ch = OfflineO2Ch + 10     
-                    
+
+                    ChannelAssign[OnlineH2OCh] = "OnlineH2O"
+                    ChannelAssign[OfflineH2OCh] = "OfflineH2O"
+                    ChannelAssign[CombinedHSRLCh] = "CombinedHSRL"
+                    ChannelAssign[MolecularHSRLCh] = "MolecularHSRL"
+                    ChannelAssign[OnlineO2Ch] = "OnlineO2"
+                    ChannelAssign[OfflineO2Ch] = "OfflineO2"
+
                     profPerHist = ord(data[112:113]) * 2**8 + ord(data[111:112])
                     #print (profPerHist)
                     ProfPerHist.append(profPerHist)
 
-                    channel = ord(data[114:115])
-                    sync = 0;
-                    #seperating sync bits from channel
-                    if(channel >= 128):
-                        channel = channel - 128
-                        sync = sync + 2
-                    if(channel >= 64):
-                        channel = channel - 64
-                        sync = sync + 1
+                    # tempBytes has 8 bits which hold both the channel and sync bits. 
+                    tempBytes = ord(data[114:115])
+                    sync = tempBytes%16
+                    channel = (tempBytes-sync)/16
+
+                    #print ("channel = ",channel)
+                    #print ("sync = ",sync)
+                        
                     Channel.append(channel)
                     Sync.append(sync)
 
@@ -496,14 +497,13 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                         data = file.read(4)
                         ReadIndex = ReadIndex+4
 
-                        chan = ord(data[3:4])
-                        # it looks like the sync variable is making it into data frames
-                        # which is not in line with Josh's documentation
-                        if(chan >= 128):
-                            chan = chan - 128
-                        if(chan >= 64):
-                            chan = chan - 64
-                         
+                        chan = ord(data[3:4])/16
+
+                        #if v < 10:
+                        #    pass
+                        #    print ("channel = ",channel)
+                        #    print ("chan = ",chan)
+                            
                         if chan != channel:
                             print (str(sys.argv[1]))
                             print (str(NowDate))
@@ -511,7 +511,7 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                             ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+str(NowDate)+"\\NetCDFPythonErrors"+str(LastTime)+".txt"
                             ensure_dir(ErrorFile)
                             fh = open(ErrorFile, "a")
-                            write("ERROR: channel number read from data entry does not match header - ",NowTime)
+                            fh.write("ERROR: channel number read from data entry does not match header - ",NowTime)
                             fh.close
                             
                         DataVal.append(ord(data[2:3])*2**16 + ord(data[1:2])*2**8 + ord(data[0:1]))
@@ -537,7 +537,8 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
 
                 MCSncfile.createDimension('Timestamp',len(Timestamp))
                 MCSncfile.createDimension('nBins',max(NBins))
-                
+                MCSncfile.createDimension('nChannels',nChannels)
+      
                 TimestampData = MCSncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
                 ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float32').char,('Timestamp'))
                 ChannelData = MCSncfile.createVariable('Channel',dtype('float32').char,('Timestamp'))
@@ -547,12 +548,7 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                 #RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('Timestamp'))
                 #FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float32').char,('Timestamp'))
                 DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','Timestamp'))
-                OnlineH2OChData = MCSncfile.createVariable('OnlineH2OChannel',dtype('int').char,())
-                OfflineH2OChData = MCSncfile.createVariable('OfflineH2OChannel',dtype('int').char,())
-                CombinedHSRLChData = MCSncfile.createVariable('CombinedHSRLChannel',dtype('int').char,())
-                MolecularHSRLChData = MCSncfile.createVariable('MolecularHSRLChannel',dtype('int').char,())
-                OnlineO2ChData = MCSncfile.createVariable('OnlineO2Channel',dtype('int').char,())
-                OfflineO2ChData = MCSncfile.createVariable('OfflineO2Channel',dtype('int').char,())
+                ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','S1',('nChannels'))
 
                 TimestampData[:] = Timestamp
                 ProfPerHistData[:] = ProfPerHist
@@ -563,12 +559,7 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                 #RTimeData[:] = RTime
                 #FrameCtrData[:] = FrameCtr
                 DataArrayData[:] = DataArray
-                OnlineH2OChData[:] = OnlineH2OCh
-                OfflineH2OChData[:] = OfflineH2OCh
-                CombinedHSRLChData[:] = CombinedHSRLCh
-                MolecularHSRLChData[:] = MolecularHSRLCh
-                OnlineO2ChData[:] = OnlineO2Ch
-                OfflineO2ChData[:] = OfflineO2Ch
+                ChannelAssignData[:] = ChannelAssign
 
                 MCSncfile.description = "MCS data file"
 
@@ -583,14 +574,9 @@ def processMCS(ThenDate,ThenTime,NowDate,LocalNetCDFOutputPath,header):
                 #RTimeData.units = "ms operational"
                 #FrameCtrData.units = "n Frames processed"
                 DataArrayData.units = "Photon Counts Returned"
-                
-                OnlineH2OChData.description = "MCS Channel Assignment for H2O Online"
-                OfflineH2OChData.description = "MCS Channel Assignment for H2O Offline"
-                CombinedHSRLChData.description = "MCS Channel Assignment for HSRL Combined"
-                MolecularHSRLChData.description = "MCS Channel Assignment for HSRL Molecular"
-                OnlineO2ChData.description = "MCS Channel Assignment for O2 Online"
-                OfflineO2ChData.description = "MCS Channel Assignment for O2 Online"
-                
+
+                ChannelAssignData.description = "Channel Assignments"
+
                 MCSncfile.close()
   
                     
@@ -632,7 +618,7 @@ def main():
             ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
             ensure_dir(ErrorFile)
             fh = open(ErrorFile, "a")
-            write("WARNING: argument 2 (path to external hard drive to copy data onto) - ",sys.argv[2]," - is not a valid directory to write to. Writing to local data directory instead. - ",NowTime)
+            fh.write("WARNING: argument 2 (path to external hard drive to copy data onto) - ",sys.argv[2]," - is not a valid directory to write to. Writing to local data directory instead. - ",NowTime)
             fh.close
 
 
@@ -644,7 +630,7 @@ def main():
             ErrorFile = sys.argv[1]+"\\Data\\NetCDFChild\\"+NowDate+"\\NetCDFPythonErrors"+LastTime+".txt"
             ensure_dir(ErrorFile)
             fh = open(ErrorFile, "a")
-            write("ERROR: argument 3 (hours to back process) - ",sys.argv[3]," - is not a number. Using default 3 hours instead. - ",NowTime)
+            fh.write("ERROR: argument 3 (hours to back process) - ",sys.argv[3]," - is not a number. Using default 3 hours instead. - ",NowTime)
             fh.close
 
         print ("go back",sys.argv[3],"hours")
@@ -665,30 +651,34 @@ def main():
 
         header = readHeaderInfo()
 
-        processWS(ThenDate,ThenTime,NowDate,LocalOutputPath + "NetCDFOutput\\",header)
+        print (header)
+        
+        processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
        
-        processLL(ThenDate,ThenTime,NowDate,LocalOutputPath + "NetCDFOutput\\",header)
+        processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
 
-        processMCS(ThenDate,ThenTime,NowDate,LocalOutputPath + "NetCDFOutput\\",header)
+        processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
 
 
-        # copy NetCDF files to external drive if applicable. 
-#        if LocalOutputPath != OutputPath:
-#            #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
-#            data_dirs_list = os.listdir(LocalOutputPath)
-#            print (data_dirs_list)
-#            for data_dir in data_dirs_list:
-#                day_dirs_list = os.listdir(LocalOutputPath+data_dir)
-#                #print (day_dirs_list)
-#                for day_dir in day_dirs_list:
-#                    #print (day_dir)
-#                    if day_dir <= ThenDate:
-#                        src_file_names = os.listdir(LocalOutputPath+data_dir+"\\"+day_dir)
-#                        ensure_dir(OutputPath+data_dir+"\\"+day_dir+"\\")
-#                        for file_name in src_file_names:
-#                            full_file_name = os.path.join(LocalOutputPath+data_dir+"\\"+day_dir, file_name)
-#                            if (os.path.isfile(full_file_name)):
-#                                shutil.copy(full_file_name, OutputPath+data_dir+"\\"+day_dir)
+        # copy NetCDF files to external drive if applicable.
+        copyFiles = False
+        if copyFiles:
+            if LocalOutputPath != OutputPath:
+                #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
+                data_dirs_list = os.listdir(LocalOutputPath)
+                print (data_dirs_list)
+                for data_dir in data_dirs_list:
+                    day_dirs_list = os.listdir(LocalOutputPath+data_dir)
+                    #print (day_dirs_list)
+                    for day_dir in day_dirs_list:
+                        #print (day_dir)
+                        if day_dir <= ThenDate:
+                            src_file_names = os.listdir(LocalOutputPath+data_dir+"\\"+day_dir)
+                            ensure_dir(OutputPath+data_dir+"\\"+day_dir+"\\")
+                            for file_name in src_file_names:
+                                full_file_name = os.path.join(LocalOutputPath+data_dir+"\\"+day_dir, file_name)
+                                if (os.path.isfile(full_file_name)):
+                                    shutil.copy(full_file_name, OutputPath+data_dir+"\\"+day_dir)
 
     
     # if os.path.isdir(sys.argv[1]+"\\Data\\"):        
@@ -696,7 +686,7 @@ def main():
         ErrorFile = sys.argv[1]+"\\NetCDFPythonErrors"+LastTime+".txt"
         ensure_dir(ErrorFile)
         fh = open(ErrorFile, "a")
-        write("ERROR: argument 1 (path to directory containing Data folder) - ",sys.argv[1]," - is not a dir, looking for directory containing Data. - ",NowTime)
+        fh.write("ERROR: argument 1 (path to directory containing Data folder) - ",sys.argv[1]," - is not a dir, looking for directory containing Data. - ",NowTime)
         fh.close
         print (sys.argv[1],"is not a dir, looking for directory containing Data")
 
