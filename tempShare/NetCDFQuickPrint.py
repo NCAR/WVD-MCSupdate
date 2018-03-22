@@ -2,6 +2,7 @@
 #Brad Schoenrock
 #Feb. 2018
 # useage:
+# python NetCDFQuickPrint.py ..\WVDNewArchitectureUpdate\WVD_Architecture_Update\Data\NetCDFOutput\20180322\LLsample200000.nc
 
 import sys
 from netCDF4 import Dataset
@@ -13,7 +14,8 @@ print (dataset.dimensions.keys())
 print (dataset.dimensions['Timestamp'])
 print (dataset.variables.keys())
 
-#print (dataset.variables['Wavelength'][:])
-
-#print (dataset.variables['LaserNum'].units)
 print (dataset.variables['LaserNum'][:])
+#print (dataset.variables['LaserNum'].units)
+
+
+            
