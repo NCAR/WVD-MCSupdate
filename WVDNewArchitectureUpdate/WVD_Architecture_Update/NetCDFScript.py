@@ -257,7 +257,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
                 TimestampData[:] = Timestamp
                 #DatestampData[:] = Datestamp
-                EtalonNum.Data[:] = np.asarray(EtalonNum, dtype='str')
+                EtalonNumData[:] = np.asarray(EtalonNum, dtype='str')
                 TemperatureData[:] = Temperature
                 TempDiffData[:] = TempDiff
                 IsLockedData[:] = IsLocked
