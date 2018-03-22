@@ -1,6 +1,6 @@
 site name	FL1
-lat	40.0150°N
-long	105.2705°W
+lat	40.0150N
+long	105.2705W
 altitude	5430
 pointing angle	0
 paper references	Fake paper here
