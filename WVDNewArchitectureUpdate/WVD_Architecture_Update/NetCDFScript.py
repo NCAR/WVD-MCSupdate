@@ -132,11 +132,17 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                     
                 # give variables units
                 TimestampData.units = "Fractional Hours"
-                TemperatureData.units = "C"
+                TemperatureData.units = "Celcius"
                 RelHumData.units = "%"
-                PressureData.units = "mb"
+                PressureData.units = "Millibar"
                 AbsHumData.units = "g/kg"
                 
+                TimestampData.description = "The time of collected data in UTC hours from the start of the day"
+                TemperatureData.description = "Atmospheric temperature measured by the weather station at the ground (actual height is 2 meters at the top of the container)"
+                RelHumData.description = "Atmospheric relative humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+                PressureData.description = "Atmospheric pressure mesaured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+                AbsHumData.description = "Atmospheric absolute humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+               
                 # and finally close file 
                 WSncfile.close()
 
@@ -164,7 +170,6 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
             TempMeas = []
             Current = []
             Timestamp = []
-            Datestamp = [] # was removed to avoid confusion. redundant information anyway
             
             #read in file line by line
             with open(file) as f:
@@ -181,7 +186,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                         TempMeas.append(linelist[5])
                         Current.append(linelist[6])
                         Timestamp.append(linelist[7])
-                        Datestamp.append(linelist[8])
+                        # Datestamp.append(linelist[8]) # not using the date
 
                 ensure_dir(LocalNetCDFOutputPath+file[-19:-11]+"\\")
                 LLncfile = Dataset(LocalNetCDFOutputPath+file[-19:-11]+"\\LLsample"+file[-10:-4]+".nc",'w')
@@ -191,8 +196,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
                 # add in variables that are expected to be the same size as timestamp which is the master dimension 
                 TimestampData = LLncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
-                #DatestampData = LLncfile.createVariable('Datestamp',dtype('float').char,('Timestamp'))
-                LaserNumData = LLncfile.createVariable('LaserNum',dtype('str').char,('Timestamp'))
+                LaserNumData = LLncfile.createVariable('LaserName',dtype('str').char,('Timestamp'))
                 WavelengthData = LLncfile.createVariable('Wavelength',dtype('float').char,('Timestamp'))
                 WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float').char,('Timestamp'))
                 IsLockedData = LLncfile.createVariable('IsLocked',dtype('float').char,('Timestamp'))
@@ -202,7 +206,6 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
                 # filling the variables that are now in the NetCDF file
                 TimestampData[:] = Timestamp
-                #DatestampData[:] = Datestamp
                 LaserNumData[:] = np.asarray(LaserNum, dtype='str')
                 WavelengthData[:] = Wavelength
                 WaveDiffData[:] = WaveDiff
@@ -217,15 +220,22 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                     LLncfile.setncattr(entry[0],entry[1])
                     
                 TimestampData.units = "Fractional Hours"
-                #DatestampData.units = "yyyymmdd"
+                LaserNumData.units = "Unitless"
                 WavelengthData.units = "nm"
                 WaveDiffData.units = "nm"
-                TempDesiredData.units = "C"
-                TempMeasData.units = "C"
-                CurrentData.units = "amp"
+                IsLockedData.units = "Unitless"
+                TempDesiredData.units = "Celcius"
+                TempMeasData.units = "Celcius"
+                CurrentData.units = "Amp"
 
-                WavelengthData.description = "Wavelength measured by wavemeter"
-                WaveDiffData.description = "Measured wavelength - Desired wavelenth"
+                TimestampData.description = "The time of collected data in UTC hours from the start of the day"
+                LaserNumData.description = "Name of the laser that was being locked (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or unknown)"
+                WavelengthData.description = "Wavelength of the seed laser measured by the wavemeter (reference to vacuum)"
+                WaveDiffData.description = "Wavelength of the seed laser measured by the wavemeter (reference to vacuum) - Desired wavelenth "
+                IsLockedData.description = "Boolean value defining if the operational software considered the wavelength difference low enough to be locked"
+                TempDesiredData.description = "Laser temperature setpoint"
+                TempMeasData.description = "Measured laser temperature from the Thor 8000 diode thermo-electric cooler"
+                CurrentData.description = "Measured laser current from the Thor 8000 diode laser controller"
 
                 LLncfile.close()
 
@@ -255,14 +265,12 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                 Etalonncfile.createDimension('Timestamp',len(Timestamp))
 
                 TimestampData = Etalonncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
-                #DatestampData = Etalonncfile.createVariable('Datestamp',dtype('float').char,('Timestamp'))
                 EtalonNumData = Etalonncfile.createVariable('EtalonNum','str',('Timestamp'))
                 TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
                 TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float').char,('Timestamp'))
                 IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('float').char,('Timestamp'))
 
                 TimestampData[:] = Timestamp
-                #DatestampData[:] = Datestamp
                 EtalonNumData[:] = np.asarray(EtalonNum, dtype='str')
                 TemperatureData[:] = Temperature
                 TempDiffData[:] = TempDiff
@@ -274,11 +282,17 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                     Etalonncfile.setncattr(entry[0],entry[1])
                     
                 TimestampData.units = "Fractional Hours"
-                #DatestampData.units = "yyyymmdd"
-                EtalonNumData.units = "Assigned Etalon Number"
-                TemperatureData.units = "C"
-                TempDiffData.units = "C"
+                EtalonNumData.units = "Unitless"
+                TemperatureData.units = "Celcius"
+                TempDiffData.units = "Celcius"
+                IsLockedData.units = "Unitless"
 
+                TimestampData.description = "The time of collected data in UTC hours from the start of the day"
+                EtalonNumData.description = "Name of the etalon that was being checked (Choices are: WVEtalon, HSRLEtalon, O2Etalon, or unknown)"
+                TemperatureData.description = "Measured temperature of the etalon from the Thor 8000 thermo-electric cooler"
+                TempDiffData.description = "Temperature difference of etalon measured - desired setpoint"
+                IsLockedData.description = "Boolean value defining if the operational software considered the temperature difference low enough to be locked"
+                
                 Etalonncfile.close()
 
 
@@ -381,9 +395,12 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 
                 TimestampData.units = "Fractional Hours"
                 PowChData.units = "PIN count"
+                ChannelAssignData.units = "Unitless"
                 
-                ChannelAssignData.description = "Channel Assignments"
-
+                TimestampData.units = "The time of collected data in UTC hours from the start of the day"
+                PowChData.units = "Raw pin count from the MCS analog detectors (must be converted to power by _______)"
+                ChannelAssignData.units = "String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)"
+                
                 Powncfile.close()
 
         # read in and process MCS Data files
@@ -457,12 +474,12 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                     if ord(data[95:96]) == 49: 
                         OfflineO2Ch = OfflineO2Ch + 10     
 
-                    ChannelAssign[OnlineH2OCh] = str("OnlineH2O")
-                    ChannelAssign[OfflineH2OCh] = str("OfflineH2O")
-                    ChannelAssign[CombinedHSRLCh] = str("CombinedHSRL")
-                    ChannelAssign[MolecularHSRLCh] = str("MolecularHSRL")
-                    ChannelAssign[OnlineO2Ch] = str("OnlineO2")
-                    ChannelAssign[OfflineO2Ch] = str("OfflineO2")
+                    ChannelAssign[OnlineH2OCh] = str("WVOnline")
+                    ChannelAssign[OfflineH2OCh] = str("WVOfline")
+                    ChannelAssign[CombinedHSRLCh] = str("HSRLCombined")
+                    ChannelAssign[MolecularHSRLCh] = str("HSRLMolecular")
+                    ChannelAssign[OnlineO2Ch] = str("O2Online")
+                    ChannelAssign[OfflineO2Ch] = str("O2Offline")
 
                     profPerHist = ord(data[112:113]) * 2**8 + ord(data[111:112])
                     #print (profPerHist)
@@ -504,12 +521,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                         ReadIndex = ReadIndex+4
 
                         chan = ord(data[3:4])/16
-
-                        #if v < 10:
-                        #    pass
-                        #    print ("channel = ",channel)
-                        #    print ("chan = ",chan)
-                            
+  
                         if chan != channel:
                             print (str(sys.argv[1]))
                             print (str(NowDate))
@@ -548,22 +560,16 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 TimestampData = MCSncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
                 ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float32').char,('Timestamp'))
                 ChannelData = MCSncfile.createVariable('Channel',dtype('float32').char,('Timestamp'))
-                #SyncData = MCSncfile.createVariable('Sync',dtype('float32').char,('Timestamp'))
                 CntsPerBinData = MCSncfile.createVariable('CntsPerBin',dtype('float32').char,('Timestamp'))
                 NBinsData = MCSncfile.createVariable('NBins',dtype('float32').char,('Timestamp'))
-                #RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('Timestamp'))
-                #FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float32').char,('Timestamp'))
                 DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','Timestamp'))
                 ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','str',('nChannels'))
 
                 TimestampData[:] = Timestamp
                 ProfPerHistData[:] = ProfPerHist
                 ChannelData[:] = Channel
-                #SyncData[:] = Sync
                 CntsPerBinData[:] = CntsPerBin
                 NBinsData[:] = NBins
-                #RTimeData[:] = RTime
-                #FrameCtrData[:] = FrameCtr
                 DataArrayData[:] = DataArray
                 ChannelAssignData[:] = np.asarray(ChannelAssign, dtype='str')
                 
@@ -573,15 +579,20 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                     MCSncfile.setncattr(entry[0],entry[1])
 
                 TimestampData.units = "Fractional Hours"
-                ProfPerHistData.units = "n shots per histogram"
-                ChannelData.units = "Channel number"
-                CntsPerBinData.units = "MCS Clock Counts per bin"
-                NBinsData.units = "n Bins"
-                #RTimeData.units = "ms operational"
-                #FrameCtrData.units = "n Frames processed"
-                DataArrayData.units = "Photon Counts Returned"
+                ProfPerHistData.units = "Number of shots"
+                ChannelData.units = "Unitless"
+                CntsPerBinData.units = "Unitless"
+                NBinsData.units = "Unitless"
+                DataArrayData.units = "Photons"
+                ChannelAssignData.units = "Unitless"
 
-                ChannelAssignData.description = "Channel Assignments"
+                TimestampData.description = "The time of collected data in UTC hours from the start of the day"
+                ProfPerHistData.description = "Number of laser shots summed to create a single verticle histogram"
+                ChannelData.description = "MCS hardware channel number for each measurement. There are 8 real valued inputs and 4 extra channels resulting from demuxing. "
+                CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
+                NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
+                DataArrayData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
+                ChannelAssignData.description = "String value defining what hardware was connected to the MCS digital detection channels (Choices are: WVOnline, WVOffline, HSRLCombined, HSRLMolecular, O2Online, O2Offline, or Unassigned)"
 
                 MCSncfile.close()
   
