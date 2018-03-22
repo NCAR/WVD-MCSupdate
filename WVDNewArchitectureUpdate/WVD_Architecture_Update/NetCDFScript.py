@@ -538,6 +538,12 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 MCSncfile.createDimension('Timestamp',len(Timestamp))
                 MCSncfile.createDimension('nBins',max(NBins))
                 MCSncfile.createDimension('nChannels',nChannels)
+
+                print ("a")
+                print (ChannelAssign)
+                print (type(ChannelAssign))
+                print (type(ChannelAssign[0]))
+                    
       
                 TimestampData = MCSncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
                 ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float32').char,('Timestamp'))
@@ -550,6 +556,28 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','Timestamp'))
                 ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','str',('nChannels'))
 
+
+                print ("b")
+                print (ChannelAssignData)
+                print ("-")
+                print (ChannelAssignData[:])
+                print ("hey")
+                print (type(ChannelAssignData))
+                print ("-")
+                print (type(ChannelAssignData[:]))
+                print ("listen")
+                print (type(ChannelAssignData[0]))
+                print ("-")
+                print (type(ChannelAssignData[0:1]))
+                print ("you")
+                print (np.asarray(ChannelAssign, dtype='str'))
+                print ("...")
+                print (np.asarray(ChannelAssign[0], dtype='str'))
+                print ("-")
+                print (type(np.asarray(ChannelAssign, dtype='str')))
+                print ("...")
+                print (type(np.asarray(ChannelAssign[0], dtype='str')))
+                  
                 TimestampData[:] = Timestamp
                 ProfPerHistData[:] = ProfPerHist
                 ChannelData[:] = Channel
@@ -560,7 +588,14 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 #FrameCtrData[:] = FrameCtr
                 DataArrayData[:] = DataArray
                 ChannelAssignData[:] = np.asarray(ChannelAssign, dtype='str')
+
                 
+                print ("c")
+                print (ChannelAssignData[:])
+                print (type(ChannelAssignData))
+                print (type(ChannelAssignData[0]))
+
+
                 MCSncfile.description = "MCS data file"
 
                 for entry in header:
