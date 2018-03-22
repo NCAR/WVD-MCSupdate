@@ -388,7 +388,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 PowChData[:] = PowerCh
                 ChannelAssignData[:] =  np.asarray(ChannelAssign, dtype='str')
                 
-                Powncfile.description = "Channel Power data file"
+                Powncfile.description = "Multi-channel scalar (MCS) power monitor data file"
 
                 for entry in header:
                     Powncfile.setncattr(entry[0],entry[1])
@@ -573,7 +573,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 DataArrayData[:] = DataArray
                 ChannelAssignData[:] = np.asarray(ChannelAssign, dtype='str')
                 
-                MCSncfile.description = "MCS data file"
+                MCSncfile.description = "Multi-channel scalar (MCS) photon count histogram data file"
 
                 for entry in header:
                     MCSncfile.setncattr(entry[0],entry[1])
