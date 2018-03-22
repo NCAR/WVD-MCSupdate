@@ -106,31 +106,37 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                 # make sure output path exists
                 ensure_dir(LocalNetCDFOutputPath+file[-19:-11]+"\\")
                 WSncfile = Dataset(LocalNetCDFOutputPath+file[-19:-11]+"\\WSsample"+file[-10:-4]+".nc",'w')
+                
                 # timestamp defines the dimentions of variables
                 WSncfile.createDimension('Timestamp',len(Timestamp))
+                
                 # creates variables
                 TimestampData = WSncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
                 TemperatureData = WSncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
                 RelHumData = WSncfile.createVariable('RelHum',dtype('float').char,('Timestamp'))
                 PressureData = WSncfile.createVariable('Pressure',dtype('float').char,('Timestamp'))
                 AbsHumData = WSncfile.createVariable('AbsHum',dtype('float').char,('Timestamp'))
+                
                 #fills variables
                 TimestampData[:] = Timestamp
                 TemperatureData[:] = Temperature
                 RelHumData[:] = RelHum
                 PressureData[:] = Pressure
                 AbsHumData[:] = AbsHum
+                
                 # brief description of file
                 WSncfile.description = "Weather Station data file: taken at surface level "
                 # load up header information for file
                 for entry in header:
                     WSncfile.setncattr(entry[0],entry[1])
+                    
                 # give variables units
                 TimestampData.units = "Fractional Hours"
                 TemperatureData.units = "C"
                 RelHumData.units = "%"
                 PressureData.units = "mb"
                 AbsHumData.units = "g/kg"
+                
                 # and finally close file 
                 WSncfile.close()
 
