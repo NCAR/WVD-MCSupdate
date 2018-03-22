@@ -22,5 +22,5 @@ Relative File Paths;;
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
 Function Types;;
-0;7;;
+0;8;;
 
