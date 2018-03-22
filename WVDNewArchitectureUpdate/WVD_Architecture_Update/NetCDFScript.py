@@ -167,7 +167,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                     linelist = line.split()
                     # making sure the line has the appropriate number of entries for the expected format
                     if len(linelist) == 9: 
-                        LaserNum.append(linelist[0])
+                        LaserNum.append(str(linelist[0]))
                         Wavelength.append(linelist[1])
                         WaveDiff.append(linelist[2])
                         IsLocked.append(linelist[3])
@@ -186,7 +186,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                 # add in variables that are expected to be the same size as timestamp which is the master dimension 
                 TimestampData = LLncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
                 #DatestampData = LLncfile.createVariable('Datestamp',dtype('float').char,('Timestamp'))
-                LaserNumData = LLncfile.createVariable('LaserNum',dtype('float').char,('Timestamp'))
+                LaserNumData = LLncfile.createVariable('LaserNum',dtype('str').char,('Timestamp'))
                 WavelengthData = LLncfile.createVariable('Wavelength',dtype('float').char,('Timestamp'))
                 WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float').char,('Timestamp'))
                 IsLockedData = LLncfile.createVariable('IsLocked',dtype('float').char,('Timestamp'))
@@ -197,7 +197,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                 # filling the variables that are now in the NetCDF file
                 TimestampData[:] = Timestamp
                 #DatestampData[:] = Datestamp
-                LaserNumData[:] = LaserNum
+                LaserNumData[:] = np.asarray(LaserNum, dtype='str')
                 WavelengthData[:] = Wavelength
                 WaveDiffData[:] = WaveDiff
                 IsLockedData[:] = IsLocked
@@ -236,7 +236,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                 for line in f:
                     linelist = line.split()
                     if len(linelist) == 6:
-                        EtalonNum.append(linelist[0])
+                        EtalonNum.append(str(linelist[0]))
                         Temperature.append(linelist[1])
                         TempDiff.append(linelist[2])
                         IsLocked.append(linelist[3])
@@ -250,14 +250,14 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
                 TimestampData = Etalonncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
                 #DatestampData = Etalonncfile.createVariable('Datestamp',dtype('float').char,('Timestamp'))
-                EtalonNumData = Etalonncfile.createVariable('EtalonNum',dtype('float').char,('Timestamp'))
+                EtalonNumData = Etalonncfile.createVariable('EtalonNum','str',('Timestamp'))
                 TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float').char,('Timestamp'))
                 TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float').char,('Timestamp'))
                 IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('float').char,('Timestamp'))
 
                 TimestampData[:] = Timestamp
                 #DatestampData[:] = Datestamp
-                EtalonNumData[:] = EtalonNum
+                EtalonNumData[:] = np.asarray(EtalonNum, dtype='str')
                 TemperatureData[:] = Temperature
                 TempDiffData[:] = TempDiff
                 IsLockedData[:] = IsLocked
@@ -335,11 +335,11 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                     OnlineO2Ch = ord(couple_bytes[56:57])-48
                     OfflineO2Ch = ord(couple_bytes[67:68])-48
             
-                    ChannelAssign[HSRLPowCh] = "HSRL"
-                    ChannelAssign[OnlineH2OCh] = "OnlineH2O"
-                    ChannelAssign[OfflineH2OCh] = "OfflineH2O"
-                    ChannelAssign[OnlineO2Ch] = "OnlineO2"
-                    ChannelAssign[OfflineO2Ch] = "OfflineO2"
+                    ChannelAssign[HSRLPowCh] = str("HSRL")
+                    ChannelAssign[OnlineH2OCh] = str("OnlineH2O")
+                    ChannelAssign[OfflineH2OCh] = str("OfflineH2O")
+                    ChannelAssign[OnlineO2Ch] = str("OnlineO2")
+                    ChannelAssign[OfflineO2Ch] = str("OfflineO2")
                     
                     TS = struct.unpack('>d',couple_bytes[:8])
                     Timestamp.append(TS[0])
@@ -362,11 +362,11 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                                 
                 TimestampData = Powncfile.createVariable('Timestamp',dtype('float32').char,('Timestamp'))
                 PowChData = Powncfile.createVariable('Power',dtype('float32').char,('nChannels','Timestamp'))
-                ChannelAssignData = Powncfile.createVariable('ChannelAssignment','S1',('nChannels'))
+                ChannelAssignData = Powncfile.createVariable('ChannelAssignment','str',('nChannels'))
                 
                 TimestampData[:] = Timestamp
                 PowChData[:] = PowerCh
-                ChannelAssignData[:] = ChannelAssign
+                ChannelAssignData[:] =  np.asarray(ChannelAssign, dtype='str')
                 
                 Powncfile.description = "Channel Power data file"
 
@@ -451,12 +451,12 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                     if ord(data[95:96]) == 49: 
                         OfflineO2Ch = OfflineO2Ch + 10     
 
-                    ChannelAssign[OnlineH2OCh] = "OnlineH2O"
-                    ChannelAssign[OfflineH2OCh] = "OfflineH2O"
-                    ChannelAssign[CombinedHSRLCh] = "CombinedHSRL"
-                    ChannelAssign[MolecularHSRLCh] = "MolecularHSRL"
-                    ChannelAssign[OnlineO2Ch] = "OnlineO2"
-                    ChannelAssign[OfflineO2Ch] = "OfflineO2"
+                    ChannelAssign[OnlineH2OCh] = str("OnlineH2O")
+                    ChannelAssign[OfflineH2OCh] = str("OfflineH2O")
+                    ChannelAssign[CombinedHSRLCh] = str("CombinedHSRL")
+                    ChannelAssign[MolecularHSRLCh] = str("MolecularHSRL")
+                    ChannelAssign[OnlineO2Ch] = str("OnlineO2")
+                    ChannelAssign[OfflineO2Ch] = str("OfflineO2")
 
                     profPerHist = ord(data[112:113]) * 2**8 + ord(data[111:112])
                     #print (profPerHist)
@@ -548,7 +548,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 #RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('Timestamp'))
                 #FrameCtrData = MCSncfile.createVariable('FrameCtr',dtype('float32').char,('Timestamp'))
                 DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','Timestamp'))
-                ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','S1',('nChannels'))
+                ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','str',('nChannels'))
 
                 TimestampData[:] = Timestamp
                 ProfPerHistData[:] = ProfPerHist
@@ -559,8 +559,8 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 #RTimeData[:] = RTime
                 #FrameCtrData[:] = FrameCtr
                 DataArrayData[:] = DataArray
-                ChannelAssignData[:] = ChannelAssign
-
+                ChannelAssignData[:] = np.asarray(ChannelAssign, dtype='str')
+                
                 MCSncfile.description = "MCS data file"
 
                 for entry in header:
@@ -659,6 +659,8 @@ def main():
 
         processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
 
+        #merge into one combined file
+        pass
 
         # copy NetCDF files to external drive if applicable.
         copyFiles = False
