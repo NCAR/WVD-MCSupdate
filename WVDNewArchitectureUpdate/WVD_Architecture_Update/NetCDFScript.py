@@ -920,7 +920,7 @@ def main():
                     #print (day_dirs_list)
                     for day_dir in day_dirs_list:
                         #print (day_dir)
-                        if day_dir <= ThenDate:
+                        if day_dir >= ThenDate:
                             src_file_names = os.listdir(LocalOutputPath+data_dir+"\\"+day_dir)
                             ensure_dir(OutputPath+data_dir+"\\"+day_dir+"\\")
                             for file_name in src_file_names:
