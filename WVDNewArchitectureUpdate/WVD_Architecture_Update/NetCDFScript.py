@@ -14,6 +14,7 @@ import binascii
 import math
 import shutil
 import numpy as np
+np.set_printoptions(threshold=np.nan)
 from datetime import timedelta 
 from netCDF4 import Dataset
 from numpy import arange, dtype # array module from http://numpy.scipy.org
@@ -43,12 +44,12 @@ def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
         TempFileList = os.listdir(DataPath + day)
         if float(day) == float(ThenDate):
             for file in TempFileList:
-                if file[:len(dataname)] == dataname and file[-4:] == datatype:
-                    if float(file[-10:-4])/10000 > ThenTime:
+                if file[:len(dataname)] == dataname and file[-1*len(datatype):] == datatype:
+                    if float(file[-1*len(datatype)-6:-1*len(datatype)])/10000 > ThenTime:
                         FileList.append(DataPath + day + "\\" + file)
         elif float(day) > float(ThenDate):
             for file in TempFileList:
-                if file[:len(dataname)] == dataname and file[-4:] == datatype:
+                if file[:len(dataname)] == dataname and file[-1*len(datatype):] == datatype:
                     FileList.append(DataPath + day + "\\" + file)
     return FileList
 
@@ -77,6 +78,25 @@ def readHeaderInfo():
         header = list(reader)
         #print (header)
         return header
+
+
+def FillVar(dataset, varName, varFill):
+    var = dataset.variables[varName][:]
+    i=0
+    for entry in var:
+        varFill.append(var[i])
+        i=i+1
+    return varFill
+
+            
+def Fill2DVar(dataset, varName, varFill):
+    var = dataset.variables[varName][:]
+    for array in var:
+        for entry in array:
+            varFill.append(entry)
+    return varFill
+
+
 
 # ----------------------- Weather Station ------------------                 
 def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
@@ -475,7 +495,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                         OfflineO2Ch = OfflineO2Ch + 10     
 
                     ChannelAssign[OnlineH2OCh] = str("WVOnline")
-                    ChannelAssign[OfflineH2OCh] = str("WVOfline")
+                    ChannelAssign[OfflineH2OCh] = str("WVOffline")
                     ChannelAssign[CombinedHSRLCh] = str("HSRLCombined")
                     ChannelAssign[MolecularHSRLCh] = str("HSRLMolecular")
                     ChannelAssign[OnlineO2Ch] = str("O2Online")
@@ -597,7 +617,219 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 MCSncfile.close()
   
                     
+
+
+# ------------------------------merged files ------------------------------
+# read in raw NetCDF files and merge them into one file. 
+def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header):
+    NetCDFPath = LocalOutputPath
+    print (NetCDFPath)
+    if os.path.isdir(NetCDFPath):
+        NetCDFDayList = os.listdir(NetCDFPath)
+        WSFileList = getFiles(NetCDFPath, "WSsample", ".nc", ThenDate, ThenTime)
+        LLFileList = getFiles(NetCDFPath, "LLsample", ".nc", ThenDate, ThenTime)
+        EtalonFileList = getFiles(NetCDFPath, "Etalonsample", ".nc", ThenDate, ThenTime)
+        MCSPowerFileList = getFiles(NetCDFPath, "Powsample", ".nc", ThenDate, ThenTime)
+        MCSDataFileList = getFiles(NetCDFPath, "MCSsample", ".nc", ThenDate, ThenTime)
         
+        index=0
+        for Datafile in MCSDataFileList:
+            print ("index = ", index)
+            index=index+1
+            DataTimestamp = []
+            DataProfPerHist = []
+            DataChannel = []
+            DataCntsPerBin = []
+            DataNBins = []
+            DataDataArray = []
+            DataChannelAssign = []
+
+            Datadataset = Dataset(Datafile)
+
+            DataTimestamp = FillVar(Datadataset, "Timestamp", DataTimestamp)
+            DataProfPerHist = FillVar(Datadataset, "ProfilesPerHist", DataProfPerHist)
+            DataChannel = FillVar(Datadataset, "Channel", DataChannel)
+            DataCntsPerBin = FillVar(Datadataset, "CntsPerBin", DataCntsPerBin)
+            DataNBins = FillVar(Datadataset, "NBins", DataNBins)
+            DataDataArray = Fill2DVar(Datadataset, "Data", DataDataArray)
+            DataChannelAssign = []
+            DataChannelAssign = FillVar(Datadataset, "ChannelAssignment", DataChannelAssign)
+
+            #print ("Data")
+            #print (len(DataTimestamp))
+            #print (len(DataProfPerHist))
+            #print (len(DataChannel))
+            #print (len(DataCntsPerBin))
+            #print (len(DataNBins))
+            #print (len(DataDataArray))
+            #print (len(DataChannelAssign))
+
+            firstChan=-1
+            i=0
+            for entry in DataChannelAssign:
+                if firstChan < 0:
+                    if entry != "Unnassigned":
+                        firstChan = i
+                i=i+1
+
+            print (firstChan,"---------")
+
+            MasterTimestamp = []
+            MasterWVOnline = []
+            MasterWVOffline = []
+            MasterHSRLCombined = []
+            MasterHSRLMolecular = []
+            MasterO2Online = []
+            MasterO2Offline = []
+            MasterProfPerHist = []
+            MasterCntsPerBin = []
+            MasterNBins = []
+            
+            i=0
+            for time in DataTimestamp:
+                #pass
+                #print ("@@@@@")
+
+                #print (time)
+                #print (DataProfPerHist[i])
+                #print (DataChannel[i])
+                #print (DataCntsPerBin[i])
+                #print (DataNBins[i])
+                #print (DataDataArray[i])
+                #print (DataChannelAssign[int(DataChannel[i])])
+                
+                if DataChannel[i] == firstChan:
+                    MasterTimestamp.append(time)
+                    MasterProfPerHist.append(DataProfPerHist[i])
+                    MasterCntsPerBin.append(DataCntsPerBin[i])
+                    MasterNBins.append(DataNBins[i])
+                if DataChannelAssign[int(DataChannel[i])] == "WVOnline":
+                    MasterWVOnline.append(DataDataArray[i*560:(i+1)*560+1])
+                if DataChannelAssign[int(DataChannel[i])] == "WVOffline":
+                    MasterWVOffline.append(DataDataArray[i*560:(i+1)*560+1])
+                if DataChannelAssign[int(DataChannel[i])] == "HSRLCombined":
+                    MasterHSRLCombined.append(DataDataArray[i*560:(i+1)*560+1])
+                if DataChannelAssign[int(DataChannel[i])] == "HSRLMolecular":
+                    MasterHSRLMolecular.append(DataDataArray[i*560:(i+1)*560+1])
+                if DataChannelAssign[int(DataChannel[i])] == "O2Online":
+                    MasterO2Online.append(DataDataArray[i*560:(i+1)*560+1])
+                if DataChannelAssign[int(DataChannel[i])] == "O2Offline":
+                    MasterO2Offline.append(DataDataArray[i*560:(i+1)*560+1])
+                
+                i=i+1
+
+            #print (len(MasterTimestamp))
+            #print (len(MasterWVOnline))
+            #print (len(MasterWVOffline))
+            #print (len(MasterHSRLCombined))
+            #print (len(MasterHSRLMolecular))
+            #print (len(MasterO2Online))
+            #print (len(MasterO2Offline))
+            #print (len(MasterProfPerHist))
+            #print (len(MasterCntsPerBin))
+            #print (len(MasterNBins))
+
+
+        """
+        WSTimestamp = []
+        WSTemperature = []
+        WSRelHum = []
+        WSPressure = []
+        WSAbsHum = []
+
+        for WSfile in WSFileList:
+            WSdataset = Dataset(WSfile)
+
+            WSTimestamp = FillVar(WSdataset, "Timestamp", WSTimestamp)
+            WSTemperature = FillVar(WSdataset, "Temperature", WSTemperature)
+            WSRelHum = FillVar(WSdataset, "RelHum", WSRelHum)
+            WSPressure = FillVar(WSdataset, "Pressure", WSPressure)
+            WSAbsHum = FillVar(WSdataset, "AbsHum", WSAbsHum)
+        
+        LLTimestamp = []
+        LLLaserName = []
+        LLWavelength = []
+        LLWaveDiff = []
+        LLIsLocked = []
+        LLTempDesired = []
+        LLTempMeas = []
+        LLCurrent = []
+
+        for LLfile in LLFileList:
+            LLdataset = Dataset(LLfile)
+
+            LLTimestamp = FillVar(LLdataset, "Timestamp", LLTimestamp)
+            LLLaserName = FillVar(LLdataset, "LaserName", LLLaserName)
+            LLWavelength = FillVar(LLdataset, "Wavelength", LLWavelength)
+            LLWaveDiff = FillVar(LLdataset, "WaveDiff", LLWaveDiff)
+            LLIsLocked = FillVar(LLdataset, "IsLocked", LLIsLocked)
+            LLTempDesired = FillVar(LLdataset, "TempDesired", LLTempDesired)
+            LLTempMeas = FillVar(LLdataset, "TempMeas", LLTempMeas)
+            LLCurrent = FillVar(LLdataset, "Current", LLCurrent)
+
+        EtalonTimestamp = []
+        EtalonName = []
+        EtalonTemperature = []
+        EtalonTempDiff = []
+        EtalonIsLocked = []
+
+        for Etalonfile in EtalonFileList:
+            Etalondataset = Dataset(Etalonfile)
+
+            EtalonTimestamp = FillVar(Etalondataset, "Timestamp", EtalonTimestamp)
+            EtalonName = FillVar(Etalondataset, "EtalonNum", EtalonName)
+            EtalonTemperature = FillVar(Etalondataset, "Temperature", EtalonTemperature)
+            EtalonTempDiff = FillVar(Etalondataset, "TempDiff", EtalonTempDiff)
+            EtalonIsLocked = FillVar(Etalondataset, "IsLocked", EtalonIsLocked)
+
+        PowTimestamp = []
+        PowData = []
+        PowChannelAssign = []
+
+        for Powfile in MCSPowerFileList:
+            Powdataset = Dataset(Powfile)
+
+            PowTimestamp = FillVar(Powdataset, "Timestamp", PowTimestamp)
+            PowData = Fill2DVar(Powdataset, "Power", PowData)
+            PowChannelAssign = []
+            PowChannelAssign = FillVar(Powdataset, "ChannelAssignment", PowChannelAssign)
+        """
+
+        """
+        print ("WS")
+        print (len(WSTimestamp))
+        print (len(WSTemperature))
+        print (len(WSRelHum))
+        print (len(WSPressure))
+        print (len(WSAbsHum))
+
+        print ("LL")
+        print (len(LLTimestamp))
+        print (len(LLLaserName))
+        print (len(LLWavelength))
+        print (len(LLWaveDiff))
+        print (len(LLIsLocked))
+        print (len(LLTempDesired))
+        print (len(LLTempMeas))
+        print (len(LLCurrent))
+
+        print ("Etalon")
+        print (len(EtalonTimestamp))
+        print (len(EtalonName))
+        print (len(EtalonTemperature))
+        print (len(EtalonTempDiff))
+        print (len(EtalonIsLocked))
+
+        print ("Power")
+        print (len(PowTimestamp))
+        print (len(PowData))
+        print (len(PowChannelAssign))
+        """
+        
+
+
+
+
 # --------------------------------main------------------------------------
 def main():
     print ("Hello World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S:%f"))
@@ -667,20 +899,17 @@ def main():
         print ("Last Time = " , LastTime)
 
         header = readHeaderInfo()
-
-        print (header)
+        #print (header)
         
         processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
-       
         processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
-
         processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
 
         #merge into one combined file
-        pass
+        #mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath + "NetCDFOutput\\",header)
 
         # copy NetCDF files to external drive if applicable.
-        copyFiles = False
+        copyFiles = True
         if copyFiles:
             if LocalOutputPath != OutputPath:
                 #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
