@@ -18,6 +18,7 @@ np.set_printoptions(threshold=np.nan)
 from datetime import timedelta 
 from netCDF4 import Dataset
 from numpy import arange, dtype # array module from http://numpy.scipy.org
+from copy import copy
 
 #checks if a value is a number
 def is_number(n):
@@ -94,15 +95,14 @@ def Fill2DVar(dataset, varName, varFill):
     for array in var:
         for entry in array:
             varFill.append(entry)
-    return varFill
-
+    return varFill 
 
 
 # ----------------------- Weather Station ------------------                 
 def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
     WSDataPath = os.path.join(sys.argv[1],"Data","WeatherStation")
     if os.path.isdir(WSDataPath):
-        print (WSDataPath)
+        print ("Making WS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
 
         WSFileList = getFiles(WSDataPath , "WeatherStation", ".txt", ThenDate, ThenTime)
         
@@ -175,7 +175,7 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
     LLDataPath = os.path.join(sys.argv[1],"Data","LaserLocking")
     if os.path.isdir(LLDataPath):
-        print (LLDataPath)
+        print ("Making LL Data File", datetime.datetime.now().strftime("%H:%M:%S"))
 
         LLDayList = os.listdir(LLDataPath)
 
@@ -262,7 +262,8 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                 CurrentData.description = "Measured laser current from the Thor 8000 diode laser controller"
 
                 LLncfile.close()
-
+        
+        print ("Making Etalon Data File", datetime.datetime.now().strftime("%H:%M:%S"))
         # read in file, process into NetCDF, and write out file
         for file in EtalonFileList: 
             EtalonNum = []
@@ -327,7 +328,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
   
     MCSDataPath = os.path.join(sys.argv[1],"Data","MCS")
     if os.path.isdir(MCSDataPath):
-        print (MCSDataPath)
+        print ("Making Power Data File", datetime.datetime.now().strftime("%H:%M:%S"))
         
         MCSDayList = os.listdir(MCSDataPath)
         MCSFileList = getFiles(MCSDataPath , "MCSData", ".bin", ThenDate, ThenTime)
@@ -428,6 +429,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 
                 Powncfile.close()
 
+        print ("Making MCS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
         # read in and process MCS Data files
         for MCSfile in MCSFileList:
 
@@ -620,12 +622,82 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
 
                 MCSncfile.close()
   
+       
+
+#=========== called by various merging functions to interpolate sparse data onto
+# a timeseries that is determined by MCS data if available, or to a 1/2 Hz timeseries
+# if data is unavailable ===========
+def interpolate(ArrayIn, VarTimestamp, MasterTimestamp):
+        
+    LocalArrayIn = copy(ArrayIn)
+    LocalVarTimestamp = copy(VarTimestamp)
+    LocalMasterTimestamp = copy(MasterTimestamp)
+
+    ArrayOut = []
+    
+    if len(LocalVarTimestamp) == 0:
+        for time in LocalMasterTimestamp:
+            ArrayOut.append(float('nan'))
+    else:
+        for time in LocalMasterTimestamp:
+            if LocalVarTimestamp[0] > time:
+                ArrayOut.append(float('nan'))
+            else:
+                while len(LocalVarTimestamp) > 1 and LocalVarTimestamp[1] < time:
+                    LocalVarTimestamp.pop(0)
+                    LocalArrayIn.pop(0)
+                if len(LocalVarTimestamp) > 1:    
+                    deltaT = LocalVarTimestamp[1] - LocalVarTimestamp[0]
+                    deltaTau = time - LocalVarTimestamp[0]
+                    fracT = deltaTau/deltaT 
+                    deltaVal = ArrayIn[1] - ArrayIn[0]
+                    newVal = ArrayIn[0] + (fracT * deltaVal)
+                    ArrayOut.append(newVal)
+                else:
+                    while len(ArrayOut) < len(LocalMasterTimestamp):
+                        ArrayOut.append(float('nan'))
+
+    return ArrayOut
+        
+
+    
+#=========== called by power merging function to apply frequent data onto
+# a timeseries that is determined by MCS data if available, or to a 1/2 Hz timeseries
+# if data is unavailable ===========
+def assign(ArrayIn,VarTimestamp,MasterTimestamp):
+    LocalArrayIn = copy(ArrayIn)
+    LocalVarTimestamp = copy(VarTimestamp)
+    LocalMasterTimestamp = copy(MasterTimestamp)
+    
+    ArrayOut = []
+
+    if len(LocalVarTimestamp) == 0:
+        for time in LocalMasterTimestamp:
+            ArrayOut.append(float('nan'))
+    else:
+        for time in LocalMasterTimestamp:
+            if LocalVarTimestamp[0] > time:
+                ArrayOut.append(float('nan'))
+            else:
+                tempsum = 0
+                tempcount = 0
+                while len(LocalVarTimestamp) > 1 and LocalVarTimestamp[0] < time:
+                    tempsum = tempsum + LocalArrayIn[0]
+                    tempcount = tempcount + 1
+                    LocalVarTimestamp.pop(0)
+                    LocalArrayIn.pop(0) 
+                ArrayOut.append(tempsum/tempcount)
+        while len(ArrayOut) < len(LocalMasterTimestamp):
+            ArrayOut.append(float('nan'))
+
+    return ArrayOut
+
 
 
 # ==========called by mergeNetCDF to process MCS photon counting data============
 def mergeData(MCSDataFileList, NetCDFPath, header):
     for Datafile in MCSDataFileList:
-        print ("Merging MCS Data")
+        print ("Merging MCS Data", datetime.datetime.now().strftime("%H:%M:%S"))
         fileDate = Datafile[-27:-19]
         fileTime = Datafile[-9:-3]
         
@@ -912,7 +984,7 @@ def mergeData(MCSDataFileList, NetCDFPath, header):
             NBinsData[:] = EmptyArray
             
         # brief description of file
-        Mergedncfile.description = "Weather Station data file: taken at surface level "
+        Mergedncfile.description = "Water Vapor Dial data file"
         # load up header information for file
         for entry in header:
             Mergedncfile.setncattr(entry[0],entry[1])
@@ -942,137 +1014,11 @@ def mergeData(MCSDataFileList, NetCDFPath, header):
         
         Mergedncfile.close()
      
-   
-# ==========called by mergeNetCDF to process Laser data============
-def mergeLaser(LLFileList, NetCDFPath, header):
-    for LLfile in LLFileList:
-        print ("Merging Lasers")
-        fileDate = LLfile[-26:-18]
-        fileTime = LLfile[-9:-3]
-        print (fileDate)
-        print (fileTime) 
-        
-        LLTimestamp = []
-        LLLaserName = []
-        LLWavelength = []
-        LLWaveDiff = []
-        LLIsLocked = []
-        LLTempDesired = []
-        LLTempMeas = []
-        LLCurrent = []
-        
-        Laserdataset = Dataset(LLfile)
-               
-        LLTimestamp = FillVar(Laserdataset, "Timestamp", LLTimestamp)
-        LLLaserName = FillVar(Laserdataset, "LaserName", LLLaserName)
-        LLWavelength = FillVar(Laserdataset, "Wavelength", LLWavelength)
-        LLWaveDiff = FillVar(Laserdataset, "WaveDiff", LLWaveDiff)
-        LLIsLocked = FillVar(Laserdataset, "IsLocked", LLIsLocked)
-        LLTempDesired = FillVar(Laserdataset, "TempDesired", LLTempDesired)
-        LLTempMeas = FillVar(Laserdataset, "TempMeas", LLTempMeas)
-        LLCurrent = FillVar(Laserdataset, "Current", LLCurrent)
-        
-        #print (len(LLTimestamp))
-        #print (len(LLLaserName))
-        #print (len(LLWavelength))
-        #print (len(LLWaveDiff))
-        #print (len(LLIsLocked))
-        #print (len(LLTempDesired))
-        #print (len(LLTempMeas))
-        #print (len(LLCurrent))
-
-        # these arrays are 6xwhatever which are indexed 0-5 by channels 
-        # WVOnline, WVOffline, HSRL, O2Online, O2Offline, unknown respectivly. 
-        ArrayTimestamp = []
-        ArrayLaserName = []
-        ArrayWavelength = []
-        ArrayWaveDiff = []
-        ArrayIsLocked = []
-        ArrayTempDesired = []
-        ArrayTempMeas = []
-        ArrayCurrent = []
-
-        for k in range(0,6):
-            ArrayTimestamp.append([])
-            ArrayLaserName.append([])
-            ArrayWavelength.append([])
-            ArrayWaveDiff.append([])
-            ArrayIsLocked.append([])
-            ArrayTempDesired.append([])
-            ArrayTempMeas.append([])
-            ArrayCurrent.append([])
-            
-        i=0
-        for time in LLTimestamp:
-            if LLLaserName[i] == "WVOnline": 
-                ArrayTimestamp[0].append(LLTimestamp[i])
-                ArrayWavelength[0].append(LLWavelength[i])
-                ArrayWaveDiff[0].append(LLWaveDiff[i])
-                ArrayIsLocked[0].append(LLIsLocked[i])
-                ArrayTempDesired[0].append(LLTempDesired[i])
-                ArrayTempMeas[0].append(LLTempMeas[i])
-                ArrayCurrent[0].append(LLCurrent[i])
-            if LLLaserName[i] == "WVOffline": 
-                ArrayTimestamp[1].append(LLTimestamp[i])
-                ArrayWavelength[1].append(LLWavelength[i])
-                ArrayWaveDiff[1].append(LLWaveDiff[i])
-                ArrayIsLocked[1].append(LLIsLocked[i])
-                ArrayTempDesired[1].append(LLTempDesired[i])
-                ArrayTempMeas[1].append(LLTempMeas[i])
-                ArrayCurrent[1].append(LLCurrent[i])
-            if LLLaserName[i] == "HSRL": 
-                ArrayTimestamp[2].append(LLTimestamp[i])
-                ArrayWavelength[2].append(LLWavelength[i])
-                ArrayWaveDiff[2].append(LLWaveDiff[i])
-                ArrayIsLocked[2].append(LLIsLocked[i])
-                ArrayTempDesired[2].append(LLTempDesired[i])
-                ArrayTempMeas[2].append(LLTempMeas[i])
-                ArrayCurrent[2].append(LLCurrent[i])
-            if LLLaserName[i] == "O2Online": 
-                ArrayTimestamp[3].append(LLTimestamp[i])
-                ArrayWavelength[3].append(LLWavelength[i])
-                ArrayWaveDiff[3].append(LLWaveDiff[i])
-                ArrayIsLocked[3].append(LLIsLocked[i])
-                ArrayTempDesired[3].append(LLTempDesired[i])
-                ArrayTempMeas[3].append(LLTempMeas[i])
-                ArrayCurrent[3].append(LLCurrent[i])
-            if LLLaserName[i] == "O2Offline": 
-                ArrayTimestamp[4].append(LLTimestamp[i])
-                ArrayWavelength[4].append(LLWavelength[i])
-                ArrayWaveDiff[4].append(LLWaveDiff[i])
-                ArrayIsLocked[4].append(LLIsLocked[i])
-                ArrayTempDesired[4].append(LLTempDesired[i])
-                ArrayTempMeas[4].append(LLTempMeas[i])
-                ArrayCurrent[4].append(LLCurrent[i])
-            if LLLaserName[i] == "unknown": 
-                ArrayTimestamp[5].append(LLTimestamp[i])
-                ArrayWavelength[5].append(LLWavelength[i])
-                ArrayWaveDiff[5].append(LLWaveDiff[i])
-                ArrayIsLocked[5].append(LLIsLocked[i])
-                ArrayTempDesired[5].append(LLTempDesired[i])
-                ArrayTempMeas[5].append(LLTempMeas[i])
-                ArrayCurrent[5].append(LLCurrent[i])
-            i=i+1
  
-        print ("hi")
-        print (len(ArrayTimestamp))
-        print (len(ArrayTimestamp[0]))
-        print (len(ArrayTimestamp[1]))
-        print (len(ArrayTimestamp[2]))
-        print (len(ArrayTimestamp[3]))
-        print (len(ArrayTimestamp[4]))
-        print (len(ArrayTimestamp[5]))
-
-
-
-
-
-
-
-# ==========called by mergeNetCDF to process Laser data============
+# ==========called by mergeNetCDF to process Power data============
 def mergePower(MCSPowerFileList, NetCDFPath, header):
     for Powerfile in MCSPowerFileList:
-        print ("Merging Power")
+        print ("Merging Power", datetime.datetime.now().strftime("%H:%M:%S"))
         fileDate = Powerfile[-27:-19]
         fileTime = Powerfile[-9:-3]
         print (fileDate)
@@ -1080,12 +1026,177 @@ def mergePower(MCSPowerFileList, NetCDFPath, header):
         PowTimestamp = []
         PowData = []
         PowChannelAssign = []
+           
+        Powerdataset = Dataset(Powerfile)
         
+        PowTimestamp = FillVar(Powerdataset, "Timestamp", PowTimestamp)
+        PowData = FillVar(Powerdataset, "Power", PowData)
+        PowChannelAssign = FillVar(Powerdataset, "ChannelAssignment", PowChannelAssign)
+
+        Channels = ["OnlineH2O", "OfflineH2O", "HSRL", "OnlineO2", "OfflineO2", "Unknown"]
+
+        PowStoreArray = []
+        for i in range (0,len(Channels)-1):
+            PowStoreArray.append([])
+
+        for i in range(0,len(Channels)-1):
+            for j in range(0,len(PowChannelAssign)):
+                if Channels[i] == PowChannelAssign[j]:
+                    PowStoreArray[i]= PowData[j]
+
+        place = os.path.join(NetCDFPath,fileDate,"MergedFiles"+fileTime+".nc")
+        Mergedncfile = None
+        MasterTimestamp = None
+        # check if merged file already exists. 
+        if os.path.isfile(place):
+            Mergedncfile = Dataset(place,'a')
+            MasterTimestamp = Mergedncfile.variables['Timestamp'][:]
+        else:
+            Mergedncfile = Dataset(place,'w')
+            # add file header information 
+            for entry in header:
+                Mergedncfile.setncattr(entry[0],entry[1])
+            # master timestamp is filled as 1/2 Hz if no file available
+            MasterTimestamp = []
+            time = PowTimestamp[0]
+            while time < PowTimestamp[len(PowTimestamp)-1]:
+                MasterTimestamp.append(time)
+                time = time + 0.00055555555 # adding 2 seconds in fractional hours
+                
+            Mergedncfile.createDimension('Timestamp',len(MasterTimestamp))
+            TimestampData = Mergedncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+            TimestampData[:] = MasterTimestamp
+            TimestampData.units = "Fractional Hours"
+            TimestampData.description = "The artificially generated time of day in UTC hours from the start of the day. Created with no MCS data to map onto."
+
+        for i in range (0,len(Channels)-1):
+            PowStoreArray[i] = assign(PowStoreArray[i].tolist(),PowTimestamp,MasterTimestamp)
+
+        PowChanData = []
+        
+        for i in range (0,len(Channels)-1):
+            PowChanData.append([])
+
+        for i in range (0,len(Channels)-1):
+            PowChanData[i] = Mergedncfile.createVariable(Channels[i]+"Power",dtype('float').char,('Timestamp'))
+            PowChanData[i][:] = PowStoreArray[i]
+
+        for i in range (0,len(Channels)-1):
+            PowChanData[i].units = "PIN count"
+            PowChanData[i].description = "Raw pin count from the MCS analog detectors (must be converted to power using ???)"
+
+        Mergedncfile.close()
+
+
 
 # ==========called by mergeNetCDF to process Laser data============
+def mergeLaser(LLFileList, NetCDFPath, header):
+    for LLfile in LLFileList:
+        print ("Merging Lasers", datetime.datetime.now().strftime("%H:%M:%S"))
+        fileDate = LLfile[-26:-18]
+        fileTime = LLfile[-9:-3]
+        print (fileDate)
+        print (fileTime) 
+
+        ChanAssign = ["WVOnline","WVOffline","HSRL","O2Online","O2Offline","unknown"]
+        Variables = ["Wavelength", "WaveDiff", "TempDesired", "TempMeas", "Current"]
+        VarUnits = ["nm","nm","Celcius","Celcius","Amp"]
+        VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","(Wavelength of the seed laser measured by the wavemeter (reference to vacuum) - Desired wavelenth)","Laser temperature setpoint","Measured laser temperature from the Thor 8000 diode thermo-electric cooler","Measured laser current from the Thor 8000 diode laser controller"]
+       
+        LLTimestamp = []
+        LLLaserName = []
+        
+        LLBlockData = [] # has dimentions Variables, Timestamp
+        for entry in Variables:
+            LLBlockData.append([])
+        
+        Laserdataset = Dataset(LLfile)
+               
+        LLTimestamp = FillVar(Laserdataset, "Timestamp", LLTimestamp)
+        LLLaserName = FillVar(Laserdataset, "LaserName", LLLaserName)
+        
+        i=0
+        for entry in Variables:
+            LLBlockData[i] = FillVar(Laserdataset, entry, LLBlockData[i])
+            i=i+1
+
+        ArrayTimestamp = []
+        LLArrayBlockData = [] #dimentions are Variables, ChanAssign, timestamp
+
+        for i in range (0,len(Variables)):
+            LLArrayBlockData.append([])
+            for j in range(0,len(ChanAssign)):
+                LLArrayBlockData[i].append([])
+
+        for i in range(0,len(ChanAssign)):
+            ArrayTimestamp.append([])
+         
+        for i in range (0,len(LLTimestamp)):
+            for j in range (0,len(ChanAssign)):
+                if LLLaserName[i] == ChanAssign[j]: 
+                    ArrayTimestamp[j].append(LLTimestamp[i])
+                    for k in range(0,len(Variables)):
+                        LLArrayBlockData[k][j].append(LLBlockData[k][i])
+             
+        place = os.path.join(NetCDFPath,fileDate,"MergedFiles"+fileTime+".nc")
+        Mergedncfile = None
+        MasterTimestamp = None
+        # check if merged file already exists. 
+        if os.path.isfile(place):
+            Mergedncfile = Dataset(place,'a')
+            MasterTimestamp = Mergedncfile.variables['Timestamp'][:]
+        else:
+            Mergedncfile = Dataset(place,'w')
+            # add file header information 
+            for entry in header:
+                Mergedncfile.setncattr(entry[0],entry[1])
+            # master timestamp is filled as 1/2 Hz if no file available
+            MasterTimestamp = []
+            time = ArrayTimestamp[0][0]
+            while time < ArrayTimestamp[0][len(ArrayTimestamp[0])-1]:
+                MasterTimestamp.append(time)
+                time = time + 0.00055555555 # adding 2 seconds in fractional hours
+                
+            Mergedncfile.createDimension('Timestamp',len(MasterTimestamp))
+            TimestampData = Mergedncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+            TimestampData[:] = MasterTimestamp
+            TimestampData.units = "Fractional Hours"
+            TimestampData.description = "The artificially generated time of day in UTC hours from the start of the day. Created with no MCS data to map onto."
+      
+        for k in range (0,len(Variables)):
+            for l in range (0,len(ChanAssign)):
+                LLArrayBlockData[k][l] = interpolate(LLArrayBlockData[k][l], ArrayTimestamp[l], MasterTimestamp)
+       
+        ChanVarData = []
+        
+        for i in range (0,len(Variables)):
+            ChanVarData.append([])
+            for j in range (0,len(ChanAssign)):
+                ChanVarData[i].append([])
+
+        i=0
+        for var in Variables:
+            j=0
+            for chan in ChanAssign:
+                ChanVarData[i][j] = Mergedncfile.createVariable(chan+var,dtype('float').char,('Timestamp'))
+                ChanVarData[i][j][:] = LLArrayBlockData[i][j]
+                j=j+1
+            i=i+1
+
+        # add variable units and descriptions 
+        for i in range (0,len(Variables)):
+            for j in range (0,len(ChanAssign)):
+                ChanVarData[i][j].units = VarUnits[i]
+                ChanVarData[i][j].description = VarDescr[i] + " for " + ChanAssign[j]
+
+        Mergedncfile.close()
+      
+
+
+# ==========called by mergeNetCDF to process Etalon data============
 def mergeEtalon(EtalonFileList, NetCDFPath, header):
     for Etalonfile in EtalonFileList:
-        print ("Merging Etalons")
+        print ("Merging Etalons", datetime.datetime.now().strftime("%H:%M:%S"))
         fileDate = Etalonfile[-30:-22]
         fileTime = Etalonfile[-9:-3]
         print (fileDate)
@@ -1097,10 +1208,11 @@ def mergeEtalon(EtalonFileList, NetCDFPath, header):
         EtalonIsLocked = []
         
         
-# ==========called by mergeNetCDF to process Laser data============
+
+# ==========called by mergeNetCDF to process WeatherStation data============
 def mergeWS(WSFileList, NetCDFPath, header):
     for WSfile in WSFileList:
-        print ("Merging WeatherStation")
+        print ("Merging WeatherStation", datetime.datetime.now().strftime("%H:%M:%S"))
         fileDate = WSfile[-26:-18]
         fileTime = WSfile[-9:-3]
         print (fileDate)
@@ -1112,43 +1224,40 @@ def mergeWS(WSFileList, NetCDFPath, header):
         WSAbsHum = []
         
 
+
 # ------------------------------merged files ------------------------------
 # read in raw NetCDF files and merge them into one file. 
 def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header):
     NetCDFPath = LocalOutputPath
-    print (NetCDFPath)
+    print ("Creating Merged file", datetime.datetime.now().strftime("%H:%M:%S"))
     if os.path.isdir(NetCDFPath):
         NetCDFDayList = os.listdir(NetCDFPath)
-        WSFileList = getFiles(NetCDFPath, "WSsample", ".nc", ThenDate, ThenTime)
+        MCSDataFileList = getFiles(NetCDFPath, "MCSsample", ".nc", ThenDate, ThenTime)
+        MCSPowerFileList = getFiles(NetCDFPath, "Powsample", ".nc", ThenDate, ThenTime)
         LLFileList = getFiles(NetCDFPath, "LLsample", ".nc", ThenDate, ThenTime)
         EtalonFileList = getFiles(NetCDFPath, "Etalonsample", ".nc", ThenDate, ThenTime)
-        MCSPowerFileList = getFiles(NetCDFPath, "Powsample", ".nc", ThenDate, ThenTime)
-        MCSDataFileList = getFiles(NetCDFPath, "MCSsample", ".nc", ThenDate, ThenTime)
+        WSFileList = getFiles(NetCDFPath, "WSsample", ".nc", ThenDate, ThenTime)
 
         # ==========creates merged files and processes data==========
         mergeData(MCSDataFileList, NetCDFPath, header)
 
-        # ==========Merge in LL info==========
-        #mergeLaser(LLFileList, NetCDFPath, header)
-
         # ==========Merge in Power info==========
-        #mergePower(MCSPowerFileList, NetCDFPath, header)
+        mergePower(MCSPowerFileList, NetCDFPath, header)
  
+        # ==========Merge in LL info==========
+        mergeLaser(LLFileList, NetCDFPath, header)
+       
         # ==========Merge in Etalon info==========
         #mergeEtalon(EtalonFileList, NetCDFPath, header)
        
         # ==========Merge in WS info==========
         #mergeWS(WSFileList, NetCDFPath, header)
       
-          
-
-
-
-
+       
 
 # --------------------------------main------------------------------------
 def main():
-    print ("Hello World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S:%f"))
+    print ("Hello World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S"))
     # create timestamp for now so we know which files to load
     Hour = datetime.datetime.utcnow().strftime("%H")
     Min = datetime.datetime.utcnow().strftime("%M")
@@ -1165,15 +1274,15 @@ def main():
     LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
 
     LocalOutputPath = os.path.join(sys.argv[1],"Data")
-    print (LocalOutputPath)
+    print ("Data saving to : ",LocalOutputPath)
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
 
         ensure_dir(LocalOutputPath)
 
         OutputPath = LocalOutputPath
 
-        print (sys.argv[1])
-        print (sys.argv[2])
+        #print (sys.argv[1])
+        #print (sys.argv[2])
         
         if os.path.isdir(sys.argv[2]):
             #ensure output directory exists
@@ -1208,11 +1317,11 @@ def main():
         ThenTime = float(ThenHour) + float(ThenMin)/60 + float(ThenSec)/3600 + float(ThenMicroSec)/3600000000
         ThenDate = (datetime.datetime.utcnow() - timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
         
-        print ("Now Date = " + NowDate)
-        print ("Then Date = " + ThenDate)          
-        print ("Now Time = " + str(NowTime))
-        print ("Then Time = " + str(ThenTime))
-        print ("Last Time = " + str(LastTime))
+        #print ("Now Date = " + NowDate)
+        #print ("Then Date = " + ThenDate)          
+        #print ("Now Time = " + str(NowTime))
+        #print ("Then Time = " + str(ThenTime))
+        #print ("Last Time = " + str(LastTime))
 
         header = readHeaderInfo()
         #print (header)
@@ -1263,7 +1372,7 @@ def main():
         fh.close
         print (sys.argv[1],"is not a dir, looking for directory containing Data")
 
-    print ("Goodnight World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S:%f"))
+    print ("Goodnight World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S"))
 
 if __name__ == '__main__':
     main()
