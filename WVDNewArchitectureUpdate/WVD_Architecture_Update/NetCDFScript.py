@@ -707,8 +707,11 @@ def assign(ArrayIn,VarTimestamp,MasterTimestamp):
                     tempsum = tempsum + LocalArrayIn[0]
                     tempcount = tempcount + 1
                     LocalVarTimestamp.pop(0)
-                    LocalArrayIn.pop(0) 
-                ArrayOut.append(tempsum/tempcount)
+                    LocalArrayIn.pop(0)
+                if tempcount >0:
+                    ArrayOut.append(tempsum/tempcount)
+                else:
+                    ArrayOut.append(float('nan'))
         while len(ArrayOut) < len(LocalMasterTimestamp):
             ArrayOut.append(float('nan'))
 
