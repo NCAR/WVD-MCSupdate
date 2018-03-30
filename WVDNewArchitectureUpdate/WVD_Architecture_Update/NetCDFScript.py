@@ -102,11 +102,15 @@ def Fill2DVar(dataset, varName, varFill):
 def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
     WSDataPath = os.path.join(sys.argv[1],"Data","WeatherStation")
     if os.path.isdir(WSDataPath):
-        print ("Making WS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
 
         WSFileList = getFiles(WSDataPath , "WeatherStation", ".txt", ThenDate, ThenTime)
         
-        for file in WSFileList: # read in file, process into NetCDF, and write out file
+        for WSfile in WSFileList: # read in file, process into NetCDF, and write out file
+            print ("Making WS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            fileDate = WSfile[-19:-11]
+            fileTime = WSfile[-10:-4]
+            print (fileDate)
+            print (fileTime)    
 
             Temperature = []
             RelHum = []
@@ -114,7 +118,7 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
             AbsHum = []
             Timestamp = []
                     
-            with open(file) as f: # read in file,
+            with open(WSfile) as f: # read in file,
                 for line in f:
                     linelist = line.split()
                     if len(linelist) == 5:
@@ -126,9 +130,9 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
                 # make sure output path exists
 
-                ensure_dir(os.path.join(LocalNetCDFOutputPath,file[-19:-11],""))
+                ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
 
-                place = os.path.join(LocalNetCDFOutputPath,file[-19:-11],"WSsample"+file[-10:-4]+".nc")
+                place = os.path.join(LocalNetCDFOutputPath,fileDate,"WSsample"+fileTime+".nc")
                 WSncfile = Dataset(place,'w')
                 # timestamp defines the dimentions of variables
                 WSncfile.createDimension('Timestamp',len(Timestamp))
@@ -175,7 +179,6 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,header):
     LLDataPath = os.path.join(sys.argv[1],"Data","LaserLocking")
     if os.path.isdir(LLDataPath):
-        print ("Making LL Data File", datetime.datetime.now().strftime("%H:%M:%S"))
 
         LLDayList = os.listdir(LLDataPath)
 
@@ -183,7 +186,13 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
         EtalonFileList = getFiles(LLDataPath , "Etalon", ".txt", ThenDate, ThenTime)
 
         # read in laser locking file, process into NetCDF, and write out file
-        for file in LLFileList: 
+        for LLfile in LLFileList: 
+            print ("Making LL Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            fileDate = LLfile[-19:-11]
+            fileTime = LLfile[-10:-4]
+            print (fileDate)
+            print (fileTime)    
+
             LaserNum = []
             Wavelength = []
             WaveDiff = []
@@ -194,7 +203,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
             Timestamp = []
             
             #read in file line by line
-            with open(file) as f:
+            with open(LLfile) as f:
                 for line in f:
                     # split up the line into numbers in list
                     linelist = line.split()
@@ -210,9 +219,9 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                         Timestamp.append(linelist[7])
                         # Datestamp.append(linelist[8]) # not using the date
 
-                ensure_dir(os.path.join(LocalNetCDFOutputPath,file[-19:-11],""))
+                ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
 
-                place = os.path.join(LocalNetCDFOutputPath,file[-19:-11],"LLsample"+file[-10:-4]+".nc")
+                place = os.path.join(LocalNetCDFOutputPath,fileDate,"LLsample"+fileTime+".nc")
                 LLncfile = Dataset(place,'w')
 
                 # create the time dimention
@@ -263,9 +272,14 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
                 LLncfile.close()
         
-        print ("Making Etalon Data File", datetime.datetime.now().strftime("%H:%M:%S"))
         # read in file, process into NetCDF, and write out file
-        for file in EtalonFileList: 
+        for EtalonFile in EtalonFileList: 
+            print ("Making Etalon Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            fileDate = EtalonFile[-19:-11]
+            fileTime = EtalonFile[-10:-4]
+            print (fileDate)
+            print (fileTime)
+
             EtalonNum = []
             Temperature = []
             TempDiff = []
@@ -273,7 +287,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
             Timestamp = []
             Datestamp = [] # was removed to avoid confusion. redundant information anyway
 
-            with open(file) as f:
+            with open(EtalonFile) as f:
                 for line in f:
                     linelist = line.split()
                     if len(linelist) == 6:
@@ -284,8 +298,8 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
                         Timestamp.append(linelist[4])
                         Datestamp.append(linelist[5]) 
 
-                ensure_dir(os.path.join(LocalNetCDFOutputPath,file[-19:-11],""))
-                Etalonncfile = Dataset(os.path.join(LocalNetCDFOutputPath,file[-19:-11],"Etalonsample"+file[-10:-4]+".nc"),'w')
+                ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
+                Etalonncfile = Dataset(os.path.join(LocalNetCDFOutputPath,fileDate,"Etalonsample"+fileTime+".nc"),'w')
 
                 Etalonncfile.createDimension('Timestamp',len(Timestamp))
 
@@ -328,14 +342,19 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
   
     MCSDataPath = os.path.join(sys.argv[1],"Data","MCS")
     if os.path.isdir(MCSDataPath):
-        print ("Making Power Data File", datetime.datetime.now().strftime("%H:%M:%S"))
-        
+                
         MCSDayList = os.listdir(MCSDataPath)
         MCSFileList = getFiles(MCSDataPath , "MCSData", ".bin", ThenDate, ThenTime)
         MCSPowerList = getFiles(MCSDataPath , "MCSPower", ".bin", ThenDate, ThenTime)
 
         # read in and process power files
         for Powerfile in MCSPowerList:
+            print ("Making Power Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            fileDate = Powerfile[-19:-11]
+            fileTime = Powerfile[-10:-4]
+            print (fileDate)
+            print (fileTime)
+            
             Timestamp = []
             PowerCh = []
             HSRLPowCh = 0
@@ -399,8 +418,8 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                         PowerCh[j].append( a + b + c + d )
                         j=j+1
 
-                ensure_dir(os.path.join(LocalNetCDFOutputPath,Powerfile[-19:-11],""))
-                place = os.path.join(LocalNetCDFOutputPath,Powerfile[-19:-11],"Powsample"+Powerfile[-10:-4]+".nc")
+                ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
+                place = os.path.join(LocalNetCDFOutputPath,fileDate,"Powsample"+fileTime+".nc")
                 Powncfile = Dataset(place,'w')
 
                 Powncfile.createDimension('Timestamp',len(Timestamp))
@@ -429,10 +448,13 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 
                 Powncfile.close()
 
-        print ("Making MCS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
         # read in and process MCS Data files
         for MCSfile in MCSFileList:
-
+            print ("Making MCS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            fileDate = MCSfile[-19:-11] 
+            fileTime = MCSfile[-10:-4]
+            print (fileDate)
+            print (fileTime)
             Timestamp = []
             ProfPerHist = []
             Channel = []
@@ -576,7 +598,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                     ReadIndex = ReadIndex+8
 
                 ensure_dir(os.path.join(LocalNetCDFOutputPath,MCSfile[-19:-11],""))
-                path = os.path.join(LocalNetCDFOutputPath,MCSfile[-19:-11],"MCSsample"+MCSfile[-10:-4]+".nc")
+                path = os.path.join(LocalNetCDFOutputPath,fileDate,"MCSsample"+fileTime+".nc")
                 MCSncfile = Dataset(path,'w')
 
                 MCSncfile.createDimension('Timestamp',len(Timestamp))
@@ -705,13 +727,13 @@ def mergeData(MCSDataFileList, NetCDFPath, header):
         print (fileTime)
          
         DataTimestamp = []
+        DataChannelAssign = []
         DataProfPerHist = []
         DataChannel = []
         DataCntsPerBin = []
         DataNBins = []
         DataDataArray = []
-        DataChannelAssign = []
-        
+
         Datadataset = Dataset(Datafile)
         
         DataTimestamp = FillVar(Datadataset, "Timestamp", DataTimestamp)
@@ -1202,12 +1224,86 @@ def mergeEtalon(EtalonFileList, NetCDFPath, header):
         print (fileDate)
         print (fileTime) 
         EtalonTimestamp = []
-        EtalonName = []
-        EtalonTemperature = []
-        EtalonTempDiff = []
-        EtalonIsLocked = []
+        EtalonNum = []
+        EtalonTemp = []
+        EtalonTempDiff = []        
         
+        Channels = ["WVEtalon", "HSRLEtalon", "O2Etalon"]
+     
+        Etalondataset = Dataset(Etalonfile)
+               
+        EtalonTimestamp = FillVar(Etalondataset, "Timestamp", EtalonTimestamp)
+        EtalonNum = FillVar(Etalondataset, "EtalonNum", EtalonNum)
+        EtalonTemp = FillVar(Etalondataset, "Temperature", EtalonTemp)
+        EtalonTempDiff = FillVar(Etalondataset, "TempDiff", EtalonTempDiff)
         
+        EtalonTimestampBlock = [] # has dimentions Channel, Timestamp
+        EtalonTemperatureBlock = [] # has dimentions Channel, Timestamp
+        EtalonTempDiffBlock = [] # has dimentions Channel, Timestamp
+
+        for entry in Channels:
+            EtalonTimestampBlock.append([])
+            EtalonTemperatureBlock.append([])
+            EtalonTempDiffBlock.append([])
+        
+        for i in range(0,len(EtalonTimestamp)):
+            for j in range(0,len(Channels)):
+                if EtalonNum[i] == Channels[j]:
+                    EtalonTimestampBlock[j].append(EtalonTimestamp[i])
+                    EtalonTemperatureBlock[j].append(EtalonTemp[i])
+                    EtalonTempDiffBlock[j].append(EtalonTempDiff[i])
+
+        place = os.path.join(NetCDFPath,fileDate,"MergedFiles"+fileTime+".nc")
+        Mergedncfile = None
+        MasterTimestamp = None
+        # check if merged file already exists. 
+        if os.path.isfile(place):
+            Mergedncfile = Dataset(place,'a')
+            MasterTimestamp = Mergedncfile.variables['Timestamp'][:]
+        else:
+            Mergedncfile = Dataset(place,'w')
+            # add file header information 
+            for entry in header:
+                Mergedncfile.setncattr(entry[0],entry[1])
+            # master timestamp is filled as 1/2 Hz if no file available
+            MasterTimestamp = []
+            time = EtalonTimestamp[0]
+            while time < EtalonTimestamp[len(EtalonTimestamp)-1]:
+                MasterTimestamp.append(time)
+                time = time + 0.00055555555 # adding 2 seconds in fractional hours
+                
+            Mergedncfile.createDimension('Timestamp',len(MasterTimestamp))
+            TimestampData = Mergedncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+            TimestampData[:] = MasterTimestamp
+            TimestampData.units = "Fractional Hours"
+            TimestampData.description = "The artificially generated time of day in UTC hours from the start of the day. Created with no MCS data to map onto."
+
+        for i in range (0,len(Channels)):
+            EtalonTemperatureBlock[i] = interpolate(EtalonTemperatureBlock[i], EtalonTimestampBlock[i], MasterTimestamp)
+            EtalonTempDiffBlock[i] = interpolate(EtalonTempDiffBlock[i], EtalonTimestampBlock[i], MasterTimestamp)
+
+        ChanTempData = []
+        ChanTempDiffData = []
+
+        for i in range (0,len(Channels)):
+            ChanTempData.append([])
+            ChanTempDiffData.append([])
+            
+        for i in range (0,len(Channels)):
+            ChanTempData[i] =  Mergedncfile.createVariable(Channels[i]+"Temperature",dtype('float').char,('Timestamp'))
+            ChanTempDiffData[i] =  Mergedncfile.createVariable(Channels[i]+"TempDiff",dtype('float').char,('Timestamp'))
+            ChanTempData[i][:] = EtalonTemperatureBlock[i]
+            ChanTempDiffData[i][:] = EtalonTempDiffBlock[i]
+        
+        for i in range (0,len(Channels)):
+            ChanTempData[i].units = "Celcius"
+            ChanTempDiffData[i].units = "Celcius"
+            ChanTempData[i].description = "Measured temperature of the etalon from the Thor 8000 thermo-electric cooler for " + Channels[i]
+            ChanTempDiffData[i].description = "Temperature difference of etalon measured - desired setpoint for " + Channels[i]
+           
+        Mergedncfile.close()
+    
+
 
 # ==========called by mergeNetCDF to process WeatherStation data============
 def mergeWS(WSFileList, NetCDFPath, header):
@@ -1223,6 +1319,66 @@ def mergeWS(WSFileList, NetCDFPath, header):
         WSPressure = []
         WSAbsHum = []
         
+        WSdataset = Dataset(WSfile)
+               
+        WSTimestamp = FillVar(WSdataset, "Timestamp", WSTimestamp)
+        WSTemperature = FillVar(WSdataset, "Temperature", WSTemperature)
+        WSRelHum = FillVar(WSdataset, "RelHum", WSRelHum)
+        WSPressure = FillVar(WSdataset, "Pressure", WSPressure)
+        WSAbsHum = FillVar(WSdataset, "AbsHum", WSAbsHum)
+       
+        place = os.path.join(NetCDFPath,fileDate,"MergedFiles"+fileTime+".nc")
+        Mergedncfile = None
+        MasterTimestamp = None
+        # check if merged file already exists. 
+        if os.path.isfile(place):
+            Mergedncfile = Dataset(place,'a')
+            MasterTimestamp = Mergedncfile.variables['Timestamp'][:]
+        else:
+            Mergedncfile = Dataset(place,'w')
+            # add file header information 
+            for entry in header:
+                Mergedncfile.setncattr(entry[0],entry[1])
+            # master timestamp is filled as 1/2 Hz if no file available
+            MasterTimestamp = []
+            time = EtalonTimestamp[0]
+            while time < EtalonTimestamp[len(EtalonTimestamp)-1]:
+                MasterTimestamp.append(time)
+                time = time + 0.00055555555 # adding 2 seconds in fractional hours
+                
+            Mergedncfile.createDimension('Timestamp',len(MasterTimestamp))
+            TimestampData = Mergedncfile.createVariable('Timestamp',dtype('float').char,('Timestamp'))
+            TimestampData[:] = MasterTimestamp
+            TimestampData.units = "Fractional Hours"
+            TimestampData.description = "The artificially generated time of day in UTC hours from the start of the day. Created with no MCS data to map onto."
+
+        WSTemperature = interpolate(WSTemperature, WSTimestamp, MasterTimestamp)
+        WSRelHum = interpolate(WSRelHum, WSTimestamp, MasterTimestamp)
+        WSPressure = interpolate(WSPressure, WSTimestamp, MasterTimestamp)
+        WSAbsHum = interpolate(WSAbsHum, WSTimestamp, MasterTimestamp)
+
+        WSTemperatureData =  Mergedncfile.createVariable("WSTemperature",dtype('float').char,('Timestamp'))
+        WSRelHumData =  Mergedncfile.createVariable("WSRelHum",dtype('float').char,('Timestamp'))
+        WSPressureData =  Mergedncfile.createVariable("WSPressure",dtype('float').char,('Timestamp'))
+        WSAbsHumData =  Mergedncfile.createVariable("WSAbsHum",dtype('float').char,('Timestamp'))
+
+        WSTemperatureData[:] = WSTemperature
+        WSRelHumData[:] =  WSRelHum
+        WSPressureData[:] =  WSPressure
+        WSAbsHumData[:] = WSAbsHum
+        
+        WSTemperatureData.units = "Celcius"
+        WSRelHumData.units = "%"
+        WSPressureData.units = "Millibar"
+        WSAbsHumData.units = "g/kg"
+  
+        WSTemperatureData.description = "Atmospheric temperature measured by the weather station at the ground (actual height is 2 meters at the top of the container)"
+        WSRelHumData.description = "Atmospheric relative humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+        WSPressureData.description = "Atmospheric pressure mesaured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+        WSAbsHumData.description = "Atmospheric absolute humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+
+        Mergedncfile.close()
+
 
 
 # ------------------------------merged files ------------------------------
@@ -1240,18 +1396,10 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
 
         # ==========creates merged files and processes data==========
         mergeData(MCSDataFileList, NetCDFPath, header)
-
-        # ==========Merge in Power info==========
         mergePower(MCSPowerFileList, NetCDFPath, header)
- 
-        # ==========Merge in LL info==========
         mergeLaser(LLFileList, NetCDFPath, header)
-       
-        # ==========Merge in Etalon info==========
-        #mergeEtalon(EtalonFileList, NetCDFPath, header)
-       
-        # ==========Merge in WS info==========
-        #mergeWS(WSFileList, NetCDFPath, header)
+        mergeEtalon(EtalonFileList, NetCDFPath, header)
+        mergeWS(WSFileList, NetCDFPath, header)
       
        
 
@@ -1281,9 +1429,6 @@ def main():
 
         OutputPath = LocalOutputPath
 
-        #print (sys.argv[1])
-        #print (sys.argv[2])
-        
         if os.path.isdir(sys.argv[2]):
             #ensure output directory exists
             OutputPath = os.path.join(sys.argv[2],"Data")
@@ -1316,15 +1461,8 @@ def main():
         ThenMicroSec = (datetime.datetime.utcnow()-timedelta(hours=float(sys.argv[3]))).strftime("%f")
         ThenTime = float(ThenHour) + float(ThenMin)/60 + float(ThenSec)/3600 + float(ThenMicroSec)/3600000000
         ThenDate = (datetime.datetime.utcnow() - timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
-        
-        #print ("Now Date = " + NowDate)
-        #print ("Then Date = " + ThenDate)          
-        #print ("Now Time = " + str(NowTime))
-        #print ("Then Time = " + str(ThenTime))
-        #print ("Last Time = " + str(LastTime))
-
+     
         header = readHeaderInfo()
-        #print (header)
         
         processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,os.path.join(LocalOutputPath,"NetCDFOutput"),header)
         processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,os.path.join(LocalOutputPath,"NetCDFOutput"),header)
@@ -1337,29 +1475,29 @@ def main():
         copyFiles = True
         #copyFiles = False
         if copyFiles:
-            print ("copyFiles")
+            print ("Copying files", datetime.datetime.now().strftime("%H:%M:%S"))
             if LocalOutputPath != OutputPath:
                 #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
                 data_dirs_list = os.listdir(LocalOutputPath)
                 #print (data_dirs_list)
                 for data_dir in data_dirs_list:
-                    day_dirs_list = os.listdir(os.path.join(LocalOutputPath,data_dir))
-                    #print ("data_dir = ",data_dir)
-                    for day_dir in day_dirs_list:
-                        #print ("day_dir = ", day_dir)
-                        if day_dir >= ThenDate:
-                            LocalCopyFrom = os.path.join(LocalOutputPath,data_dir,day_dir)
-                            CopyTo = os.path.join(OutputPath,data_dir,day_dir,"")
-                            #print ("LocalCopyFrom = ",LocalCopyFrom)
-                            #print ("CopyTo = ",CopyTo)
-                            src_file_names = os.listdir(LocalCopyFrom)
-                            ensure_dir(CopyTo)
-                            for file_name in src_file_names:
-                                #print ("file_name = ",file_name)
-                                full_file_name = os.path.join(LocalCopyFrom,file_name)
-                                #print ("full_file_name = ",full_file_name)
-                                if (os.path.isfile(full_file_name)):
-                                    shutil.copy(full_file_name, CopyTo)
+                    print ("Copying",data_dir, datetime.datetime.now().strftime("%H:%M:%S"))
+                    if os.path.isfile(os.path.join(LocalOutputPath,data_dir)):
+                        shutil.copy(os.path.join(LocalOutputPath,data_dir), os.path.join(OutputPath,data_dir))
+                    else:
+                        day_dirs_list = os.listdir(os.path.join(LocalOutputPath,data_dir))
+                        for day_dir in day_dirs_list:
+                            if os.path.isfile(day_dir):
+                                shutil.copy(os.path.join(LocalOutputPath,data_dir,day_dir), os.path.join(OutputPath,data_dir,day_dir))
+                            else:
+                                if day_dir >= ThenDate:
+                                    print ("copying day", day_dir, datetime.datetime.now().strftime("%H:%M:%S"))
+                                    LocalCopyFrom = os.path.join(LocalOutputPath,data_dir,day_dir)
+                                    src_file_names = os.listdir(os.path.join(LocalOutputPath,data_dir,day_dir))
+                                    ensure_dir(os.path.join(OutputPath,data_dir,day_dir,""))
+                                    for file_name in src_file_names:
+                                        if (os.path.isfile(os.path.join(LocalCopyFrom,file_name))):
+                                            shutil.copy(os.path.join(LocalCopyFrom,file_name), os.path.join(OutputPath,data_dir,day_dir,""))
 
     
     # if os.path.isdir(os.path.join(sys.argv[1],"Data"):        
