@@ -106,7 +106,7 @@ def processWS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
         WSFileList = getFiles(WSDataPath , "WeatherStation", ".txt", ThenDate, ThenTime)
         
         for WSfile in WSFileList: # read in file, process into NetCDF, and write out file
-            print ("Making WS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            print ("Making WS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             fileDate = WSfile[-19:-11]
             fileTime = WSfile[-10:-4]
             print (fileDate)
@@ -187,7 +187,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
 
         # read in laser locking file, process into NetCDF, and write out file
         for LLfile in LLFileList: 
-            print ("Making LL Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            print ("Making LL Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             fileDate = LLfile[-19:-11]
             fileTime = LLfile[-10:-4]
             print (fileDate)
@@ -274,7 +274,7 @@ def processLL(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,h
         
         # read in file, process into NetCDF, and write out file
         for EtalonFile in EtalonFileList: 
-            print ("Making Etalon Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            print ("Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             fileDate = EtalonFile[-19:-11]
             fileTime = EtalonFile[-10:-4]
             print (fileDate)
@@ -349,7 +349,7 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
 
         # read in and process power files
         for Powerfile in MCSPowerList:
-            print ("Making Power Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            print ("Making Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             fileDate = Powerfile[-19:-11]
             fileTime = Powerfile[-10:-4]
             print (fileDate)
@@ -365,13 +365,11 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
             ChannelAssign = []
     
             nChannels = 12
-            
             i=0
             while i < nChannels:
                 i=i+1
                 PowerCh.append([])
                 ChannelAssign.append("Unassigned")
-           
             with open(Powerfile, "rb") as file:
                 file.seek(0)  # Go to beginning
 
@@ -434,7 +432,6 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 ChannelAssignData[:] =  np.asarray(ChannelAssign, dtype='str')
                 
                 Powncfile.description = "Multi-channel scalar (MCS) power monitor data file"
-
                 for entry in header:
                     Powncfile.setncattr(entry[0],entry[1])
                 
@@ -445,12 +442,11 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 TimestampData.units = "The time of collected data in UTC hours from the start of the day"
                 PowChData.units = "Raw pin count from the MCS analog detectors (must be converted to power by _______)"
                 ChannelAssignData.units = "String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)"
-                
                 Powncfile.close()
 
         # read in and process MCS Data files
         for MCSfile in MCSFileList:
-            print ("Making MCS Data File", datetime.datetime.now().strftime("%H:%M:%S"))
+            print ("Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             fileDate = MCSfile[-19:-11] 
             fileTime = MCSfile[-10:-4]
             print (fileDate)
@@ -468,12 +464,10 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
             ChannelAssign = []
 
             nChannels = 12
-            
             i=0
             while i < nChannels:
                 i=i+1
                 ChannelAssign.append("Unassigned")
-           
             with open(MCSfile , 'rb') as file:
                 thing = file.read()
                 file_length=len(thing)
@@ -596,8 +590,8 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                     # throw away extra bits on end of data frame so next is alligned
                     data = file.read(8)
                     ReadIndex = ReadIndex+8
-
-                ensure_dir(os.path.join(LocalNetCDFOutputPath,MCSfile[-19:-11],""))
+            
+                ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
                 path = os.path.join(LocalNetCDFOutputPath,fileDate,"MCSsample"+fileTime+".nc")
                 MCSncfile = Dataset(path,'w')
 
@@ -622,7 +616,6 @@ def processMCS(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalNetCDFOutputPath,
                 ChannelAssignData[:] = np.asarray(ChannelAssign, dtype='str')
                 
                 MCSncfile.description = "Multi-channel scalar (MCS) photon count histogram data file"
-
                 for entry in header:
                     MCSncfile.setncattr(entry[0],entry[1])
 
@@ -722,7 +715,7 @@ def assign(ArrayIn,VarTimestamp,MasterTimestamp):
 # ==========called by mergeNetCDF to process MCS photon counting data============
 def mergeData(MCSDataFileList, NetCDFPath, header):
     for Datafile in MCSDataFileList:
-        print ("Merging MCS Data", datetime.datetime.now().strftime("%H:%M:%S"))
+        print ("Merging MCS Data", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         fileDate = Datafile[-27:-19]
         fileTime = Datafile[-9:-3]
         
@@ -1043,7 +1036,7 @@ def mergeData(MCSDataFileList, NetCDFPath, header):
 # ==========called by mergeNetCDF to process Power data============
 def mergePower(MCSPowerFileList, NetCDFPath, header):
     for Powerfile in MCSPowerFileList:
-        print ("Merging Power", datetime.datetime.now().strftime("%H:%M:%S"))
+        print ("Merging Power", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         fileDate = Powerfile[-27:-19]
         fileTime = Powerfile[-9:-3]
         print (fileDate)
@@ -1117,7 +1110,7 @@ def mergePower(MCSPowerFileList, NetCDFPath, header):
 # ==========called by mergeNetCDF to process Laser data============
 def mergeLaser(LLFileList, NetCDFPath, header):
     for LLfile in LLFileList:
-        print ("Merging Lasers", datetime.datetime.now().strftime("%H:%M:%S"))
+        print ("Merging Lasers", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         fileDate = LLfile[-26:-18]
         fileTime = LLfile[-9:-3]
         print (fileDate)
@@ -1221,7 +1214,7 @@ def mergeLaser(LLFileList, NetCDFPath, header):
 # ==========called by mergeNetCDF to process Etalon data============
 def mergeEtalon(EtalonFileList, NetCDFPath, header):
     for Etalonfile in EtalonFileList:
-        print ("Merging Etalons", datetime.datetime.now().strftime("%H:%M:%S"))
+        print ("Merging Etalons", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         fileDate = Etalonfile[-30:-22]
         fileTime = Etalonfile[-9:-3]
         print (fileDate)
@@ -1311,7 +1304,7 @@ def mergeEtalon(EtalonFileList, NetCDFPath, header):
 # ==========called by mergeNetCDF to process WeatherStation data============
 def mergeWS(WSFileList, NetCDFPath, header):
     for WSfile in WSFileList:
-        print ("Merging WeatherStation", datetime.datetime.now().strftime("%H:%M:%S"))
+        print ("Merging WeatherStation", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         fileDate = WSfile[-26:-18]
         fileTime = WSfile[-9:-3]
         print (fileDate)
@@ -1388,7 +1381,7 @@ def mergeWS(WSFileList, NetCDFPath, header):
 # read in raw NetCDF files and merge them into one file. 
 def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header):
     NetCDFPath = LocalOutputPath
-    print ("Creating Merged file", datetime.datetime.now().strftime("%H:%M:%S"))
+    print ("Creating Merged file", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     if os.path.isdir(NetCDFPath):
         NetCDFDayList = os.listdir(NetCDFPath)
         MCSDataFileList = getFiles(NetCDFPath, "MCSsample", ".nc", ThenDate, ThenTime)
@@ -1415,7 +1408,7 @@ def main():
     Sec = datetime.datetime.utcnow().strftime("%S")
     MicroSec = datetime.datetime.utcnow().strftime("%f")
     NowTime = float(Hour) + float(Min)/60 + float(Sec)/3600 + float(MicroSec)/3600000000
-    NowDate = datetime.datetime.now().strftime("%Y%m%d")
+    NowDate = datetime.datetime.utcnow().strftime("%Y%m%d")
 
     # LastHour variables used to find NetCDF Logging files for error and other logging. 
     LastHour = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%H")
@@ -1478,13 +1471,13 @@ def main():
         copyFiles = True
         #copyFiles = False
         if copyFiles:
-            print ("Copying files", datetime.datetime.now().strftime("%H:%M:%S"))
+            print ("Copying files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             if LocalOutputPath != OutputPath:
                 #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
                 data_dirs_list = os.listdir(LocalOutputPath)
                 #print (data_dirs_list)
                 for data_dir in data_dirs_list:
-                    print ("Copying",data_dir, datetime.datetime.now().strftime("%H:%M:%S"))
+                    print ("Copying",data_dir, datetime.datetime.utcnow().strftime("%H:%M:%S"))
                     if os.path.isfile(os.path.join(LocalOutputPath,data_dir)):
                         shutil.copy(os.path.join(LocalOutputPath,data_dir), os.path.join(OutputPath,data_dir))
                     else:
@@ -1494,7 +1487,7 @@ def main():
                                 shutil.copy(os.path.join(LocalOutputPath,data_dir,day_dir), os.path.join(OutputPath,data_dir,day_dir))
                             else:
                                 if day_dir >= ThenDate:
-                                    print ("copying day", day_dir, datetime.datetime.now().strftime("%H:%M:%S"))
+                                    print ("Copying day", day_dir, datetime.datetime.utcnow().strftime("%H:%M:%S"))
                                     LocalCopyFrom = os.path.join(LocalOutputPath,data_dir,day_dir)
                                     src_file_names = os.listdir(os.path.join(LocalOutputPath,data_dir,day_dir))
                                     ensure_dir(os.path.join(OutputPath,data_dir,day_dir,""))
@@ -1513,7 +1506,7 @@ def main():
         fh.close
         print (sys.argv[1],"is not a dir, looking for directory containing Data")
 
-    print ("Goodnight World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S"))
+    print ("Goodnight World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
 
 if __name__ == '__main__':
     main()
