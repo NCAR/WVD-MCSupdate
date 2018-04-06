@@ -1599,7 +1599,7 @@ def main():
     LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
     
     # creating Error file variable for use if needed ... which of course it never will be ... right? 
-    ErrorFile = os.path.join(sys.argv[1],"NetCDFPythonErrors"+str(LastTime)+".txt")
+    ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild","NetCDFPythonErrors"+str(LastTime)+".txt")
 
     LocalOutputPath = os.path.join(sys.argv[1],"Data")
     print ("Data saving to : ",LocalOutputPath)
