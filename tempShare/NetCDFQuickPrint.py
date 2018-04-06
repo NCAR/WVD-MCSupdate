@@ -11,7 +11,7 @@ dataset = Dataset(sys.argv[1])
 print (dataset.file_format)
 print (dataset)
 print (dataset.dimensions.keys())
-print (dataset.dimensions['Timestamp'])
+print (dataset.dimensions['time'])
 print (dataset.variables.keys())
 
 

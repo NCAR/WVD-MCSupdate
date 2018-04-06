@@ -1,9 +1,14 @@
-site name	FL1
-lat	40.0150N
-long	105.2705W
-altitude	5430
-pointing angle	0
-paper references	Fake paper here
-contact info	Brad Schoenrock - brads@ucar.edu
-dial unit number	DIAL2
-project	Testing for Relampago
+Conventions	CFRadial
+title		Water Vapor Dial Merged Data
+institution	NCAR/UCAR
+references	Fake paper here
+source		DIAL2
+history		raw, merged onto master timeseries set by MCS data if available
+comment		N/A
+instrument_name	Water Vapor Dial 2
+site_name	FL1
+contact_info	Brad Schoenrock - brads@ucar.edu
+project		Testing for Relampago
+latitude	40.0150
+longitude	254.7295
+altitude	1655
