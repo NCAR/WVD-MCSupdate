@@ -1518,7 +1518,7 @@ def mergeWS(WSfile, NetCDFPath):
 
 # ------------------------------merged files ------------------------------
 # read in raw NetCDF files and merge them into one file. 
-def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header):
+def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header,ErrorFile):
     NetCDFPath = LocalOutputPath
     print ("Creating Merged files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     if os.path.isdir(NetCDFPath):
@@ -1688,7 +1688,7 @@ def main():
                     Write2ErrorFile(ErrorFile, writeString)
 
         #merge into one combined file
-        mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,os.path.join(LocalOutputPath,"NetCDFOutput"),header)
+        mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,os.path.join(LocalOutputPath,"NetCDFOutput"),header,ErrorFile)
 
         #copy NetCDF files to external drive if applicable.
         copyFiles = True
