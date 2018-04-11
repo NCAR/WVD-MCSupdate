@@ -364,7 +364,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
                 # but will log the error as below. 
                 if HSRLPowCh != ord(couple_bytes[23:24])-48 or OnlineH2OCh != ord(couple_bytes[34:35])-48 or OfflineH2OCh != ord(couple_bytes[46:47])-48 or OnlineO2Ch != ord(couple_bytes[56:57])-48 or OfflineO2Ch != ord(couple_bytes[67:68])-48:
                     ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild",str(NowDate),"NetCDFPythonErrors",str(LastTime),".txt")
-                    writeString = "ERROR: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime)
+                    writeString = "ERROR: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime) + '\n'
                     Write2ErrorFile(ErrorFile, writeString)
               
                     
@@ -471,7 +471,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
                 # but will log the error as below. 
                 if OnlineH2OCh != ord(data[29:30])-48 or OfflineH2OCh != ord(data[42:43])-48 or CombinedHSRLCh != ord(data[57:58])-48 or MolecularHSRLCh != ord(data[73:74])-48 or OnlineO2Ch != ord(data[84:85])-48 or OfflineO2Ch != ord(data[96:97])-48:
                     ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild",str(NowDate),"NetCDFPythonErrors",str(LastTime),".txt")
-                    writeString = "ERROR: Data Channel Assignments changed mid file in " + str(MCSfile) + " - " + str(NowTime)
+                    writeString = "ERROR: Data Channel Assignments changed mid file in " + str(MCSfile) + " - " + str(NowTime) + '\n'
                     Write2ErrorFile(ErrorFile, writeString)
 
             OnlineH2OCh = ord(data[29:30])-48 # 48 is the number to subtract from ascii to get the numerical values
@@ -546,7 +546,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
                     print (str(NowDate))
                     print (str(LastTime))
                     ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild",str(NowDate),"NetCDFPythonErrors",str(LastTime),".txt")
-                    writeString = "ERROR: channel number read from data entry does not match header - "+str(NowTime)
+                    writeString = "ERROR: channel number read from data entry does not match header - "+str(NowTime) + '\n'
                     Write2ErrorFile(ErrorFile, writeString)
 
                 thisVal = ord(data[2:3])*2**16 + ord(data[1:2])*2**8 + ord(data[0:1])
@@ -558,7 +558,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
             #print ("footer? = " , data)
             if ord(data[0:1]) != 255:
                 ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild",str(NowDate),"NetCDFPythonErrors",str(LastTime),".txt")
-                writeString = "ERROR: Length of data frame does not match number of bins - " + str(NowTime)
+                writeString = "ERROR: Length of data frame does not match number of bins - " + str(NowTime) + '\n'
                 Write2ErrorFile(ErrorFile, writeString)
 
             # throw away extra bits on end of data frame so next is alligned
@@ -613,6 +613,11 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         
 
 
+def toSec(fracHour):
+    return (float(fracHour) - int(fracHour))*3600 
+
+
+
 #=========== called by various merging functions to interpolate sparse data onto
 # a timeseries that is determined by MCS data if available, or to a 1/2 Hz timeseries
 # if data is unavailable ===========
@@ -621,7 +626,7 @@ def interpolate(ArrayIn, VarTimestamp, MasterTimestamp):
     LocalArrayIn = copy(ArrayIn)
     LocalVarTimestamp = copy(VarTimestamp)
     LocalMasterTimestamp = copy(MasterTimestamp)
-
+  
     ArrayOut = []
     
     if len(LocalVarTimestamp) == 0:
@@ -629,25 +634,25 @@ def interpolate(ArrayIn, VarTimestamp, MasterTimestamp):
             ArrayOut.append(float('nan'))
     else:
         for time in LocalMasterTimestamp:
-            if LocalVarTimestamp[0] > time:
-                ArrayOut.append(float('nan'))
+            if toSec(LocalVarTimestamp[0]) > time:
+                ArrayOut.append(float('nan'))         
             else:
-                while len(LocalVarTimestamp) > 1 and LocalVarTimestamp[1] < time:
+                while len(LocalVarTimestamp) > 1 and toSec(LocalVarTimestamp[1]) < time:
                     LocalVarTimestamp.pop(0)
                     LocalArrayIn.pop(0)
                 if len(LocalVarTimestamp) > 1:    
-                    deltaT = LocalVarTimestamp[1] - LocalVarTimestamp[0]
-                    deltaTau = time - LocalVarTimestamp[0]
+                    deltaT = toSec(LocalVarTimestamp[1]) - toSec(LocalVarTimestamp[0])
+                    deltaTau = time - toSec(LocalVarTimestamp[0])
                     fracT = deltaTau/deltaT 
                     deltaVal = LocalArrayIn[1] - LocalArrayIn[0]
                     newVal = LocalArrayIn[0] + (fracT * deltaVal)
-                    ArrayOut.append(newVal)
+                    ArrayOut.append(newVal)               
                 else:
-                    while len(ArrayOut) < len(LocalMasterTimestamp):
+                    if len(ArrayOut) < len(LocalMasterTimestamp):
                         ArrayOut.append(float('nan'))
-
+                        
     return ArrayOut
-        
+
 
     
 #=========== called by power merging function to apply frequent data onto
@@ -665,12 +670,12 @@ def assign(ArrayIn,VarTimestamp,MasterTimestamp):
             ArrayOut.append(float('nan'))
     else:
         for time in LocalMasterTimestamp:
-            if LocalVarTimestamp[0] > time:
+            if toSec(LocalVarTimestamp[0]) > time:
                 ArrayOut.append(float('nan'))
             else:
                 tempsum = 0
                 tempcount = 0
-                while len(LocalVarTimestamp) > 1 and len(LocalArrayIn) > 1 and LocalVarTimestamp[0] < time:
+                while len(LocalVarTimestamp) > 1 and len(LocalArrayIn) > 1 and toSec(LocalVarTimestamp[0]) < time:
                     tempsum = tempsum + LocalArrayIn[0]
                     tempcount = tempcount + 1
                     LocalVarTimestamp.pop(0)
@@ -679,8 +684,9 @@ def assign(ArrayIn,VarTimestamp,MasterTimestamp):
                     ArrayOut.append(tempsum/tempcount)
                 else:
                     ArrayOut.append(float('nan'))
-        while len(ArrayOut) < len(LocalMasterTimestamp):
-            ArrayOut.append(float('nan'))
+    
+    while len(ArrayOut) < len(LocalMasterTimestamp):
+        ArrayOut.append(float('nan'))
 
     return ArrayOut
 
@@ -1206,16 +1212,21 @@ def mergePower(Powerfile, NetCDFPath):
     PowData = FillVar(Powerdataset, "Power", PowData)
     PowChannelAssign = FillVar(Powerdataset, "ChannelAssignment", PowChannelAssign)
     
-    #Channels = ["WVOnline", "WVOffline", "HSRL", "O2Online", "O2Offline"]
-    Channels = ["WVOnline", "WVOffline", "HSRL"]
-    
+    # ChannelsIn and ChannelsOut need to be the same length, 
+    # In is used to read from the device file while 
+    # Out is used to name the variables in the merged file 
+    #ChannelsIn = ["OnlineH2O", "OfflineH2O", "HSRL", "OnlineO2", "OfflineO2"]
+    #ChannelsOut = ["WVOnline", "WVOffline", "HSRL", "O2Online", "O2Offline"]
+    ChannelsIn = ["OnlineH2O", "OfflineH2O", "HSRL"]
+    ChannelsOut = ["WVOnline", "WVOffline", "HSRL"]
+  
     PowStoreArray = []
-    for i in range (0,len(Channels)):
+    for i in range (0,len(ChannelsIn)):
         PowStoreArray.append([])
         
-    for i in range(0,len(Channels)):
+    for i in range(0,len(ChannelsIn)):
         for j in range(0,len(PowChannelAssign)):
-            if Channels[i] == PowChannelAssign[j]:
+            if ChannelsIn[i] == PowChannelAssign[j]:
                 PowStoreArray[i]= PowData[j].tolist()
                 
     place = os.path.join(NetCDFPath,fileDate,"MergedFiles"+fileTime+".nc")
@@ -1238,19 +1249,19 @@ def mergePower(Powerfile, NetCDFPath):
         TimestampData = Mergedncfile.createVariable('time',dtype('float').char,('time'))
         TimestampData[:] = MasterTimestamp
         
-    for i in range (0,len(Channels)):
+    for i in range (0,len(ChannelsIn)):
         PowStoreArray[i] = assign(PowStoreArray[i],PowTimestamp,MasterTimestamp)
     
     PowChanData = []
     
-    for i in range (0,len(Channels)):
+    for i in range (0,len(ChannelsIn)):
         PowChanData.append([])
         
-    for i in range (0,len(Channels)):
-        PowChanData[i] = Mergedncfile.createVariable(Channels[i]+"Power",dtype('float').char,('time'))
+    for i in range (0,len(ChannelsIn)):
+        PowChanData[i] = Mergedncfile.createVariable(ChannelsOut[i]+"Power",dtype('float').char,('time'))
         PowChanData[i][:] = PowStoreArray[i]
         
-    for i in range (0,len(Channels)):
+    for i in range (0,len(ChannelsIn)):
         PowChanData[i].units = "PIN count"
         PowChanData[i].description = "Raw pin count from the MCS analog detectors (must be converted to power using ???)"
         
@@ -1331,7 +1342,7 @@ def mergeLaser(LLfile, NetCDFPath):
     for k in range (0,len(Variables)):
         for l in range (0,len(ChanAssign)):
             LLArrayBlockData[k][l] = interpolate(LLArrayBlockData[k][l], ArrayTimestamp[l], MasterTimestamp)
-       
+
     ChanVarData = []
     
     for i in range (0,len(Variables)):
@@ -1541,31 +1552,31 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             try:
                 mergeData(Datafile, NetCDFPath)
             except:
-                writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime)
+                writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
         for Powerfile in MCSPowerFileList:
             try:
                 mergePower(Powerfile, NetCDFPath)
             except:
-                writeString = "ERROR: unable to merge MCSPower into CFRadial file - "+str(NowTime)
+                writeString = "ERROR: unable to merge MCSPower into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
         for LLfile in LLFileList:
             try:
                 mergeLaser(LLfile, NetCDFPath)
             except:
-                writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime)
+                writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
         for Etalonfile in EtalonFileList:
             try:
                 mergeEtalon(Etalonfile, NetCDFPath)
             except:
-                writeString = "ERROR: unable to merge Etalons into CFRadial file - "+str(NowTime)
+                writeString = "ERROR: unable to merge Etalons into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
         for WSfile in WSFileList:
             try:
                 mergeWS(WSfile, NetCDFPath)
             except:
-                writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime)
+                writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
         
         MergedFileList = getFiles(NetCDFPath, "Merged", ".nc", ThenDate, ThenTime)
@@ -1574,14 +1585,14 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             try:
                 CFRadify(MergedFile,NetCDFPath,header)
             except:
-                writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime)
+                writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
 
 
 
 # --------------------------------main------------------------------------
 def main():
-    print ("Hello World - the date and time is - ", datetime.datetime.now().strftime("%H:%M:%S"))
+    print ("Hello World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
        
     # create timestamp for now so we know which files to load
     Hour = datetime.datetime.utcnow().strftime("%H")
@@ -1599,8 +1610,10 @@ def main():
     LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
     
     # creating Error file variable for use if needed ... which of course it never will be ... right? 
-    ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild","NetCDFPythonErrors"+str(LastTime)+".txt")
+    ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild","NetCDFPythonErrors_"+str(NowDate)+"_"+str(NowTime)+".txt")
 
+    print ("Error file loction if needed = ", ErrorFile)
+    
     LocalOutputPath = os.path.join(sys.argv[1],"Data")
     print ("Data saving to : ",LocalOutputPath)
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
@@ -1614,7 +1627,7 @@ def main():
             OutputPath = os.path.join(sys.argv[2],"Data")
             ensure_dir(OutputPath)
         else:
-            writeString = "WARNING: argument 2 (path to external hard drive to copy data onto) - "+sys.argv[2]+" - is not a valid directory to write to. Writing to local data directory instead. - "+str(NowTime)
+            writeString = "WARNING: argument 2 (path to external hard drive to copy data onto) - "+sys.argv[2]+" - is not a valid directory to write to. Writing to local data directory instead. - "+str(NowTime) + '\n'
             Write2ErrorFile(ErrorFile, writeString)
 
         if is_number(sys.argv[3]): # the second should be a number of hours worth of files that we want to process
@@ -1622,7 +1635,7 @@ def main():
 
         else:
             HoursBack = 3
-            writeString = "ERROR: argument 3 (hours to back process) - "+sys.argv[3]+" - is not a number. Using default "+HoursBack+" hours instead. - "+str(NowTime)
+            writeString = "ERROR: argument 3 (hours to back process) - "+sys.argv[3]+" - is not a number. Using default "+HoursBack+" hours instead. - "+str(NowTime) + '\n'
             Write2ErrorFile(ErrorFile, writeString)
 
         print ("go back "+str(sys.argv[3])+" hours")
@@ -1645,7 +1658,7 @@ def main():
                 try:
                     processWS(WSfile,os.path.join(LocalOutputPath,"NetCDFOutput"),header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process weather station data - " + "WSfile = " + str(WSfile) + " - "+str(NowTime)
+                    writeString = "ERROR: Failure to process weather station data - " + "WSfile = " + str(WSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
      
         LLDataPath = os.path.join(sys.argv[1],"Data","LaserLocking")
@@ -1656,7 +1669,7 @@ def main():
                 try:
                     processLL(LLfile,os.path.join(LocalOutputPath,"NetCDFOutput"),header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process laser locking data - " + "LLfile = " + str(LLfile) + " - "+str(NowTime)
+                    writeString = "ERROR: Failure to process laser locking data - " + "LLfile = " + str(LLfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
             EtalonFileList = getFiles(LLDataPath , "Etalon", ".txt", ThenDate, ThenTime)
             EtalonFileList.sort()
@@ -1664,7 +1677,7 @@ def main():
                 try:
                     processEtalons(EtalonFile,os.path.join(LocalOutputPath,"NetCDFOutput"),header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process etalon data - " + "Etalonfile = " + str(EtalonFile) + " - "+str(NowTime)
+                    writeString = "ERROR: Failure to process etalon data - " + "Etalonfile = " + str(EtalonFile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
                     
         MCSDataPath = os.path.join(sys.argv[1],"Data","MCS")
@@ -1675,7 +1688,7 @@ def main():
                 try:
                     processMCS(MCSfile,os.path.join(LocalOutputPath,"NetCDFOutput"),header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process MCS data - " + "MCSfile = " + str(MCSFile) + " - "+str(NowTime)
+                    writeString = "ERROR: Failure to process MCS data - " + "MCSfile = " + str(MCSFile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
             MCSPowerList = getFiles(MCSDataPath , "MCSPower", ".bin", ThenDate, ThenTime)
             MCSFileList.sort()
@@ -1684,7 +1697,7 @@ def main():
                 try:
                     processPower(Powerfile,os.path.join(LocalOutputPath,"NetCDFOutput"),header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process Power data - " + "Powerfile = " + str(Powerfile) + " - "+str(NowTime)
+                    writeString = "ERROR: Failure to process Power data - " + "Powerfile = " + str(Powerfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
 
         #merge into one combined file
@@ -1720,7 +1733,7 @@ def main():
 
     # if os.path.isdir(os.path.join(sys.argv[1],"Data"):        
     else:
-        writeString = "ERROR: argument 1 (path to directory containing Data folder) - "+sys.argv[1]+" - is not a dir, looking for directory containing Data. - "+str(NowTime)
+        writeString = "ERROR: argument 1 (path to directory containing Data folder) - "+sys.argv[1]+" - is not a dir, looking for directory containing Data. - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
         Write2ErrorFile(ErrorFile, writeString)
 
     print ("Goodnight World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
