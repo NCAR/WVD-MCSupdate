@@ -712,35 +712,37 @@ def CFRadify(MergedFile,NetCDFPath,header):
     # these two dimensions should already exist
     # Mergedncfile.createDimension('time',len(MasterTimestamp))
     # Mergedncfile.createDimension('range',MasterNBins[0])
-    
+
     # these dimentions are being added here
     Mergedncfile.createDimension('sweep',1)
     Mergedncfile.createDimension('string_length',20)
-    
+    Mergedncfile.createDimension('string_length_DataType',5)
+
     # thse are the coordinate variables - time is already built, range is not. 
     TimestampData = Mergedncfile['time']
     RangeData = Mergedncfile.createVariable('range',dtype('float').char,('range'))
     
     # global variables
     VolNumData = Mergedncfile.createVariable('volume_number',dtype('float').char,())
-    InstTypeData = Mergedncfile.createVariable('instrument_type','S1','string_length')
+    InstTypeData = Mergedncfile.createVariable('instrument_type','S1','string_length_DataType')
+    InstTypeData[:] = list("lidar")
+   
     TimeStartData = Mergedncfile.createVariable('time_coverage_start','S1','string_length')
     TimeEndData = Mergedncfile.createVariable('time_coverage_end','S1','string_length')
-    InstTypeData[:] = "lidar"
     year = int(int(fileDate)/10000)
     month = int((int(fileDate) - year*10000)/100)
     day = int((int(fileDate) - year*10000 - month*100))
     hour = int(int(fileTime)/10000)
     minute = int((int(fileTime) - hour*10000)/100)
     sec = int(int(fileTime) - hour*10000 - minute*100)
-    TimeStart = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(hour,'02d')+":"+format(sec,'02d')+"Z"
-    TimeStartData[:] = TimeStart
+    TimeStart = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(minute,'02d')+":"+format(sec,'02d')+"Z"
+    TimeStartData[:] = list(TimeStart)
     lastTime =  TimestampData[len(TimestampData)-1]
-    hour = int(lastTime)
-    minute = int((float(lastTime) - int(lastTime))*60)
-    sec = int((float(lastTime)-int(lastTime))*3600 - minute*60)
-    TimeEnd = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(hour,'02d')+":"+format(sec,'02d')+"Z"
-    TimeEndData[:] = TimeEnd 
+    hour = int(int(fileTime)/10000)
+    minute = int(float(lastTime)/60)
+    sec = int(float(lastTime)%60)
+    TimeEnd = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(minute,'02d')+":"+format(sec,'02d')+"Z"
+    TimeEndData[:] = list(TimeEnd)
     
     # setting value of range variable
     MasterRange = []
@@ -1587,7 +1589,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             except:
                 writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
-
+            
 
 
 # --------------------------------main------------------------------------
@@ -1699,7 +1701,7 @@ def main():
                 except:
                     writeString = "ERROR: Failure to process Power data - " + "Powerfile = " + str(Powerfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
-
+        
         #merge into one combined file
         mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,os.path.join(LocalOutputPath,"NetCDFOutput"),header,ErrorFile)
 
