@@ -352,7 +352,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         file.seek(0)  # Go to beginning
         
         k=0 # k is the number of entries in the power file. 
-        Mybytes = 146 # this is the number of bytes per power return.
+        Mybytes = 148 # this is the number of bytes per power return.
         
         while k < (os.path.getsize(Powerfile))/Mybytes:
             k = k + 1
@@ -362,17 +362,17 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
                 # checking if channel assignments changed mid file.
                 # The resulting NetCDF file will have assignments based on the assignments that are in the last entry
                 # but will log the error as below. 
-                if HSRLPowCh != ord(couple_bytes[23:24])-48 or OnlineH2OCh != ord(couple_bytes[34:35])-48 or OfflineH2OCh != ord(couple_bytes[46:47])-48 or OnlineO2Ch != ord(couple_bytes[56:57])-48 or OfflineO2Ch != ord(couple_bytes[67:68])-48:
+                if HSRLPowCh != ord(couple_bytes[25:26])-48 or OnlineH2OCh != ord(couple_bytes[36:37])-48 or OfflineH2OCh != ord(couple_bytes[48:49])-48 or OnlineO2Ch != ord(couple_bytes[58:59])-48 or OfflineO2Ch != ord(couple_bytes[69:70])-48:
                     ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild",str(NowDate),"NetCDFPythonErrors",str(LastTime),".txt")
                     writeString = "ERROR: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime) + '\n'
                     Write2ErrorFile(ErrorFile, writeString)
               
                     
-            HSRLPowCh = ord(couple_bytes[23:24])-48
-            OnlineH2OCh = ord(couple_bytes[34:35])-48 
-            OfflineH2OCh = ord(couple_bytes[46:47])-48
-            OnlineO2Ch = ord(couple_bytes[56:57])-48
-            OfflineO2Ch = ord(couple_bytes[67:68])-48
+            HSRLPowCh = ord(couple_bytes[25:26])-48
+            OnlineH2OCh = ord(couple_bytes[36:37])-48 
+            OfflineH2OCh = ord(couple_bytes[48:49])-48
+            OnlineO2Ch = ord(couple_bytes[58:59])-48
+            OfflineO2Ch = ord(couple_bytes[69:70])-48
             
             ChannelAssign[HSRLPowCh] = str("HSRL")
             ChannelAssign[OnlineH2OCh] = str("OnlineH2O")
@@ -380,15 +380,15 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
             ChannelAssign[OnlineO2Ch] = str("OnlineO2")
             ChannelAssign[OfflineO2Ch] = str("OfflineO2")
             
-            TS = struct.unpack('>d',couple_bytes[:8])
+            TS = struct.unpack('>d',couple_bytes[10])
             Timestamp.append(TS[0])
             
             j=0
             while j < nChannels:
-                a = ord(couple_bytes[4*j+86:4*j+87])
-                b = ord(couple_bytes[4*j+87:4*j+88])*2**8
-                c = ord(couple_bytes[4*j+88:4*j+89])*2**16
-                d = ord(couple_bytes[4*j+89:4*j+90])*2**24
+                a = ord(couple_bytes[4*j+88:4*j+89])
+                b = ord(couple_bytes[4*j+89:4*j+90])*2**8
+                c = ord(couple_bytes[4*j+90:4*j+91])*2**16
+                d = ord(couple_bytes[4*j+91:4*j+92])*2**24
                 
                 PowerCh[j].append( a + b + c + d )
                 j=j+1
