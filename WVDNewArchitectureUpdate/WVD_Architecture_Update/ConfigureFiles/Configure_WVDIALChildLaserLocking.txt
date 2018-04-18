@@ -123,7 +123,7 @@ Thor8000 Slots;;
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
 Wavemeter Comm Port;;
-COM3;;
+192.168.0.166;23;1000;122;1000;;
 
 
 
