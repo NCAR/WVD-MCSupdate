@@ -261,7 +261,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     LLncfile.close()
     
     
-
+# ----------------------- Etalon Data ------------------
 def processEtalons(EtalonFile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     print ("Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     fileDate = EtalonFile[-19:-11]
@@ -325,7 +325,7 @@ def processEtalons(EtalonFile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastT
     
     
 
-# ----------------------- MCS Power------------------
+# ----------------------- MCS Power ------------------
 def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     print ("Making Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     fileDate = Powerfile[-19:-11]
@@ -334,6 +334,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
     print (fileTime)
     
     Timestamp = []
+    RTime = []
     PowerCh = []
     HSRLPowCh = 0
     OnlineH2OCh = 0
@@ -357,7 +358,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         while k < (os.path.getsize(Powerfile))/Mybytes:
             k = k + 1
             couple_bytes = file.read(Mybytes)
-            
+                        
             if k != 1:
                 # checking if channel assignments changed mid file.
                 # The resulting NetCDF file will have assignments based on the assignments that are in the last entry
@@ -383,14 +384,20 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
             TS = struct.unpack('>d',couple_bytes[0:8])
             Timestamp.append(TS[0])
             
+            a = ord(couple_bytes[86:87])
+            b = ord(couple_bytes[87:88])*2**8
+            c = ord(couple_bytes[88:89])*2**16
+            d = ord(couple_bytes[89:90])*2**24
+
+            RTime.append( a + b + c + d ) 
+
             j=0
             while j < nChannels:
-                a = ord(couple_bytes[4*j+88:4*j+89])
-                b = ord(couple_bytes[4*j+89:4*j+90])*2**8
-                c = ord(couple_bytes[4*j+90:4*j+91])*2**16
-                d = ord(couple_bytes[4*j+91:4*j+92])*2**24
+                a = ord(couple_bytes[4*j+90:4*j+91])
+                b = ord(couple_bytes[4*j+91:4*j+92])*2**8
+                c = ord(couple_bytes[4*j+92:4*j+93])*2**16
                 
-                PowerCh[j].append( a + b + c + d )
+                PowerCh[j].append( a + b + c )
                 j=j+1
             
         ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
@@ -401,10 +408,12 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         Powncfile.createDimension('nChannels',nChannels)
         
         TimestampData = Powncfile.createVariable('time',dtype('float32').char,('time'))
+        RTimeData= Powncfile.createVariable('RTime',dtype('float32').char,('time'))
         PowChData = Powncfile.createVariable('Power',dtype('float32').char,('nChannels','time'))
         ChannelAssignData = Powncfile.createVariable('ChannelAssignment','str',('nChannels'))
         
         TimestampData[:] = Timestamp
+        RTimeData[:] = RTime
         PowChData[:] = PowerCh
         ChannelAssignData[:] =  np.asarray(ChannelAssign, dtype='str')
         
@@ -413,16 +422,19 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
             Powncfile.setncattr(entry[0],entry[1])
             
         TimestampData.units = "Fractional Hours"
+        RTimeData.units = "ms"
         PowChData.units = "PIN count"
         ChannelAssignData.units = "Unitless"
         
-        TimestampData.units = "The time of collected data in UTC hours from the start of the day"
-        PowChData.units = "Raw pin count from the MCS analog detectors (must be converted to power by _______)"
-        ChannelAssignData.units = "String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)"
+        TimestampData.description = "The time of collected data in UTC hours from the start of the day"
+        PowChData.description = "Raw pin count from the MCS analog detectors (must be converted to power by _______)"
+        ChannelAssignData.description = "String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)"
+        RTimeData.description = "Relative time counter, 20 bit time valuerelative to the most recent system reset (or time reset)."
         Powncfile.close()
         
 
 
+# ----------------------- MCS Data ------------------
 def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     print ("Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     fileDate = MCSfile[-19:-11] 
@@ -580,7 +592,8 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         NBinsData = MCSncfile.createVariable('NBins',dtype('float32').char,('time'))
         DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','time'))
         ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','str',('nChannels'))
-        
+        RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('time'))
+     
         TimestampData[:] = Timestamp
         ProfPerHistData[:] = ProfPerHist
         ChannelData[:] = Channel
@@ -588,7 +601,8 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         NBinsData[:] = NBins
         DataArrayData[:] = DataArray
         ChannelAssignData[:] = np.asarray(ChannelAssign, dtype='str')
-    
+        RTimeData[:] = RTime
+        
         MCSncfile.description = "Multi-channel scalar (MCS) photon count histogram data file"
         for entry in header:
             MCSncfile.setncattr(entry[0],entry[1])
@@ -600,6 +614,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         NBinsData.units = "Unitless"
         DataArrayData.units = "Photons"
         ChannelAssignData.units = "Unitless"
+        RTimeData.units = "ms"
         
         TimestampData.description = "The time of collected data in UTC hours from the start of the day"
         ProfPerHistData.description = "Number of laser shots summed to create a single verticle histogram"
@@ -608,10 +623,10 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
         DataArrayData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
         ChannelAssignData.description = "String value defining what hardware was connected to the MCS digital detection channels (Choices are: WVOnline, WVOffline, HSRLCombined, HSRLMolecular, O2Online, O2Offline, or Unassigned)"
-        
+        RTimeData.description = "Relative time counter, 20 bit time valuerelative to the most recent system reset (or time reset)."
         MCSncfile.close()
         
-
+    
 
 def toSec(fracHour):
     return (float(fracHour) - int(fracHour))*3600 
@@ -1009,7 +1024,7 @@ def mergeData(Datafile, NetCDFPath):
             MasterProfPerHist.append(DataProfPerHist[i])
             MasterCntsPerBin.append(DataCntsPerBin[i])
             MasterNBins.append(DataNBins[i])
-            
+               
         if DataChannelAssign[int(DataChannel[i])] == "WVOnline":
             # the next if statement is needed if we start in the middle of transmitting 
             # data and don't get the first few channels. 
@@ -1020,42 +1035,60 @@ def mergeData(Datafile, NetCDFPath):
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            MasterWVOnline.append(DataDataArray[i*560:(i+1)*560])
+            tempList = []
+            for j in range(0,int(DataNBins[i])):
+                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+            MasterWVOnline.append(tempList)
         if DataChannelAssign[int(DataChannel[i])] == "WVOffline":
             if len(MasterTimestamp) == len(MasterWVOffline):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            MasterWVOffline.append(DataDataArray[i*560:(i+1)*560])
+            tempList = []
+            for j in range(0,int(DataNBins[i])):
+                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+            MasterWVOffline.append(tempList)
         if DataChannelAssign[int(DataChannel[i])] == "HSRLCombined":
             if len(MasterTimestamp) == len(MasterHSRLCombined):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            MasterHSRLCombined.append(DataDataArray[i*560:(i+1)*560])
+            tempList = []
+            for j in range(0,int(DataNBins[i])):
+                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+            MasterHSRLCombined.append(tempList)
         if DataChannelAssign[int(DataChannel[i])] == "HSRLMolecular":
             if len(MasterTimestamp) == len(MasterHSRLMolecular):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            MasterHSRLMolecular.append(DataDataArray[i*560:(i+1)*560])
+            tempList = []
+            for j in range(0,int(DataNBins[i])):
+                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+            MasterHSRLMolecular.append(tempList)
         if DataChannelAssign[int(DataChannel[i])] == "O2Online":
             if len(MasterTimestamp) == len(MasterO2Online):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            MasterO2Online.append(DataDataArray[i*560:(i+1)*560])
+            tempList = []
+            for j in range(0,int(DataNBins[i])):
+                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+            MasterO2Online.append(tempList)
         if DataChannelAssign[int(DataChannel[i])] == "O2Offline":
             if len(MasterTimestamp) == len(MasterO2Offline):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            MasterO2Offline.append(DataDataArray[i*560:(i+1)*560])
+            tempList = []
+            for j in range(0,int(DataNBins[i])):
+                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+            MasterO2Offline.append(tempList)
             
         i=i+1
 
