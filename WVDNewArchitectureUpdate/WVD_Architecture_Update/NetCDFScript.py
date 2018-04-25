@@ -383,23 +383,23 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
 
             TS = struct.unpack('>d',couple_bytes[0:8])
             Timestamp.append(TS[0])
-            
-            a = ord(couple_bytes[86:87])
-            b = ord(couple_bytes[87:88])*2**8
-            c = ord(couple_bytes[88:89])*2**16
-            d = ord(couple_bytes[89:90])*2**24
+                       
+            a = ord(couple_bytes[82:83])
+            b = ord(couple_bytes[83:84])*2**8
+            c = ord(couple_bytes[84:85])*2**16
+            d = ord(couple_bytes[85:86])*2**24
 
             RTime.append( a + b + c + d ) 
-
+                        
             j=0
             while j < nChannels:
-                a = ord(couple_bytes[4*j+90:4*j+91])
-                b = ord(couple_bytes[4*j+91:4*j+92])*2**8
-                c = ord(couple_bytes[4*j+92:4*j+93])*2**16
+                a = ord(couple_bytes[4*j+86:4*j+87])
+                b = ord(couple_bytes[4*j+87:4*j+88])*2**8
+                c = ord(couple_bytes[4*j+88:4*j+89])*2**16
                 
                 PowerCh[j].append( a + b + c )
                 j=j+1
-            
+
         ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
         place = os.path.join(LocalNetCDFOutputPath,fileDate,"Powsample"+fileTime+".nc")
         Powncfile = Dataset(place,'w')
@@ -1038,7 +1038,8 @@ def mergeData(Datafile, NetCDFPath):
             tempList = []
             for j in range(0,int(DataNBins[i])):
                 tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
-            MasterWVOnline.append(tempList)
+            MasterWVOnline.append([])
+            MasterWVOnline[len(MasterWVOnline)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "WVOffline":
             if len(MasterTimestamp) == len(MasterWVOffline):
                 MasterTimestamp.append(time)
@@ -1048,7 +1049,8 @@ def mergeData(Datafile, NetCDFPath):
             tempList = []
             for j in range(0,int(DataNBins[i])):
                 tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
-            MasterWVOffline.append(tempList)
+            MasterWVOffline.append([])
+            MasterWVOffline[len(MasterWVOffline)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "HSRLCombined":
             if len(MasterTimestamp) == len(MasterHSRLCombined):
                 MasterTimestamp.append(time)
@@ -1058,7 +1060,8 @@ def mergeData(Datafile, NetCDFPath):
             tempList = []
             for j in range(0,int(DataNBins[i])):
                 tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
-            MasterHSRLCombined.append(tempList)
+            MasterHSRLCombined.append([])
+            MasterHSRLCombined[len(MasterHSRLCombined)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "HSRLMolecular":
             if len(MasterTimestamp) == len(MasterHSRLMolecular):
                 MasterTimestamp.append(time)
@@ -1068,7 +1071,8 @@ def mergeData(Datafile, NetCDFPath):
             tempList = []
             for j in range(0,int(DataNBins[i])):
                 tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
-            MasterHSRLMolecular.append(tempList)
+            MasterHSRLMolecular.append([])
+            MasterHSRLMolecular[len(MasterHSRLMolecular)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "O2Online":
             if len(MasterTimestamp) == len(MasterO2Online):
                 MasterTimestamp.append(time)
@@ -1078,7 +1082,8 @@ def mergeData(Datafile, NetCDFPath):
             tempList = []
             for j in range(0,int(DataNBins[i])):
                 tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
-            MasterO2Online.append(tempList)
+            MasterO2Online.append([])
+            MasterO2Online[len(MasterO2Online)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "O2Offline":
             if len(MasterTimestamp) == len(MasterO2Offline):
                 MasterTimestamp.append(time)
@@ -1088,7 +1093,8 @@ def mergeData(Datafile, NetCDFPath):
             tempList = []
             for j in range(0,int(DataNBins[i])):
                 tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
-            MasterO2Offline.append(tempList)
+            MasterO2Offline.append([])
+            MasterO2Offline[len(MasterO2Offline)-1]=tempList
             
         i=i+1
 
