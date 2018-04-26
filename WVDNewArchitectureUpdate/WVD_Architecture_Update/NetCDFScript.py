@@ -1037,7 +1037,7 @@ def mergeData(Datafile, NetCDFPath):
                 MasterNBins.append(DataNBins[i])
             tempList = []
             for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
             MasterWVOnline.append([])
             MasterWVOnline[len(MasterWVOnline)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "WVOffline":
@@ -1048,7 +1048,7 @@ def mergeData(Datafile, NetCDFPath):
                 MasterNBins.append(DataNBins[i])
             tempList = []
             for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
             MasterWVOffline.append([])
             MasterWVOffline[len(MasterWVOffline)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "HSRLCombined":
@@ -1059,7 +1059,7 @@ def mergeData(Datafile, NetCDFPath):
                 MasterNBins.append(DataNBins[i])
             tempList = []
             for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
             MasterHSRLCombined.append([])
             MasterHSRLCombined[len(MasterHSRLCombined)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "HSRLMolecular":
@@ -1070,7 +1070,7 @@ def mergeData(Datafile, NetCDFPath):
                 MasterNBins.append(DataNBins[i])
             tempList = []
             for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
             MasterHSRLMolecular.append([])
             MasterHSRLMolecular[len(MasterHSRLMolecular)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "O2Online":
@@ -1081,7 +1081,7 @@ def mergeData(Datafile, NetCDFPath):
                 MasterNBins.append(DataNBins[i])
             tempList = []
             for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
             MasterO2Online.append([])
             MasterO2Online[len(MasterO2Online)-1]=tempList
         if DataChannelAssign[int(DataChannel[i])] == "O2Offline":
@@ -1092,7 +1092,7 @@ def mergeData(Datafile, NetCDFPath):
                 MasterNBins.append(DataNBins[i])
             tempList = []
             for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[int(j*len(DataDataArray)/int(DataNBins[i])+i)])
+                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
             MasterO2Offline.append([])
             MasterO2Offline[len(MasterO2Offline)-1]=tempList
             
