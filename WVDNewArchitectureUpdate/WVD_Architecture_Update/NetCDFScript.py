@@ -77,20 +77,23 @@ def readHeaderInfo():
         #print (header)
         return header
 
-def FillVar(dataset, varName, varFill):
+def FillVar(dataset, varName):
     var = dataset.variables[varName][:]
+    varFill = []
     i=0
     for entry in var:
         varFill.append(var[i])
         i=i+1
     return varFill
             
-def Fill2DVar(dataset, varName, varFill):
+def Fill2DVar(dataset, varName):
     var = dataset.variables[varName][:]
+    localvar = []
     for array in var:
-        for entry in array:
-            varFill.append(entry)
-    return varFill 
+        localvar.append([])
+        localvar[int(len(localvar)-1)]=array
+    localvar = np.array(localvar).T.tolist()
+    return localvar
 
 def Write2ErrorFile(ErrorFile, writeString):
     ensure_dir(ErrorFile)
@@ -917,14 +920,15 @@ def mergeData(Datafile, NetCDFPath):
     
     Datadataset = Dataset(Datafile)
     
-    DataTimestamp = FillVar(Datadataset, "time", DataTimestamp)
-    DataProfPerHist = FillVar(Datadataset, "ProfilesPerHist", DataProfPerHist)
-    DataChannel = FillVar(Datadataset, "Channel", DataChannel)
-    DataCntsPerBin = FillVar(Datadataset, "CntsPerBin", DataCntsPerBin)
-    DataNBins = FillVar(Datadataset, "NBins", DataNBins)
-    DataDataArray = Fill2DVar(Datadataset, "Data", DataDataArray)
-    DataChannelAssign = FillVar(Datadataset, "ChannelAssignment", DataChannelAssign)
+    DataTimestamp = FillVar(Datadataset, "time")
+    DataProfPerHist = FillVar(Datadataset, "ProfilesPerHist")
+    DataChannel = FillVar(Datadataset, "Channel")
+    DataCntsPerBin = FillVar(Datadataset, "CntsPerBin")
+    DataNBins = FillVar(Datadataset, "NBins")
+    DataDataArray = Fill2DVar(Datadataset, "Data")
+    DataChannelAssign = FillVar(Datadataset, "ChannelAssignment")
     
+    #print ("hey")
     #print (len(DataTimestamp))
     #print (len(DataProfPerHist))
     #print (len(DataChannel))
@@ -932,7 +936,8 @@ def mergeData(Datafile, NetCDFPath):
     #print (len(DataNBins))
     #print (len(DataDataArray))
     #print (len(DataChannelAssign))
-    
+    #print ("listen")
+
     firstChan=-1
     i=0
     for entry in DataChannelAssign:
@@ -1019,12 +1024,12 @@ def mergeData(Datafile, NetCDFPath):
                 print ("MasterO2Offline")
                 print (len(MasterTimestamp))
                 print (len(MasterO2Offline))
-                    
+            
             MasterTimestamp.append(time)
             MasterProfPerHist.append(DataProfPerHist[i])
             MasterCntsPerBin.append(DataCntsPerBin[i])
             MasterNBins.append(DataNBins[i])
-               
+
         if DataChannelAssign[int(DataChannel[i])] == "WVOnline":
             # the next if statement is needed if we start in the middle of transmitting 
             # data and don't get the first few channels. 
@@ -1035,67 +1040,42 @@ def mergeData(Datafile, NetCDFPath):
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            tempList = []
-            for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
-            MasterWVOnline.append([])
-            MasterWVOnline[len(MasterWVOnline)-1]=tempList
+            MasterWVOnline.append(DataDataArray[i])
         if DataChannelAssign[int(DataChannel[i])] == "WVOffline":
             if len(MasterTimestamp) == len(MasterWVOffline):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            tempList = []
-            for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
-            MasterWVOffline.append([])
-            MasterWVOffline[len(MasterWVOffline)-1]=tempList
+            MasterWVOffline.append(DataDataArray[i])
         if DataChannelAssign[int(DataChannel[i])] == "HSRLCombined":
             if len(MasterTimestamp) == len(MasterHSRLCombined):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            tempList = []
-            for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
-            MasterHSRLCombined.append([])
-            MasterHSRLCombined[len(MasterHSRLCombined)-1]=tempList
+            MasterHSRLCombined.append(DataDataArray[i])
         if DataChannelAssign[int(DataChannel[i])] == "HSRLMolecular":
             if len(MasterTimestamp) == len(MasterHSRLMolecular):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            tempList = []
-            for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
-            MasterHSRLMolecular.append([])
-            MasterHSRLMolecular[len(MasterHSRLMolecular)-1]=tempList
+            MasterHSRLMolecular.append(DataDataArray[i])
         if DataChannelAssign[int(DataChannel[i])] == "O2Online":
             if len(MasterTimestamp) == len(MasterO2Online):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            tempList = []
-            for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
-            MasterO2Online.append([])
-            MasterO2Online[len(MasterO2Online)-1]=tempList
+            MasterO2Online.append(DataDataArray[i])
         if DataChannelAssign[int(DataChannel[i])] == "O2Offline":
             if len(MasterTimestamp) == len(MasterO2Offline):
                 MasterTimestamp.append(time)
                 MasterProfPerHist.append(DataProfPerHist[i])
                 MasterCntsPerBin.append(DataCntsPerBin[i])
                 MasterNBins.append(DataNBins[i])
-            tempList = []
-            for j in range(0,int(DataNBins[i])):
-                tempList.append(DataDataArray[i*int(DataNBins[i])+j])
-            MasterO2Offline.append([])
-            MasterO2Offline[len(MasterO2Offline)-1]=tempList
-            
+            MasterO2Offline.append(DataDataArray[i])
         i=i+1
 
     # check if last entry is missing
@@ -1120,17 +1100,6 @@ def mergeData(Datafile, NetCDFPath):
     if len(MasterTimestamp) == len(MasterO2Offline)+1:
         MasterO2Offline.append(NaNArray)
         
-    #print (len(MasterTimestamp))
-    #print (len(MasterWVOnline))
-    #print (len(MasterWVOffline))
-    #print (len(MasterHSRLCombined))
-    #print (len(MasterHSRLMolecular))
-    #print (len(MasterO2Online))
-    #print (len(MasterO2Offline))
-    #print (len(MasterProfPerHist))
-    #print (len(MasterCntsPerBin))
-    #print (len(MasterNBins))
-    
     # make sure output path exists
     ensure_dir(os.path.join(NetCDFPath,fileDate))
     
@@ -1143,12 +1112,12 @@ def mergeData(Datafile, NetCDFPath):
     # creates variables
     TimestampData = Mergedncfile.createVariable('time',dtype('float').char,('time'))
     
-    WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('range','time'))
-    WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('range','time'))
-    HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('range','time'))
-    HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('range','time'))
-    #O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('range','time'))
-    #O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('range','time'))
+    WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
+    WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
+    HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('time','range'))
+    HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('time','range'))
+    #O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('time','range'))
+    #O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('time','range'))
     ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
     CntsPerBinData = Mergedncfile.createVariable('CntsPerBin',dtype('float').char,('time'))
     NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
@@ -1249,9 +1218,9 @@ def mergePower(Powerfile, NetCDFPath):
     
     Powerdataset = Dataset(Powerfile)
     
-    PowTimestamp = FillVar(Powerdataset, "time", PowTimestamp)
-    PowData = FillVar(Powerdataset, "Power", PowData)
-    PowChannelAssign = FillVar(Powerdataset, "ChannelAssignment", PowChannelAssign)
+    PowTimestamp = FillVar(Powerdataset, "time")
+    PowData = FillVar(Powerdataset, "Power")
+    PowChannelAssign = FillVar(Powerdataset, "ChannelAssignment")
     
     # ChannelsIn and ChannelsOut need to be the same length, 
     # In is used to read from the device file while 
@@ -1333,12 +1302,12 @@ def mergeLaser(LLfile, NetCDFPath):
         
     Laserdataset = Dataset(LLfile)
     
-    LLTimestamp = FillVar(Laserdataset, "time", LLTimestamp)
-    LLLaserName = FillVar(Laserdataset, "LaserName", LLLaserName)
+    LLTimestamp = FillVar(Laserdataset, "time")
+    LLLaserName = FillVar(Laserdataset, "LaserName")
     
     i=0
     for entry in Variables:
-        LLBlockData[i] = FillVar(Laserdataset, entry, LLBlockData[i])
+        LLBlockData[i] = FillVar(Laserdataset, entry)
         i=i+1
         
     ArrayTimestamp = []
@@ -1428,10 +1397,10 @@ def mergeEtalon(Etalonfile, NetCDFPath):
     
     Etalondataset = Dataset(Etalonfile)
     
-    EtalonTimestamp = FillVar(Etalondataset, "time", EtalonTimestamp)
-    EtalonNum = FillVar(Etalondataset, "EtalonNum", EtalonNum)
-    EtalonTemp = FillVar(Etalondataset, "Temperature", EtalonTemp)
-    EtalonTempDiff = FillVar(Etalondataset, "TempDiff", EtalonTempDiff)
+    EtalonTimestamp = FillVar(Etalondataset, "time")
+    EtalonNum = FillVar(Etalondataset, "EtalonNum")
+    EtalonTemp = FillVar(Etalondataset, "Temperature")
+    EtalonTempDiff = FillVar(Etalondataset, "TempDiff")
     
     EtalonTimestampBlock = [] # has dimentions Channel, Timestamp
     EtalonTemperatureBlock = [] # has dimentions Channel, Timestamp
@@ -1512,11 +1481,11 @@ def mergeWS(WSfile, NetCDFPath):
     
     WSdataset = Dataset(WSfile)
     
-    WSTimestamp = FillVar(WSdataset, "time", WSTimestamp)
-    WSTemperature = FillVar(WSdataset, "Temperature", WSTemperature)
-    WSRelHum = FillVar(WSdataset, "RelHum", WSRelHum)
-    WSPressure = FillVar(WSdataset, "Pressure", WSPressure)
-    WSAbsHum = FillVar(WSdataset, "AbsHum", WSAbsHum)
+    WSTimestamp = FillVar(WSdataset, "time")
+    WSTemperature = FillVar(WSdataset, "Temperature")
+    WSRelHum = FillVar(WSdataset, "RelHum")
+    WSPressure = FillVar(WSdataset, "Pressure")
+    WSAbsHum = FillVar(WSdataset, "AbsHum")
     
     place = os.path.join(NetCDFPath,fileDate,"MergedFiles"+fileTime+".nc")
     Mergedncfile = None
@@ -1590,11 +1559,11 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
         
         # ==========creates merged files and processes data==========
         for Datafile in MCSDataFileList:
-            try:
-                mergeData(Datafile, NetCDFPath)
-            except:
-                writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                Write2ErrorFile(ErrorFile, writeString)
+            #try:
+            mergeData(Datafile, NetCDFPath)
+            #except:
+            #    writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            #    Write2ErrorFile(ErrorFile, writeString)
         for Powerfile in MCSPowerFileList:
             try:
                 mergePower(Powerfile, NetCDFPath)
@@ -1660,16 +1629,6 @@ def main():
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
 
         ensure_dir(LocalOutputPath)
-
-        OutputPath = LocalOutputPath
-
-        if os.path.isdir(sys.argv[2]):
-            #ensure output directory exists
-            OutputPath = os.path.join(sys.argv[2],"Data","")
-            ensure_dir(OutputPath)
-        else:
-            writeString = "WARNING: argument 2 (path to external hard drive to copy data onto) - "+sys.argv[2]+" - is not a valid directory to write to. Writing to local data directory instead. - "+str(NowTime) + '\n'
-            Write2ErrorFile(ErrorFile, writeString)
 
         if is_number(sys.argv[3]): # the second should be a number of hours worth of files that we want to process
             HoursBack = sys.argv[3]
@@ -1749,6 +1708,16 @@ def main():
         #copyFiles = False
         if copyFiles:
             print ("Copying files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+            OutputPath = LocalOutputPath
+
+            if os.path.isdir(sys.argv[2]):
+                #ensure output directory exists
+                OutputPath = os.path.join(sys.argv[2],"Data","")
+                ensure_dir(OutputPath)
+            else:
+                writeString = "WARNING: argument 2 (path to external hard drive to copy data onto) - "+sys.argv[2]+" - is not a valid directory to write to. Writing to local data directory instead. - "+str(NowTime) + '\n'
+                Write2ErrorFile(ErrorFile, writeString)
+        
             if LocalOutputPath != OutputPath:
                 #recursive_overwrite(LocalOutputPath,OutputPath,ignore=None)
                 data_dirs_list = os.listdir(LocalOutputPath)
