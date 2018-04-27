@@ -1565,38 +1565,38 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             #    writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
             #    Write2ErrorFile(ErrorFile, writeString)
         for Powerfile in MCSPowerFileList:
-            try:
-                mergePower(Powerfile, NetCDFPath)
-            except:
-                writeString = "ERROR: unable to merge MCSPower into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                Write2ErrorFile(ErrorFile, writeString)
+            #try:
+            mergePower(Powerfile, NetCDFPath)
+            #except:
+            #    writeString = "ERROR: unable to merge MCSPower into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            #    Write2ErrorFile(ErrorFile, writeString)
         for LLfile in LLFileList:
-            try:
-                mergeLaser(LLfile, NetCDFPath)
-            except:
-                writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                Write2ErrorFile(ErrorFile, writeString)
+            #try:
+            mergeLaser(LLfile, NetCDFPath)
+            #except:
+            #    writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            #    Write2ErrorFile(ErrorFile, writeString)
         for Etalonfile in EtalonFileList:
-            try:
-                mergeEtalon(Etalonfile, NetCDFPath)
-            except:
-                writeString = "ERROR: unable to merge Etalons into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                Write2ErrorFile(ErrorFile, writeString)
+            #try:
+            mergeEtalon(Etalonfile, NetCDFPath)
+            #except:
+            #    writeString = "ERROR: unable to merge Etalons into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            #    Write2ErrorFile(ErrorFile, writeString)
         for WSfile in WSFileList:
-            try:
-                mergeWS(WSfile, NetCDFPath)
-            except:
-                writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                Write2ErrorFile(ErrorFile, writeString)
+            #try:
+            mergeWS(WSfile, NetCDFPath)
+            #except:
+            #    writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            #    Write2ErrorFile(ErrorFile, writeString)
         
         MergedFileList = getFiles(NetCDFPath, "Merged", ".nc", ThenDate, ThenTime)
         MergedFileList.sort() 
         for MergedFile in MergedFileList:
-            try:
-                CFRadify(MergedFile,NetCDFPath,header)
-            except:
-                writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                Write2ErrorFile(ErrorFile, writeString)
+            #try:
+            CFRadify(MergedFile,NetCDFPath,header)
+            #except:
+            #    writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            #    Write2ErrorFile(ErrorFile, writeString)
             
 
 
@@ -1704,8 +1704,8 @@ def main():
         mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,os.path.join(LocalOutputPath,"NetCDFOutput"),header,ErrorFile)
 
         #copy NetCDF files to external drive if applicable.
-        copyFiles = True
-        #copyFiles = False
+        #copyFiles = True
+        copyFiles = False
         if copyFiles:
             print ("Copying files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             OutputPath = LocalOutputPath
