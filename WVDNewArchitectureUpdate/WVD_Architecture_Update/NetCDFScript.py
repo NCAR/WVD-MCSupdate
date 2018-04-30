@@ -780,7 +780,7 @@ def CFRadify(MergedFile,NetCDFPath,header):
     # set attributes for time and range 
     TimestampData.standard_name = 'time'
     TimestampData.long_name = 'time_in_seconds_since_volume_start'           
-    TimestampData.units = "seconds since" + TimeStart
+    TimestampData.units = "seconds since " + TimeStart
     TimestampData.description = "The time of collected data in UTC hours from the start of the day"
     RangeData.standard_name = 'projection_range_coordinate'
     RangeData.long_name = 'range_to_measurement_volume'           
@@ -795,9 +795,14 @@ def CFRadify(MergedFile,NetCDFPath,header):
     LongitudeData = Mergedncfile.createVariable('longitude',dtype('double').char,())
     AltitudeData = Mergedncfile.createVariable('altitude',dtype('double').char,())
     
-    LatitudeData[:] = header[len(header)-3][1]
-    LongitudeData[:] = header[len(header)-2][1]
-    AltitudeData[:] = header[len(header)-1][1]
+    for entry in header:
+        if entry[0] == "latitude":
+            LatitudeData[:] = entry[1]
+        if entry[0] == "longitude":
+            LongitudeData[:] = entry[1]
+        if entry[0] == "altitude":
+            AltitudeData[:] = entry[1]
+   
     LatitudeData.units = "degrees_north"
     LongitudeData.units = "degrees_east"
     AltitudeData.units = "meters"
