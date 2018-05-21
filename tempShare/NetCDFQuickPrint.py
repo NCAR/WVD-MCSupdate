@@ -49,6 +49,12 @@ for i in range(0,len(data)):
 
 data = np.array(data).T.tolist()
 
+print ("min = ",datamin)
+print ("max = ",datamax)
+
+if datamin < 1:
+    datamin=1
+
 pylab.pcolor(time, rangei, data, norm=LogNorm(vmin=datamin, vmax=datamax), cmap='PuBu_r')
 pylab.colorbar()
 pylab.show()
