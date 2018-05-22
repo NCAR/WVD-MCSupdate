@@ -14,6 +14,7 @@ import binascii
 import math
 import shutil
 import numpy as np
+import numpy.ma as ma
 from datetime import timedelta 
 from netCDF4 import Dataset
 from numpy import arange, dtype 
@@ -802,16 +803,22 @@ def interpolate(ArrayIn,MasterIn, VarTimestamp, MasterTimestamp):
     LocalMasterIn = copy(MasterIn)
     LocalVarTimestamp = copy(VarTimestamp)
     LocalMasterTimestamp = copy(MasterTimestamp)
-  
+    ArrayOut = LocalMasterIn
+    
     timedeltaSum = 0
     timecounter = 0
     for i in range(0,len(LocalMasterTimestamp)-1):
         timecounter = timecounter + 1
         timedeltaSum = timedeltaSum + (LocalMasterTimestamp[i+1] - LocalMasterTimestamp[i])
+    if len(LocalMasterTimestamp) == 1:
+        ArrayOut = ma.array([float('NaN')])
+        return ArrayOut
+    if len(LocalMasterTimestamp) == 0:
+        ArrayOut = ma.array([])
+        return ArrayOut
+        
     AveTimeDelta = timedeltaSum/timecounter
-
-    ArrayOut = LocalMasterIn
-
+    
     placeOututArray = 0 # this hold where in the output array we want
 
     if len(LocalVarTimestamp) > 0:
@@ -843,14 +850,21 @@ def assign(ArrayIn,MasterIn,VarTimestamp,MasterTimestamp):
     LocalVarTimestamp = copy(VarTimestamp)
     LocalMasterTimestamp = copy(MasterTimestamp)
 
+    ArrayOut = LocalMasterIn
+
     timedeltaSum = 0
     timecounter = 0
     for i in range(0,len(LocalMasterTimestamp)-1):
         timecounter = timecounter + 1
         timedeltaSum = timedeltaSum + (LocalMasterTimestamp[i+1] - LocalMasterTimestamp[i])
+    if len(LocalMasterTimestamp) == 1:
+        ArrayOut = ma.array([float('NaN')])
+        return ArrayOut
+    if len(LocalMasterTimestamp) == 0:
+        ArrayOut = ma.array([])
+        return ArrayOut
+    
     AveTimeDelta = timedeltaSum/timecounter
-
-    ArrayOut = LocalMasterIn
 
     placeOututArray = 0 # this hold where in the output array we want
 
@@ -897,21 +911,44 @@ def CFRadify(MergedFile,CFRadPath,header):
     # Mergedncfile.createDimension('range',MasterNBins[0])
 
     # these dimentions are being added here
-    Mergedncfile.createDimension('sweep',1)
-    Mergedncfile.createDimension('string_length',20)
-    Mergedncfile.createDimension('string_length_DataType',5)
-
+    try:
+        Mergedncfile.createDimension('sweep',1)
+        Mergedncfile.createDimension('string_length',20)
+        Mergedncfile.createDimension('string_length_DataType',5)
+    except:
+        pass
+    
     # thse are the coordinate variables - time is already built, range is not. 
     TimestampData = Mergedncfile['time']
-    RangeData = Mergedncfile.createVariable('range',dtype('float').char,('range'))
+
+    try:
+        RangeData = Mergedncfile.createVariable('range',dtype('float').char,('range'))
+        RangeData.standard_name = 'projection_range_coordinate'
+        RangeData.long_name = 'range_to_measurement_volume'           
+        RangeData.units = "meters"
+        RangeData.spacing_is_constant = 'true'
+        RangeData.meters_to_center_of_first_gate = 0
+        RangeData.axis = "radial_range_coordinate"
+        RangeData.description = "The range variable for collected data as distance from DIAL unit"
+    except:
+        RangeData = Mergedncfile.variables["range"][:]
     
     # global variables
-    VolNumData = Mergedncfile.createVariable('volume_number',dtype('float').char,())
-    InstTypeData = Mergedncfile.createVariable('instrument_type','S1','string_length_DataType')
+    try:
+        VolNumData = Mergedncfile.createVariable('volume_number',dtype('float').char,())
+        InstTypeData = Mergedncfile.createVariable('instrument_type','S1','string_length_DataType')
+    except:
+        InstTypeData = Mergedncfile.variables["instrument_type"][:]
+
     InstTypeData[:] = list("lidar")
-   
-    TimeStartData = Mergedncfile.createVariable('time_coverage_start','S1','string_length')
-    TimeEndData = Mergedncfile.createVariable('time_coverage_end','S1','string_length')
+
+    try:
+        TimeStartData = Mergedncfile.createVariable('time_coverage_start','S1','string_length')
+        TimeEndData = Mergedncfile.createVariable('time_coverage_end','S1','string_length')
+    except:
+        TimeStartData = Mergedncfile.variables["time_coverage_start"][:]
+        TimeEndData = Mergedncfile.variables["time_coverage_end"][:]
+        
     year = int(int(fileDate)/10000)
     month = int((int(fileDate) - year*10000)/100)
     day = int((int(fileDate) - year*10000 - month*100))
@@ -927,6 +964,12 @@ def CFRadify(MergedFile,CFRadPath,header):
     TimeEnd = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(minute,'02d')+":"+format(sec,'02d')+"Z"
 
     TimeEndData[:] = list(TimeEnd)
+
+    # set attributes for time 
+    TimestampData.standard_name = 'time'
+    TimestampData.long_name = 'time_in_seconds_since_volume_start'           
+    TimestampData.units = "seconds since " + TimeStart
+    TimestampData.description = "The time of collected data in UTC hours from the start of the day"
     
     # setting value of range variable
     MasterRange = []
@@ -943,71 +986,72 @@ def CFRadify(MergedFile,CFRadPath,header):
             # also hard coded for range bins. 
     RangeData[:] = MasterRange
 
-    # set attributes for time and range 
-    TimestampData.standard_name = 'time'
-    TimestampData.long_name = 'time_in_seconds_since_volume_start'           
-    TimestampData.units = "seconds since " + TimeStart
-    TimestampData.description = "The time of collected data in UTC hours from the start of the day"
-    RangeData.standard_name = 'projection_range_coordinate'
-    RangeData.long_name = 'range_to_measurement_volume'           
-    RangeData.units = "meters"
-    RangeData.spacing_is_constant = 'true'
-    RangeData.meters_to_center_of_first_gate = 0
-    RangeData.axis = "radial_range_coordinate"
-    RangeData.description = "The range variable for collected data as distance from DIAL unit"
-    
     # Location Variables
-    LatitudeData = Mergedncfile.createVariable('latitude',dtype('double').char,())
-    LongitudeData = Mergedncfile.createVariable('longitude',dtype('double').char,())
-    AltitudeData = Mergedncfile.createVariable('altitude',dtype('double').char,())
-    
-    for entry in header:
-        if entry[0] == "latitude":
-            LatitudeData[:] = entry[1]
-        if entry[0] == "longitude":
-            LongitudeData[:] = entry[1]
-        if entry[0] == "altitude":
-            AltitudeData[:] = entry[1]
-   
-    LatitudeData.units = "degrees_north"
-    LongitudeData.units = "degrees_east"
-    AltitudeData.units = "meters"
+    try:
+        LatitudeData = Mergedncfile.createVariable('latitude',dtype('double').char,())
+        LongitudeData = Mergedncfile.createVariable('longitude',dtype('double').char,())
+        AltitudeData = Mergedncfile.createVariable('altitude',dtype('double').char,())
+        for entry in header:
+            if entry[0] == "latitude":
+                LatitudeData[:] = entry[1]
+            if entry[0] == "longitude":
+                LongitudeData[:] = entry[1]
+            if entry[0] == "altitude":
+                AltitudeData[:] = entry[1]            
+        LatitudeData.units = "degrees_north"
+        LongitudeData.units = "degrees_east"
+        AltitudeData.units = "meters"
+    except:
+        pass
     
     # sweep variables
-    SweepNumData = Mergedncfile.createVariable('sweep_number',dtype('int').char,('sweep'))
-    SweepModeData = Mergedncfile.createVariable('sweep_mode','S1',('sweep','string_length'))
-    FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float').char,('sweep'))
-    SweepStartData = Mergedncfile.createVariable('sweep_start_ray_index',dtype('int').char,('sweep'))
-    SweepEndData = Mergedncfile.createVariable('sweep_end_ray_index',dtype('int').char,('sweep'))
-    FixedAngleData.units = "degrees"
+    try:
+        SweepNumData = Mergedncfile.createVariable('sweep_number',dtype('int').char,('sweep'))
+        SweepModeData = Mergedncfile.createVariable('sweep_mode','S1',('sweep','string_length'))
+        FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float').char,('sweep'))
+        SweepStartData = Mergedncfile.createVariable('sweep_start_ray_index',dtype('int').char,('sweep'))
+        SweepEndData = Mergedncfile.createVariable('sweep_end_ray_index',dtype('int').char,('sweep'))
+        FixedAngleData.units = "degrees"
+    except:
+        pass
     
     # sensor pointing variables
-    AzimuthData = Mergedncfile.createVariable('azimuth',dtype('float').char,('time'))
-    ElevationData = Mergedncfile.createVariable('elevation',dtype('float').char,('time'))
+    try:
+        AzimuthData = Mergedncfile.createVariable('azimuth',dtype('float').char,('time'))
+        ElevationData = Mergedncfile.createVariable('elevation',dtype('float').char,('time'))
+
+        # set attributes for Azimuth & Elevation
+        AzimuthData.standard_name = "ray_azimuth_angle"
+        AzimuthData.long_name = "azimuth_angle_from_true_north"
+        AzimuthData.units = "degrees"
+        AzimuthData.axis = "radial_azimuth_coordinate"
+        ElevationData.standard_name = "ray_elevation_angle"
+        ElevationData.long_name = "elevation_angle_from_horizontal_plane"
+        ElevationData.units = "degrees"
+        ElevationData.axis = "radial_elevation_coordinate"
+    except:
+        pass
     
-    # set attributes for Azimuth & Elevation
-    AzimuthData.standard_name = "ray_azimuth_angle"
-    AzimuthData.long_name = "azimuth_angle_from_true_north"
-    AzimuthData.units = "degrees"
-    AzimuthData.axis = "radial_azimuth_coordinate"
-    ElevationData.standard_name = "ray_elevation_angle"
-    ElevationData.long_name = "elevation_angle_from_horizontal_plane"
-    ElevationData.units = "degrees"
-    ElevationData.axis = "radial_elevation_coordinate"
+    
     
     # moving platform geo-reference variables
-    HeadingData = Mergedncfile.createVariable('heading',dtype('float').char,('time'))
-    RollData = Mergedncfile.createVariable('roll',dtype('float').char,('time'))
-    PitchData = Mergedncfile.createVariable('pitch',dtype('float').char,('time'))
-    DriftData = Mergedncfile.createVariable('drift',dtype('float').char,('time'))
-    RotationData = Mergedncfile.createVariable('rotation',dtype('float').char,('time'))
-    TiltData = Mergedncfile.createVariable('tilt',dtype('float').char,('time'))
-    HeadingData.units = "degrees"
-    RollData.units = "degrees"
-    PitchData.units = "degrees"
-    DriftData.units = "degrees"
-    RotationData.units = "degrees"
-    TiltData.units = "degrees"
+    try:
+        HeadingData = Mergedncfile.createVariable('heading',dtype('float').char,('time'))
+        RollData = Mergedncfile.createVariable('roll',dtype('float').char,('time'))
+        PitchData = Mergedncfile.createVariable('pitch',dtype('float').char,('time'))
+        DriftData = Mergedncfile.createVariable('drift',dtype('float').char,('time'))
+        RotationData = Mergedncfile.createVariable('rotation',dtype('float').char,('time'))
+        TiltData = Mergedncfile.createVariable('tilt',dtype('float').char,('time'))
+    
+        HeadingData.units = "degrees"
+        RollData.units = "degrees"
+        PitchData.units = "degrees"
+        DriftData.units = "degrees"
+        RotationData.units = "degrees"
+        TiltData.units = "degrees"
+    except:
+        pass
+    
     
     # giving attributes to any present data fields
     try:
@@ -1666,7 +1710,6 @@ def mergeLaser(LLfile, CFRadPath, ThenDate, ThenTime):
                 for k in range (0,len(Variables)):
                     for l in range (0,len(ChanAssign)):
                         ChanVarData[k][l] = interpolate(LLArrayBlockData[k][l],ChanVarData[k][l], ArrayTimestamp[l], MasterTimestamp)
-
             # add variable units and descriptions
             for i in range (0,len(Variables)):
                 for j in range (0,len(ChanAssign)):
