@@ -177,10 +177,10 @@ def processUPS(UPSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
 
     # give variables units
     TimestampData.units = "Fractional Hours"
-    BatteryNominalData.units = "(1 = nominal, 0 = abnormal)"
-    BatteryReplaceData.units = "(1 = replace, 0 = okay for now)"
-    BatteryInUseData.units = "(1 = wall power, 0 = on battery)"
-    BatteryLowData.units = "(1 = okay, 0 = low)"
+    BatteryNominalData.units = "unitless"
+    BatteryReplaceData.units = "unitless"
+    BatteryInUseData.units = "unitless"
+    BatteryLowData.units = "unitless"
     BatteryCapacityData.units = "percent"
     BatteryTimeLeftData.units = "hours"
     UPSTemperatureData.units = "Celcius"
@@ -188,10 +188,10 @@ def processUPS(UPSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
 
     # give variables descriptions
     TimestampData.description = "The time of collected data in UTC hours from the start of the day"
-    BatteryNominalData.description = "Boolean for Battery Nominal"
-    BatteryReplaceData.description = "Boolean for Battery Replace"
-    BatteryInUseData.description = "Boolean for if UPS is on Battery"
-    BatteryLowData.description = "Boolean for if battery is low"
+    BatteryNominalData.description = "Boolean for Battery Nominal (1 = nominal, 0 = abnormal)"
+    BatteryReplaceData.description = "Boolean for Battery Replace (1 = replace, 0 = okay for now)"
+    BatteryInUseData.description = "Boolean for if UPS is on Battery (1 = wall power, 0 = on battery)"
+    BatteryLowData.description = "Boolean for if battery is low (1 = okay, 0 = low)"
     BatteryCapacityData.description = "Battery capacity remaining"
     BatteryTimeLeftData.description = "Hours of runtime remaining on batteries"
     UPSTemperatureData.description = "UPS temperature"
@@ -1407,13 +1407,13 @@ def mergeData(Datafile, CFRadPath):
     CntsPerBinData.units = "Unitless"
     NBinsData.units = "Unitless"
     
-    WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-    WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-    HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-    HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-    #O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-    #O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-    ProfPerHistData.description = "Number of laser shots summed to create a single verticle histogram"
+    WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
+    WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+    HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Combined"
+    HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Molecular"
+    #O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Oxygen"
+    #O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Oxygen"
+    ProfPerHistData.description = "Number of laser shots summed to create a single vertical histogram"
     CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
     NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
     
@@ -1542,8 +1542,8 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
             WVOnlineData.units = "Photons"
             WVOfflineData.units = "Photons"
 
-            WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
-            WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
+            WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
+            WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
 
             Mergedncfile.close()
 
@@ -1634,7 +1634,7 @@ def mergeLaser(LLfile, CFRadPath, ThenDate, ThenTime):
     ChanAssign = ["WVOnline","WVOffline","HSRL"]
     Variables = ["Wavelength", "WaveDiff", "TempDesired", "TempMeas", "Current"]
     VarUnits = ["nm","nm","Celcius","Celcius","Amp"]
-    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","(Wavelength of the seed laser measured by the wavemeter (reference to vacuum) - Desired wavelenth)","Laser temperature setpoint","Measured laser temperature from the Thor 8000 diode thermo-electric cooler","Measured laser current from the Thor 8000 diode laser controller"]
+    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","Wavelength of the seed laser measured by the wavemeter (reference to vacuum) Minus Desired wavelenth (reference to vacuum)","Laser temperature setpoint","Measured laser temperature from the Thor 8000 diode thermo-electric cooler","Measured laser current from the Thor 8000 diode laser controller"]
     
     LLTimestamp = []
     LLLaserName = []
@@ -1801,7 +1801,7 @@ def mergeEtalon(Etalonfile, CFRadPath, ThenDate, ThenTime):
                 ChanTempData[i].units = "Celcius"
                 ChanTempDiffData[i].units = "Celcius"
                 ChanTempData[i].description = "Measured temperature of the etalon from the Thor 8000 thermo-electric cooler for " + Channels[i]
-                ChanTempDiffData[i].description = "Temperature difference of etalon measured - desired setpoint for " + Channels[i]
+                ChanTempDiffData[i].description = "Temperature difference of etalon measured Minus desired setpoint for " + Channels[i]
 
             Mergedncfile.close()
 
@@ -1867,7 +1867,7 @@ def mergeWS(WSfile, CFRadPath, ThenDate, ThenTime):
             WSTemperatureData.units = "Celcius"
             WSRelHumData.units = "%"
             WSPressureData.units = "Millibar"
-            WSAbsHumData.units = "g/kg"
+            WSAbsHumData.units = "g/m^3"
 
             WSTemperatureData.description = "Atmospheric temperature measured by the weather station at the ground (actual height is 2 meters at the top of the container)"
             WSRelHumData.description = "Atmospheric relative humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
