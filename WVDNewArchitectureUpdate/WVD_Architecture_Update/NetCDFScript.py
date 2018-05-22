@@ -2034,17 +2034,17 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     else:# the gap is contained within one hour
                         createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,firstTime,AveTimeDelta)
 
-            #try:
-            mergeData(Datafile, CFRadPath)
-            #except:
-            #    writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergeData(Datafile, CFRadPath)
+            except:
+                writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
             lastTime = DataTimestamp[len(DataTimestamp)-1]
 
             if Datafile == MCSDataFileList[len(MCSDataFileList)-1]: # this case covers the end of the running period
                 if int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
-                    createEmptyDataFile(CFRadPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,massFileList)
+                    createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta)
 
                 # I'm limiting how long it will make files past the end of data taking
                 # when createEmptyDataFile is fixed i can replace the for loop
@@ -2067,58 +2067,58 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                         createEmptyDataFile(LocalOutputPath,str(date),ThenDate,ThenTime,int(time),int(time+1),AveTimeDelta)
 
         for Powerfile in MCSPowerFileList:
-            #try:
-            mergePower(Powerfile, CFRadPath, ThenDate, ThenTime)
-            #except:
-            #    writeString = "ERROR: unable to merge MCSPower into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergePower(Powerfile, CFRadPath, ThenDate, ThenTime)
+            except:
+                writeString = "ERROR: unable to merge MCSPower into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
         for LLfile in LLFileList:
-            #try:
-            mergeLaser(LLfile, CFRadPath, ThenDate, ThenTime)
-            #except:
-            #    writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergeLaser(LLfile, CFRadPath, ThenDate, ThenTime)
+            except:
+                writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
         for Etalonfile in EtalonFileList:
-            #try:
-            mergeEtalon(Etalonfile, CFRadPath, ThenDate, ThenTime)
-            #except:
-            #    writeString = "ERROR: unable to merge Etalons into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergeEtalon(Etalonfile, CFRadPath, ThenDate, ThenTime)
+            except:
+                writeString = "ERROR: unable to merge Etalons into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
         for WSfile in WSFileList:
-            #try:
-            mergeWS(WSfile, CFRadPath, ThenDate, ThenTime)
-            #except:
-            #    writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergeWS(WSfile, CFRadPath, ThenDate, ThenTime)
+            except:
+                writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
         for HKeepfile in HKeepFileList:
-            #try:
-            mergeHKeep(HKeepfile, CFRadPath, ThenDate, ThenTime)
-            #except:
-            #    writeString = "ERROR: unable to merge Housekeeping into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergeHKeep(HKeepfile, CFRadPath, ThenDate, ThenTime)
+            except:
+                writeString = "ERROR: unable to merge Housekeeping into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
         for UPSfile in UPSFileList:
-            #try:
-            mergeUPS(UPSfile, CFRadPath, ThenDate, ThenTime)
-            #except:
-            #    writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                mergeUPS(UPSfile, CFRadPath, ThenDate, ThenTime)
+            except:
+                writeString = "ERROR: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
         
         MergedFileList = getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
         MergedFileList.sort() 
         for Mergedfile in MergedFileList:
 
-            # check that all variables are present in merged file, WVOnline, Temperature, etc.... *************************
+            # need to check that all variables are present in merged file, WVOnline, Temperatures, etc.... *************************
 
-            #try:
-            CFRadify(Mergedfile,CFRadPath,header)
-            #except:
-            #    writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-            #    Write2ErrorFile(ErrorFile, writeString)
+            try:
+                CFRadify(Mergedfile,CFRadPath,header)
+            except:
+                writeString = "ERROR: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                Write2ErrorFile(ErrorFile, writeString)
 
 
 
