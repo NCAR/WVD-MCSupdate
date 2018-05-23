@@ -2086,7 +2086,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             lastTime = DataTimestamp[len(DataTimestamp)-1]
 
             if Datafile == MCSDataFileList[len(MCSDataFileList)-1]: # this case covers the end of the running period
-                if int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
+                if int(lastTime) + 1 < NowTime and int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
                     createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta)
 
                 # I'm limiting how long it will make files past the end of data taking
