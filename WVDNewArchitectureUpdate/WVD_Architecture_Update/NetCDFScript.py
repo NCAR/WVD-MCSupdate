@@ -2232,7 +2232,7 @@ def main():
                 try:
                     processUPS(UPSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process weather station data - " + "UPSfile = " + str(UPSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                    writeString = "ERROR: Failure to process UPS data - " + "UPSfile = " + str(UPSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
 
 
@@ -2244,7 +2244,7 @@ def main():
                 try:
                     processHKeep(HKeepfile,NetCDFPath,header,NowDate,NowTime,LastTime)
                 except:
-                    writeString = "ERROR: Failure to process weather station data - " + "HKeepfile = " + str(HKeepfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                    writeString = "ERROR: Failure to process Housekeeping data - " + "HKeepfile = " + str(HKeepfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     Write2ErrorFile(ErrorFile, writeString)
 
         WSDataPath = os.path.join(sys.argv[1],"Data","WeatherStation")
