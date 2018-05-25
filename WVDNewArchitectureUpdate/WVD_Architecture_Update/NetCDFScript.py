@@ -2049,7 +2049,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                 okDate = 0  # I'm limiting how long it will make files before the beginning of data taking
                 # once createEmptyDataFile is fixed and no longer segfaulting okDate will not be needed.
                 if int(ThenDate) < (int(fileDate) - 1):
-                    okDate = int(fileDate) - 1
+                    okDate = int(fileDate)
                 else:
                     okDate = ThenDate
 
@@ -2315,8 +2315,8 @@ def main():
         mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header,ErrorFile)
 
         #copy NetCDF files to external drive if applicable.
-        #copyFiles = True
-        copyFiles = False
+        copyFiles = True
+        #copyFiles = False
         if copyFiles:
             print ("Copying files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             OutputPath = LocalOutputPath
