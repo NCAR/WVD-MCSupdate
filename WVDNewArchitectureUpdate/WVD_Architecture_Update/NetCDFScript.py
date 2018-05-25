@@ -2017,15 +2017,26 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             # begin with checking for gaps in data files and create placeholder files for missing data
             Datadataset = Dataset(Datafile)
             DataTimestamp = FillVar(Datadataset, "time")
+            DataChannelAssign = FillVar(Datadataset, "ChannelAssignment")
+            DataChannel = FillVar(Datadataset, "Channel")
 
             firstTime = DataTimestamp[0]
 
             timedeltaSum = 0
             timecounter = 0
+            timeCheck=0
+            name = ""
             for i in range(0,len(DataTimestamp)-1):
-                timecounter = timecounter + 1
-                timedeltaSum = timedeltaSum + (DataTimestamp[i+1] - DataTimestamp[i])
+                if i==0:
+                    name = DataChannelAssign[int(DataChannel[i])]
+                    timeCheck = DataTimestamp[i]
+                elif DataChannelAssign[int(DataChannel[i])] == name:
+                    timecounter = timecounter + 1
+                    timedeltaSum = timedeltaSum + (DataTimestamp[i] - timeCheck)
+                    timeCheck = DataTimestamp[i]
+
             AveTimeDelta = timedeltaSum/timecounter
+
             nTimeDeltasGap = 3
 
             #print ("FT=",firstTime)
@@ -2101,15 +2112,18 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     #print ("date=",date)
                     startTime = 0
                     endTime = 0
-                    if date == int(fileDate):
+                    if date == int(fileDate) and date != int(NowDate):
                         startTime = int(int(fileTime)/10+1000)
                         endTime = 24000
-                    elif date == int(NowDate):
-                        startTime = 0
+                    elif date == int(fileDate) and date == int(NowDate):
+                        startTime = int(int(fileTime)/10+1000)
                         endTime = int((int(NowTime))*1000)
-                    else:
+                    elif date != int(fileDate) and date != int(NowDate):
                         startTime = 0
                         endTime = 24000
+                    elif date != int(fileDate) and date == int(NowDate):
+                        startTime = 0
+                        endTime = int((int(NowTime))*1000)
 
                     for time in range (int(startTime/1000),int(endTime/1000)):
                         createEmptyDataFile(LocalOutputPath,str(date),ThenDate,ThenTime,int(time),int(time+1),AveTimeDelta)
@@ -2301,8 +2315,8 @@ def main():
         mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header,ErrorFile)
 
         #copy NetCDF files to external drive if applicable.
-        copyFiles = True
-        #copyFiles = False
+        #copyFiles = True
+        copyFiles = False
         if copyFiles:
             print ("Copying files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
             OutputPath = LocalOutputPath
