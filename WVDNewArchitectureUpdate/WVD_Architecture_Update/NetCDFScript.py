@@ -1117,7 +1117,7 @@ def CFRadify(MergedFile,CFRadPath,header):
 
 
 # ==========called by mergeNetCDF to process MCS photon counting data============
-def mergeData(Datafile, CFRadPath):
+def mergeData(Datafile, CFRadPath,nameList):
     print ("Merging MCS Data", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     fileDate = Datafile[-27:-19]
     fileTime = Datafile[-9:-3]
@@ -1204,39 +1204,39 @@ def mergeData(Datafile, CFRadPath):
                 MasterO2Offline.append(NaNArray)
                 
             if len(MasterTimestamp) != len(MasterProfPerHist):
-                print ("MasterProfPerHist")
+                print ("MasterProfPerHist length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterProfPerHist))
             if len(MasterTimestamp) != len(MasterCntsPerBin):
-                print ("MasterCntsPerBin")
+                print ("MasterCntsPerBin length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterCntsPerBin))
             if len(MasterTimestamp) != len(MasterNBins):
-                print ("MasterNBins")
+                print ("MasterNBins length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterNBins))
             if len(MasterTimestamp) != len(MasterWVOnline):
-                print ("MasterWVOnline")
+                print ("MasterWVOnline length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterWVOnline))
             if len(MasterTimestamp) != len(MasterWVOffline):
-                print ("MasterWVOffline")
+                print ("MasterWVOffline length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterWVOffline))
             if len(MasterTimestamp) != len(MasterHSRLCombined):
-                print ("MasterHSRLCombined")
+                print ("MasterHSRLCombined length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterHSRLCombined))
             if len(MasterTimestamp) != len(MasterHSRLMolecular):
-                print ("MasterHSRLMolecular")
+                print ("MasterHSRLMolecular length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterHSRLMolecular))
             if len(MasterTimestamp) != len(MasterO2Online):
-                print ("MasterO2Online")
+                print ("MasterO2Online length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterO2Online))
             if len(MasterTimestamp) != len(MasterO2Offline):
-                print ("MasterO2Offline")
+                print ("MasterO2Offline length discrepency")
                 print (len(MasterTimestamp))
                 print (len(MasterO2Offline))
             
@@ -1326,17 +1326,7 @@ def mergeData(Datafile, CFRadPath):
     
     # creates variables
     TimestampData = Mergedncfile.createVariable('time',dtype('float').char,('time'))
-    
-    WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
-    WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
-    HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('time','range'))
-    HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('time','range'))
-    #O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('time','range'))
-    #O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('time','range'))
-    ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
-    CntsPerBinData = Mergedncfile.createVariable('CntsPerBin',dtype('float').char,('time'))
-    NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
-    
+
     EmptyArray = []
     for entry in MasterTimestamp:
         EmptyArray.append(float('nan'))
@@ -1344,85 +1334,107 @@ def mergeData(Datafile, CFRadPath):
     for entry in MasterTimestamp:
         for x in range(0,int(MasterNBins[0])):
             Empty2DArray.append(float('nan'))
-            
+
     # converting from fractional hours to fractional seconds for CFRadial compliance
     for i in range(0,len(MasterTimestamp)):
         MasterTimestamp[i] = (MasterTimestamp[i] - int(MasterTimestamp[i])) *3600
-        
+
     TimestampData[:] = MasterTimestamp
-    
-    if len(MasterTimestamp) == len(MasterWVOnline):
-        WVOnlineData[:] = MasterWVOnline
-    else: 
-        print ("ERROR: WVOnlineData is full Empty2DArray")
-        WVOnlineData[:] = Empty2DArray
-    if len(MasterTimestamp) == len(MasterWVOffline):
-        WVOfflineData[:] = MasterWVOffline
-    else: 
-        print ("ERROR: WVOfflineData is full Empty2DArray")
-        WVOfflineData[:] = Empty2DArray
-    if len(MasterTimestamp) == len(MasterHSRLCombined):
-        HSRLCombinedData[:] = MasterHSRLCombined
-    else: 
-        print ("ERROR: HSRLCombinedData is full Empty2DArray")
-        HSRLCombinedData[:] = Empty2DArray
-    if len(MasterTimestamp) == len(MasterHSRLMolecular):
-        HSRLMolecularData[:] = MasterHSRLMolecular
-    else: 
-        print ("ERROR: HSRLMolecularData is full Empty2DArray")
-        HSRLMolecularData[:] = Empty2DArray
-    #if len(MasterTimestamp) == len(MasterO2Online):
-    #    O2OnlineData[:] = MasterO2Online
-    #else: 
-    #    print ("ERROR: O2OfflineData is full Empty2DArray")
-    #    O2OnlineData[:] = Empty2DArray
-    #if len(MasterTimestamp) == len(MasterO2Offline):
-    #    O2OfflineData[:] = MasterO2Offline
-    #else: 
-    #    print ("ERROR: O2OfflineData is full Empty2DArray")
-    #    O2OfflineData[:] = Empty2DArray
+
+    ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
+    CntsPerBinData = Mergedncfile.createVariable('CntsPerBin',dtype('float').char,('time'))
+    NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
     if len(MasterTimestamp) == len(MasterProfPerHist):
         ProfPerHistData[:] = MasterProfPerHist
-    else: 
+    else:
         print ("ERROR: ProfPerHistData is full Empty2DArray")
         ProfPerHistData[:] = EmptyArray
     if len(MasterTimestamp) == len(MasterCntsPerBin):
         CntsPerBinData[:] = MasterCntsPerBin
-    else: 
+    else:
         print ("ERROR: CntsPerBinData is full Empty2DArray")
         CntsPerBinData[:] = EmptyArray
     if len(MasterTimestamp) == len(MasterNBins):
         NBinsData[:] = MasterNBins
-    else: 
+    else:
         print ("ERROR: NBinsData is full Empty2DArray")
         NBinsData[:] = EmptyArray
 
-    WVOnlineData.units = "Photons"
-    WVOfflineData.units = "Photons"
-    HSRLCombinedData.units = "Photons"
-    HSRLMolecularData.units= "Photons"
-    #O2OnlineData.units = "Photons"
-    #O2OfflineData.units = "Photons"
     ProfPerHistData.units = "Number of shots"
     CntsPerBinData.units = "Unitless"
     NBinsData.units = "Unitless"
-    
-    WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
-    WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
-    HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Combined"
-    HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Molecular"
-    #O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Oxygen"
-    #O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Oxygen"
+
     ProfPerHistData.description = "Number of laser shots summed to create a single vertical histogram"
     CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
     NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
-    
+
+    if 'WVOnline' in nameList:
+        WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
+        if len(MasterTimestamp) == len(MasterWVOnline):
+            WVOnlineData[:] = MasterWVOnline
+        else:
+            print ("ERROR: WVOnlineData is full Empty2DArray")
+            WVOnlineData[:] = Empty2DArray
+        WVOnlineData.units = "Photons"
+        WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
+
+    if 'WVOffline' in nameList:
+        WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
+        if len(MasterTimestamp) == len(MasterWVOffline):
+            WVOfflineData[:] = MasterWVOffline
+        else:
+            print ("ERROR: WVOfflineData is full Empty2DArray")
+            WVOfflineData[:] = Empty2DArray
+        WVOfflineData.units = "Photons"
+        WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+
+    if 'HSRLCombined' in nameList:
+        HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('time','range'))
+        if len(MasterTimestamp) == len(MasterHSRLCombined):
+            HSRLCombinedData[:] = MasterHSRLCombined
+        else:
+            print ("ERROR: HSRLCombinedData is full Empty2DArray")
+            HSRLCombinedData[:] = Empty2DArray
+        HSRLCombinedData.units = "Photons"
+        HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Combined"
+
+    if 'HSRLMolecular' in nameList:
+        HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('time','range'))
+        if len(MasterTimestamp) == len(MasterHSRLMolecular):
+            HSRLMolecularData[:] = MasterHSRLMolecular
+        else:
+            print ("ERROR: HSRLMolecularData is full Empty2DArray")
+            HSRLMolecularData[:] = Empty2DArray
+        HSRLMolecularData.units= "Photons"
+        HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Molecular"
+
+    if 'O2Online' in nameList:
+        O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('time','range'))
+        if len(MasterTimestamp) == len(MasterO2Online):
+            O2OnlineData[:] = MasterO2Online
+        else:
+            print ("ERROR: O2OfflineData is full Empty2DArray")
+            O2OnlineData[:] = Empty2DArray
+        O2OnlineData.units = "Photons"
+        O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Oxygen"
+
+
+    if 'O2Offline' in nameList:
+        O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('time','range'))
+        if len(MasterTimestamp) == len(MasterO2Offline):
+            O2OfflineData[:] = MasterO2Offline
+        else:
+            print ("ERROR: O2OfflineData is full Empty2DArray")
+            O2OfflineData[:] = Empty2DArray
+        O2OfflineData.units = "Photons"
+        O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Oxygen"
+
     Mergedncfile.close()
 
 
 
 # ==========called to create files for periods where there is no photon counting data============
-def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTime,AveTimeDelta):
+def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTime,AveTimeDelta,nameList):
     print ("Making Merged File Without Data", datetime.datetime.utcnow().strftime("%H:%M:%S"))
 
     fileTime = decimal.Decimal(fromTime*10000) # decimal.Decimal is used to round down
@@ -1523,27 +1535,67 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
             TimestampData = Mergedncfile.createVariable('time',dtype('float').char,('time'))
             TimestampData[:] = MasterTimestamp
 
-            WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
-            WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
-
-            WVOnlineTemp=[]
-            WVOfflineTemp=[]
-
+            emptyArray = []
             for i in range(0,len(TimestampData)):
-                WVOnlineTemp.append([])
-                WVOfflineTemp.append([])
+                emptyArray.append([])
                 for j in range(0,560):
-                    WVOnlineTemp[i].append(float('NaN'))
-                    WVOfflineTemp[i].append(float('NaN'))
+                    emptyArray[i].append(float('NaN'))
 
-            WVOfflineData[:] = WVOfflineTemp
-            WVOnlineData[:] = WVOnlineTemp
+            if 'WVOnline' in nameList:
+                WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
+                WVOnlineData[:] = emptyArray
+                WVOnlineData.units = "Photons"
+                WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
 
-            WVOnlineData.units = "Photons"
-            WVOfflineData.units = "Photons"
+            if 'WVOffline' in nameList:
+                WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
+                WVOfflineData[:] = emptyArray
+                WVOfflineData.units = "Photons"
+                WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
 
-            WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
-            WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+            if 'HSRLCombined' in nameList:
+                HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('time','range'))
+                HSRLCombinedData[:] = emptyArray
+                HSRLCombinedData.units = "Photons"
+                HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+
+            if 'HSRLMolecular' in nameList:
+                HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('time','range'))
+                HSRLMolecularData[:] = emptyArray
+                HSRLMolecularData.units = "Photons"
+                HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+
+            if 'O2Online' in nameList:
+                O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('time','range'))
+                O2OnlineData[:] = emptyArray
+                O2OnlineData.units = "Photons"
+                O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+
+            if 'O2Offline' in nameList:
+                O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('time','range'))
+                O2OfflineData[:] = emptyArray
+                O2OfflineData.units = "Photons"
+                O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+
+            EmptyArray = []
+            for entry in MasterTimestamp:
+                EmptyArray.append(float('nan'))
+
+            ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
+            CntsPerBinData = Mergedncfile.createVariable('CntsPerBin',dtype('float').char,('time'))
+            NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
+
+            ProfPerHistData[:] = EmptyArray
+            CntsPerBinData[:] = EmptyArray
+            NBinsData[:] = EmptyArray
+
+            ProfPerHistData.units = "Number of shots"
+            CntsPerBinData.units = "Unitless"
+            NBinsData.units = "Unitless"
+
+            ProfPerHistData.description = "Number of laser shots summed to create a single vertical histogram"
+            CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
+            NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
 
             Mergedncfile.close()
 
@@ -2026,6 +2078,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             timecounter = 0
             timeCheck=0
             name = ""
+            nameList = []
             for i in range(0,len(DataTimestamp)-1):
                 if i==0:
                     name = DataChannelAssign[int(DataChannel[i])]
@@ -2034,6 +2087,8 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     timecounter = timecounter + 1
                     timedeltaSum = timedeltaSum + (DataTimestamp[i] - timeCheck)
                     timeCheck = DataTimestamp[i]
+                if not DataChannelAssign[int(DataChannel[i])] in nameList:
+                    nameList.append(DataChannelAssign[int(DataChannel[i])])
 
             AveTimeDelta = timedeltaSum/timecounter
 
@@ -2069,10 +2124,10 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                         endTime = 24000
 
                     for time in range(int(startTime / 1000), int(endTime / 1000)):
-                        createEmptyDataFile(LocalOutputPath, str(date), ThenDate, ThenTime, int(time), int(time + 1), AveTimeDelta)
+                        createEmptyDataFile(LocalOutputPath, str(date), ThenDate, ThenTime, int(time), int(time + 1), AveTimeDelta,nameList)
 
                 if firstTime - int(firstTime) > nTimeDeltasGap * AveTimeDelta:  # covers the fractional hour potentially missed at beginning of data collection
-                    createEmptyDataFile(LocalOutputPath, fileDate, ThenDate, ThenTime, int(firstTime), firstTime, AveTimeDelta)
+                    createEmptyDataFile(LocalOutputPath, fileDate, ThenDate, ThenTime, int(firstTime), firstTime, AveTimeDelta,nameList)
 
             else: # if this is not our first time through
                 if firstTime - lastTime > nTimeDeltasGap*AveTimeDelta:
@@ -2080,16 +2135,16 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     if intDiff > 0: # we crossed at least one hour boundry
                         for i in range(0,intDiff+1): # number of files needed to account for crossing hour boundries without data
                             if i ==0: # first partial hour missed
-                                createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta)
+                                createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,nameList)
                             elif i == intDiff: # last partial hour potentially missed
-                                createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,int(firstTime),firstTime,AveTimeDelta)
+                                createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,int(firstTime),firstTime,AveTimeDelta,nameList)
                             else: # any full hours that were missed in the middle
-                                createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,int(lastTime)+i,int(lastTime)+i+1,AveTimeDelta)
+                                createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,int(lastTime)+i,int(lastTime)+i+1,AveTimeDelta,nameList)
                     else:# the gap is contained within one hour
-                        createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,firstTime,AveTimeDelta)
+                        createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,firstTime,AveTimeDelta,nameList)
 
             try:
-                mergeData(Datafile, CFRadPath)
+                mergeData(Datafile, CFRadPath,nameList)
             except:
                 writeString = "ERROR: unable to merge MCSData into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 Write2ErrorFile(ErrorFile, writeString)
@@ -2099,11 +2154,11 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             if Datafile == MCSDataFileList[len(MCSDataFileList)-1]: # this case covers the end of the running period
                 if fileDate != NowDate:
                     if int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
-                        createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta)
+                        createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,nameList)
                 else:
                     if int(lastTime) + 1 < NowTime:
                         if int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
-                            createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta)
+                            createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,nameList)
 
                 # I'm limiting how long it will make files past the end of data taking
                 # when createEmptyDataFile is fixed i can replace the for loop
@@ -2126,7 +2181,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                         endTime = int((int(NowTime))*1000)
 
                     for time in range (int(startTime/1000),int(endTime/1000)):
-                        createEmptyDataFile(LocalOutputPath,str(date),ThenDate,ThenTime,int(time),int(time+1),AveTimeDelta)
+                        createEmptyDataFile(LocalOutputPath,str(date),ThenDate,ThenTime,int(time),int(time+1),AveTimeDelta,nameList)
 
         for Powerfile in MCSPowerFileList:
             try:
