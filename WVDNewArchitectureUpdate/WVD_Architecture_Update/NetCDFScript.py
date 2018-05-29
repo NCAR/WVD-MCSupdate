@@ -970,7 +970,138 @@ def CFRadify(MergedFile,CFRadPath,header):
     TimestampData.long_name = 'time_in_seconds_since_volume_start'           
     TimestampData.units = "seconds since " + TimeStart
     TimestampData.description = "The time of collected data in UTC hours from the start of the day"
-    
+
+    # ------------------------- Checking for variables existing. -----------------------------
+    # Each section here tries to make variables, that will fail if the variable exists and it will move on to the except
+    # which will load the variable. Then we try to set its units and descriptions for each system.
+    try: #create the variable if you can, fill it with nans
+        nSensors = 1
+        Mergedncfile.createDimension('nInternalThermalSensors',nSensors)
+        HKeepTemperatureData = Mergedncfile.createVariable("HKeepTemperature",dtype('float').char,('nInternalThermalSensors','time'))
+        HKeepTemperatureData.append([])
+        for i in range (0,len(TimestampData)-1):
+            HKeepTemperatureData[i].append(float('nan'))
+    except:
+        HKeepTemperatureData = Mergedncfile.variables["HKeepTemperature"][:]
+    HKeepTemperatureData.units = "Celcius"
+    HKeepTemperatureData.description = "Temperature measured inside the container by nInternalThermalSensors"
+
+
+    try: #create the variable if you can, fill it with nans
+        UPSTemperatureData = Mergedncfile.createVariable("UPSTemperature",dtype('float').char,('time'))
+        UPSHoursOnBatteryData = Mergedncfile.createVariable("UPSHoursOnBattery",dtype('float').char,('time'))
+        for time in MasterTimestamp:
+            UPSTemperatureDataData.append(float('nan'))
+            UPSHoursOnBatteryData.append(float('nan'))
+    except:
+        UPSTemperatureData = Mergedncfile.variables["UPSTemperature"][:]
+        UPSHoursOnBatteryData = Mergedncfile.variables["UPSHoursOnBattery"][:]
+    UPSTemperatureData.units = "Celcius"
+    UPSHoursOnBatteryData.units = "hours"
+    UPSTemperatureData.description = "Temperature of the UPS"
+    UPSHoursOnBatteryData.description = "Hours operating on UPS Battery"
+
+
+    try: #create the variable if you can, fill it with nans
+        WSTemperatureData = Mergedncfile.createVariable("WSTemperature",dtype('float').char,('time'))
+        WSRelHumData = Mergedncfile.createVariable("WSRelHum",dtype('float').char,('time'))
+        WSPressureData = Mergedncfile.createVariable("WSPressure",dtype('float').char,('time'))
+        WSAbsHumData = Mergedncfile.createVariable("WSAbsHum",dtype('float').char,('time'))
+        for time in MasterTimestamp:
+            WSTemperatureData.append(float('nan'))
+            WSRelHumData.append(float('nan'))
+            WSPressureData.append(float('nan'))
+            WSAbsHumData.append(float('nan'))
+    except:
+        WSTemperatureData = Mergedncfile.variables["WSTemperature"][:]
+        WSRelHumData = Mergedncfile.variables["WSRelHum"][:]
+        WSPressureData = Mergedncfile.variables["WSPressure"][:]
+        WSAbsHumData = Mergedncfile.variables["WSAbsHum"][:]
+    WSTemperatureData.units = "Celcius"
+    WSRelHumData.units = "%"
+    WSPressureData.units = "Millibar"
+    WSAbsHumData.units = "g/m^3"
+    WSTemperatureData.description = "Atmospheric temperature measured by the weather station at the ground (actual height is 2 meters at the top of the container)"
+    WSRelHumData.description = "Atmospheric relative humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+    WSPressureData.description = "Atmospheric pressure mesaured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+    WSAbsHumData.description = "Atmospheric absolute humidity measured by the weather station at ground level (actual height is 2 meters at the top of the container)"
+
+
+    Channels = ["WVEtalon", "HSRLEtalon"]
+    ChanTempData = []
+    ChanTempDiffData = []
+    for i in range (0,len(Channels)):
+        ChanTempData.append([])
+        ChanTempDiffData.append([])
+    for i in range (0,len(Channels)):
+        tempstr = Channels[i]+"Temperature"
+        tempDiffstr = Channels[i]+"TempDiff"
+        try: # create the variable if you can, fill it with nans until the mergeing
+            ChanTempData[i] =  Mergedncfile.createVariable(tempstr,dtype('float').char,('time'))
+            for time in MasterTimestamp:
+                ChanTempData[i].append(float('nan'))
+        except:
+            ChanTempData[i] = Mergedncfile.variables[tempstr][:]
+        try: # create the variable if you can, fill it with nans until the mergeing
+            ChanTempDiffData[i] =  Mergedncfile.createVariable(tempDiffstr,dtype('float').char,('time'))
+            for time in MasterTimestamp:
+                ChanTempDiffData[i].append(float('nan'))
+        except:
+            ChanTempDiffData[i] = Mergedncfile.variables[tempDiffstr][:]
+    for i in range (0,len(Channels)):
+        ChanTempData[i].units = "Celcius"
+        ChanTempDiffData[i].units = "Celcius"
+        ChanTempData[i].description = "Measured temperature of the etalon from the Thor 8000 thermo-electric cooler for " + Channels[i]
+        ChanTempDiffData[i].description = "Temperature difference of etalon measured Minus desired setpoint for " + Channels[i]
+
+
+    ChanAssign = ["WVOnline","WVOffline","HSRL"]
+    Variables = ["Wavelength", "WaveDiff", "TempDesired", "TempMeas", "Current"]
+    VarUnits = ["nm","nm","Celcius","Celcius","Amp"]
+    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","Wavelength of the seed laser measured by the wavemeter (reference to vacuum) Minus Desired wavelenth (reference to vacuum)","Laser temperature setpoint","Measured laser temperature from the Thor 8000 diode thermo-electric cooler","Measured laser current from the Thor 8000 diode laser controller"]
+    ChanVarData = []
+    for i in range (0,len(Variables)):
+        ChanVarData.append([])
+        for j in range (0,len(ChanAssign)):
+            ChanVarData[i].append([])
+    i=0
+    for var in Variables:
+        j=0
+        for chan in ChanAssign:
+            thing = chan+"Laser"+var
+            try: # create the variable if you can, fill it with nans until the mergeing
+                ChanVarData[i][j] = Mergedncfile.createVariable(thing ,dtype('float').char,('time'))
+                for time in MasterTimestamp:
+                    ChanVarData[i][j].append(float('nan'))
+            except:
+                ChanVarData[i][j] = Mergedncfile.variables[thing][:]
+            j=j+1
+        i=i+1
+    # add variable units and descriptions
+    for i in range (0,len(Variables)):
+        for j in range (0,len(ChanAssign)):
+            ChanVarData[i][j].units = VarUnits[i]
+            ChanVarData[i][j].description = VarDescr[i] + " for " + ChanAssign[j]
+
+
+    ChannelsIn = ["OnlineH2O", "OfflineH2O", "HSRL"]
+    ChannelsOut = ["WVOnline", "WVOffline", "HSRL"]
+    PowChanData = []
+    for i in range (0,len(ChannelsIn)):
+        PowChanData.append([])
+    for i in range (0,len(ChannelsIn)):
+        powthing = ChannelsOut[i]+"Power"
+        try: # create the variable if you can, fill it with nans until the mergeing
+            PowChanData[i] = Mergedncfile.createVariable(powthing,dtype('float').char,('time'))
+            for time in MasterTimestamp:
+                PowChanData[i].append(float('nan'))
+        except: # variable already existed\
+            PowChanData[i] = Mergedncfile.variables[powthing][:]
+    for i in range (0,len(ChannelsIn)):
+        PowChanData[i].units = "PIN count"
+        PowChanData[i].description = "Raw pin count from the MCS analog detectors (must be converted to power using ???)"
+
+
     # setting value of range variable
     MasterRange = []
     try:
@@ -2108,19 +2239,23 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                 else:
                     okDate = ThenDate
 
-                # for date in range (int(ThenDate),int(ileDate)+1):
+                # for date in range (int(ThenDate),int(fileDate)+1):
                 for date in range(int(okDate), int(fileDate) + 1):
                     # print ("date=",date)
                     startTime = 0
                     endTime = 0
-                    if date == int(fileDate):
+
+                    if date == int(fileDate) and date != int(ThenDate):
                         startTime = 0
-                        endTime = int(int(fileTime) / 10 + 1000)
-                    elif date == int(NowDate):
+                        endTime = int(int(fileTime) / 10)
+                    elif date == int(fileDate) and date == int(ThenDate):
+                        startTime = int(ThenTime+1)*1000
+                        endTime = int(int(fileTime) / 10)
+                    elif date != int(fileDate) and date != int(ThenDate):
                         startTime = 0
-                        endTime = int((int(NowTime)) * 1000)
-                    else:
-                        startTime = 0
+                        endTime = 24000
+                    elif date != int(fileDate) and date == int(ThenDate):
+                        startTime = int(ThenTime+1)*1000
                         endTime = 24000
 
                     for time in range(int(startTime / 1000), int(endTime / 1000)):
@@ -2228,9 +2363,6 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
         MergedFileList = getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
         MergedFileList.sort() 
         for Mergedfile in MergedFileList:
-
-            # need to check that all variables are present in merged file, WVOnline, Temperatures, etc.... *************************
-
             try:
                 CFRadify(Mergedfile,CFRadPath,header)
             except:
@@ -2257,7 +2389,7 @@ def main():
     LastSec = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%S")
     LastMicroSec = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%f")
     LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
-    
+
     # creating Error file variable for use if needed ... which of course it never will be ... right? 
     ErrorFile = os.path.join(sys.argv[1],"Data","NetCDFChild","NetCDFPythonErrors_"+str(NowDate)+"_"+str(NowTime)+".txt")
 
@@ -2389,7 +2521,7 @@ def main():
                 data_dirs_list = os.listdir(LocalOutputPath)
                 #print (data_dirs_list)
                 for data_dir in data_dirs_list:
-                    print ("Copying hardware level",data_dir, datetime.datetime.utcnow().strftime("%H:%M:%S"))
+                    print ("Copying ",data_dir, datetime.datetime.utcnow().strftime("%H:%M:%S"))
                     if os.path.isfile(os.path.join(LocalOutputPath,data_dir)):
                         shutil.copy(os.path.join(LocalOutputPath,data_dir), os.path.join(OutputPath,data_dir))
                     else:
@@ -2399,7 +2531,7 @@ def main():
                                 shutil.copy(os.path.join(LocalOutputPath,data_dir,day_dir), os.path.join(OutputPath,data_dir,day_dir))
                             else:
                                 if day_dir >= ThenDate:
-                                    print ("Copying day level ", day_dir, datetime.datetime.utcnow().strftime("%H:%M:%S"))
+                                    #print ("Copying day level ", day_dir, datetime.datetime.utcnow().strftime("%H:%M:%S"))
                                     LocalCopyFrom = os.path.join(LocalOutputPath,data_dir,day_dir)
                                     src_file_names = ""
                                     if os.path.isfile(os.path.join(LocalOutputPath,data_dir,day_dir)):
