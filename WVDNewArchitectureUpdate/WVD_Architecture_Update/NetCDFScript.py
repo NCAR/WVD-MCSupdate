@@ -98,7 +98,7 @@ def main():
         #copy NetCDF files to external drive if applicable.
         print ("RSync files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         OutputPath = os.path.join(sys.argv[2],"Data","")
-        DoRSync(LocalOutputPath,OutputPath)
+        DoRSync(LocalOutputPath,OutputPath,ThenDate)
 
     # if os.path.isdir(os.path.join(sys.argv[1],"Data"):        
     else:
