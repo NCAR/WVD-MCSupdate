@@ -1,0 +1,170 @@
+Written By: Brad Schoenrock
+Written For: NCAR
+This file is used to define the initial state of the NCAR MCSControls in the WVD labview program. 
+
+### enable channel demuxing - 3;2;1;0;;
+Demux Channel Enable;;
+false; false; false; true;;
+
+### enable sync to reset accumulation on sync input signal 2;1;0;;
+Sync Enable;;
+false; false; true;;
+
+### turns on channels 11;10;9;8;7;6;5;4;3;2;1;0;;
+Channel Enable;;
+false; false; false; true; false; false; false; false; false; false; false; true;;
+
+### used to reset harvester, must be set back to false in order to collect data once in operations
+User Reset;;
+false;;
+
+### used to reset accumulater per channel 11-0
+Reset Profile Accumulator;;
+false; false; false; false; false; false; false; false; false; false; false; false;;
+
+### number of core clock cycles during which pulses are accumulated
+### must be >=2
+### core clock is 200MHz (5ns)
+Counts Per Bin;;
+50;;
+
+### number of bins returned
+Number of Bins;;
+560;;
+
+### number of profiles per channel return
+### must be >= 1
+Profiles Per Histogram;;
+14000;;
+
+### configures the muxing network to route a sync input to a channel.
+### all channels default to 0. 
+Sync Select;;
+0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;;
+
+### sets the period of pulses when sync test mode selection - 01. 
+### Period = 2^10*tm1period/200MHz
+Sync Test Mode Config;;
+0;;
+
+### Directs test pattern to channels 0-7 or 4-11. 
+### probably keep set to false
+Channel DEMUX Selector;;
+false;;
+
+### Directs test patterns controls
+### probably keep set to false
+Soft DEMUX Selector Enable;;
+false;; 
+
+### Sets the period of the pulses generated for test mode 1 pattern
+### Probably keep set to 0
+Pulse Period;;
+0;;
+
+### sets up mode of operations 
+### options are "Normal Operations" or "Insert Pulse"
+Sync Test Mode Select;;
+Normal Operations;;
+
+### sets up mode of operations
+### options are "Normal Operations" , "Pulse Stream" , or "Ramp"
+Data Input Test Mode;;
+Normal Operations;;
+
+### Determines the period of the internally generated trigger that will initate the start of new data harvest
+### options are "100 ms" , "10 ms" , or "~100 ns"
+Throttle Mode;;
+100 ms;;
+
+### false transfers data in order Ch0-Ch11
+### true transfers data when histograms are complete
+Channel Transfer Order;;
+false;;
+
+### false asserts holds on channels as they are ready
+### true assert hold individually as new histogram is complete
+Channel Hold Order;;
+false;;
+
+### resets the relative time counter
+### probably keep this false
+Time Reset;;
+false;;
+
+### Number of core clock cycles to increment the relative time counter value present in histogram frame header
+### the core clock is 100MHz
+### probably keep 20000000 
+Relative Time Step;;
+20000000;;
+
+### SYNC0 - SYNC2 polarity
+### false event occurs on rising edge
+### true event occours on falling edge
+Sync Input Polarity;;
+false; false; false;;
+
+### Pulse counts routed to lower or upper channel (false or true)
+DIN Demux Polarity;;
+false; false; false; false;;
+
+### pulse registered on rising or falling edge (false or true)
+DIN Polarity;;
+false; false; false; false; false; false; false; false;;
+
+### pulses with duration less than this will be rejected
+### 0 is reject nothing and is reccomended
+Power Pulse Reject Config;;
+0;;
+
+### determines how pulse durrations accumulate into total accumulation
+### valid options are "Accum 2^N pulses" or "Accum All pulses 50 ms"
+Power Mon Acc Mode;;
+Accum 2^N pulses;;
+
+### determines how pulse durrations accumulate into total accumulation
+### valid options are "Normal Operations" or "Pulse"
+Power Mon Test Mode;;
+Normal Operations;;
+
+### enables power monitoring channels 11-0
+Power Mon Chan Enable;;
+false; false; false; false; false; true; false; false; false; false; false; true;;
+
+### accumulate pulse duration value over 2^N pulses where N is the decimal value of PIN#Average
+PIN Pulse Durration Ave;;
+8; 0; 0; 0; 0; 0;;
+
+### configures the routing matrix that matches a DEMUX to a PIN input
+### PIN5 - PIN0
+### valid options are "DEMUX0" , "DEMUX1" , "DEMUX2" , or "DEMUX3"
+Power Mon In DEMUX Select;;
+DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX0;;
+
+### voltage = 2.5 * VALUE / 65536
+### 16 bit value is truncated to 12 bit when passed to device
+Power Mon Volt Ref Threshold;;
+20960;;
+
+### voltage = 2.5 * VALUE / 65536
+### 16 bit value is truncated to 12 bit when passed to device
+DEMUX In Volt Threshold;;
+26208;;
+
+### voltage = 2.5 * VALUE / 65536
+### 16 bit value is truncated to 12 bit when passed to device
+DIN In Volt Threshold;;
+26208;;
+
+### voltage = 2.5 * VALUE / 65536
+### 16 bit value is truncated to 12 bit when passed to device
+SYNC In Volt Threshold;;
+26208;;
+
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\MCSControls\;
+MCSState;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+

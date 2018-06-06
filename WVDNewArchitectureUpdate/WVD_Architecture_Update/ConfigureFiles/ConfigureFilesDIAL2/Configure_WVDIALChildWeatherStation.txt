@@ -1,0 +1,32 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the Weather Station in the Water Vapor DIAL Main labview program. 
+
+### This is where the Labview VISA communications should find the weather station.
+Comm Port;;
+COM6;;
+
+### These are miscilaneous variables that are read and used as default values
+### by the weather station. These are currently: the update period of the weather 
+### station in seconds, the time to wait between write and read of the comm port,
+### The number of measurments to save, and the number of weather station variables
+### to keep. 
+Child Variables;;
+5;50;1440;4;;
+
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\WeatherStation\;
+WeatherStation;
+WSLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+### This is currently unused but was intended to be used as the starting point to 
+### set the initial state of the plot bounds. It is likely not necessary if
+### we keep autoscaling the plots.
+Plot Bounds;;
+1;2;3;4;5;6;7;8;;
+
+
+

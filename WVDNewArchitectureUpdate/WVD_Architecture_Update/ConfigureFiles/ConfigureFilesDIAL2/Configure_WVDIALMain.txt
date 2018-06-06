@@ -26,7 +26,7 @@ Function Types;;
 
 ### the name of the dial unit used to grab the correct config files
 Unit Name;;
-DIAL1;;
+DIAL2;;
 
 ### the paths to logging for main contianer
 Logging Paths;;

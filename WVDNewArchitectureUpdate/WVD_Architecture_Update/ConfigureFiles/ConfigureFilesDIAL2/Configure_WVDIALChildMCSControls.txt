@@ -133,7 +133,7 @@ false; false; false; false; false; true; false; false; false; false; true; true;
 
 ### accumulate pulse duration value over 2^N pulses where N is the decimal value of PIN#Average
 PIN Pulse Durration Ave;;
-0; 0; 0; 0; 0; 0;;
+7; 7; 0; 0; 0; 0;;
 
 ### configures the routing matrix that matches a DEMUX to a PIN input
 ### PIN5 - PIN0

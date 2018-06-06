@@ -1,15 +1,15 @@
 Conventions	CFRadial
-title		Water Vapor Dial Merged Data
+title	Water Vapor Dial Merged Data
 institution	NCAR/UCAR
 references	Fake paper here
-source		DIAL1
+source	DIAL1
 capabilities	WVDial
-history		raw, merged onto master timeseries set by MCS data if available
-comment		N/A
+history	raw, merged onto master timeseries set by MCS data if available
+comment	N/A
 instrument_name	Water Vapor Dial 1
 site_name	FL1
 contact_info	Brad Schoenrock - brads@ucar.edu
-project		Testing for Relampago
+project	Testing for Relampago
 latitude	40.0150
 longitude	254.7295
 altitude	1655
