@@ -24,11 +24,12 @@ Relative File Paths;;
 Function Types;;
 ;;
 
-### the name of the dial unit used to grab the correct config files
-Unit Name;;
-DIAL2;;
-
 ### the paths to logging for main contianer
 Logging Paths;;
 .\Data\Container\;
 ContainerLogging;;
+
+
+### the name of the dial unit used to grab the correct config files
+Unit Name;;
+DIAL2;;
