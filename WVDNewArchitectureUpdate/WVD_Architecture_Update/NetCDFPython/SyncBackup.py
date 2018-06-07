@@ -4,11 +4,16 @@ import os
 import shutil
 import SharedPythonFunctions as SPF
 
-def DoRSync(syncFrom, syncTo,ThenDate):
-    #subprocess.call(["rsync", "-az", syncFrom, syncTo])
-    
-    # Everything below this can be deleted when we get RSync working
+def DoRSync(syncFrom, syncTo,WarningFile,ErrorFile):
+    try:
+        subprocess.call(["C:\\Users\\h2odial\\Documents\\MobaXterm\\slash\\bin\\rsync", "-avz", "--compress-level=9", syncFrom, syncTo])
+    except:
+        writeString = "WARNING: unable to RSync to external hard drive - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+        SPF.Write2ErrorFile(WarningFile, writeString)
 
+    # Everything below this can be deleted when we get RSync working
+    # some of the imports above can also be deleted. 
+    """
     LocalOutputPath = syncFrom
 
     #copy NetCDF files to external drive if applicable.
@@ -57,5 +62,4 @@ def DoRSync(syncFrom, syncTo,ThenDate):
                                         fromt = os.path.join(LocalCopyFrom,file_name)
                                         tot = os.path.join(OutputPath,data_dir,day_dir,"")
                                         shutil.copy(fromt,tot)
-
-
+    """

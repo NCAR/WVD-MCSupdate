@@ -756,7 +756,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
             try:
                 processMCS(MCSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
-                writeString = "ERROR: Failure to process MCS data - " + "MCSfile = " + str(MCSFile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                writeString = "ERROR: Failure to process MCS data - " + "MCSfile = " + str(MCSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(ErrorFile, writeString)
         MCSPowerList = SPF.getFiles(MCSDataPath , "MCSPower", ".bin", ThenDate, ThenTime)
         MCSFileList.sort()
