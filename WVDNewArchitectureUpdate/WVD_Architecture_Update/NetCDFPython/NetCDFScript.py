@@ -105,9 +105,8 @@ def main():
         # when we are done with the RSync then we get to change directories back
         try:
             cwd = os.getcwd()
-            print (sys.argv[2])
             os.chdir(sys.argv[2])
-            DoRSync("/cygdrive/c/Users/eol-lidar/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data",".",WarningFile,ErrorFile)
+            DoRSync("/cygdrive/c/Users/h2odial/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data",".",WarningFile,ErrorFile)
             os.chdir(cwd)
         except:
             writeString = "WARNING: unable to RSync to external hard drive - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
