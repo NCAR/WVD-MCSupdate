@@ -12,7 +12,7 @@ false; false; true;;
 
 ### turns on channels 11;10;9;8;7;6;5;4;3;2;1;0;;
 Channel Enable;;
-false; false; false; true; false; false; false; false; true; true; false; true;;
+false; false; false; true; false; false; false; false; false; false; false; true;;
 
 ### used to reset harvester, must be set back to false in order to collect data once in operations
 User Reset;;
@@ -129,11 +129,11 @@ Normal Operations;;
 
 ### enables power monitoring channels 11-0
 Power Mon Chan Enable;;
-false; false; false; false; false; true; false; false; false; false; true; true;;
+false; false; false; false; false; true; false; false; false; false; false; true;;
 
 ### accumulate pulse duration value over 2^N pulses where N is the decimal value of PIN#Average
 PIN Pulse Durration Ave;;
-0; 0; 0; 0; 0; 0;;
+8; 0; 0; 0; 0; 0;;
 
 ### configures the routing matrix that matches a DEMUX to a PIN input
 ### PIN5 - PIN0

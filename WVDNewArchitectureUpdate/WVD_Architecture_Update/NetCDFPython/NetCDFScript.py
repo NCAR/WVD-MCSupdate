@@ -96,10 +96,21 @@ def main():
         mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header,WarningFile,ErrorFile)
 
         #copy NetCDF files to external drive if applicable.
-        print ("RSync files", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+        print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         OutputPath = os.path.join(sys.argv[2],"Data","")
-        DoRSync(LocalOutputPath,OutputPath,ThenDate)
-
+        # Rsync can't be performed when both source and destination are remote
+        # so we have to change directory so that one of the locations isn't remote
+        # windows sees anything with a : in the path to be remote
+        # the cygdrive also apears to be treated as remote
+        # when we are done with the RSync then we get to change directories back
+        try:
+            cwd = os.getcwd()
+            os.chdir(sys.argv[2])
+            DoRSync("/cygdrive/c/Users/h2odial/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data",".",WarningFile,ErrorFile)
+            os.chdir(cwd)
+        except:
+            writeString = "WARNING: unable to RSync to external hard drive - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+            SPF.Write2ErrorFile(WarningFile, writeString)
     # if os.path.isdir(os.path.join(sys.argv[1],"Data"):        
     else:
         writeString = "ERROR: argument 1 (path to directory containing Data folder) - "+sys.argv[1]+" - is not a dir, looking for directory containing Data. - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'

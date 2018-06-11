@@ -1,0 +1,109 @@
+Written By: Brad Schoenrock
+Written For: NCAR
+This file is used to define the initial state of the NCAR MCSControls in the WVD labview program. 
+
+Demux Channel Enable;;
+false; false; false; false;;
+
+Sync Enable;;
+false; false; true;;
+
+Channel Enable;;
+true; true; true; true; true; true; true; true; true; true; true; true;;
+
+User Reset;;
+false;;
+
+Reset Profile Accumulator;;
+false; false; false; false; false; false; false; false; false; false; false; false;;
+
+Counts Per Bin;;
+50;;
+
+Number of Bins;;
+560;;
+
+Profiles Per Histogram;;
+14000;;
+
+Sync Select;;
+0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;;
+
+Sync Test Mode Config;;
+31;;
+
+Channel DEMUX Selector;;
+false;;
+
+Soft DEMUX Selector Enable;;
+false;; 
+
+Pulse Period;;
+0;;
+
+Sync Test Mode Select;;
+Insert Pulse;;
+
+Data Input Test Mode;;
+Ramp;;
+
+Throttle Mode;;
+100 ms;;
+
+Channel Transfer Order;;
+false;;
+
+Channel Hold Order;;
+false;;
+
+Time Reset;;
+false;;
+
+Relative Time Step;;
+20000000;;
+
+Sync Input Polarity;;
+false; false; false;;
+
+DIN Demux Polarity;;
+false; false; false; false;;
+
+DIN Polarity;;
+false; false; false; false; false; false; false; false;;
+
+Power Pulse Reject Config;;
+0;;
+
+Power Mon Acc Mode;;
+Accum 2^N pulses;;
+
+Power Mon Test Mode;;
+Pulse;;
+
+Power Mon Chan Enable;;
+true; true; true; true; true; true; true; true; true; true; true; true;;
+
+PIN Pulse Durration Ave;;
+0; 0; 0; 0; 0; 0;;
+
+Power Mon In DEMUX Select;;
+DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX0; DEMUX0;;
+
+Power Mon Volt Ref Threshold;;
+20960;;
+
+DEMUX In Volt Threshold;;
+26208;;
+
+DIN In Volt Threshold;;
+26208;;
+
+SYNC In Volt Threshold;;
+26208;;
+
+FilePaths;;
+.\Data\MCSControls\;
+MCSState;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+

@@ -145,7 +145,8 @@ def CFRadify(MergedFile,CFRadPath,header):
         
     # load up header information for file global attributes
     for entry in header:
-        Mergedncfile.setncattr(entry[0],entry[1])
+        if len(entry)>0:
+            Mergedncfile.setncattr(entry[0],entry[len(entry)-1])
         
     # these two dimensions should already exist
     # Mergedncfile.createDimension('time',len(MasterTimestamp))
@@ -364,12 +365,13 @@ def CFRadify(MergedFile,CFRadPath,header):
         LongitudeData = Mergedncfile.createVariable('longitude',dtype('double').char,())
         AltitudeData = Mergedncfile.createVariable('altitude',dtype('double').char,())
         for entry in header:
-            if entry[0] == "latitude":
-                LatitudeData[:] = entry[1]
-            if entry[0] == "longitude":
-                LongitudeData[:] = entry[1]
-            if entry[0] == "altitude":
-                AltitudeData[:] = entry[1]            
+            if len(entry) >0:
+                if entry[0] == "latitude":
+                    LatitudeData[:] = entry[len(entry)-1]
+                if entry[0] == "longitude":
+                    LongitudeData[:] = entry[len(entry)-1]
+                if entry[0] == "altitude":
+                    AltitudeData[:] = entry[len(entry)-1]            
         LatitudeData.units = "degrees_north"
         LongitudeData.units = "degrees_east"
         AltitudeData.units = "meters"
@@ -1471,8 +1473,11 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                 if not DataChannelAssign[int(DataChannel[i])] in nameList:
                     nameList.append(DataChannelAssign[int(DataChannel[i])])
 
-            AveTimeDelta = timedeltaSum/timecounter
-
+            if timecounter > 0:
+                AveTimeDelta = timedeltaSum/timecounter
+            else:
+                AveTimeDelta = 2
+                
             nTimeDeltasGap = 3
 
             #print ("FT=",firstTime)
