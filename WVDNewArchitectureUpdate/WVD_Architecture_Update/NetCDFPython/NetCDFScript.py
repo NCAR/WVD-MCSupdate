@@ -55,8 +55,8 @@ def main():
     LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
 
     # creating Error file variable for use if needed ... which of course it never will be ... right?
-    SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Errors",str(NowDate))
-    SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Warnings",str(NowDate))
+    SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Errors",str(NowDate)))
+    SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Warnings",str(NowDate)))
     ErrorFile = os.path.join(sys.argv[1],"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+str(NowDate)+"_"+str(NowTime)+".txt")
     WarningFile = os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+str(NowDate)+"_"+str(NowTime)+".txt")
 
@@ -108,7 +108,7 @@ def main():
         try:
             cwd = os.getcwd()
             os.chdir(sys.argv[2])
-            DoRSync("/cygdrive/c/Users/eol-lidar/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data",".",WarningFile,ErrorFile)
+            DoRSync("/cygdrive/c/Users/h2odial/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data",".",WarningFile,ErrorFile)
             os.chdir(cwd)
         except:
             writeString = "WARNING: unable to RSync to external hard drive - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
