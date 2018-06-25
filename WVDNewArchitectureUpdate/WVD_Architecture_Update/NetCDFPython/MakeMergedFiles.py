@@ -240,6 +240,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
             HKeepTemperatureData[i].append(float('nan'))
     except:
         HKeepTemperatureData = Mergedncfile.variables["HKeepTemperature"]
+
     HKeepTemperatureData.units = "Celcius"
     HKeepTemperatureData.description = "Temperature measured inside the container by nInternalThermalSensors"
 
@@ -1699,10 +1700,30 @@ def mergeHKeep(HKeepfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     for time in MasterTimestamp:
                         tempHKeepTemperatureData[i].append(float('nan'))
 
+                    #print ("Hey",i)
+                    #print ("list(HKeepTemperature[i])[:50]=",list(HKeepTemperature[i])[:50])
+                    #print ("tempHKeepTemperatureData[i][:50]=",tempHKeepTemperatureData[i][:50])
+                    #print ("HKeepTimestamp[:50]=",HKeepTimestamp[:50])
+                    #print ("MasterTimestamp[:50]=",MasterTimestamp[:50])
+
                     tempHKeepTemperatureData[i][:] = interpolate(list(HKeepTemperature[i]), tempHKeepTemperatureData[i], HKeepTimestamp, MasterTimestamp)
+
+                    #print ("Listen",i)
+                    #print ("list(HKeepTemperature[i])[:50]=",list(HKeepTemperature[i])[:50])
+                    #print ("tempHKeepTemperatureData[i][:50]=",tempHKeepTemperatureData[i][:50])
+                    #print ("HKeepTimestamp[:50]=",HKeepTimestamp[:50])
+                    #print ("MasterTimestamp[:50]=",MasterTimestamp[:50])
+
+                #print ("before")
+                #print ("tempHKeepTemperatureData[i][:50]=",tempHKeepTemperatureData[0][:50])
+                #print ("list(HKeepTemperature[i])[:50]=",list(HKeepTemperature[0])[:50])
 
                 HKeepTemperatureData[:] = tempHKeepTemperatureData
 
+                #print ("after")
+                #print ("tempHKeepTemperatureData[i][:50]=",tempHKeepTemperatureData[0][:50])
+                #print ("list(HKeepTemperature[i])[:50]=",list(HKeepTemperature[0])[:50])
+                
                 HKeepTemperatureData.units = "Celcius"
                 HKeepTemperatureData.description = "Temperature measured inside the container by nInternalThermalSensors"
 
@@ -1835,7 +1856,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
         # we need to check if the first file needed to be made. This skipping of the first file prevents hourly cracks.
         makeFirst = False
 
-        for i in range(0,len(MCSDataFileList)-1):
+        for i in range(0,len(MCSDataFileList)):
             Datafile = MCSDataFileList[i]
 
             fileDate = Datafile[-27:-19]
@@ -1854,16 +1875,16 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
             timeCheck=0
             name = ""
             nameList = []
-            for i in range(0,len(DataTimestamp)-1):
-                if i==0:
-                    name = DataChannelAssign[int(DataChannel[i])]
-                    timeCheck = DataTimestamp[i]
-                elif DataChannelAssign[int(DataChannel[i])] == name:
+            for j in range(0,len(DataTimestamp)-1):
+                if j==0:
+                    name = DataChannelAssign[int(DataChannel[j])]
+                    timeCheck = DataTimestamp[j]
+                elif DataChannelAssign[int(DataChannel[j])] == name:
                     timecounter = timecounter + 1
-                    timedeltaSum = timedeltaSum + (DataTimestamp[i] - timeCheck)
-                    timeCheck = DataTimestamp[i]
-                if not DataChannelAssign[int(DataChannel[i])] in nameList:
-                    nameList.append(DataChannelAssign[int(DataChannel[i])])
+                    timedeltaSum = timedeltaSum + (DataTimestamp[j] - timeCheck)
+                    timeCheck = DataTimestamp[j]
+                if not DataChannelAssign[int(DataChannel[j])] in nameList:
+                    nameList.append(DataChannelAssign[int(DataChannel[j])])
 
             if timecounter > 0:
                 AveTimeDelta = timedeltaSum/timecounter
@@ -1907,9 +1928,11 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
 
                     for time in range(int(startTime / 1000), int(endTime / 1000)):
                         createEmptyDataFile(LocalOutputPath, str(date), ThenDate, ThenTime, int(time), int(time + 1), AveTimeDelta,nameList)
+                        #print ("create A")
 
                 if firstTime - int(firstTime) > nTimeDeltasGap * AveTimeDelta:  # covers the fractional hour potentially missed at beginning of data collection
                     createEmptyDataFile(LocalOutputPath, fileDate, ThenDate, ThenTime, int(firstTime), firstTime, AveTimeDelta,nameList)
+                    #print ("create B")
 
             else: # if this is not our first time through
                 if firstTime - lastTime > nTimeDeltasGap*AveTimeDelta:
@@ -1918,17 +1941,23 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                         for i in range(0,intDiff+1): # number of files needed to account for crossing hour boundries without data
                             if i ==0: # first partial hour missed
                                 createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,nameList)
+                                #print ("create C")
                             elif i == intDiff: # last partial hour potentially missed
                                 createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,int(firstTime),firstTime,AveTimeDelta,nameList)
+                                #print ("create D")
                             else: # any full hours that were missed in the middle
                                 createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,int(lastTime)+i,int(lastTime)+i+1,AveTimeDelta,nameList)
+                                #print ("create E")
                     else:# the gap is contained within one hour
                         createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,firstTime,AveTimeDelta,nameList)
+                        #print ("create F")
 
             try:
                 place = os.path.join(CFRadPath,fileDate,"MergedFiles"+fileTime+".nc")
                 if i != 0 or not os.path.isfile(place):
                     mergeData(Datafile, CFRadPath,nameList)
+                    #print ("create G",i)
+                    #print ("os.path.isfile(place)=",os.path.isfile(place))
                     if i == 0:
                         makeFirst = True
             except:
@@ -1941,10 +1970,12 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                 if fileDate != NowDate:
                     if int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
                         createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,nameList)
+                        #print ("create H")
                 else:
                     if int(lastTime) + 1 < NowTime:
                         if int(lastTime) + 1 - lastTime > nTimeDeltasGap*AveTimeDelta:# covers last fractional hour at end of list
                             createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,lastTime,int(lastTime)+1,AveTimeDelta,nameList)
+                            #print ("create I")
 
                 # I'm limiting how long it will make files past the end of data taking
                 # when createEmptyDataFile is fixed i can replace the for loop
@@ -1968,8 +1999,9 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
 
                     for time in range (int(startTime/1000),int(endTime/1000)):
                         createEmptyDataFile(LocalOutputPath,str(date),ThenDate,ThenTime,int(time),int(time+1),AveTimeDelta,nameList)
+                        #print ("create J")
 
-        for i in range(0,len(MCSPowerFileList)-1):
+        for i in range(0,len(MCSPowerFileList)):
             Powerfile = MCSPowerFileList[i]
             LastFile = ""
             NextFile = ""
@@ -1984,7 +2016,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     writeString = "WARNING: unable to merge MCSPower into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     SPF.Write2ErrorFile(WarningFile, writeString)
 
-        for i in range(0,len(LLFileList)-1):
+        for i in range(0,len(LLFileList)):
             LLfile = LLFileList[i]
             LastFile = ""
             NextFile = ""
@@ -1999,7 +2031,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     writeString = "ERROR: unable to merge LaserLocking into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     SPF.Write2ErrorFile(ErrorFile, writeString)
 
-        for i in range(0,len(EtalonFileList)-1):
+        for i in range(0,len(EtalonFileList)):
             Etalonfile = EtalonFileList[i]
             LastFile = ""
             NextFile = ""
@@ -2014,7 +2046,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     writeString = "WARNING: unable to merge Etalons into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     SPF.Write2ErrorFile(WarningFile, writeString)
 
-        for i in range(0,len(WSFileList)-1):
+        for i in range(0,len(WSFileList)):
             WSfile = WSFileList[i]
             LastFile = ""
             NextFile = ""
@@ -2029,7 +2061,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     writeString = "WARNING: unable to merge WeatherStation into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     SPF.Write2ErrorFile(WarningFile, writeString)
 
-        for i in range(0,len(HKeepFileList)-1):
+        for i in range(0,len(HKeepFileList)):
             HKeepfile = HKeepFileList[i]
             LastFile = ""
             NextFile = ""
@@ -2044,7 +2076,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                     writeString = "WARNING: unable to merge Housekeeping into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                     SPF.Write2ErrorFile(WarningFile, writeString)
 
-        for i in range(0,len(UPSFileList)-1):
+        for i in range(0,len(UPSFileList)):
             UPSfile = UPSFileList[i]
             LastFile = ""
             NextFile = ""
@@ -2061,11 +2093,13 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
 
         MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
         MergedFileList.sort()
-        for Mergedfile in MergedFileList:
-            try:
-                CFRadify(Mergedfile,CFRadPath,header,NowDate,NowTime)
-            except:
-                writeString = "WARNING: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                SPF.Write2ErrorFile(WarningFile, writeString)
+        for i in range(0,len(MergedFileList)):
+            Mergedfile = MergedFileList[i]
+            if i != 0 or makeFirst:
+                try:
+                    CFRadify(Mergedfile,CFRadPath,header,NowDate,NowTime)
+                except:
+                    writeString = "WARNING: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                    SPF.Write2ErrorFile(WarningFile, writeString)
 
 
