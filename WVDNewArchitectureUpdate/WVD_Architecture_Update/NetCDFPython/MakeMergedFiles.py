@@ -834,7 +834,8 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
     print ("Making Merged File Without Data", datetime.datetime.utcnow().strftime("%H:%M:%S"))
 
     fileTime = decimal.Decimal(fromTime*10000) # decimal.Decimal is used to round down
-    fileTime = str(round(fileTime,0)).zfill(6)# append extra 0s so the file names are of constant width.
+    #fileTime = str(round(fileTime,0)).zfill(6)# append extra 0s so the file names are of constant width.
+    fileTime = str(int(fileTime))# append extra 0s so the file names are of constant width.
 
     print (fileDate)
     print (fileTime)

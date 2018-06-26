@@ -282,7 +282,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     
     # add in variables that are expected to be the same size as timestamp which is the master dimension 
     TimestampData = LLncfile.createVariable('time',dtype('float').char,('time'))
-    LaserNumData = LLncfile.createVariable('LaserName','str',('time'))
+    LaserNumData = LLncfile.createVariable('LaserName',str,('time'))
     WavelengthData = LLncfile.createVariable('Wavelength',dtype('float').char,('time'))
     WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float').char,('time'))
     IsLockedData = LLncfile.createVariable('IsLocked',dtype('float').char,('time'))
@@ -359,7 +359,7 @@ def processEtalons(EtalonFile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastT
     Etalonncfile.createDimension('time',len(Timestamp))
     
     TimestampData = Etalonncfile.createVariable('time',dtype('float').char,('time'))
-    EtalonNumData = Etalonncfile.createVariable('EtalonNum','str',('time'))
+    EtalonNumData = Etalonncfile.createVariable('EtalonNum',str,('time'))
     TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float').char,('time'))
     TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float').char,('time'))
     IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('float').char,('time'))
@@ -476,7 +476,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         TimestampData = Powncfile.createVariable('time',dtype('float32').char,('time'))
         RTimeData= Powncfile.createVariable('RTime',dtype('float32').char,('time'))
         PowChData = Powncfile.createVariable('Power',dtype('float32').char,('nChannels','time'))
-        ChannelAssignData = Powncfile.createVariable('ChannelAssignment','str',('nChannels'))
+        ChannelAssignData = Powncfile.createVariable('ChannelAssignment',str,('nChannels'))
         
         TimestampData[:] = Timestamp
         RTimeData[:] = RTime
@@ -657,7 +657,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         CntsPerBinData = MCSncfile.createVariable('CntsPerBin',dtype('float32').char,('time'))
         NBinsData = MCSncfile.createVariable('NBins',dtype('float32').char,('time'))
         DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','time'))
-        ChannelAssignData = MCSncfile.createVariable('ChannelAssignment','str',('nChannels'))
+        ChannelAssignData = MCSncfile.createVariable('ChannelAssignment',str,('nChannels'))
         RTimeData = MCSncfile.createVariable('RTime',dtype('float32').char,('time'))
      
         TimestampData[:] = Timestamp
