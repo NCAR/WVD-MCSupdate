@@ -1396,11 +1396,11 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     LastTemperatureBlock[j].append(LastTemp[i])
                     LastTempDiffBlock[j].append(LastTempDiff[i])
         if ThisHour - LastHour < 2:
-            for i in range(0,len(LastTimestampBlock)-1):
+            for i in range(0,len(LastTimestampBlock)):
                 EtalonTimestampBlock[i] = np.hstack((LastTimestampBlock[i],EtalonTimestampBlock[i]))
-            for i in range(0,len(LastTemperatureBlock)-1):
+            for i in range(0,len(LastTemperatureBlock)):
                 EtalonTemperatureBlock[i] = np.hstack((LastTemperatureBlock[i],EtalonTemperatureBlock[i]))
-            for i in range(0,len(LastTempDiffBlock)-1):
+            for i in range(0,len(LastTempDiffBlock)):
                 EtalonTempDiffBlock[i] = np.hstack((LastTempDiffBlock[i],EtalonTempDiffBlock[i]))
 
     if NextFile != "":
@@ -1429,11 +1429,11 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     NextTemperatureBlock[j].append(NextTemp[i])
                     NextTempDiffBlock[j].append(NextTempDiff[i])
         if NextHour - ThisHour < 2:
-            for i in range(0,len(NextTimestampBlock)-1):
+            for i in range(0,len(NextTimestampBlock)):
                 EtalonTimestampBlock[i] = np.hstack((EtalonTimestampBlock[i],NextTimestampBlock[i]))
-            for i in range(0,len(NextTemperatureBlock)-1):
+            for i in range(0,len(NextTemperatureBlock)):
                 EtalonTemperatureBlock[i] = np.hstack((EtalonTemperatureBlock[i],NextTemperatureBlock[i]))
-            for i in range(0,len(NextTempDiffBlock)-1):
+            for i in range(0,len(NextTempDiffBlock)):
                 EtalonTempDiffBlock[i] = np.hstack((EtalonTempDiffBlock[i],NextTempDiffBlock[i]))
 
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
