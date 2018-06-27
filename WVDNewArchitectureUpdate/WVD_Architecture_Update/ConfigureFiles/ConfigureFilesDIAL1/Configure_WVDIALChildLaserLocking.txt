@@ -27,7 +27,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19804;828.29765;;
+828.19800;828.29765;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -36,11 +36,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius (was 19.563;18.604)
 Temperature;;
-26.740;18.614;;
+26.50;18.43;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-150;150;;
+160;160;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -92,7 +92,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-28.1;;
+21.40;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -118,7 +118,7 @@ GPIB0::10::INSTR;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-0;1;2;3;10;13;13;13;;
+0;1;2;3;13;10;13;13;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
