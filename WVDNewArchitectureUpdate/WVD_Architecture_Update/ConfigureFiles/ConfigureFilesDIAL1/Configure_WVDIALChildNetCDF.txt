@@ -10,8 +10,8 @@ This file is used to define the initial state of the NetCDF writer in the Water 
 VariousPaths;;
 .;
 C:\Users\h2odial\Anaconda3\python.exe;
-.\NetCDFScript.py;
-C:\Users\h2odial\Desktop\;;
+.\NetCDFPython\NetCDFScript.py;
+D:\;;
 
 ### how many hours of data do we want to back process
 HoursToBackProcess;;
