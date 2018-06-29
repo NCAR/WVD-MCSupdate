@@ -22,7 +22,7 @@ false;;
 Reset Profile Accumulator;;
 false; false; false; false; false; false; false; false; false; false; false; false;;
 
-### this value is ns per range bin 
+### this value is ns per range bin {changed to ns from MCS clock count}
 Counts Per Bin;;
 250;;
 
