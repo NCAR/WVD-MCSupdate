@@ -28,9 +28,9 @@ false; false; false; false; false; false; false; false; false; false; false; fal
 Counts Per Bin;;
 50;;
 
-### number of bins returned
-Number of Bins;;
-560;;
+### this value is ns per range bin 
+Counts Per Bin;;
+250;;
 
 ### number of profiles per channel return
 ### must be >= 1
