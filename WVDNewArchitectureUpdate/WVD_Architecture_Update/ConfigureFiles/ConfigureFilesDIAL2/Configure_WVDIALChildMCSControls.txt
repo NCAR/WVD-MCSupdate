@@ -22,15 +22,13 @@ false;;
 Reset Profile Accumulator;;
 false; false; false; false; false; false; false; false; false; false; false; false;;
 
-### number of core clock cycles during which pulses are accumulated
-### must be >=2
-### core clock is 200MHz (5ns)
-Counts Per Bin;;
-50;;
-
 ### this value is ns per range bin 
 Counts Per Bin;;
 250;;
+
+### number of bins per histogram
+Number of Bins;;
+560;;
 
 ### number of profiles per channel return
 ### must be >= 1
