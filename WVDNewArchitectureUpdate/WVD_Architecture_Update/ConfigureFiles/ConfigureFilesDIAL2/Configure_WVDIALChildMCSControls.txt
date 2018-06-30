@@ -22,13 +22,11 @@ false;;
 Reset Profile Accumulator;;
 false; false; false; false; false; false; false; false; false; false; false; false;;
 
-### number of core clock cycles during which pulses are accumulated
-### must be >=2
-### core clock is 200MHz (5ns)
+### this value is ns per range bin {changed to ns from MCS clock count}
 Counts Per Bin;;
-50;;
+250;;
 
-### number of bins returned
+### number of bins per histogram
 Number of Bins;;
 560;;
 
