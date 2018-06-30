@@ -60,12 +60,12 @@ def interpolate(ArrayIn,MasterIn, VarTimestamp, MasterTimestamp):
         
     AveTimeDelta = timedeltaSum/timecounter
     
-    placeOututArray = 0 # this hold where in the output array we want
+    placeOutputArray = 0 # this hold where in the output array we want
 
     if len(LocalVarTimestamp) > 0:
         for localTime in LocalMasterTimestamp:
-            if LocalVarTimestamp[0] > localTime - AveTimeDelta:
-                placeOututArray = placeOututArray + 1
+            if LocalVarTimestamp[0] > localTime:
+                placeOutputArray = placeOutputArray + 1
             else:
                 while len(LocalVarTimestamp) > 1 and LocalVarTimestamp[1] < localTime:
                     LocalVarTimestamp.pop(0)
@@ -76,8 +76,8 @@ def interpolate(ArrayIn,MasterIn, VarTimestamp, MasterTimestamp):
                     fracT = deltaTau/deltaT 
                     deltaVal = LocalArrayIn[1] - LocalArrayIn[0]
                     newVal = LocalArrayIn[0] + (fracT * deltaVal)
-                    ArrayOut[placeOututArray]=newVal
-                placeOututArray = placeOututArray + 1
+                    ArrayOut[placeOutputArray]=newVal
+                placeOutputArray = placeOutputArray + 1
     return ArrayOut
 
 
@@ -118,12 +118,12 @@ def assign(ArrayIn,MasterIn,VarTimestamp,MasterTimestamp):
 
     #print ("ATD=",AveTimeDelta)
 
-    placeOututArray = 0 # this hold where in the output array we want
+    placeOutputArray = 0 # this hold where in the output array we want
 
     if len(LocalVarTimestamp) > 0:
         for localTime in LocalMasterTimestamp:
             if LocalVarTimestamp[0] > localTime:
-                placeOututArray = placeOututArray + 1
+                placeOutputArray = placeOutputArray + 1
             else:
                 tempsum = 0
                 tempcount = 0
@@ -134,8 +134,8 @@ def assign(ArrayIn,MasterIn,VarTimestamp,MasterTimestamp):
                     LocalVarTimestamp.pop(0)
                     LocalArrayIn.pop(0)
                 if tempcount > 0:
-                    ArrayOut[placeOututArray] = (tempsum/tempcount)
-                placeOututArray = placeOututArray + 1
+                    ArrayOut[placeOutputArray] = (tempsum/tempcount)
+                placeOutputArray = placeOutputArray + 1
 
     return ArrayOut
 
@@ -157,7 +157,14 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     # load up header information for file global attributes
     for entry in header:
         if len(entry)>0:
-            Mergedncfile.setncattr(entry[0],entry[len(entry)-1])
+            if entry[0] == "latitude":
+                pass
+            elif entry[0] == "longitude":
+                pass
+            elif entry[0] == "altitude":
+                pass
+            else:
+                Mergedncfile.setncattr(entry[0],entry[len(entry)-1])
 
     # adding meta data on when the file was created.
     Mergedncfile.setncattr("Date_of_file_creation",NowDate)
@@ -173,7 +180,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         Mergedncfile.createDimension('string_length',20)
         Mergedncfile.createDimension('string_length_DataType',5)
     except:
-        pass
+        pass#print ("passed on dimentions")
     
     # thse are the coordinate variables - time is already built, range is not. 
     TimestampData = Mergedncfile['time']
@@ -193,6 +200,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     # global variables
     try:
         VolNumData = Mergedncfile.createVariable('volume_number',dtype('float').char,())
+        VolNumData[:] = 0
         InstTypeData = Mergedncfile.createVariable('instrument_type','S1','string_length_DataType')
     except:
         InstTypeData = Mergedncfile.variables["instrument_type"][:]
@@ -210,14 +218,18 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     month = int((int(fileDate) - year*10000)/100)
     day = int((int(fileDate) - year*10000 - month*100))
     hour = int(int(fileTime)/10000)
-    minute = int((int(fileTime) - hour*10000)/100)
-    sec = int(int(fileTime) - hour*10000 - minute*100)
+    fracHour = int(int(fileTime)%10000)
+    minute = int((fracHour*60)/10000)
+    fracMin = int((fracHour*60)%10000)
+    sec = int((fracMin*60)/10000)
     TimeStart = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(minute,'02d')+":"+format(sec,'02d')+"Z"
     TimeStartData[:] = list(TimeStart)
     lastTime = TimestampData[len(TimestampData)-1]
     hour = int(int(fileTime)/10000)
-    minute = int(float(lastTime)/60)
-    sec = int(float(lastTime)%60)
+    fracHour = int(int(fileTime)%10000)
+    minute = int((fracHour*60)/10000)
+    fracMin = int((fracHour*60)%10000)
+    sec = int((fracMin*60)/10000)
     TimeEnd = format(year,'04d')+"-"+format(month,'02d')+"-"+format(day,'02d')+"T"+format(hour,'02d')+":"+format(minute,'02d')+":"+format(sec,'02d')+"Z"
 
     TimeEndData[:] = list(TimeEnd)
@@ -226,7 +238,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     TimestampData.standard_name = 'time'
     TimestampData.long_name = 'time_in_seconds_since_volume_start'           
     TimestampData.units = "seconds since " + TimeStart
-    TimestampData.description = "The time of collected data in UTC hours from the start of the day"
+    TimestampData.description = "The time of collected data in seconds since time_coverage_start"
 
     # ------------------------- Checking for variables existing. -----------------------------
     # Each section here tries to make variables, that will fail if the variable exists and it will move on to the except
@@ -234,12 +246,12 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     try: #create the variable if you can, fill it with nans
         nSensors = 1
         Mergedncfile.createDimension('nInternalThermalSensors',nSensors)
-        HKeepTemperatureData = Mergedncfile.createVariable("HKeepTemperature",dtype('float').char,('nInternalThermalSensors','time'))
+        HKeepTemperatureData = Mergedncfile.createVariable("ContainerTemperature",dtype('float').char,('nInternalThermalSensors','time'))
         HKeepTemperatureData.append([])
         for i in range (0,len(TimestampData)-1):
             HKeepTemperatureData[i].append(float('nan'))
     except:
-        HKeepTemperatureData = Mergedncfile.variables["HKeepTemperature"]
+        HKeepTemperatureData = Mergedncfile.variables["ContainerTemperature"]
 
     HKeepTemperatureData.units = "Celcius"
     HKeepTemperatureData.description = "Temperature measured inside the container by nInternalThermalSensors"
@@ -309,14 +321,14 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     for i in range (0,len(Channels)):
         ChanTempData[i].units = "Celcius"
         ChanTempDiffData[i].units = "Celcius"
-        ChanTempData[i].description = "Measured temperature of the etalon from the Thor 8000 thermo-electric cooler for " + Channels[i]
-        ChanTempDiffData[i].description = "Temperature difference of etalon measured Minus desired setpoint for " + Channels[i]
+        ChanTempData[i].description = "Measured temperature of the etalon from the thermo-electric cooler for " + Channels[i]
+        ChanTempDiffData[i].description = "Temperature difference of etalon measured minus desired setpoint for " + Channels[i]
 
 
     ChanAssign = ["WVOnline","WVOffline","HSRL"]
     Variables = ["Wavelength", "WaveDiff", "TempDesired", "TempMeas", "Current"]
     VarUnits = ["nm","nm","Celcius","Celcius","Amp"]
-    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","Wavelength of the seed laser measured by the wavemeter (reference to vacuum) Minus Desired wavelenth (reference to vacuum)","Laser temperature setpoint","Measured laser temperature from the Thor 8000 diode thermo-electric cooler","Measured laser current from the Thor 8000 diode laser controller"]
+    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","Wavelength of the seed laser measured by the wavemeter (reference to vacuum) minus Desired wavelenth (reference to vacuum)","Laser temperature setpoint","Measured laser temperature from the thermo-electric cooler","Measured laser current from the laser controller"]
     ChanVarData = []
     for i in range (0,len(Variables)):
         ChanVarData.append([])
@@ -389,7 +401,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         LongitudeData.units = "degrees_east"
         AltitudeData.units = "meters"
     except:
-        pass
+        pass#print ("passed on lat, long, alt")
     
     # sweep variables
     try:
@@ -398,14 +410,28 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float').char,('sweep'))
         SweepStartData = Mergedncfile.createVariable('sweep_start_ray_index',dtype('int').char,('sweep'))
         SweepEndData = Mergedncfile.createVariable('sweep_end_ray_index',dtype('int').char,('sweep'))
+        SweepNumData[:] = [1]
+        SweepModeData[0][:] = [""]
+        FixedAngleData[:] = [90.0]
+        SweepStartData[:] = [0]
+        SweepEndData[:] = [-1]
         FixedAngleData.units = "degrees"
     except:
-        pass
+        pass#print ("passed on sweep variables")
     
     # sensor pointing variables
     try:
         AzimuthData = Mergedncfile.createVariable('azimuth',dtype('float').char,('time'))
         ElevationData = Mergedncfile.createVariable('elevation',dtype('float').char,('time'))
+
+        tempAz = []
+        tempEl = []
+        for i in range (0,len(TimestampData)):
+            tempAz.append(0)
+            tempEl.append(90)
+
+        AzimuthData[:] = tempAz
+        ElevationData[:] = tempEl
 
         # set attributes for Azimuth & Elevation
         AzimuthData.standard_name = "ray_azimuth_angle"
@@ -417,28 +443,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         ElevationData.units = "degrees"
         ElevationData.axis = "radial_elevation_coordinate"
     except:
-        pass
-    
-    
-    
-    # moving platform geo-reference variables
-    try:
-        HeadingData = Mergedncfile.createVariable('heading',dtype('float').char,('time'))
-        RollData = Mergedncfile.createVariable('roll',dtype('float').char,('time'))
-        PitchData = Mergedncfile.createVariable('pitch',dtype('float').char,('time'))
-        DriftData = Mergedncfile.createVariable('drift',dtype('float').char,('time'))
-        RotationData = Mergedncfile.createVariable('rotation',dtype('float').char,('time'))
-        TiltData = Mergedncfile.createVariable('tilt',dtype('float').char,('time'))
-    
-        HeadingData.units = "degrees"
-        RollData.units = "degrees"
-        PitchData.units = "degrees"
-        DriftData.units = "degrees"
-        RotationData.units = "degrees"
-        TiltData.units = "degrees"
-    except:
-        pass
-    
+        pass#print ("passed on azimuth and elevation")
     
     # giving attributes to any present data fields
     try:
@@ -525,7 +530,7 @@ def mergeData(Datafile, CFRadPath,nameList):
     DataTimestamp = FillVar(Datadataset, "time")
     DataProfPerHist = FillVar(Datadataset, "ProfilesPerHist")
     DataChannel = FillVar(Datadataset, "Channel")
-    DataCntsPerBin = FillVar(Datadataset, "CntsPerBin")
+    DataCntsPerBin = FillVar(Datadataset, "nsPerBin")
     DataNBins = FillVar(Datadataset, "NBins")
     DataDataArray = Fill2DVar(Datadataset, "Data")
     DataChannelAssign = FillVar(Datadataset, "ChannelAssignment")
@@ -729,8 +734,8 @@ def mergeData(Datafile, CFRadPath,nameList):
     TimestampData[:] = MasterTimestamp
 
     ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
-    CntsPerBinData = Mergedncfile.createVariable('CntsPerBin',dtype('float').char,('time'))
-    NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
+    CntsPerBinData = Mergedncfile.createVariable('nsPerBin',dtype('float').char,('time'))
+    #NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
     if len(MasterTimestamp) == len(MasterProfPerHist):
         ProfPerHistData[:] = MasterProfPerHist
     else:
@@ -743,20 +748,20 @@ def mergeData(Datafile, CFRadPath,nameList):
         writeString = "ERROR: - CntsPerBinData is full Empty2DArray - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
         SPF.Write2ErrorFile(ErrorFile, writeString)
         CntsPerBinData[:] = EmptyArray
-    if len(MasterTimestamp) == len(MasterNBins):
-        NBinsData[:] = MasterNBins
-    else:
-        writeString = "ERROR: - NBinsData is full Empty2DArray - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-        SPF.Write2ErrorFile(ErrorFile, writeString)
-        NBinsData[:] = EmptyArray
+    #if len(MasterTimestamp) == len(MasterNBins):
+    #    NBinsData[:] = MasterNBins
+    #else:
+    #    writeString = "ERROR: - NBinsData is full Empty2DArray - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+    #    SPF.Write2ErrorFile(ErrorFile, writeString)
+    #    NBinsData[:] = EmptyArray
 
     ProfPerHistData.units = "Number of shots"
     CntsPerBinData.units = "Unitless"
-    NBinsData.units = "Unitless"
+    #NBinsData.units = "Unitless"
 
     ProfPerHistData.description = "Number of laser shots summed to create a single vertical histogram"
-    CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
-    NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
+    CntsPerBinData.description = "nanoseconds that defines the width of each altitude bin. Convert to range with half the speed of light"
+    #NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
 
     if 'WVOnline' in nameList:
         WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
@@ -928,7 +933,7 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
                 MasterTimestamp.append(time)
                 time = time + AveTimeDelta*3600
             Mergedncfile.createDimension('time',len(MasterTimestamp))
-            Mergedncfile.createDimension('range',0)
+            Mergedncfile.createDimension('range',560)# 560 is a default number of bins
             TimestampData = Mergedncfile.createVariable('time',dtype('float').char,('time'))
             TimestampData[:] = MasterTimestamp
 
@@ -979,20 +984,20 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
                 EmptyArray.append(float('nan'))
 
             ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
-            CntsPerBinData = Mergedncfile.createVariable('CntsPerBin',dtype('float').char,('time'))
-            NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
+            CntsPerBinData = Mergedncfile.createVariable('nsPerBin',dtype('float').char,('time'))
+            #NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
 
             ProfPerHistData[:] = EmptyArray
             CntsPerBinData[:] = EmptyArray
-            NBinsData[:] = EmptyArray
+            #NBinsData[:] = EmptyArray
 
             ProfPerHistData.units = "Number of shots"
             CntsPerBinData.units = "Unitless"
-            NBinsData.units = "Unitless"
+            #NBinsData.units = "Unitless"
 
             ProfPerHistData.description = "Number of laser shots summed to create a single vertical histogram"
             CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
-            NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
+            #NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
 
             Mergedncfile.close()
 
@@ -1021,11 +1026,11 @@ def mergePower(Powerfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
         LastTimestamp = FillVar(Lastdataset, "time")
         LastHour = int(LastTimestamp[0])
         for i in range(0,len(LastTimestamp)):
-            if ThisHour - LastHour == 1:
+            if ThisHour - LastHour == 1 or ThisHour - LastHour == -23:
                 LastTimestamp[i]=toSec(LastTimestamp[i])-3600
             elif ThisHour - LastHour == 0:
                 LastTimestamp[i]=toSec(LastTimestamp[i])
-        if ThisHour - LastHour < 2:
+        if (LastHour < 23 and ThisHour - LastHour < 2) or (LastHour == 23 and ThisHour == 0):
             LastData = FillVar(Lastdataset, "Power")
             PowTimestamp = LastTimestamp + PowTimestamp
             for i in range(0,len(PowChannelAssign)-1):
@@ -1036,11 +1041,11 @@ def mergePower(Powerfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
         NextTimestamp = FillVar(Nextdataset, "time")
         NextHour = int(NextTimestamp[0])
         for i in range(0,len(NextTimestamp)):
-            if NextHour - ThisHour == 1:
+            if NextHour - ThisHour == 1 or NextHour - ThisHour == -23:
                 NextTimestamp[i]=toSec(NextTimestamp[i])+3600
             elif NextHour - ThisHour ==0:
                 NextTimestamp[i]=toSec(NextTimestamp[i])
-        if NextHour - ThisHour < 2:
+        if (ThisHour < 23 and NextHour - ThisHour < 2) or (ThisHour == 23 and NextHour == 0):
             NextData = FillVar(Nextdataset, "Power")
             PowTimestamp = PowTimestamp + NextTimestamp
             for i in range(0,len(PowChannelAssign)-1):
@@ -1066,9 +1071,10 @@ def mergePower(Powerfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
     MergedFileList.sort()
     for Mergedfile in MergedFileList:
+        MergedDate = Mergedfile[-29:-21]
         MergedHour = Mergedfile[-9:-7]
         PowerHour = Powerfile[-9:-7]
-        if MergedHour == PowerHour:
+        if MergedDate == fileDate and MergedHour == PowerHour:
             Mergedncfile = Dataset(Mergedfile,'a')
             MasterTimestamp = Mergedncfile.variables['time'][:]
             FirstMergedTime = MasterTimestamp[0]
@@ -1129,7 +1135,7 @@ def mergeLaser(LLfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
     ChanAssign = ["WVOnline","WVOffline","HSRL"]
     Variables = ["Wavelength", "WaveDiff", "TempDesired", "TempMeas", "Current"]
     VarUnits = ["nm","nm","Celcius","Celcius","Amp"]
-    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","Wavelength of the seed laser measured by the wavemeter (reference to vacuum) Minus Desired wavelenth (reference to vacuum)","Laser temperature setpoint","Measured laser temperature from the Thor 8000 diode thermo-electric cooler","Measured laser current from the Thor 8000 diode laser controller"]
+    VarDescr = ["Wavelength of the seed laser measured by the wavemeter (reference to vacuum)","Wavelength of the seed laser measured by the wavemeter (reference to vacuum) minus Desired wavelenth (reference to vacuum)","Laser temperature setpoint","Measured laser temperature from the thermo-electric cooler","Measured laser current from the laser controller"]
 
     Laserdataset = Dataset(LLfile)
     
@@ -1203,13 +1209,13 @@ def mergeLaser(LLfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     for k in range(0,len(Variables)):
                         LastArrayBlockData[k][j].append(LastBlockData[k][i])
         for i in range(0,len(LastArrayTimestamp)):
-            if ThisHour - LastHour == 1:
+            if ThisHour - LastHour == 1 or ThisHour - LastHour == -23:
                 for j in range (0,len(LastArrayTimestamp[i])):
                     LastArrayTimestamp[i][j]=toSec(LastArrayTimestamp[i][j])-3600
             elif ThisHour - LastHour == 0:
                 for j in range (0,len(LastArrayTimestamp[i])):
                     LastArrayTimestamp[i][j]=toSec(LastArrayTimestamp[i][j])
-        if ThisHour - LastHour < 2:
+        if (LastHour < 23 and ThisHour - LastHour < 2) or (LastHour == 23 and ThisHour == 0):
             for i in range (0,len(ChanAssign)):
                 ArrayTimestamp[i] = np.hstack((LastArrayTimestamp[i],ArrayTimestamp[i]))
                 for j in range(0,len(Variables)):
@@ -1246,35 +1252,50 @@ def mergeLaser(LLfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     for k in range(0,len(Variables)):
                         NextArrayBlockData[k][j].append(NextBlockData[k][i])
         for i in range(0,len(NextArrayTimestamp)):
-            if NextHour - ThisHour == 1:
+            if NextHour - ThisHour == 1 or NextHour - ThisHour == -23:
                 for j in range (0,len(NextArrayTimestamp[i])):
                     NextArrayTimestamp[i][j]=toSec(NextArrayTimestamp[i][j])+3600
             elif NextHour - ThisHour == 0:
                 for j in range (0,len(NextArrayTimestamp[i])):
                     NextArrayTimestamp[i][j]=toSec(NextArrayTimestamp[i][j])
-        if NextHour - ThisHour < 2:
+        if (ThisHour < 23 and NextHour - ThisHour < 2) or (ThisHour == 23 and NextHour == 0):
             for i in range (0,len(ChanAssign)):
                 ArrayTimestamp[i] = np.hstack((ArrayTimestamp[i],NextArrayTimestamp[i]))
                 for j in range(0,len(Variables)):
                     LLArrayBlockData[j][i] = np.hstack((LLArrayBlockData[j][i],NextArrayBlockData[j][i]))
 
-    #print ("C len(ArrayTimestamp)=",len(ArrayTimestamp))
-    #print ("C len(ArrayTimestamp[0])=",len(ArrayTimestamp[0]))
-    #print ("C len(LLArrayBlockData)=",len(LLArrayBlockData))
-    #print ("C len(LLArrayBlockData[0])=",len(LLArrayBlockData[0]))
-    #print ("C len(LLArrayBlockData[0][0])=",len(LLArrayBlockData[0][0]))
+    # print ("C len(ArrayTimestamp)=",len(ArrayTimestamp))
+    # print ("C len(ArrayTimestamp[0])=",len(ArrayTimestamp[0]))
+    # print ("C len(LLArrayBlockData)=",len(LLArrayBlockData))
+    # print ("C len(LLArrayBlockData[0])=",len(LLArrayBlockData[0]))
+    # print ("C len(LLArrayBlockData[0][0])=",len(LLArrayBlockData[0][0]))
 
-    #print ("D ArrayTimestamp[0][:50]=", ArrayTimestamp[0][:50])
-    #print ("D ArrayTimestamp[0][:50]=", ArrayTimestamp[0][len(ArrayTimestamp[0])-50:])
-    #print ("D LLArrayBlockData[0][0][:50]=", LLArrayBlockData[0][0][:50])
-    #print ("D LLArrayBlockData[0][0][:50]=", LLArrayBlockData[0][0][len(LLArrayBlockData[0][0])-50:])
+    # print ("D ArrayTimestamp[0][:50]=", ArrayTimestamp[0][:50])
+    # print ("D ArrayTimestamp[0][:50]=", ArrayTimestamp[0][len(ArrayTimestamp[0])-50:])
+    # print ("D LLArrayBlockData[0][0][:50]=", LLArrayBlockData[0][0][:50])
+    # print ("D LLArrayBlockData[0][0][:50]=", LLArrayBlockData[0][0][len(LLArrayBlockData[0][0])-50:])
+
+    #print ("len(ChanAssign)=",len(ChanAssign))
+    #print ("len(LLTimestamp)=",len(LLTimestamp))
+    #print ("len(ArrayTimestamp=",len(ArrayTimestamp))
+    #print ("len(ArrayTimestamp[0]=",len(ArrayTimestamp[0]))
+    #print ("len(LLArrayBlockData)=",len(LLArrayBlockData))
+    #print ("len(LLArrayBlockData[0])=",len(LLArrayBlockData[0]))
+    #print ("len(LLArrayBlockData[0][0])=",len(LLArrayBlockData[0][0]))
+    if len(LLArrayBlockData)>0:
+        for i in range(0,len(LLArrayBlockData[0])):
+            for j in range(0,len(LLArrayBlockData[0][i])):
+                #print ("hey",i,j)
+                if LLArrayBlockData[0][i][j] < 0:
+                    LLArrayBlockData[0][i][j] = float('nan')
 
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
     MergedFileList.sort()
     for Mergedfile in MergedFileList:
+        MergedDate = Mergedfile[-29:-21]
         MergedHour = Mergedfile[-9:-7]
         LLHour = LLfile[-9:-7]
-        if MergedHour == LLHour:
+        if MergedDate == fileDate and MergedHour == LLHour:
             Mergedncfile = Dataset(Mergedfile,'a')
             MasterTimestamp = Mergedncfile.variables['time'][:]
             FirstMergedTime = MasterTimestamp[0]
@@ -1386,7 +1407,7 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
             LastTemperatureBlock.append([])
             LastTempDiffBlock.append([])
         for i in range(0,len(LastTimestamp)):
-            if ThisHour - LastHour == 1:
+            if ThisHour - LastHour == 1 or ThisHour - LastHour == -23:
                 LastTimestamp[i]=toSec(LastTimestamp[i])-3600
             elif ThisHour - LastHour == 0:
                 LastTimestamp[i]=toSec(LastTimestamp[i])
@@ -1396,7 +1417,7 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     LastTimestampBlock[j].append(LastTimestamp[i])
                     LastTemperatureBlock[j].append(LastTemp[i])
                     LastTempDiffBlock[j].append(LastTempDiff[i])
-        if ThisHour - LastHour < 2:
+        if (LastHour < 23 and ThisHour - LastHour < 2) or (LastHour == 23 and ThisHour == 0):
             for i in range(0,len(LastTimestampBlock)):
                 EtalonTimestampBlock[i] = np.hstack((LastTimestampBlock[i],EtalonTimestampBlock[i]))
             for i in range(0,len(LastTemperatureBlock)):
@@ -1419,7 +1440,7 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
             NextTemperatureBlock.append([])
             NextTempDiffBlock.append([])
         for i in range(0,len(NextTimestamp)):
-            if NextHour - ThisHour == 1:
+            if NextHour - ThisHour == 1 or NextHour - ThisHour == -23:
                 NextTimestamp[i]=toSec(NextTimestamp[i])+3600
             elif NextHour - ThisHour == 0:
                 NextTimestamp[i]=toSec(NextTimestamp[i])
@@ -1429,7 +1450,7 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     NextTimestampBlock[j].append(NextTimestamp[i])
                     NextTemperatureBlock[j].append(NextTemp[i])
                     NextTempDiffBlock[j].append(NextTempDiff[i])
-        if NextHour - ThisHour < 2:
+        if (ThisHour < 23 and NextHour - ThisHour < 2) or (ThisHour == 23 and NextHour == 0):
             for i in range(0,len(NextTimestampBlock)):
                 EtalonTimestampBlock[i] = np.hstack((EtalonTimestampBlock[i],NextTimestampBlock[i]))
             for i in range(0,len(NextTemperatureBlock)):
@@ -1440,9 +1461,10 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
     MergedFileList.sort()
     for Mergedfile in MergedFileList:
+        MergedDate = Mergedfile[-29:-21]
         MergedHour = Mergedfile[-9:-7]
         EtalonHour = Etalonfile[-9:-7]
-        if MergedHour == EtalonHour:
+        if MergedDate == fileDate and MergedHour == EtalonHour:
             Mergedncfile = Dataset(Mergedfile,'a')
             MasterTimestamp = Mergedncfile.variables['time'][:]
             FirstMergedTime = MasterTimestamp[0]
@@ -1484,8 +1506,8 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
 
                     Var2WriteTemp.units = "Celcius"
                     Var2WriteTempDiff.units = "Celcius"
-                    Var2WriteTemp.description = "Measured temperature of the etalon from the Thor 8000 thermo-electric cooler for " + Channels[i]
-                    Var2WriteTempDiff.description = "Temperature difference of etalon measured Minus desired setpoint for " + Channels[i]
+                    Var2WriteTemp.description = "Measured temperature of the etalon from the thermo-electric cooler for " + Channels[i]
+                    Var2WriteTempDiff.description = "Temperature difference of etalon measured minus desired setpoint for " + Channels[i]
 
             Mergedncfile.close()
 
@@ -1512,16 +1534,25 @@ def mergeWS(WSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
     for i in range(0,len(WSTimestamp)):
         WSTimestamp[i]=toSec(WSTimestamp[i])
 
+    #print ("A len(WSTimestamp)=",len(WSTimestamp))
+    #print ("A len(WSTemperature)=",len(WSTemperature))
+    #print ("A len(WSRelHum)=",len(WSRelHum))
+    #print ("A len(WSPressure)=",len(WSPressure))
+    #print ("A len(WSAbsHum)=",len(WSAbsHum))
+
+    #print ("Z ThisHour = ",ThisHour)
+
     if LastFile != "":
         Lastdataset = Dataset(LastFile)
         LastTimestamp = FillVar(Lastdataset, "time")
         LastHour = int(LastTimestamp[0])
+        #print ("Y LastHour=",LastHour)
         for i in range(0,len(LastTimestamp)):
-            if ThisHour - LastHour == 1:
+            if ThisHour - LastHour == 1 or ThisHour - LastHour == -23:
                 LastTimestamp[i]=toSec(LastTimestamp[i])-3600
             elif ThisHour - LastHour == 0:
                 LastTimestamp[i]=toSec(LastTimestamp[i])
-        if ThisHour - LastHour < 2:
+        if (LastHour < 23 and ThisHour - LastHour < 2) or (LastHour == 23 and ThisHour == 0):
             LastTemperature = FillVar(Lastdataset, "Temperature")
             LastRelHum = FillVar(Lastdataset, "RelHum")
             LastPressure = FillVar(Lastdataset, "Pressure")
@@ -1533,16 +1564,23 @@ def mergeWS(WSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
             WSPressure = LastPressure + WSPressure
             WSAbsHum = LastAbsHum + WSAbsHum
 
+    #print ("B len(WSTimestamp)=",len(WSTimestamp))
+    #print ("B len(WSTemperature)=",len(WSTemperature))
+    #print ("B len(WSRelHum)=",len(WSRelHum))
+    #print ("B len(WSPressure)=",len(WSPressure))
+    #print ("B len(WSAbsHum)=",len(WSAbsHum))
+
     if NextFile != "":
         Nextdataset = Dataset(NextFile)
         NextTimestamp = FillVar(Nextdataset, "time")
         NextHour = int(NextTimestamp[0])
+        #print ("X NextHour = ",NextHour)
         for i in range(0,len(NextTimestamp)):
-            if NextHour - ThisHour == 1:
+            if NextHour - ThisHour == 1 or NextHour - ThisHour == -23:
                 NextTimestamp[i]=toSec(NextTimestamp[i])+3600
             elif NextHour - ThisHour ==0:
                 NextTimestamp[i]=toSec(NextTimestamp[i])
-        if NextHour - ThisHour < 2:
+        if (ThisHour < 23 and NextHour - ThisHour < 2) or (ThisHour == 23 and NextHour == 0):
             NextTemperature = FillVar(Nextdataset, "Temperature")
             NextRelHum = FillVar(Nextdataset, "RelHum")
             NextPressure = FillVar(Nextdataset, "Pressure")
@@ -1554,18 +1592,30 @@ def mergeWS(WSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
             WSPressure = WSPressure + NextPressure
             WSAbsHum = WSAbsHum + NextAbsHum
 
+    #print ("C len(WSTimestamp)=",len(WSTimestamp))
+    #print ("C len(WSTemperature)=",len(WSTemperature))
+    #print ("C len(WSRelHum)=",len(WSRelHum))
+    #print ("C len(WSPressure)=",len(WSPressure))
+    #print ("C len(WSAbsHum)=",len(WSAbsHum))
+
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
     MergedFileList.sort()
     for Mergedfile in MergedFileList:
+        MergedDate = Mergedfile[-29:-21]
         MergedHour = Mergedfile[-9:-7]
         WSHour = WSfile[-9:-7]
-        if MergedHour == WSHour:
+        if MergedDate == fileDate and MergedHour == WSHour:
             Mergedncfile = Dataset(Mergedfile,'a')
             MasterTimestamp = Mergedncfile.variables['time'][:]
             FirstMergedTime = MasterTimestamp[0]
             LastMergedTime = MasterTimestamp[len(MasterTimestamp)-1]
             FirstWSTime = WSTimestamp[0]
             LastWSTime = WSTimestamp[len(WSTimestamp)-1]
+            #print ("in")
+            #print ("FirstWSTime=",FirstWSTime)
+            #print ("LastWSTime=",LastWSTime)
+            #print ("FirstMergedTime=",FirstMergedTime)
+            #print ("LastMergedTime=",LastMergedTime)
 
             if FirstWSTime < LastMergedTime or LastWSTime > FirstMergedTime:
                 tempWSTemperatureData = []
@@ -1603,6 +1653,11 @@ def mergeWS(WSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                 tempWSRelHumData[:] = interpolate(WSRelHum, tempWSRelHumData, WSTimestamp, MasterTimestamp)
                 tempWSPressureData[:] = interpolate(WSPressure, tempWSPressureData, WSTimestamp, MasterTimestamp)
                 tempWSAbsHumData[:] = interpolate(WSAbsHum, tempWSAbsHumData, WSTimestamp, MasterTimestamp)
+                #print ("Listen")
+                #print ("len(WSTemperature)=",len(WSTemperature))
+                #print ("len(WSTemperatureData)=",len(WSTemperatureData))
+                #print ("len(WSTimestamp)=",len(WSTimestamp))
+                #print ("len(MasterTimestamp)=",len(MasterTimestamp))
 
                 WSTemperatureData[:] = tempWSTemperatureData
                 WSRelHumData[:] = tempWSRelHumData
@@ -1647,11 +1702,11 @@ def mergeHKeep(HKeepfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
         LastHour = int(LastTimestamp[0])
 
         for i in range(0,len(LastTimestamp)):
-            if ThisHour - LastHour == 1:
+            if ThisHour - LastHour == 1 or ThisHour - LastHour == -23:
                 LastTimestamp[i]=toSec(LastTimestamp[i])-3600
             elif ThisHour - LastHour == 0:
                 LastTimestamp[i]=toSec(LastTimestamp[i])
-        if ThisHour - LastHour < 2:
+        if (LastHour < 23 and ThisHour - LastHour < 2) or (LastHour == 23 and ThisHour == 0):
             LastTemperature = FillVar(Lastdataset, "Temperature")
             HKeepTimestamp = LastTimestamp + HKeepTimestamp
             for i in range(0,len(HKeepTemperature)):
@@ -1662,11 +1717,11 @@ def mergeHKeep(HKeepfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
         NextTimestamp = FillVar(Nextdataset, "time")
         NextHour = int(NextTimestamp[0])
         for i in range(0,len(NextTimestamp)):
-            if NextHour - ThisHour == 1:
+            if NextHour - ThisHour == 1 or NextHour - ThisHour == -23:
                 NextTimestamp[i]=toSec(NextTimestamp[i])+3600
             elif NextHour - ThisHour == 0:
                 NextTimestamp[i]=toSec(NextTimestamp[i])
-        if NextHour - ThisHour < 2:
+        if (ThisHour < 23 and NextHour - ThisHour < 2) or (ThisHour == 23 and NextHour == 0):
             NextTemperature = FillVar(Nextdataset, "Temperature")
             HKeepTimestamp = HKeepTimestamp + NextTimestamp
             for i in range(0,len(HKeepTemperature)):
@@ -1675,9 +1730,10 @@ def mergeHKeep(HKeepfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
     MergedFileList.sort()
     for Mergedfile in MergedFileList:
+        MergedDate = Mergedfile[-29:-21]
         MergedHour = Mergedfile[-9:-7]
         HKeepHour = HKeepfile[-9:-7]
-        if MergedHour == HKeepHour:
+        if MergedDate == fileDate and MergedHour == HKeepHour:
             Mergedncfile = Dataset(Mergedfile,'a')
             MasterTimestamp = Mergedncfile.variables['time'][:]
             FirstMergedTime = MasterTimestamp[0]
@@ -1693,9 +1749,9 @@ def mergeHKeep(HKeepfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
 
                 try: #create the variable if you can, fill it with nans until the mergeing
                     Mergedncfile.createDimension('nInternalThermalSensors',nSensors)
-                    HKeepTemperatureData = Mergedncfile.createVariable("HKeepTemperature",dtype('float').char,('nInternalThermalSensors','time'))
+                    HKeepTemperatureData = Mergedncfile.createVariable("ContainerTemperature",dtype('float').char,('nInternalThermalSensors','time'))
                 except:
-                    HKeepTemperatureData = Mergedncfile.variables["HKeepTemperature"]
+                    HKeepTemperatureData = Mergedncfile.variables["ContainerTemperature"]
 
                 for i in range(0,nSensors):
                     for time in MasterTimestamp:
@@ -1756,11 +1812,11 @@ def mergeUPS(UPSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
         LastTimestamp = FillVar(Lastdataset, "time")
         LastHour = int(LastTimestamp[0])
         for i in range(0,len(LastTimestamp)):
-            if ThisHour - LastHour == 1:
+            if ThisHour - LastHour == 1 or ThisHour - LastHour == -23:
                 LastTimestamp[i]=toSec(LastTimestamp[i])-3600
             elif ThisHour - LastHour == 0:
                 LastTimestamp[i]=toSec(LastTimestamp[i])
-        if ThisHour - LastHour < 2:
+        if (LastHour < 23 and ThisHour - LastHour < 2) or (LastHour == 23 and ThisHour == 0):
             LastTemperature = FillVar(Lastdataset, "UPSTemperature")
             LastHoursOnBattery = FillVar(Lastdataset, "HoursOnBattery")
             UPSTimestamp = LastTimestamp + UPSTimestamp
@@ -1772,11 +1828,11 @@ def mergeUPS(UPSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
         NextTimestamp = FillVar(Nextdataset, "time")
         NextHour = int(NextTimestamp[0])
         for i in range(0,len(NextTimestamp)):
-            if NextHour - ThisHour == 1:
+            if NextHour - ThisHour == 1 or NextHour - ThisHour == -23:
                 NextTimestamp[i]=toSec(NextTimestamp[i])+3600
             elif NextHour - ThisHour == 0:
                 NextTimestamp[i]=toSec(NextTimestamp[i])
-        if NextHour - ThisHour < 2:
+        if (ThisHour < 23 and NextHour - ThisHour < 2) or (ThisHour == 23 and NextHour == 0):
             NextTemperature = FillVar(Nextdataset, "UPSTemperature")
             NextHoursOnBattery = FillVar(Nextdataset, "HoursOnBattery")
             UPSTimestamp = UPSTimestamp + NextTimestamp
@@ -1786,9 +1842,10 @@ def mergeUPS(UPSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
     MergedFileList = SPF.getFiles(CFRadPath, "Merged", ".nc", ThenDate, ThenTime)
     MergedFileList.sort()
     for Mergedfile in MergedFileList:
+        MergedDate = Mergedfile[-29:-21]
         MergedHour = Mergedfile[-9:-7]
         UPSHour = UPSfile[-9:-7]
-        if MergedHour == UPSHour:
+        if MergedDate == fileDate and MergedHour == UPSHour:
             Mergedncfile = Dataset(Mergedfile,'a')
             MasterTimestamp = Mergedncfile.variables['time'][:]
             FirstMergedTime = MasterTimestamp[0]
@@ -2097,10 +2154,10 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
         for i in range(0,len(MergedFileList)):
             Mergedfile = MergedFileList[i]
             if i != 0 or makeFirst:
-                try:
-                    CFRadify(Mergedfile,CFRadPath,header,NowDate,NowTime)
-                except:
-                    writeString = "WARNING: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
-                    SPF.Write2ErrorFile(WarningFile, writeString)
+                #try:
+                CFRadify(Mergedfile,CFRadPath,header,NowDate,NowTime)
+                #except:
+                #    writeString = "WARNING: unable to put CFRadial formatting into CFRadial file - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
+                #    SPF.Write2ErrorFile(WarningFile, writeString)
 
 

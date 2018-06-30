@@ -12,6 +12,7 @@ import numpy as np
 from numpy import arange, dtype
 
 
+
 # ----------------------- UPS ------------------
 def processUPS(UPSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     print ("Making UPS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
@@ -54,21 +55,35 @@ def processUPS(UPSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
 
     # creates variables
     TimestampData = UPSncfile.createVariable('time',dtype('float').char,('time'))
-    BatteryNominalData = UPSncfile.createVariable('BatteryNominal',dtype('float').char,('time'))
+    BatteryNominalData = UPSncfile.createVariable('BatteryNominal',dtype('b').char,('time'))
     BatteryReplaceData = UPSncfile.createVariable('BatteryReplace',dtype('float').char,('time'))
     BatteryInUseData = UPSncfile.createVariable('BatteryInUse',dtype('float').char,('time'))
-    BatteryLowData = UPSncfile.createVariable('BatteryLow',dtype('float').char,('time'))
+    BatteryLowData = UPSncfile.createVariable('BatteryLow',dtype('b').char,('time'))
     BatteryCapacityData = UPSncfile.createVariable('BatteryCapacity',dtype('float').char,('time'))
     BatteryTimeLeftData = UPSncfile.createVariable('BatteryTimeLeft',dtype('float').char,('time'))
     UPSTemperatureData = UPSncfile.createVariable('UPSTemperature',dtype('float').char,('time'))
     HoursOnBatteryData = UPSncfile.createVariable('HoursOnBattery',dtype('float').char,('time'))
 
+    boolBatteryNominal = []
+    for entry in BatteryNominal:
+        if entry == 0:
+            boolBatteryNominal.append(False)
+        elif entry ==1:
+            boolBatteryNominal.append(True)
+
+    boolBatteryLow = []
+    for entry in BatteryLow:
+        if entry == 0:
+            boolBatteryLow.append(False)
+        elif entry ==1:
+            boolBatteryLow.append(True)
+
     #fills variables
     TimestampData[:] = Timestamp
-    BatteryNominalData[:] = BatteryNominal
+    BatteryNominalData[:] = boolBatteryNominal
     BatteryReplaceData[:] = BatteryReplace
     BatteryInUseData[:] = BatteryInUse
-    BatteryLowData[:] = BatteryLow
+    BatteryLowData[:] = boolBatteryLow
     BatteryCapacityData[:] = BatteryCapacity
     BatteryTimeLeftData[:] = BatteryTimeLeft
     UPSTemperatureData[:] = UPSTemperature
@@ -78,7 +93,14 @@ def processUPS(UPSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     UPSncfile.description = "UPS data file"
     # load up header information for file
     for entry in header:
-        UPSncfile.setncattr(entry[0],entry[1])
+        if entry[0] == "title":
+            UPSncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw UPS"))
+        elif entry[0] == "history":
+            UPSncfile.setncattr(entry[0],"Raw UPS data from instrument")
+        elif entry[0] == "thermocouple_location_[0-9]":
+            pass
+        else:
+            UPSncfile.setncattr(entry[0],entry[len(entry)-1])
 
     # give variables units
     TimestampData.units = "Fractional Hours"
@@ -151,7 +173,12 @@ def processHKeep(HKeepfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
     HKeepncfile.description = "Housekeeping data file: Thermocouples monitoring internal temperature of container"
     # load up header information for file
     for entry in header:
-        HKeepncfile.setncattr(entry[0],entry[1])
+        if entry[0] == "title":
+            HKeepncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw Housekeeping"))
+        elif entry[0] == "history":
+            HKeepncfile.setncattr(entry[0],"Raw Housekeeping data from instrument")
+        else:
+            HKeepncfile.setncattr(entry[0],entry[len(entry)-1])
 
     # give variables units
     TimestampData.units = "Fractional Hours"
@@ -217,8 +244,15 @@ def processWS(WSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     WSncfile.description = "Weather Station data file: taken at surface level "
     # load up header information for file
     for entry in header:
-        WSncfile.setncattr(entry[0],entry[1])
-        
+        if entry[0] == "title":
+            WSncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw Weather Station"))
+        elif entry[0] == "history":
+            WSncfile.setncattr(entry[0],"Raw Weather Station data from instrument")
+        elif entry[0] == "thermocouple_location_[0-9]":
+            pass
+        else:
+            WSncfile.setncattr(entry[0],entry[len(entry)-1])
+
     # give variables units
     TimestampData.units = "Fractional Hours"
     TemperatureData.units = "Celcius"
@@ -285,26 +319,39 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     LaserNumData = LLncfile.createVariable('LaserName',str,('time'))
     WavelengthData = LLncfile.createVariable('Wavelength',dtype('float').char,('time'))
     WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float').char,('time'))
-    IsLockedData = LLncfile.createVariable('IsLocked',dtype('float').char,('time'))
+    IsLockedData = LLncfile.createVariable('IsLocked',dtype('b').char,('time'))
     TempDesiredData = LLncfile.createVariable('TempDesired',dtype('float').char,('time'))
     TempMeasData = LLncfile.createVariable('TempMeas',dtype('float').char,('time'))
     CurrentData = LLncfile.createVariable('Current',dtype('float').char,('time'))
-    
+
+    boolIsLocked=[]
+    for entry in IsLocked:
+        if entry == 0:
+            boolIsLocked.append(False)
+        elif entry ==1:
+            boolIsLocked.append(True)
+
     # filling the variables that are now in the NetCDF file
     TimestampData[:] = Timestamp
     LaserNumData[:] = np.asarray(LaserNum, dtype='str')
     WavelengthData[:] = Wavelength
     WaveDiffData[:] = WaveDiff
-    IsLockedData[:] = IsLocked
+    IsLockedData[:] = boolIsLocked
     TempDesiredData[:] = TempDesired
     TempMeasData[:] = TempMeas
     CurrentData[:] = Current
     
     LLncfile.description = "Laser Locking data file"
-    
     for entry in header:
-        LLncfile.setncattr(entry[0],entry[1])
-        
+        if entry[0] == "title":
+            LLncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw Laser Locking"))
+        elif entry[0] == "history":
+            LLncfile.setncattr(entry[0],"Raw Laser Locking data from instrument")
+        elif entry[0] == "thermocouple_location_[0-9]":
+            pass
+        else:
+            LLncfile.setncattr(entry[0],entry[len(entry)-1])
+
     TimestampData.units = "Fractional Hours"
     LaserNumData.units = "Unitless"
     WavelengthData.units = "nm"
@@ -362,19 +409,33 @@ def processEtalons(EtalonFile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastT
     EtalonNumData = Etalonncfile.createVariable('EtalonNum',str,('time'))
     TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float').char,('time'))
     TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float').char,('time'))
-    IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('float').char,('time'))
-    
+    IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('b').char,('time'))
+
+    boolIsLocked=[]
+    for entry in IsLocked:
+        if entry == 0:
+            boolIsLocked.append(False)
+        elif entry ==1:
+            boolIsLocked.append(True)
+
     TimestampData[:] = Timestamp
     EtalonNumData[:] = np.asarray(EtalonNum, dtype='str')
     TemperatureData[:] = Temperature
     TempDiffData[:] = TempDiff
-    IsLockedData[:] = IsLocked
+    IsLockedData[:] = boolIsLocked
     
     Etalonncfile.description = "Etalon data file"
     
     for entry in header:
-        Etalonncfile.setncattr(entry[0],entry[1])
-        
+        if entry[0] == "title":
+            Etalonncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw Etalon"))
+        elif entry[0] == "history":
+            Etalonncfile.setncattr(entry[0],"Raw Etalon data from instrument")
+        elif entry[0] == "thermocouple_location_[0-9]":
+            pass
+        else:
+            Etalonncfile.setncattr(entry[0],entry[len(entry)-1])
+
     TimestampData.units = "Fractional Hours"
     EtalonNumData.units = "Unitless"
     TemperatureData.units = "Celcius"
@@ -485,8 +546,15 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         
         Powncfile.description = "Multi-channel scalar (MCS) power monitor data file"
         for entry in header:
-            Powncfile.setncattr(entry[0],entry[1])
-            
+            if entry[0] == "title":
+                Powncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw Power"))
+            elif entry[0] == "history":
+                Powncfile.setncattr(entry[0],"Raw Power data from instrument")
+            elif entry[0] == "thermocouple_location_[0-9]":
+                pass
+            else:
+                Powncfile.setncattr(entry[0],entry[len(entry)-1])
+
         TimestampData.units = "Fractional Hours"
         RTimeData.units = "ms"
         PowChData.units = "PIN count"
@@ -495,7 +563,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         TimestampData.description = "The time of collected data in UTC hours from the start of the day"
         PowChData.description = "Raw pin count from the MCS analog detectors (must be converted to power by _______)"
         ChannelAssignData.description = "String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)"
-        RTimeData.description = "Relative time counter, 20 bit time valuerelative to the most recent system reset (or time reset)."
+        RTimeData.description = "Relative time counter, 20 bit time value relative to the most recent system reset (or time reset)."
         Powncfile.close()
         
 
@@ -595,7 +663,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
             
             cntsPerBin = ord(data[116:117]) * 2**8 + ord(data[115:116])
             #print (cntsPerBin)
-            CntsPerBin.append(cntsPerBin)
+            CntsPerBin.append(cntsPerBin*5)
             
             nBins = ord(data[118:119]) * 2**8 + ord(data[117:118])
             #print (nBins)
@@ -654,7 +722,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         TimestampData = MCSncfile.createVariable('time',dtype('float32').char,('time'))
         ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float32').char,('time'))
         ChannelData = MCSncfile.createVariable('Channel',dtype('float32').char,('time'))
-        CntsPerBinData = MCSncfile.createVariable('CntsPerBin',dtype('float32').char,('time'))
+        CntsPerBinData = MCSncfile.createVariable('nsPerBin',dtype('float32').char,('time'))
         NBinsData = MCSncfile.createVariable('NBins',dtype('float32').char,('time'))
         DataArrayData = MCSncfile.createVariable('Data',dtype('float32').char,('nBins','time'))
         ChannelAssignData = MCSncfile.createVariable('ChannelAssignment',str,('nChannels'))
@@ -671,12 +739,19 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         
         MCSncfile.description = "Multi-channel scalar (MCS) photon count histogram data file"
         for entry in header:
-            MCSncfile.setncattr(entry[0],entry[1])
-                
+            if entry[0] == "title":
+                MCSncfile.setncattr(entry[0],entry[len(entry)-1].replace("Merged","Raw MCS"))
+            elif entry[0] == "history":
+                MCSncfile.setncattr(entry[0],"Raw MCS data from instrument")
+            elif entry[0] == "thermocouple_location_[0-9]":
+                pass
+            else:
+                MCSncfile.setncattr(entry[0],entry[len(entry)-1])
+
         TimestampData.units = "Fractional Hours"
         ProfPerHistData.units = "Number of shots"
         ChannelData.units = "Unitless"
-        CntsPerBinData.units = "Unitless"
+        CntsPerBinData.units = "ns"
         NBinsData.units = "Unitless"
         DataArrayData.units = "Photons"
         ChannelAssignData.units = "Unitless"
@@ -685,14 +760,13 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         TimestampData.description = "The time of collected data in UTC hours from the start of the day"
         ProfPerHistData.description = "Number of laser shots summed to create a single verticle histogram"
         ChannelData.description = "MCS hardware channel number for each measurement. There are 8 real valued inputs and 4 extra channels resulting from demuxing. "
-        CntsPerBinData.description = "The number of 5 ns clock counts that defines the width of each altitude bin. To convert to range take the value here and multiply by 5 ns then convert to range with half the speed of light"
+        CntsPerBinData.description = "nanoseconds that defines the width of each altitude bin. Convert to range with half the speed of light"
         NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
         DataArrayData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
         ChannelAssignData.description = "String value defining what hardware was connected to the MCS digital detection channels (Choices are: WVOnline, WVOffline, HSRLCombined, HSRLMolecular, O2Online, O2Offline, or Unassigned)"
         RTimeData.description = "Relative time counter, 20 bit time valuerelative to the most recent system reset (or time reset)."
         MCSncfile.close()
         
-
 
 
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,header):
