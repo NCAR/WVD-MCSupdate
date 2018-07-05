@@ -11,7 +11,7 @@ Thermocouple Comm Port;;
 ### by the UPS. These are currently: the update period of the UPS in seconds, and
 ### the number of measurments to save.
 Child Variables;;
-5;3600;10;60;;
+8;3600;10;60;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
