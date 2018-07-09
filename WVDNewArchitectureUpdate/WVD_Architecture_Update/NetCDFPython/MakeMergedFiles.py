@@ -402,23 +402,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         AltitudeData.units = "meters"
     except:
         pass#print ("passed on lat, long, alt")
-    
-    # sweep variables
-    try:
-        SweepNumData = Mergedncfile.createVariable('sweep_number',dtype('int').char,('sweep'))
-        SweepModeData = Mergedncfile.createVariable('sweep_mode','S1',('sweep','string_length'))
-        FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float').char,('sweep'))
-        SweepStartData = Mergedncfile.createVariable('sweep_start_ray_index',dtype('int').char,('sweep'))
-        SweepEndData = Mergedncfile.createVariable('sweep_end_ray_index',dtype('int').char,('sweep'))
-        SweepNumData[:] = [1]
-        SweepModeData[0][:] = [""]
-        FixedAngleData[:] = [90.0]
-        SweepStartData[:] = [0]
-        SweepEndData[:] = [-1]
-        FixedAngleData.units = "degrees"
-    except:
-        pass#print ("passed on sweep variables")
-    
+
     # sensor pointing variables
     try:
         AzimuthData = Mergedncfile.createVariable('azimuth',dtype('float').char,('time'))
@@ -444,7 +428,24 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         ElevationData.axis = "radial_elevation_coordinate"
     except:
         pass#print ("passed on azimuth and elevation")
-    
+
+    # sweep variables
+    try:
+        SweepNumData = Mergedncfile.createVariable('sweep_number',dtype('int').char,('sweep'))
+        SweepModeData = Mergedncfile.createVariable('sweep_mode','S1',('sweep','string_length'))
+        FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float').char,('sweep'))
+        SweepStartData = Mergedncfile.createVariable('sweep_start_ray_index',dtype('int').char,('sweep'))
+        SweepEndData = Mergedncfile.createVariable('sweep_end_ray_index',dtype('int').char,('sweep'))
+        SweepNumData[:] = [1]
+        SweepModeData[0][:] = [""]
+        FixedAngleData[:] = [90.0]
+        SweepStartData[:] = [0]
+        AzimuthData = Mergedncfile.variables["azimuth"]
+        SweepEndData[:] = [len(AzimuthData)-1]
+        FixedAngleData.units = "degrees"
+    except:
+        pass#print ("passed on sweep variables")
+
     # giving attributes to any present data fields
     try:
         WVOnlineData = dataset.variables['WVOnline'][:]
