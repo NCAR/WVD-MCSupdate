@@ -95,6 +95,7 @@ print ("elevation = ", dataset.variables['elevation'][:50])
 
 
 plt.plot(dataset.variables['time'],dataset.variables['WSTemperature'] )
+plt.title(sys.argv[1][-20:])
 plt.show()
 
 
