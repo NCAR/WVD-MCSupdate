@@ -765,7 +765,7 @@ def mergeData(Datafile, CFRadPath,nameList):
     #NBinsData.description = "Number of sequential altitude bins measured for each histogram profile"
 
     if 'WVOnline' in nameList:
-        WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
+        WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float32').char,('time','range'))
         if len(MasterTimestamp) == len(MasterWVOnline):
             WVOnlineData[:] = MasterWVOnline
         else:
@@ -774,9 +774,10 @@ def mergeData(Datafile, CFRadPath,nameList):
             WVOnlineData[:] = Empty2DArray
         WVOnlineData.units = "Photons"
         WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
+        WVOnlineData.long_name = "Water Vapor Online"
 
     if 'WVOffline' in nameList:
-        WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
+        WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float32').char,('time','range'))
         if len(MasterTimestamp) == len(MasterWVOffline):
             WVOfflineData[:] = MasterWVOffline
         else:
@@ -785,9 +786,10 @@ def mergeData(Datafile, CFRadPath,nameList):
             WVOfflineData[:] = Empty2DArray
         WVOfflineData.units = "Photons"
         WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+        WVOfflineData.long_name = "Water Vapor Offline"
 
     if 'HSRLCombined' in nameList:
-        HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('time','range'))
+        HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float32').char,('time','range'))
         if len(MasterTimestamp) == len(MasterHSRLCombined):
             HSRLCombinedData[:] = MasterHSRLCombined
         else:
@@ -796,9 +798,10 @@ def mergeData(Datafile, CFRadPath,nameList):
             HSRLCombinedData[:] = Empty2DArray
         HSRLCombinedData.units = "Photons"
         HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Combined"
+        HSRLCombinedData.long_name = "HSRL Combined"
 
     if 'HSRLMolecular' in nameList:
-        HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('time','range'))
+        HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float32').char,('time','range'))
         if len(MasterTimestamp) == len(MasterHSRLMolecular):
             HSRLMolecularData[:] = MasterHSRLMolecular
         else:
@@ -807,9 +810,10 @@ def mergeData(Datafile, CFRadPath,nameList):
             HSRLMolecularData[:] = Empty2DArray
         HSRLMolecularData.units= "Photons"
         HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for HSRL Molecular"
+        HSRLMolecularData.long_name = "HSRL Molecular"
 
     if 'O2Online' in nameList:
-        O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('time','range'))
+        O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float32').char,('time','range'))
         if len(MasterTimestamp) == len(MasterO2Online):
             O2OnlineData[:] = MasterO2Online
         else:
@@ -818,10 +822,10 @@ def mergeData(Datafile, CFRadPath,nameList):
             O2OnlineData[:] = Empty2DArray
         O2OnlineData.units = "Photons"
         O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Oxygen"
-
+        O2OnlineData.long_name = "Oxygen Online"
 
     if 'O2Offline' in nameList:
-        O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('time','range'))
+        O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float32').char,('time','range'))
         if len(MasterTimestamp) == len(MasterO2Offline):
             O2OfflineData[:] = MasterO2Offline
         else:
@@ -830,6 +834,7 @@ def mergeData(Datafile, CFRadPath,nameList):
             O2OfflineData[:] = Empty2DArray
         O2OfflineData.units = "Photons"
         O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Oxygen"
+        O2OfflineData.long_name = "Oxygen Offline"
 
     Mergedncfile.close()
 
@@ -945,40 +950,46 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
                     emptyArray[i].append(float('NaN'))
 
             if 'WVOnline' in nameList:
-                WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float').char,('time','range'))
+                WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float32').char,('time','range'))
                 WVOnlineData[:] = emptyArray
                 WVOnlineData.units = "Photons"
                 WVOnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Online Water Vapor"
+                WVOnlineData.long_name = "Water Vapor Online"
 
             if 'WVOffline' in nameList:
-                WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float').char,('time','range'))
+                WVOfflineData = Mergedncfile.createVariable('WVOffline',dtype('float32').char,('time','range'))
                 WVOfflineData[:] = emptyArray
                 WVOfflineData.units = "Photons"
                 WVOfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+                WVOfflineData.long_name = "Water Vapor Offline"
 
             if 'HSRLCombined' in nameList:
-                HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float').char,('time','range'))
+                HSRLCombinedData = Mergedncfile.createVariable('HSRLCombined',dtype('float32').char,('time','range'))
                 HSRLCombinedData[:] = emptyArray
                 HSRLCombinedData.units = "Photons"
                 HSRLCombinedData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+                HSRLCombinedData.long_name = "HSRL Combined"
 
             if 'HSRLMolecular' in nameList:
-                HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float').char,('time','range'))
+                HSRLMolecularData = Mergedncfile.createVariable('HSRLMolecular',dtype('float32').char,('time','range'))
                 HSRLMolecularData[:] = emptyArray
                 HSRLMolecularData.units = "Photons"
                 HSRLMolecularData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+                HSRLMolecularData.long_name = "HSRL Molecular"
 
             if 'O2Online' in nameList:
-                O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float').char,('time','range'))
+                O2OnlineData = Mergedncfile.createVariable('O2Online',dtype('float32').char,('time','range'))
                 O2OnlineData[:] = emptyArray
                 O2OnlineData.units = "Photons"
                 O2OnlineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+                O2OnlineData.long_name = "Oxygen Online"
 
             if 'O2Offline' in nameList:
-                O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float').char,('time','range'))
+                O2OfflineData = Mergedncfile.createVariable('O2Offline',dtype('float32').char,('time','range'))
                 O2OfflineData[:] = emptyArray
                 O2OfflineData.units = "Photons"
                 O2OfflineData.description = "A profile containing the number of photons returned in each of the sequential altitude bins for Offline Water Vapor"
+                O2OfflineData.long_name = "Oxygen Offline"
 
             EmptyArray = []
             for entry in MasterTimestamp:
