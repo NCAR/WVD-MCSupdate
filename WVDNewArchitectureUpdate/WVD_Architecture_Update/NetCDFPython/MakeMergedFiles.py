@@ -31,7 +31,7 @@ def Fill2DVar(dataset, varName):
     return localvar
 
 def toSec(fracHour):
-    return (float(fracHour) - int(fracHour))*3600 
+    return (float(fracHour) - int(fracHour))*3600
 
 
 
@@ -52,7 +52,7 @@ def interpolate(ArrayIn,MasterIn, VarTimestamp, MasterTimestamp):
         timecounter = timecounter + 1
         timedeltaSum = timedeltaSum + (LocalMasterTimestamp[i+1] - LocalMasterTimestamp[i])
     if len(LocalMasterTimestamp) == 1:
-        ArrayOut = ma.array([float('NaN')])
+        ArrayOut = ma.array([float('nan')])
         return ArrayOut
     if len(LocalMasterTimestamp) == 0:
         ArrayOut = ma.array([])
@@ -101,7 +101,7 @@ def assign(ArrayIn,MasterIn,VarTimestamp,MasterTimestamp):
     ArrayOut = LocalMasterIn
 
     if len(LocalMasterTimestamp) == 1:
-        ArrayOut = ma.array([float('NaN')])
+        ArrayOut = ma.array([float('nan')])
         return ArrayOut
     if len(LocalMasterTimestamp) == 0:
         ArrayOut = ma.array([])
@@ -186,7 +186,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     TimestampData = Mergedncfile['time']
 
     try:
-        RangeData = Mergedncfile.createVariable('range',dtype('float').char,('range'))
+        RangeData = Mergedncfile.createVariable('range',dtype('float32').char,('range'))
         RangeData.standard_name = 'projection_range_coordinate'
         RangeData.long_name = 'range_to_measurement_volume'           
         RangeData.units = "meters"
@@ -199,7 +199,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     
     # global variables
     try:
-        VolNumData = Mergedncfile.createVariable('volume_number',dtype('float').char,())
+        VolNumData = Mergedncfile.createVariable('volume_number',dtype('float32').char,())
         VolNumData[:] = 0
         InstTypeData = Mergedncfile.createVariable('instrument_type','S1','string_length_DataType')
     except:
@@ -246,7 +246,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     try: #create the variable if you can, fill it with nans
         nSensors = 1
         Mergedncfile.createDimension('nInternalThermalSensors',nSensors)
-        HKeepTemperatureData = Mergedncfile.createVariable("ContainerTemperature",dtype('float').char,('nInternalThermalSensors','time'))
+        HKeepTemperatureData = Mergedncfile.createVariable("ContainerTemperature",dtype('float32').char,('nInternalThermalSensors','time'))
         HKeepTemperatureData.append([])
         for i in range (0,len(TimestampData)-1):
             HKeepTemperatureData[i].append(float('nan'))
@@ -258,8 +258,8 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
 
 
     try: #create the variable if you can, fill it with nans
-        UPSTemperatureData = Mergedncfile.createVariable("UPSTemperature",dtype('float').char,('time'))
-        UPSHoursOnBatteryData = Mergedncfile.createVariable("UPSHoursOnBattery",dtype('float').char,('time'))
+        UPSTemperatureData = Mergedncfile.createVariable("UPSTemperature",dtype('float32').char,('time'))
+        UPSHoursOnBatteryData = Mergedncfile.createVariable("UPSHoursOnBattery",dtype('float32').char,('time'))
         for time in MasterTimestamp:
             UPSTemperatureDataData.append(float('nan'))
             UPSHoursOnBatteryData.append(float('nan'))
@@ -273,10 +273,10 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
 
 
     try: #create the variable if you can, fill it with nans
-        WSTemperatureData = Mergedncfile.createVariable("WSTemperature",dtype('float').char,('time'))
-        WSRelHumData = Mergedncfile.createVariable("WSRelHum",dtype('float').char,('time'))
-        WSPressureData = Mergedncfile.createVariable("WSPressure",dtype('float').char,('time'))
-        WSAbsHumData = Mergedncfile.createVariable("WSAbsHum",dtype('float').char,('time'))
+        WSTemperatureData = Mergedncfile.createVariable("WSTemperature",dtype('float32').char,('time'))
+        WSRelHumData = Mergedncfile.createVariable("WSRelHum",dtype('float32').char,('time'))
+        WSPressureData = Mergedncfile.createVariable("WSPressure",dtype('float32').char,('time'))
+        WSAbsHumData = Mergedncfile.createVariable("WSAbsHum",dtype('float32').char,('time'))
         for time in MasterTimestamp:
             WSTemperatureData.append(float('nan'))
             WSRelHumData.append(float('nan'))
@@ -307,13 +307,13 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         tempstr = Channels[i]+"Temperature"
         tempDiffstr = Channels[i]+"TempDiff"
         try: # create the variable if you can, fill it with nans until the mergeing
-            ChanTempData[i] =  Mergedncfile.createVariable(tempstr,dtype('float').char,('time'))
+            ChanTempData[i] =  Mergedncfile.createVariable(tempstr,dtype('float32').char,('time'))
             for time in MasterTimestamp:
                 ChanTempData[i].append(float('nan'))
         except:
             ChanTempData[i] = Mergedncfile.variables[tempstr]
         try: # create the variable if you can, fill it with nans until the mergeing
-            ChanTempDiffData[i] =  Mergedncfile.createVariable(tempDiffstr,dtype('float').char,('time'))
+            ChanTempDiffData[i] =  Mergedncfile.createVariable(tempDiffstr,dtype('float32').char,('time'))
             for time in MasterTimestamp:
                 ChanTempDiffData[i].append(float('nan'))
         except:
@@ -340,7 +340,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         for chan in ChanAssign:
             thing = chan+"Laser"+var
             try: # create the variable if you can, fill it with nans until the mergeing
-                ChanVarData[i][j] = Mergedncfile.createVariable(thing ,dtype('float').char,('time'))
+                ChanVarData[i][j] = Mergedncfile.createVariable(thing ,dtype('float32').char,('time'))
                 for time in MasterTimestamp:
                     ChanVarData[i][j].append(float('nan'))
             except:
@@ -360,7 +360,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
         powthing = ChannelsOut[i]+"Power"
         Var2Write = []
         try: # create the variable if you can, fill it with nans until the mergeing
-            Var2Write = Mergedncfile.createVariable(powthing,dtype('float').char,('time'))
+            Var2Write = Mergedncfile.createVariable(powthing,dtype('float32').char,('time'))
             for time in MasterTimestamp:
                 Var2Write.append(float('nan'))
         except: # variable already existed
@@ -405,8 +405,8 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
 
     # sensor pointing variables
     try:
-        AzimuthData = Mergedncfile.createVariable('azimuth',dtype('float').char,('time'))
-        ElevationData = Mergedncfile.createVariable('elevation',dtype('float').char,('time'))
+        AzimuthData = Mergedncfile.createVariable('azimuth',dtype('float32').char,('time'))
+        ElevationData = Mergedncfile.createVariable('elevation',dtype('float32').char,('time'))
 
         tempAz = []
         tempEl = []
@@ -433,7 +433,7 @@ def CFRadify(MergedFile,CFRadPath,header,NowDate,NowTime):
     try:
         SweepNumData = Mergedncfile.createVariable('sweep_number',dtype('int').char,('sweep'))
         SweepModeData = Mergedncfile.createVariable('sweep_mode','S1',('sweep','string_length'))
-        FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float').char,('sweep'))
+        FixedAngleData = Mergedncfile.createVariable('fixed_angle',dtype('float32').char,('sweep'))
         SweepStartData = Mergedncfile.createVariable('sweep_start_ray_index',dtype('int').char,('sweep'))
         SweepEndData = Mergedncfile.createVariable('sweep_end_ray_index',dtype('int').char,('sweep'))
         SweepNumData[:] = [1]
@@ -729,14 +729,15 @@ def mergeData(Datafile, CFRadPath,nameList):
             Empty2DArray.append(float('nan'))
 
     # converting from fractional hours to fractional seconds for CFRadial compliance
+    ThisHour = int(MasterTimestamp[int(len(MasterTimestamp)/2)])
     for i in range(0,len(MasterTimestamp)):
-        MasterTimestamp[i] = (MasterTimestamp[i] - int(MasterTimestamp[i])) *3600
+        MasterTimestamp[i]=toSec(MasterTimestamp[i]) + (int(MasterTimestamp[i]) - ThisHour)*3600
 
     TimestampData[:] = MasterTimestamp
 
-    ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
-    CntsPerBinData = Mergedncfile.createVariable('nsPerBin',dtype('float').char,('time'))
-    #NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
+    ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float32').char,('time'))
+    CntsPerBinData = Mergedncfile.createVariable('nsPerBin',dtype('float32').char,('time'))
+    #NBinsData = Mergedncfile.createVariable('NBins',dtype('float32').char,('time'))
     if len(MasterTimestamp) == len(MasterProfPerHist):
         ProfPerHistData[:] = MasterProfPerHist
     else:
@@ -947,7 +948,7 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
             for i in range(0,len(TimestampData)):
                 emptyArray.append([])
                 for j in range(0,560):
-                    emptyArray[i].append(float('NaN'))
+                    emptyArray[i].append(float('nan'))
 
             if 'WVOnline' in nameList:
                 WVOnlineData = Mergedncfile.createVariable('WVOnline',dtype('float32').char,('time','range'))
@@ -995,9 +996,9 @@ def createEmptyDataFile(LocalOutputPath,fileDate,ThenDate,ThenTime,fromTime,toTi
             for entry in MasterTimestamp:
                 EmptyArray.append(float('nan'))
 
-            ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float').char,('time'))
-            CntsPerBinData = Mergedncfile.createVariable('nsPerBin',dtype('float').char,('time'))
-            #NBinsData = Mergedncfile.createVariable('NBins',dtype('float').char,('time'))
+            ProfPerHistData = Mergedncfile.createVariable('ProfPerHist',dtype('float32').char,('time'))
+            CntsPerBinData = Mergedncfile.createVariable('nsPerBin',dtype('float32').char,('time'))
+            #NBinsData = Mergedncfile.createVariable('NBins',dtype('float32').char,('time'))
 
             ProfPerHistData[:] = EmptyArray
             CntsPerBinData[:] = EmptyArray
@@ -1098,7 +1099,7 @@ def mergePower(Powerfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     for time in MasterTimestamp:
                         PowChanData[i].append(float('nan'))
                     try: # create the variable if you can, fill it with nans until the mergeing
-                        Var2Write = Mergedncfile.createVariable(powthing,dtype('float').char,('time'))
+                        Var2Write = Mergedncfile.createVariable(powthing,dtype('float32').char,('time'))
                         #print ("A - len(Var2Write)=",len(Var2Write))
                     except: # variable already existed
                         Var2Write = Mergedncfile.variables[powthing]
@@ -1310,7 +1311,7 @@ def mergeLaser(LLfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                         for time in MasterTimestamp:
                             ChanVarData[i][j].append(float('nan'))
                         try: # create the variable if you can, fill it with nans until the mergeing
-                            Var2Write = Mergedncfile.createVariable(thing ,dtype('float').char,('time'))
+                            Var2Write = Mergedncfile.createVariable(thing ,dtype('float32').char,('time'))
                         except:
                             Var2Write = Mergedncfile.variables[thing]
 
@@ -1470,8 +1471,8 @@ def mergeEtalon(Etalonfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                         ChanTempData[i].append(float('nan'))
                         ChanTempDiffData[i].append(float('nan'))
                     try: # create the variable if you can, fill it with nans until the mergeing
-                        Var2WriteTemp = Mergedncfile.createVariable(tempstr,dtype('float').char,('time'))
-                        Var2WriteTempDiff = Mergedncfile.createVariable(tempDiffstr,dtype('float').char,('time'))
+                        Var2WriteTemp = Mergedncfile.createVariable(tempstr,dtype('float32').char,('time'))
+                        Var2WriteTempDiff = Mergedncfile.createVariable(tempDiffstr,dtype('float32').char,('time'))
                     except:
                         Var2WriteTemp = Mergedncfile.variables[tempstr]
                         Var2WriteTempDiff = Mergedncfile.variables[tempDiffstr]
@@ -1604,10 +1605,10 @@ def mergeWS(WSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     tempWSPressureData.append(float('nan'))
                     tempWSAbsHumData.append(float('nan'))
                 try: #create the variable if you can, fill it with nans until the mergeing
-                    WSTemperatureData = Mergedncfile.createVariable("WSTemperature",dtype('float').char,('time'))
-                    WSRelHumData = Mergedncfile.createVariable("WSRelHum",dtype('float').char,('time'))
-                    WSPressureData = Mergedncfile.createVariable("WSPressure",dtype('float').char,('time'))
-                    WSAbsHumData = Mergedncfile.createVariable("WSAbsHum",dtype('float').char,('time'))
+                    WSTemperatureData = Mergedncfile.createVariable("WSTemperature",dtype('float32').char,('time'))
+                    WSRelHumData = Mergedncfile.createVariable("WSRelHum",dtype('float32').char,('time'))
+                    WSPressureData = Mergedncfile.createVariable("WSPressure",dtype('float32').char,('time'))
+                    WSAbsHumData = Mergedncfile.createVariable("WSAbsHum",dtype('float32').char,('time'))
                     #print ("A len(WSTemperatureData)=",len(WSTemperatureData))
                 except:
                     WSTemperatureData = Mergedncfile.variables["WSTemperature"]
@@ -1715,7 +1716,7 @@ def mergeHKeep(HKeepfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
 
                 try: #create the variable if you can, fill it with nans until the mergeing
                     Mergedncfile.createDimension('nInternalThermalSensors',nSensors)
-                    HKeepTemperatureData = Mergedncfile.createVariable("ContainerTemperature",dtype('float').char,('nInternalThermalSensors','time'))
+                    HKeepTemperatureData = Mergedncfile.createVariable("ContainerTemperature",dtype('float32').char,('nInternalThermalSensors','time'))
                 except:
                     HKeepTemperatureData = Mergedncfile.variables["ContainerTemperature"]
 
@@ -1819,8 +1820,8 @@ def mergeUPS(UPSfile, LastFile, NextFile, CFRadPath, ThenDate, ThenTime):
                     tempUPSTemperatureData.append(float('nan'))
                     tempUPSHoursOnBatteryData.append(float('nan'))
                 try: #create the variable if you can, fill it with nans until the mergeing
-                    UPSTemperatureData = Mergedncfile.createVariable("UPSTemperature",dtype('float').char,('time'))
-                    UPSHoursOnBatteryData = Mergedncfile.createVariable("UPSHoursOnBattery",dtype('float').char,('time'))
+                    UPSTemperatureData = Mergedncfile.createVariable("UPSTemperature",dtype('float32').char,('time'))
+                    UPSHoursOnBatteryData = Mergedncfile.createVariable("UPSHoursOnBattery",dtype('float32').char,('time'))
                 except:
                     UPSTemperatureData = Mergedncfile.variables["UPSTemperature"]
                     UPSHoursOnBatteryData = Mergedncfile.variables["UPSHoursOnBattery"]
@@ -1974,7 +1975,7 @@ def mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,heade
                 if i != 0 or not os.path.isfile(place):
                     mergeData(Datafile, CFRadPath,nameList)
                     #print ("create G",i)
-                    #print ("os.path.isfile(place)=",os.path.isfile(place))
+                    # #print ("os.path.isfile(place)=",os.path.isfile(place))
                     if i == 0:
                         makeFirst = True
             except:

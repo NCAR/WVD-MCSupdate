@@ -23,6 +23,7 @@ print (dataset.variables.keys())
 
 print ("time = ", dataset.variables['time'][:50])
 print ("time units = ", dataset.variables['time'].units)
+print ("time = ", dataset.variables['time'][-50:])
 
 print ("range = ", dataset.variables['range'][:50])
 print ("range units = ", dataset.variables['range'].units)

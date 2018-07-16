@@ -56,13 +56,13 @@ def processUPS(UPSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     # creates variables
     TimestampData = UPSncfile.createVariable('time',dtype('float').char,('time'))
     BatteryNominalData = UPSncfile.createVariable('BatteryNominal',dtype('b').char,('time'))
-    BatteryReplaceData = UPSncfile.createVariable('BatteryReplace',dtype('float').char,('time'))
-    BatteryInUseData = UPSncfile.createVariable('BatteryInUse',dtype('float').char,('time'))
+    BatteryReplaceData = UPSncfile.createVariable('BatteryReplace',dtype('float32').char,('time'))
+    BatteryInUseData = UPSncfile.createVariable('BatteryInUse',dtype('float32').char,('time'))
     BatteryLowData = UPSncfile.createVariable('BatteryLow',dtype('b').char,('time'))
-    BatteryCapacityData = UPSncfile.createVariable('BatteryCapacity',dtype('float').char,('time'))
-    BatteryTimeLeftData = UPSncfile.createVariable('BatteryTimeLeft',dtype('float').char,('time'))
-    UPSTemperatureData = UPSncfile.createVariable('UPSTemperature',dtype('float').char,('time'))
-    HoursOnBatteryData = UPSncfile.createVariable('HoursOnBattery',dtype('float').char,('time'))
+    BatteryCapacityData = UPSncfile.createVariable('BatteryCapacity',dtype('float32').char,('time'))
+    BatteryTimeLeftData = UPSncfile.createVariable('BatteryTimeLeft',dtype('float32').char,('time'))
+    UPSTemperatureData = UPSncfile.createVariable('UPSTemperature',dtype('float32').char,('time'))
+    HoursOnBatteryData = UPSncfile.createVariable('HoursOnBattery',dtype('float32').char,('time'))
 
     boolBatteryNominal = []
     for entry in BatteryNominal:
@@ -163,7 +163,7 @@ def processHKeep(HKeepfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
 
     # creates variables
     TimestampData = HKeepncfile.createVariable('time',dtype('float').char,('time'))
-    TemperatureData = HKeepncfile.createVariable('Temperature',dtype('float').char,('nSensors','time'))
+    TemperatureData = HKeepncfile.createVariable('Temperature',dtype('float32').char,('nSensors','time'))
 
     #fills variables
     TimestampData[:] = Timestamp
@@ -228,10 +228,10 @@ def processWS(WSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     
     # creates variables
     TimestampData = WSncfile.createVariable('time',dtype('float').char,('time'))
-    TemperatureData = WSncfile.createVariable('Temperature',dtype('float').char,('time'))
-    RelHumData = WSncfile.createVariable('RelHum',dtype('float').char,('time'))
-    PressureData = WSncfile.createVariable('Pressure',dtype('float').char,('time'))
-    AbsHumData = WSncfile.createVariable('AbsHum',dtype('float').char,('time'))
+    TemperatureData = WSncfile.createVariable('Temperature',dtype('float32').char,('time'))
+    RelHumData = WSncfile.createVariable('RelHum',dtype('float32').char,('time'))
+    PressureData = WSncfile.createVariable('Pressure',dtype('float32').char,('time'))
+    AbsHumData = WSncfile.createVariable('AbsHum',dtype('float32').char,('time'))
     
     #fills variables
     TimestampData[:] = Timestamp
@@ -317,12 +317,12 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     # add in variables that are expected to be the same size as timestamp which is the master dimension 
     TimestampData = LLncfile.createVariable('time',dtype('float').char,('time'))
     LaserNumData = LLncfile.createVariable('LaserName',str,('time'))
-    WavelengthData = LLncfile.createVariable('Wavelength',dtype('float').char,('time'))
-    WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float').char,('time'))
+    WavelengthData = LLncfile.createVariable('Wavelength',dtype('float32').char,('time'))
+    WaveDiffData = LLncfile.createVariable('WaveDiff',dtype('float32').char,('time'))
     IsLockedData = LLncfile.createVariable('IsLocked',dtype('b').char,('time'))
-    TempDesiredData = LLncfile.createVariable('TempDesired',dtype('float').char,('time'))
-    TempMeasData = LLncfile.createVariable('TempMeas',dtype('float').char,('time'))
-    CurrentData = LLncfile.createVariable('Current',dtype('float').char,('time'))
+    TempDesiredData = LLncfile.createVariable('TempDesired',dtype('float32').char,('time'))
+    TempMeasData = LLncfile.createVariable('TempMeas',dtype('float32').char,('time'))
+    CurrentData = LLncfile.createVariable('Current',dtype('float32').char,('time'))
 
     boolIsLocked=[]
     for entry in IsLocked:
@@ -407,8 +407,8 @@ def processEtalons(EtalonFile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastT
     
     TimestampData = Etalonncfile.createVariable('time',dtype('float').char,('time'))
     EtalonNumData = Etalonncfile.createVariable('EtalonNum',str,('time'))
-    TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float').char,('time'))
-    TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float').char,('time'))
+    TemperatureData = Etalonncfile.createVariable('Temperature',dtype('float32').char,('time'))
+    TempDiffData = Etalonncfile.createVariable('TempDiff',dtype('float32').char,('time'))
     IsLockedData = Etalonncfile.createVariable('IsLocked',dtype('b').char,('time'))
 
     boolIsLocked=[]
@@ -534,7 +534,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
         Powncfile.createDimension('time',len(Timestamp))
         Powncfile.createDimension('nChannels',nChannels)
         
-        TimestampData = Powncfile.createVariable('time',dtype('float32').char,('time'))
+        TimestampData = Powncfile.createVariable('time',dtype('float').char,('time'))
         RTimeData= Powncfile.createVariable('RTime',dtype('float32').char,('time'))
         PowChData = Powncfile.createVariable('Power',dtype('float32').char,('nChannels','time'))
         ChannelAssignData = Powncfile.createVariable('ChannelAssignment',str,('nChannels'))
@@ -719,7 +719,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         MCSncfile.createDimension('nBins',max(NBins))
         MCSncfile.createDimension('nChannels',nChannels)
         
-        TimestampData = MCSncfile.createVariable('time',dtype('float32').char,('time'))
+        TimestampData = MCSncfile.createVariable('time',dtype('float').char,('time'))
         ProfPerHistData = MCSncfile.createVariable('ProfilesPerHist',dtype('float32').char,('time'))
         ChannelData = MCSncfile.createVariable('Channel',dtype('float32').char,('time'))
         CntsPerBinData = MCSncfile.createVariable('nsPerBin',dtype('float32').char,('time'))
