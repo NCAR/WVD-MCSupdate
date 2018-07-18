@@ -1,0 +1,68 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Class %%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\documentclass{report} % use larger type; default would be 10pt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% PACKAGES TO USE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Page Style %%%%%
+\usepackage[margin=1.0in]{geometry}            	% setting the side margins to be ______ inches
+\usepackage{fancyhdr}                             		% used to better a custom footer with names/classes/total pages/...
+\usepackage{lastpage}                                    	% used to calculate the total page number
+%%%%% Functionality %%%%%
+\usepackage{enumerate}                                	% making lists       
+\usepackage{amsmath}                                   	% includes some math equation functions
+\usepackage{graphicx }                                   	% including figures
+%\usepackage{sidecap}                                      	% side captions on figures instead of below captions
+%%%%% Formatting %%%%%
+\usepackage[labelfont=bf]{caption}                  	% setting caption labels to be bold (Table ##, Figure ##)
+\usepackage{longtable}					% allows tables that are longer than a single page
+\usepackage[font={small,it}]{caption}			% sets captions font to be small italics
+\setlength{\belowcaptionskip}{-10pt}                	% removes the extra spacing after captions
+\usepackage{color}                                    		% allows one to specify the color of a set of font
+\usepackage[section]{placeins}           		% Only allows figures/tables/equations after they are called in line with text
+%%%%% Bibliography %%%%% 
+\usepackage{cite}                                            	% including the citation package	
+\usepackage{natbib}                                        	% used in combination with \setlength to remove the extra spacing in the bibliography
+\setlength{\bibsep}{0.0pt}                                	% used in combination with natbib to remove the extra spacing in the bibliography
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Water Vapor Dial Labview Software}
+\author{Brad Schoenrock & Robert Stillwell}    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Setting the Footer %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}\lhead{} \chead{} \rhead{}
+\lfoot{\sc Schoenrock/Stillwell} \cfoot{\normalsize \thepage\ of \pageref{LastPage}} \rfoot{\sc WV DIAL Labview}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Begin Title Page %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}                    
+\begin{center}
+{\sc \LARGE Water Vapor Dial Labview Software} \\
+\vspace{0.25in}
+{\sc \Large Brad Schoenrock\\}
+{\sc \Large Robert Stillwell\\}
+\vspace{0.5in}
+{\large NCAR
+\\ \today}
+\end{center}
+\vspace{0.5in}
+\thispagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Begin Content Page %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage                               	% Making a page break to start the table of contents
+\tableofcontents                     	% Making a table of contents
+\thispagestyle{empty}		% Removing page number from page
+\newpage      				% Making a page break to start of a document
+\setcounter{page}{1}            	% Starting page counting here
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\input{Acronyms.tex}
+
+\input{Design.tex}
+
+\input{RawDataOutput.tex}
+
+\input{LabviewDetails.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Ending document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
