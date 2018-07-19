@@ -46,6 +46,11 @@ background length;;
 dead time;;
 3.7e-8;;
 
+### time averaging for WV ND and Aerosol Backscatter 
+### display is 1000 itterations long which corresponds to about 30 min
+Integration Itterations;;
+50;;
+
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
 .\Data\AdvVis\;
