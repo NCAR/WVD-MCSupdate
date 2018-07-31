@@ -51,4 +51,6 @@ Note: As of the time of writing this documentation DIAL2's computer (cuttlefish)
 
 For the Relampago deployment data is also collected on Eldora. A series of cronjobs are set up to RSync the merged files as well as Error and Warning files from the DIAL unit to Eldora for processing and display on the field catalog. As of the time of writing this document the processing of data for the field catalog has been completed, but there are still problems with the RSync pulling data from the field causing the RSync to spontaniously fail, and the alert scripts are not yet set up to look for files that do not start exactly on the hour in case the unit is restarted for any reason. The alert scripts are also not set up to look for the presence of Error or Warning files which are being transfered from the DIAL unit to alert of problems. The mere presence of growing data files is not sufficient to alert of failures in operations. Because the merged files are set up to make as many data products available as possible even in the face of sub-system failure, if a sub-system fails the current alert scripts on eldora are insuficiant to alert the responsible monitor for field deployment. 
 
+*** Robert will have to add more details on the Matlab processing of the merged files into images for the field catalog *** 
+
 \newpage

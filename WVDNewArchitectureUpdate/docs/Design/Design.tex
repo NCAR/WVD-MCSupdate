@@ -33,7 +33,7 @@ This creates a 3 tiered structure: 1) Main function that opens sub-functions, 2)
 
 \section{Back Panel Design}\label{Sec:BPDesign}
 
-A template was made to standardize all labview control for WV DIAL. The design is to use queues to execute commands. This allows for an intentional bottleneck of execution such that user and automatically generated commands can not be executed out of order and there are a minimum of changes that need to be made to accommodate new hardware. The automatically generated and user generated commands are in the form of a string that is delimitated by an ``\_". The main loop cases are:
+A template was made to standardize all labview control for WV DIAL. The design is to use queues to execute commands. This allows for an intentional bottleneck of execution such that user and automatically generated commands can not be executed out of order and there are a minimum of changes that need to be made to accommodate new hardware. The automatically generated and user generated commands are in the form of a string that is delimitated by an underscore. The main loop cases are:
 \begin{enumerate}
 \item{Configure}
 \begin{enumerate}
