@@ -1,0 +1,26 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the Water Vapor DIAL Main labview program loading just the template. 
+
+### These are the actual names that will appear in the tabs for the container.
+### The tag "Unused" tells the container not to populate a tab. Note that this 
+### command is case sensitive.
+Tab Names;;
+Main Controls; Template; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+
+### In its current state, these two variables are the width and height of the 
+### tab containers. This location is, however, a catch all for data you need to 
+### read in quickly from this configure file
+Global Variables;;
+540;985;;
+
+### This is the relative file path(s) (identified by the .\) to the program(s) 
+### that the container should populate the tabs with
+Relative File Paths;;
+.\Template.llb\ControlSystemTemplate.vi;;
+
+### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
+### the main container what to populate the tabs with.
+Function Types;;
+0;8;;
+
