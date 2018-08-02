@@ -36,7 +36,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-32.012;29.443;;
+32.046;29.443;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
