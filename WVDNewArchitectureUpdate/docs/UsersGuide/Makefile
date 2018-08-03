@@ -3,7 +3,7 @@ BIBTEX   = bibtex
 DVIPS    = dvips
 DVIPDF   = dvipdf
 
-BASENAME = WVDIAL_LabviewProposal_Stillwell_V01
+BASENAME = WVDIAL_UsersGuide_V01
 
 default: testlatex
 

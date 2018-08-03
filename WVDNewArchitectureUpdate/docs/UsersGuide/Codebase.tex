@@ -1,0 +1,14 @@
+
+\chapter{Codebase}
+\label{CH-Codebase}
+
+We have used github for our version control. The github repo is located here - 
+
+https://github.com/NCAR/WVD-MCSupdate
+
+\noindent Instructions for how to install it as well as other software for the operations of the DIAL units is located in google drive here - 
+
+https://docs.google.com/document/d/1IzeoFDJbz2wUmzOSmWAWuVJSXAY20Qs0wkWSpMHNQFk/edit
+
+\noindent The software should be on each of the DIAL units already, and if those instructions were followed a shortcut to the codebase should be located on the desktop named WVD-MCSupdate. The WVD-MCSupdate directory has 4 sub directores. They are WVDoldSoftware, WVDNewArchitectureUpdate, WVDMCSupdate, and tempShare. WVDoldSoftware has a copy of the old control software. WVDNewArchitectureUpdate has the updated control software. WVDMCSupdate has a copy of the original MCS control software, which was not integrated into final software. tempShare has some small scripts and explorations. The only part of this software that runs for operations is located in WVDNewArchitectureUpdate. Within the WVDNewArchitectureUpdate directory is a docs directory that holds documentation on the deign and operations of the DIAL unit (including this document). The WVD\_Architecture\_Update directory holds the software for operations. WVDIAL\_Main.vi is the way to access the functionality of this software. The other .llb files hold the supporting functionality, but everything needed should be accessable through the main vi. The setup of each of the modes of operations are done through configure files located in the ConfigureFiles directory. The intermediate and final data products are located in Data, which is RSynced to a backup hard drive on the unit as well as to Eldora for collection and processing. The Design documentation located in docs has more detail for development of this software with details of each of the libraries seen here. 
+

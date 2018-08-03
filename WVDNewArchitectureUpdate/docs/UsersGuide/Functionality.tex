@@ -1,0 +1,67 @@
+
+\chapter{Functionality ***needs updating***}
+\label{CH-Functions}
+
+These are the things you can do with the software, represented by buttons in the main container. The operational modes that are called by the buttons on the main panel are:
+
+\begin{enumerate}
+\item{Warm up sub-function that brings all hardware to operational status. This includes things like warming the lasers and warming the etalons, which needs to be done before high quality data can be taken.}
+\item{Main operations sub-function that performs all the mission critical hardware communication during data collection. This is discussed further in Chapter~\ref{CH-Ops}}
+\item{A template sub function which brings up an empty child with minimal functionality.}
+\item{Switches sub-function which tests our ability to control the switches.}
+\item{Temp. Scan sub-function which sweeps through temperatures to test the lasers.}
+\item{Testing sub-functions for individusal controls to check operational status of hardware pieces such as the wavemeter (laser locking), the MCS operation, or the weather station.}
+\end{enumerate}
+
+\section{Individual Element Controls}
+The proposed software update parses the main hardware control function into sub-functions. These sub-functions serve to control individual elements of the WVDIAL, serve as simplified routines to warm up elements of the WVDIAL, or are to test out specific functionality in isolation of the rest of the unit. 
+
+\subsection{MCS}\label{Sec:MCSSubFunction}
+
+A sub-function that brings up two children. One does the communications via UDP to read the MCS, while the other is a set of controls to change the state of the MCS. These were split into two functions in order to prioritize the UDP communication so photon counting data was always running without interuption, and so that while the child was reading the UDP port the controls would continue to feel responsive. In a previous version of the MCS software putting the UDP communications in the same VI as the controls would lead to delays in the responsivness of the front panel due to the translation from a series of controls into a 32 bit hex word and back that was needed for MCS communications. 
+
+\subsection{Weather Station}\label{Sec:WSSubFunction}
+
+A sub-function that brings up the weather station child to monitor surface level temperature, pressure, relative humidity, and absolute humidity. 
+
+\subsection{Laser Locking}\label{Sec:LLSubFunction}
+
+A sub-function that brings up the laser locking routines that controls laser wavelengths and the etalons. 
+
+\subsection{Housekeeping}\label{Sec:HousekeepingSubFunction}
+
+A sub-function that brings up one child whose responsibility is to relay information about the temperature of the container. Thermocouples are placed within the container in various positions which can be specified for writing into the data in the Configure\_WVDIALPythonNetCDFHeader.txt. This is primarily to help ensure that the climate control for the unit is functioning properly. 
+
+\subsection{UPS}\label{Sec:UPSSubFunction}
+
+A sub-function that calls the UPS child to monitor the state of the UPS Battery and power to the unit. The UPS child has a subroutine to automatically send out an email when the UPS Battery gets too low. 
+
+\subsection{HSRL Oven}\label{Sec:HSRLOvenSubFunction}
+
+A sub-function that warms up the HSRL. This is not currently built, but the button on the front panel is there for the addition of the feature in the future. 
+
+\subsection{Wavemeter}\label{Sec:WavemeterSubFunction}
+
+A sub-function that brings up the wavemeter to read the wavelengths of the lasers. 
+
+\subsection{Thor 8000}\label{Sec:T8000SubFunction}
+
+A sub-function that controls the Thor 8000 laser diode current control module. 
+
+\subsection{Quantum Composer}\label{Sec:QCSubFunction}
+
+A sub-function that controls the Quantum Composer timing unit. For the Relampago release the only functionality is to write, the read function does not work. When writing to the QC you may have to click through a couple pop ups in order to sucessfully set the state of the QC. 
+
+\subsection{Power Switches}\label{Sec:PowSwitchSubFunction}
+
+A sub-function that controls the power switches.
+
+\subsection{NetCDF}\label{Sec:NetCDFSubFunction}
+
+A sub-function that brings up the NetCDF writer for reprocessing of data files.
+
+
+
+
+
+\newpage 

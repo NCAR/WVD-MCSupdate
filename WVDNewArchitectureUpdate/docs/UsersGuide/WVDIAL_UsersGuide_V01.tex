@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Class %%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\documentclass{article} % use larger type; default would be 10pt
+\documentclass{report} % use larger type; default would be 10pt
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% PACKAGES TO USE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Page Style %%%%%
@@ -24,13 +24,13 @@
 \setlength{\bibsep}{0.0pt}                                	% used in combination with natbib to remove the extra spacing in the bibliography
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Water Vapor Dial Labview Software}
-\author{Robert Stillwell}    
+\title{Water Vapor Dial Users Guide}
+\author{Brad Schoenrock & Robert Stillwell}    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Setting the Footer %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}\lhead{} \chead{} \rhead{}
-\lfoot{\sc Stillwell} \cfoot{\normalsize \thepage\ of \pageref{LastPage}} \rfoot{\sc WV DIAL Labview}
+\lfoot{\sc Schoenrock/Stillwell} \cfoot{\normalsize \thepage\ of \pageref{LastPage}} \rfoot{\sc WV DIAL Labview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Begin Title Page %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}                    
 \begin{center}
@@ -40,7 +40,6 @@
 {\sc \Large Robert Stillwell\\}
 \vspace{0.5in}
 {\large NCAR
-\\Advanced Study Program
 \\ \today}
 \end{center}
 \vspace{0.5in}
@@ -58,18 +57,17 @@
 
 \input{Acronyms.tex}
 
-\input{Nomenclature.tex}
+\input{Codebase.tex}
 
-\input{Design.tex}
+\input{Configure.tex}
 
-\input{RawDataOutput.tex}
+\input{GettingStarted.tex}
 
-\input{RawDataInput.tex}
+\input{Functionality.tex}
 
-\input{KnownIssues.tex}
+\input{MainOps.tex}
 
-\input{LabviewDetails.tex}
-
+\input{DataOutput.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Ending document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
