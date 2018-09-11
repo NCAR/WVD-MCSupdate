@@ -27,72 +27,13 @@ To accomplish these goals, the following concept is proposed. Small individual p
 
 This creates a 3 tiered structure: 1) Main function that opens sub-functions, 2) sub-functions that organize and manage children, and 3) children that actually set and control the state of each individual hardware piece. This creates a natural hierarchy that is predefined. New users unfamiliar with the operation of WV DIAL do not need to know how to control each piece individually but rather are guided through operation. Testing new hardware does not require complete integration with an all in one solution like is currently available, but can be built and tested independantly of the operations of the rest of the DIAL unit. This isolation creates fault tolerance because if one child fails, others are not waiting on that task and data collection for other children can continue unimpeded. Finally, knowledge of the hardware configuration is only needed at the higher levels (the main function and sub-functions) and can be more easily defined than a single all in one program. 
 
-\section{Individual Element Controls}
-The proposed software update parses the main hardware control function into sub-functions. The sub-functions for individual controls are:
 
-\begin{enumerate}
-\item{MCS}
-\item{Weather Station}
-\item{Laser Locking}
-\item{Housekeeping}
-\item{UPS}
-\item{HSRL Oven}
-\item{Wavemeter}
-\item{Thor 8000}
-\item{Quantum Composer}
-\item{Power Switches}
-\item{NetCDF}
-\end{enumerate}
-
-\subsection{MCS}\label{Sec:MCSSubFunction}
-
-A sub-function that brings up two children. One does the communications via UDP to read the MCS, while the other is a set of controls to change the state of the MCS. These were split into two functions in order to prioritize the UDP communication so photon counting data was always running without interuption, and so that while the child was reading the UDP port the controls would continue to feel responsive. In a previous version of the MCS software putting the UDP communications in the same VI as the controls would lead to delays in the responsivness of the front panel due to the translation from a series of controls into a 32 bit hex word and back that was needed for MCS communications. 
-
-\subsection{Weather Station}\label{Sec:WSSubFunction}
-
-A sub-function that brings up the weather station child to monitor surface level temperature, pressure, relative humidity, and absolute humidity. 
-
-\subsection{Laser Locking}\label{Sec:LLSubFunction}
-
-A sub-function that brings up the laser locking routines that controls laser wavelengths and the etalons. 
-
-\subsection{Housekeeping}\label{Sec:HousekeepingSubFunction}
-
-A sub-function that brings up one child whose responsibility is to relay information about the temperature of the container. Thermocouples are placed within the container in various positions (which can be specified for writing into the data in the Configure\_WVDIALPythonNetCDFHeader.txt) primarily to help ensure that the climate control for the unit is functioning properly. 
-
-\subsection{UPS}\label{Sec:UPSSubFunction}
-
-A sub-function that calls the UPS child to monitor the state of the UPS Battery and power to the unit. 
-
-\subsection{HSRL Oven}\label{Sec:HSRLOvenSubFunction}
-
-A sub-function that ....
-
-\subsection{Wavemeter}\label{Sec:WavemeterSubFunction}
-
-A sub-function that ....
-
-\subsection{Thor 8000}\label{Sec:T8000SubFunction}
-
-A sub-function that ....
-
-\subsection{Quantum Composer}\label{Sec:QCSubFunction}
-
-A sub-function that ....
-
-\subsection{Power Switches}\label{Sec:PowSwitchSubFunction}
-
-A sub-function that ....
-
-\subsection{NetCDF}\label{Sec:NetCDFSubFunction}
-
-A sub-function that ....
 
 
 
 \section{Back Panel Design}\label{Sec:BPDesign}
 
-A template was made to standardize all labview control for WV DIAL. The design is to use queues to execute commands. This allows for an intentional bottleneck of execution such that user and automatically generated commands can not be executed out of order and there are a minimum of changes that need to be made to accommodate new hardware. The automatically generated and user generated commands are in the form of a string that is delimitated by an ``\_". The main loop cases are:
+A template was made to standardize all labview control for WV DIAL. The design is to use queues to execute commands. This allows for an intentional bottleneck of execution such that user and automatically generated commands can not be executed out of order and there are a minimum of changes that need to be made to accommodate new hardware. The automatically generated and user generated commands are in the form of a string that is delimitated by an underscore. The main loop cases are:
 \begin{enumerate}
 \item{Configure}
 \begin{enumerate}
@@ -129,7 +70,7 @@ A template was made to standardize all labview control for WV DIAL. The design i
 \end{enumerate}
 
 
-\begin{figure}[!h]\centering
+\begin{figure}[!ht]\centering
 \includegraphics[height=3in]{Figures/MainVITemplateBackPanel}
 \caption{A picture of the idle loop stage of the VI template child.}
 \label{Fig:VITemplateBP}
@@ -149,18 +90,20 @@ The multiple function concept requires one functional distinction. One concept i
 
 A template for the individual control elements is given in Figure \ref{Fig:VITemplate}. There are 3 main boxes, the first is in the top left (labeled as ``Place Commands Here") for all of the user controls and everything the user needs to see. This will be different for each control. Within that box is a smaller box that would be the same for all controls that help locate the current status of the queue. The second box directly below would appear if the control were running as a stand alone but be hidden if the control were running as child. This really only needs to be in one place and is constant for all functions. The final box to the right is always hidden but is the storage place for all hidden variables that need to be defined but that the user does not need to see. 
 
-\begin{figure}[!h]\centering
+\begin{figure}[!ht]\centering
 \includegraphics[height=3in]{Figures/MainVITemplate}
 \caption{The front panel of the main VI template. The software at runtime will hide the unnecessary controls and shrink the front panel window the the appropriate size indicated by the outer boxes. If the VI is run as a child (called from a higher VI) the Global Buttons disappear. }\label{Fig:VITemplate}
 \end{figure}
 
-This standardization is not critical for running all VIs as stand alone, however, the solution for running all the VIs as children in parallel does. 
+Each child is stored in its own library. They are WeatherStation.llb, WavelengthLocking.llb, QuantCompControl.llb, NetCDFWriter.llb, MCS\_NCAR.llb, MCSControls\_NCAR.llb, Logbook.llb, IndividualChildControl.llb, and AdvancedVis.llb. WVDIAL\_Main.vi is the definition of the main container and the main VI to start the software. The library ContainerResources.llb is used to support the main contianer. Futhermore there are some VI's which are useful to more than one child and are stored in SharedResorces.llb. Some LabView objects are complex and need to be passed through several VIs, so type definitions are used to communicate the structure of those complex structures. Those TypeDefs are stored in TypeDefinitions.llb. 
+
+This standardization via the template is not critical for running all VIs as stand alone, however, the solution for running all the VIs as children in parallel does. 
 
 \subsection{Run as Child}
 
 For the case that these individual controls are to be run automatically in parallel, an organizational problem arises. Assuming the code running the individual controls as children knows what functions to open and in what order, it is still possible that a user accidentally closes one function or a mess of VIs appears. To solve this, all front panels of the VIs running are projected into a single container seperated by a tabular control. The container itself has very little code running but is just there to contain all of the sub-VIs. This container is shown in Figure \ref{Fig:VIContainer}.
 
-\begin{figure}[!h]\centering
+\begin{figure}[!ht]\centering
 \includegraphics[height=3in]{Figures/MainVIContainer}
 \caption{The front panel of the main VI container. If multiple VIs are called and run simultaneously, their front panels are projected into the main container to allow for a simple control for the user but also allows maximum flexibility in VI execution.}\label{Fig:VIContainer}
 \end{figure}
@@ -170,7 +113,7 @@ In this case, the controls that are common to all VIs, in the bottom box of Figu
 \subsection{Configure Files}
 Instead of using default variables in Labview, the default configuration for each sub-program will be stored in a configuration file. This ensures that operational hardware configurations are decoupled from any software upgrades or changes. Additionally, it makes it always possible to return the software to a known pre-set operational state and makes it more difficult for users to unknowingly modify the hardware's initial state. The configure files are version controlled via Git to track changes over time. An example of a configure file is given in Figure \ref{Fig:ConfigureFile}. 
 
-\begin{figure}[!h]\centering
+\begin{figure}[!ht]\centering
 \includegraphics[height=3in]{Figures/ConfigureFileExample}
 \caption{An example of the structure of a configure file. Variables are identified by a single name followed by two semi-colons. The next line has the required values delimitated by a single semi-colon with the end of line denoted by a double semi-colon.}\label{Fig:ConfigureFile}
 \end{figure}
@@ -191,10 +134,85 @@ One of the unfortunate features of labview occurs when trying to modify the cont
 
 This type definition is widely used for controls. It requires an extra step to make the definition then load it into the program much like defining a global variable but it makes updating and maintaining the code simpler and cleaner. 
 
+
+
+
+
+
+\section{Children}\label{Sec:Children}
+
+Each child was created to seperate and isolate funcitonality. These children were built based off of the template, but several differ from that design for specific reasons. Listed below are descriptions of how the children used for main data collection differ from the template design. 
+
+WeatherStation.llb contains files needed for operation of the weather station. It is perhaps the simplist of all the children and simply sticks to the design of the template to do so.  
+
+MCS\_NCAR.llb and MCSControls\_NCAR.llb when taken together form the data acquasition system and controls for the MCS. Because of the timing sensitivity and mission critical nature of the photon counting data, the MCS\_NCAR child has an additional loop whose sole responsibility is to monitor the UDP port communications and never allow itself to get interupted from that goal. This means it has an additional UDP loop thread dedicated to monitoring the UDP port which is seperated from the normal idle loop. Furthermore MCSControls\_NCAR is used to seperate the controls from the hardware communication a layer further, so as to add an extra layer of safty to ensure that users fiddling with controls may be isolated from the reading of the UDP port. To this end any failure in the MCSControls will not interupt the collection of photon counting data. 
+
+WavelengthLocking.llb ********** - Robert will have to fill this one in more detail, as he wrote this and will have more insight into its operations - **********
+
+AdvancedVis.llb seems at first to be straightforward. It pulls information from the MCS, the weather station, etc... in order to display composite data fields. This communication method however must remain true to the goals of isolating functionality and ensure that any failures in one child do not leak through to others. The way we do this (which is also done between MCS\_NCAR and MCSControls\_NCAR) is to establish queue communications where a child may add instructions onto the queue of another child. This requires the name of the queue in order to add to it, and as such the names of the queues should not be changed in order to maintain these avenues of communication. Advanced visualization gathers data from several sources so this method of communication is quite useful in this case. 
+
+IndividualChildControl.llb contains both the housekeeping child and the UPS child. Both of these children stick to the design of the original template quite closely. The UPS does, however, have routines for sending email messages in the case of loss of power to the unit so power outages can be addressed as quickly as possible. 
+
+NetCDFWriter.llb acts as a data compiler. It takes the raw txt and bin files written by each of the other data writing children and converts them into raw NetCDF files and finally into the final data product which is a merged CFRadial file. LabView does not have the capabilities to write NetCDF files directly, so for this purpose a python subroutine is called in order to deliver the final data products. These data products are described in Chapter~\ref{CH-Data}.
+
+
+
+
+\section{Individual Element Controls}
+The proposed software update parses the main hardware control function into sub-functions. These sub-functions serve to control individual elements of the WVDIAL, serve as simplified routines to warm up elements of the WVDIAL, or are to test out specific functionality in isolation of the rest of the unit. 
+
+\subsection{MCS}\label{Sec:MCSSubFunction}
+
+A sub-function that brings up two children. One does the communications via UDP to read the MCS, while the other is a set of controls to change the state of the MCS. These were split into two functions in order to prioritize the UDP communication so photon counting data was always running without interuption, and so that while the child was reading the UDP port the controls would continue to feel responsive. In a previous version of the MCS software putting the UDP communications in the same VI as the controls would lead to delays in the responsivness of the front panel due to the translation from a series of controls into a 32 bit hex word and back that was needed for MCS communications. 
+
+\subsection{Weather Station}\label{Sec:WSSubFunction}
+
+A sub-function that brings up the weather station child to monitor surface level temperature, pressure, relative humidity, and absolute humidity. 
+
+\subsection{Laser Locking}\label{Sec:LLSubFunction}
+
+A sub-function that brings up the laser locking routines that controls laser wavelengths and the etalons. 
+
+\subsection{Housekeeping}\label{Sec:HousekeepingSubFunction}
+
+A sub-function that brings up one child whose responsibility is to relay information about the temperature of the container. Thermocouples are placed within the container in various positions which can be specified for writing into the data in the Configure\_WVDIALPythonNetCDFHeader.txt. This is primarily to help ensure that the climate control for the unit is functioning properly. 
+
+\subsection{UPS}\label{Sec:UPSSubFunction}
+
+A sub-function that calls the UPS child to monitor the state of the UPS Battery and power to the unit. The UPS child has a subroutine to automatically send out an email when the UPS Battery gets too low. 
+
+\subsection{HSRL Oven}\label{Sec:HSRLOvenSubFunction}
+
+A sub-function that warms up the HSRL. This is not currently built, but the button on the front panel is there for the addition of the feature in the future. 
+
+\subsection{Wavemeter}\label{Sec:WavemeterSubFunction}
+
+A sub-function that brings up the wavemeter to read the wavelengths of the lasers. 
+
+\subsection{Thor 8000}\label{Sec:T8000SubFunction}
+
+A sub-function that controls the Thor 8000 laser diode current control module. 
+
+\subsection{Quantum Composer}\label{Sec:QCSubFunction}
+
+A sub-function that controls the Quantum Composer timing unit. For the Relampago release the only functionality is to write, the read function does not work. When writing to the QC you may have to click through a couple pop ups in order to sucessfully set the state of the QC. 
+
+\subsection{Power Switches}\label{Sec:PowSwitchSubFunction}
+
+A sub-function that controls the power switches.
+
+\subsection{NetCDF}\label{Sec:NetCDFSubFunction}
+
+A sub-function that brings up the NetCDF writer for reprocessing of data files.
+
+
+
+
+
 \section{Sub-Functions and Calling}
 
-All of the individual controls are collected into a single container to run more complicated tasks. For example, the main operation of WV DIAL at full capability would require simultaneous control of the MCS, weather station, laser locking, etc.... The labview code would simply run the 6 individual controls responsible for each of these tasks and store them in a single container. 
+All of the individual controls are collected into a single container to run more complicated tasks. For example, the main operation of WV DIAL at full capability would require simultaneous control of the MCS, weather station, laser locking, etc.... The labview code runs the children responsible for each of these tasks and stores them in a single container. 
 
-If a single VI fails, the other sub-functions are not affected by it. Its data would be missing from the global data however. For example, if the weather station communication failed, that data would be missing but it is not completely critical to have at all times. When its service could be restored, its data stream would be restored without interuption of other services. Details of how that data appears is outlined in Chapter~\ref{CH-DATA}.
+If a single VI fails, the other sub-functions are not affected by it. Its data would, however, be missing from the final data product. For example, if the weather station communication failed, that data would be missing but it is not mission critical to have at all times. When its service could be restored, the weather station data stream would be restored without interuption of other services. Details of how that data appears is outlined in Chapter~\ref{CH-Data}.
 
 \newpage 

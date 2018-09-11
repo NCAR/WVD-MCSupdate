@@ -1,10 +1,9 @@
 
-\chapter{Other}
+\chapter{Other Labview Details}
 \label{CH-Other}
 
-\section{Other Labview Details}
-\subsection{Front Panel}
-\subsection{Back Panel}
+\section{Front Panel}
+\section{Back Panel}
 
 It is easy to forget the Labview standard back panel color coding scheme so It is included here for reference in Table~\ref{Table:BPColorCoding}. 
 
@@ -35,12 +34,12 @@ Purple	& Hardware Resource					& \includegraphics[height=0.2in]{Figures/ColorCod
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Priority Settings}
+\section{Priority Settings}
 Because the main structure of the software is based around queues, it is possible to remove elements from a queue before they are executed, put things on top of the queue in front of other commands, or put things at the bottom. Additionally, for performing commands that occur in steps, the queue is an ideal solution for organizing commands. Each of these possibilities is governed by a priority setting. For normal operation, the string commands are added to the bottom of the queue. If that queue is full or has several items in it, a standard command will not take precedent over other commands. The user abort command, for instance, has first priority. This command flushes the queue of current commands and inserts the set of commands to shut the system down.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Password Settings} \label{Sec:Password}
+\section{Password Settings} \label{Sec:Password}
 
 NOTE: This functionality has not been built upon for Relampago, but the back end is in place for it to be added when desired. All commands are currently set up as accessable to all levels of user. 
 

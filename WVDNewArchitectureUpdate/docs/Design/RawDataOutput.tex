@@ -5,113 +5,52 @@
 \section{Raw Data Output}
 \label{Sec-DATAOutput}
 
-\subsection{Raw File Naming Convention}
- A naming convention for the files written is proposed as:
+Within the codebase is a location for data storage, the directory is called Data. Each child that writes data has a subdirectory, MCS for the MCS, Housekeeping for the thermocouples, UPS for the UPS, etc.... Within these subdirectories are daily subdirectories in the format YYYYMMDD, and within these daily directories are the data files broken up by hour. Within the MCS daily directories, as an example, are MCSData files with names formatted as MCSData\_YYYYMMDD\_HHHHHH.bin and MCSPower files with names formatted as MCSPower\_YYYYMMDD\_HHHHHH.bin. The hour formatting of these names is in fractional hours in UTC, so a time of 015000 would be 1.5 hours into the UTC day and would be a file that began at 1:30 UTC. 
 
-\begin{enumerate}
-\item{MCS Data: NCARWVDIAL\#\#\#\_MCS\_YYYYMMDD\_HHMMSS.cdf where \#\#\# is the number of the instrument, YYYYMMDD is the year, month and day of the file creation, and HHMMSS is the hour, minute, and second of file creation.}
-\item{Weather Station Data: NCARWVDIAL\#\#\#\_WeatherStation\_YYYYMMDD\_HHMMSS.cdf where \#\#\# is the number of the instrument, YYYYMMDD is the year, month and day of the file creation, and HHMMSS is the hour, minute, and second of file creation.}
-\item{Transmitter Housekeeping Data: NCARWVDIAL\#\#\#\_HousekeepingTx\_YYYYMMDD\_HHMMSS.cdf where \#\#\# is the number of the instrument, YYYYMMDD is the year, month and day of the file creation, and HHMMSS is the hour, minute, and second of file creation.}
-\item{Receiver Housekeeping Data: NCARWVDIAL\#\#\#\_HousekeepingRx\_YYYYMMDD\_HHMMSS.cdf where \#\#\# is the number of the instrument, YYYYMMDD is the year, month and day of the file creation, and HHMMSS is the hour, minute, and second of file creation.}
-\end{enumerate}
+The MCS files are stored in binary format in order to save space, and are a log of the hex responses from the MCS with a header for each entry that contains the timestamp as well as channel assignments that were set in LabView. These are decoded by the python routines stored in the NetCDFPython directory and is automatically called by the NetCDF child when data is collected via main operations. The format for each data entry is - bytes 0-8 stores the timestamp, bytes 28-96 store channel assignments, bytes 111-112 stores the number of profiles per histogram, byte 114 stores the channel number and the sync bit from the MCS, bytes 115-116 store the number of counts per bin, bytes 117-118 store the number of bins, bytes 119-121 store the relative time, byte 122 stores the frame counter, and then each bin is read from 4 byte blocks for nBins. The first three bytes of each bin is the photon counting information, while the 4th byte contains the channel number and the sync bit for that transmission. Once all nBins have been read there will be a 4 byte footer word ``ffff'' and 8 bytes of space for dilimination to the next data transmission. Some seemingly unused bytes exist in the header, those are either to help deliminate information when visually inspecting the files, or are unused bytes of the MCS header. 
 
-\subsection{Main Data Product Changes}
+MCS Power files share a similar but simpler structure to the MCS data files. Bytes 0-8 store the timestamp, bytes 23-67 store the channel assignments, bytes 82-85 store the relative time, and each channel power is stored in 4 byte increments, with the first three bytes being the power measurement and the fourth byte containing metadata on the returns. Again seemingly unused bytes are used to help deliminate information when inspecting the files or are unused bytes of the MCS header. 
 
-The main changes from previous architecture and how those changes help accomplish design goals are listed below.
-\begin{enumerate}
-\item{NetCDF file types instead of binary files.}
-	\begin{enumerate}
-		\item{Pros:
-			\begin{enumerate}
-				\item{Expandable and customizable to different hardware configurations or improvements.}
-				\item{Can be easily converted to have outputs to mirror the GV HSRL or in CFRadial format.}
-				\item{Can be easily read and understood by non-NCAR personnel lacking knowledge of binary format.}
-				\end{enumerate}
-		}
-		\item{Cons:
-			\begin{enumerate}
-				\item{Requires a change to the post processing ingest code.}
-				\item{As far as I can tell, only allows for a single unlimited variable making it not possible to stream data at different cadences to the same file efficiently.}
-				\end{enumerate}
-		}
-	\end{enumerate}
-\item{Multiple files containing data instead of a single file per hour. The plan is to split the hourly files into a file containing: all photon counts and power measurements (measurements from the MCS), weather station data, laser housekeeping and locking data, and receiver housekeeping data. Additionally, on restart, a new netCDF file will be created instead of reopening the current hour's file.}
-	\begin{enumerate}
-		\item{Pros:
-			\begin{enumerate}
-				\item{Data for WV DIAL can be taken at different cadences. Though the current architecture can accommodate all data being taken at the same cadence, it is not necessary. There is no physical reason to take weather station data at 2 second resolution for example. By allowing multiple files, data can be taken at physically meaningful resolution and recombined in post processing.}
-				\item{Shrinks data files: Removing the requirement to take data at the same resolution removes redundant measurements.}
-				\item{Data transfer flexibility: Over limited data transfer links, such as a cell modem or at bandwidth limited sites, the most critical data can be identified and transferred while still saving all data for post processing.}
-				\item{Hardware changes or major changes requiring Labview shutdown can be easily tracked by file header information.}
-			\end{enumerate}
-		}
-		\item{Cons:
-			\begin{enumerate}
-				\item{Data requires recombination to a single time grid in post processing.}
-				\item{The proposed split may require multiple VIs talk to the same hardware. This will require an access check before writing commands to make sure that two commands are not sent simultaneously that confuses the hardware.}
-			\end{enumerate}
-		}
-	\end{enumerate}
-\item{Writing photon counting data at native resolution regardless of the state of the transmitter or receiver. This requires status bits being recorded instead of only recording data when all status bits indicate good data.}
-	\begin{enumerate}
-		\item{Pros:
-			\begin{enumerate}
-				\item{Data is not missed for one laser while other lasers are locking.}
-				\item{Data collection decoupled from all other data makes sure you are not loosing data for a reason other than MCS failure. For example, if the HSRL laser turns off, the system will be stuck trying to lock a laser it can't find. Meanwhile, WV data is lost that is not necessarily bad. }
-			\end{enumerate}
-		}
-		\item{Cons:
-			\begin{enumerate}
-				\item{Data file must now include status flags that were not needed before.}
-			\end{enumerate}
-		}
-	\end{enumerate}
-%\item{C}
-%	\begin{enumerate}
-%		\item{Pros:
-%			\begin{enumerate}
-%				\item{1.}
-%				\item{2.}
-%				\item{3.}
-%			\end{enumerate}
-%		}
-%		\item{Cons:
-%			\begin{enumerate}
-%				\item{1.}
-%				\item{2.}
-%			\end{enumerate}
-%		}
-%	\end{enumerate}
-\end{enumerate}
+Further information about the contents of the MCS header can be read either from the MakeChildFiles.py function within this codebase, or from the MCS design documentation. 
 
+Laser Locking data files are stored in a text format, with the collumns corresponding to Laser number, Wavelenth measured, Difference in wavelength from desired, a boolean 0 or 1 for if it is locked or not, the desired temperature, the measured temperature, the current, the timestamp, and a date. 
+
+Etalon data files are stored in a text format, with the collumns corresponding to Etalon number, Temperature, Temperature difference from desired temperature, a boolean 0 or 1 for if it is locked or not, a timestamp, and a date. 
+
+Weather Station data files are stored in a text format, with the collumns corresponding to Temperature, Relative Humidity, Pressure, Absolute Humidity, and a Timestamp. 
+
+UPS data files are stored in a text format, with the collumns corresponding to Timestamp, A boolean 0 or 1 for if the battery is behaving nominally, a boolean 0 or 1 for if the battery should be replaced, a boolean 0 or 1 for if the battery is in use, a boolean 0 or 1 for if the battery is low, a percentile number for battery capacity, an estimate for how much time is left for battery operations in fractional hours, the temperature of the UPS, and the number of continuous hours it has been on battery. 
+
+Housekeeping data files are stored in a text format, with the collumns corresponding to a timestamp, and then an entry for each thermocouple. The file will have as many collumns as there are thermocouples plus one collumn for the timestamp which is the first collumn. Locations of the thermocouples can be recorded into the final data products by creating an entry in the config file Configure\_WVDIALPythonNetCDFHeader.txt. Entries for this purpose should be formatted as thermocouple\_location\_\# followed by a description for the location. This config file is tab delimited. 
+
+The txt and bin files are the first and rawest form of data available. As long as you have these files the rest can be derived from them. The txt and bin files are then processed by the NetCDF child via some python scripts on board the WVDIAL unit's MFF computer. The main python script is NetCDFScript.py which sets up the needed variables and calls each of the other python scripts to perform specific functions. 
+
+\subsection{Raw NetCDF Child Files}
+
+The function MakeChildFiles.py is used to translate these misc. txt and bin files into a common NetCDF format. NetCDF4 was chosen for this purpose. This function translates the data files as they were written and performs no mainpulation on that data in order to present it in its raw form straight off the hardware in an easier to read format. Each child file is written on its own native timeseries in order to represent the caidance the data was actually collected on. This means that the MCSPower data (to pick an example) is interwoven data from all channels, and that in order to look at just WVOffline power (to pick another example) you have to do some translation using the provided ChannelAssignment variable to pick out just the power of the WVOffline that you might be looking for. This requires some processing on the users part, but if raw hardware returns or time resolution and averaging etc... are what you are looking for then that is a nessecity. If such details are not desired then the simpler merged data product can be examined instead. 
+
+\subsection{Main CFRadial Merged Data Product}
+
+The function MakeMergedFiles.py reads in the raw NetCDF files created by MakeChildFiles.py and writes out merged CFRadial files. In these files all data products are merged onto one common timegrid which is defined by photon counting data. When photon counting data is present merged files will be created with start and end times that correspond to the start and end times of the photon counting data. For gaps in the photon counting data, merged files are made which function on a default 1/2 Hz timegrid. The presence or non-presence of photon counting data defines the creation of files and the creation of the master timestamps that all data products are put on. 
+
+Most data products are taken less frequently than photon counting data, so to push them onto the same time grid we perfom an interpolation. The Weather Station (WS) as an example is taken at 1/10Hz. To do this we need to ensure that we have WS data from before the first photon counting data in a file which nessecitates investigation into the WS file before the times that are seemingly nessiary, as well as the WS file after. We load these products from the previous and next files in order to avoid extrapolation while filling the first and last few entries in data files. 
+
+Power monitoring is taken at a faster caidance (10Hz) than photon counting data. To better reflect the power monitoring data onto the common timegrid an average of the power data is considered. All power returns that came in between the nth data return and the n+1 data return are considered, an average is calculated, and that average is assigned to the n+1 data return. 
+
+Once these interpolations are completed we apply CFRadial formatting to the file, ensuring all relevent dimentions and variables exist, and adding any additional descriptions to objects. 
+
+The merged files are designed to be made under varied conditions, that is if one or many subsystems fail the rest of the available data will be compiled into a merged file. This means that merged files can be created without data from the weather station, or considerably more dramatically, without photon counting data. 
+
+\subsection{Data Backups}
+
+SyncBackup.py is the last script called by NetCDFScript.py. As a one line script it seems unassuming but it is doing something far tricker than might first appear. The one line is telling the computer to RSync our data from the Data directory embedded within the codebase to a backup location specified in the NetCDF writers config file. The location of that backup is intended to be an external hard drive. RSync is a linux utility, and in order to be able to call it from our windows environment at all the CWRsync utility must be installed, and the Data directory embedded within the codebase needs to be set up as an RSync server with that utility. On top of the fact that we are forcing a linux utility to work on windows RSync is not capable of sending information from a remote server (which CWRsync is doing in order to find the data at all) to another remoter server (which the external hard drive qualifies as according to windows). In order to get around this we need to change directories to the external hard drive, perform the RSync from there, and change directories back. This is handled within the NetCDFScript.py script. 
+
+Note: As of the time of writing this documentation DIAL2's computer (cuttlefish) was our development machine and as such does not conform to the standards that were outlined in the instalation procedures stored in the WVDIAL shared google drive. It is reccomended that cuttlefish be presented to IT for wiping and reinstallation of windows in order to conform to the other DIAL MFF computers. Until that is done DIAL2's NetCDFScript.py will need to differ from the git repo on line 111 to reflect the fact that cuttlefish's user has a different name. 
+
+\subsection{Eldora}
+
+For the Relampago deployment data is also collected on Eldora. A series of cronjobs are set up to RSync the merged files as well as Error and Warning files from the DIAL unit to Eldora for processing and display on the field catalog. As of the time of writing this document the processing of data for the field catalog has been completed, but there are still problems with the RSync pulling data from the field causing the RSync to spontaniously fail, and the alert scripts are not yet set up to look for files that do not start exactly on the hour in case the unit is restarted for any reason. The alert scripts are also not set up to look for the presence of Error or Warning files which are being transfered from the DIAL unit to alert of problems. The mere presence of growing data files is not sufficient to alert of failures in operations. Because the merged files are set up to make as many data products available as possible even in the face of sub-system failure, if a sub-system fails the current alert scripts on eldora are insuficiant to alert the responsible monitor for field deployment. 
+
+*** Robert will have to add more details on the Matlab processing of the merged files into images for the field catalog *** 
 
 \newpage
-
-
-
-
-\section{Raw Data Ingest and Mating with Python Scripts}
-
-
-Steps of unpacking a single day of data:
-\begin{enumerate}
-	\item{Loop over hourly folders (I prefer to dump all data into a single daily directory but that is a convenience not a necessity)}
-	\begin{enumerate}
-		\item{Loop over hourly file types (more that one of each type can be written if the labview is started more than once in a single hour or restarted)}
-			\begin{enumerate}
-				\item{Check if particular file contains data (by checking for zero-valued dimensions)}
-				\item{Loading raw photon count data}
-				\item{Loading laser housekeeping data}
-				\item{Loading weather station data}
-				\item{Loading the operational parameters of the system and time stamps for each file type}
-			\end{enumerate}
-		\item{Interpolate slower data to highest cadence data (likely housekeeping and weather station data to photon count time grid)}
-		\item{Collect all data into a single daily file with a single time dimension}
-		\item{Fill in missing data in time (if any time gaps exist) with nan values}
-		\item{Combine laser locking, receiver temperature, and all other data flags and create a single quality control flag: (Use Data, Data Warning, or Don't Use)}
-	\end{enumerate}
-\end{enumerate}
-
-
-\newpage
-

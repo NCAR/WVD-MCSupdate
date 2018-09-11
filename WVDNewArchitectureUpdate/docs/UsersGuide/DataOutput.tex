@@ -1,0 +1,16 @@
+
+\chapter{Data}
+\label{CH-Data}
+
+Data is saved in three locations, in the Data directory embedded within the software, on an external hard drive conneted to the DIAL unit, and on Eldora. The Data directory has several directories containing data in various stages. The final form of the data is the merged CFRadial files which is in the Data/CFRadialOutput directory, more on those below. Raw data is stored in two forms, NetCDFOutput which contains raw data in a NetCDF format, and in either binary or text format (child dependant) which is stored in seperate directories for each child. The merged CFRadial files should be the files you are interfacing with by default, but if for some reason those were not able to be written don't panic. As long as the binary and text files are being written then you have your data, and raw NetCDF files as well as the merged CFRadial files can be re-processed after the fact if nessicary. Raw NetCDF files are derived from the binary and text files, and merged CFRadial files are derived from the raw NetCDF files. 
+
+\section{Merged Data Output}
+\label{Sec-DATAOutput}
+
+Merged files can be checked with a quick print script which is located in tempShare. That function is NetCDFQuickPrint.py. It can be called from the command line as - 
+
+python NetCDFQuickPrint.py <pathToMergedFile>MergedFiles130000.nc WVOffline
+
+Once you get the path to the merged file correct you can pick a data product that you want to plot. The options are (if they are present in the file) [WVOnline, WVOffline, HSRLCombined, HSRLMolecular, O2Online, O2Offline]. For Relampago there is no HSRL or O2 lasers so those selections are expected to error out if you are using this quick print script. Before it errors out it should show you the variables and dimentions so you can get an idea of what is in the file. The option of what to plot is currently limited to a photon counting selection, but hopefully this example script allows you to start reading the merged CFRadial files in python. 
+
+When attempting to read these files in with Matlab, be sure to use the hdf5read functionality instead of the ncread functionality. This is a consequence of having chosen NetCDF4 as the format of the files and Matlab's interaction with NetCDF4's chosen string formatting. This is a known bug that has been submitted to Matlab, it is unknown when it will be addressed. Example Matlab code to read in these files is on Eldora. 

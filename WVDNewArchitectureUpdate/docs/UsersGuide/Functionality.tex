@@ -1,0 +1,63 @@
+
+\chapter{Functionality}
+\label{CH-Functions}
+
+These are the things you can do with the software, represented by buttons in the main container. The operational modes that are called by the buttons on the main panel are:
+
+\begin{enumerate}
+\item{Warm up sub-function that brings all hardware to operational status. This includes things like warming the lasers and warming the etalons, which needs to be done before high quality data can be taken.}
+\item{Main operations sub-function that performs all the mission critical hardware communication during data collection. This is discussed further in Chapter~\ref{CH-Ops}}
+\item{A template sub function which brings up an empty child with minimal functionality.}
+\item{Switches sub-function which tests our ability to control the switches.}
+\item{Temp. Scan sub-function which sweeps through temperatures to test the lasers.}
+\item{Testing sub-functions for individusal controls to check operational status of hardware pieces such as the wavemeter (laser locking), the MCS operation, or the weather station.}
+\end{enumerate}
+
+\section{Individual Element Controls}
+The proposed software update parses the main hardware control function into sub-functions. These sub-functions serve to control individual elements of the WVDIAL, serve as simplified routines to warm up elements of the WVDIAL, or are to test out specific functionality in isolation of the rest of the unit. 
+
+\subsection{MCS}\label{Sec:MCSSubFunction}
+
+A sub-function that brings up two children. One does the communications via UDP to read the MCS, while the other is a set of controls to change the state of the MCS. These two functions are open in different tabs to seperate functionality. The first has three tabs, one to monitor photon counting returns, one to monitor power, and one that holds other controls for the software. In the other controls there are clusters for inputing where each return is plugged into the MCS, as well as readouts for other MCS related communications. In the Photon Counting tab there are controls for Channel and a Channel multiplier. This is used to scale up the display of one channel for comparison to other channels. This multiplicative factor only affects the display. The Channel selection here corresponds to the data channel cluster in the third tab. The tab which contains the MCSControls itself has four tabs, as the NCAR MCS has many settings. They are broken up by functionality as photon counting, power monitoring, other controls, and status readouts. 
+
+\subsection{Weather Station}\label{Sec:WSSubFunction}
+
+A sub-function that brings up the weather station child to monitor surface level temperature, pressure, relative humidity, and absolute humidity. There are controls here for update period and the com channel for the device. 
+
+\subsection{Laser Locking}\label{Sec:LLSubFunction}
+
+A sub-function that brings up the laser locking routines that controls laser wavelengths and the etalons. It has four tabs, one for controls, one for readouts, one for readouts of the data saving routines, and one for display of data collected. 
+
+\subsection{Housekeeping}\label{Sec:HousekeepingSubFunction}
+
+A sub-function that brings up one child whose responsibility is to relay information about the temperature of the container. Thermocouples are placed within the container in various positions which can be specified for writing into the data in the Configure\_WVDIALPythonNetCDFHeader.txt. This is primarily to help ensure that the climate control for the unit is functioning properly. There are controls for update period, the number of thermocouples attached to the unit, and for the ethernet communications information. 
+
+\subsection{UPS}\label{Sec:UPSSubFunction}
+
+A sub-function that calls the UPS child to monitor the state of the UPS Battery and power to the unit. The UPS child has a subroutine to automatically send out an email when the UPS Battery gets too low. There are controls for update period, how low the battery is allowed to get before shutting down or sending a warning email, and for the ethernet communications information. 
+
+\subsection{HSRL Oven}\label{Sec:HSRLOvenSubFunction}
+
+A sub-function that warms up the HSRL. This is not currently built, but the button on the front panel is there for the addition of the feature in the future. 
+
+\subsection{Wavemeter}\label{Sec:WavemeterSubFunction}
+
+A sub-function that brings up the wavemeter to read the wavelengths of the lasers. There are controls for update period, and for the ethernet communications information. 
+
+\subsection{Thor 8000}\label{Sec:T8000SubFunction}
+
+A sub-function that controls the Thor 8000 laser diode current control module. 
+
+\subsection{Quantum Composer}\label{Sec:QCSubFunction}
+
+A sub-function that controls the Quantum Composer timing unit. For the Relampago release the only functionality is to write, there is no read function. When writing to the QC you may have to click through a couple error pop ups in order to sucessfully set the state of the QC. As long as the Setting State light at the bottom of the display, then the state of the quantum composer was set. The controls for System Parameters and Channel Parameters are not set via config file, and this functionality is more advanced, so set the Quantum Composer with care. 
+
+\subsection{Power Switches}\label{Sec:PowSwitchSubFunction}
+
+A sub-function that controls the power switches.
+
+\subsection{NetCDF}\label{Sec:NetCDFSubFunction}
+
+A sub-function that brings up the NetCDF writer for reprocessing of data files. There are two controls, one for how many hours to back process data (minimum of three) and an update period which is how often you want the system to process data. Make sure that the hours to back process is greater than the update period so you don't miss processing of data. The larger the number of hours to back process is then the longer the processing with take to run. As a conservitive estimate you can run 24 hours of data in less than 10 minutes. 
+
+\newpage 

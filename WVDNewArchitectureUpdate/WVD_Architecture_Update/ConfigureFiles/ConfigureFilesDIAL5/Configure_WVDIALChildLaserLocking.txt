@@ -1,0 +1,155 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the template in the Water Vapor DIAL Main labview program.
+
+### These settings just set the names of the tab controller so the user knows
+### what is contained in each large piece
+Outter Tab Names;;
+Wavelength Settings; Wavelength Status; Data Saving; Data Plotting;;
+
+### These settings just set the names of the inner tab controller so the user knows
+### what is contained in each large piece
+Inner Tab Names;;
+Laser Temperatures; Laser Wavelengths; Etalon Temperatures;;
+
+### These are miscilaneous settings needed for the laser locking program. They are:
+### the time between checks of the etalons in seconds, the number of data scans to 
+### keep and plot, whether to check the lasers or not (1 = yes and 0 = no) even if
+### they should not be locked, whether the program is running in software testing
+### mode or as standard (this option is currently not set up), and what type of switch
+### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details)
+Misc;; 
+15; 1000; 1; 0; 3;;
+
+### The type of laser that is being used. This corresponds to the typedefintion 
+### TypeDef_LaserTypes.ctl
+Laser Types;;
+0;1;;
+
+### The exact desired wavelengths of the lasers in nanometers
+Wavelength;;
+828.19800;828.29765;;
+
+### The exact tolerance allowed for locking...how far off can the lasers be before 
+### the locking program attempts to lock them...in nanometers
+Tolerance;;
+0.00005;0.00005;;
+
+### The desired starting temperature of the lasers, in degrees celcius
+Temperature;;
+24.257;22.151;;
+
+### The current that the diode controller should use, in milliamps
+Current;;
+130;130;;
+
+### This is currently not being used but these should be the proportional gain constants
+### for each laser to do locking via PID control
+P Gain;;
+0;1;;
+
+### This is currently not being used but these should be the integral gain constants
+### for each laser to do locking via PID control
+I Gain;;
+3;4;;
+
+### This is currently not being used but these should be the derivative gain constants
+### for each laser to do locking via PID control
+D Gain;;
+6;7;;
+
+### This is the current and only locking method for locking the laser. This is the 
+### temperature step size to take when trying to temperature tune the lasers in 
+### degrees celciuc
+Lock Step Size;;
+0.001;0.001;;
+
+### This is the maximum allowable time that a laser is allowed to try to lock itself 
+### before it times out, in seconds. 
+Time Limit;;
+30;30;;
+
+### This is a boolean operator to set whether the lasers should try to lock themselves
+### or just simply check their status (1 = yes lock and 0 = just check)
+Locking On;;
+1;1;;
+
+### This is a boolean operator to set whether the lasers should try to lock themselves 
+### usin ga single step or PID control method (1 = single step and 0 = PID)
+Locking Type;;
+1;1;;
+
+### This is an array describing how the lasers should try to lock themselves. These 
+### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
+### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
+### would check the first laser 4 times before checking the other. 
+Scan Strategy;;
+0;1;;
+
+### The type of etalonthat is being used. This corresponds to the typedefintion 
+### TypeDef_EtalonTypes.ctl
+Etalon Types;;
+0;;
+
+### The desired temperatures of the etalons in degrees celcius
+Etalon Temperature;;
+21.40;;
+
+### This is a boolean operator to tell the program whether to turn the TEC's on or off
+### (1 = on and 0 = off)
+Etalon TEC On;;
+1;;
+
+### File paths to the data storage and data logging locations and functions.
+File Paths;;
+.\Data\LaserLocking\;
+LaserLockingData;
+EtalonData;
+LaserLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+### This is the computer location to find the Thor 8000 box. If multiple boxes are
+### desired, there should be multiple locations. This is likely the GPIB port that the 
+### GPIB to USB cable is associated with.
+Thor8000 Locations;;
+GPIB0::10::INSTR;;
+
+### The type of control plugged into each slot in the Thor 8000 box. These numbers 
+### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
+### as a map between the local arrays to labview and the locations of the hardware.
+Thor8000 Slots;;
+2;3;0;1;10;13;13;13;;
+
+###0;1;2;3;6;7;8;9;;
+
+### The comm port that the wavemeter can be found at. For the future, this can change
+### to an IP address fairly easily. 
+Wavemeter Comm Port;;
+192.168.0.166;23;1000;122;1000;;
+
+### The temperature tolerance with which to scan the original temperature. For example
+### if the value is 1, the scan will run from the original temp +- 1 degree C
+Scan Limits;;
+1;1.01;;
+
+### The number of steps to take when scanning the laser or etalon
+Scan Steps;;
+10;10;;
+
+### Defining what you want to scan. The first number is the laser, the second number is
+### the etalon. This corresponds to the array element to scan. So 2;0;; would scan
+### laser 2 and etalon 0.
+Scan Definition;;
+0;0;;
+
+
+### Defining the name of the base name of the scan files
+Scan File Paths;;
+.\Data\LaserLocking\;
+TemperatureScan;
+LaserLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+
