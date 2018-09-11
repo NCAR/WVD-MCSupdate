@@ -18,7 +18,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures;;
 ### they should not be locked, and whether the program is running in software testing
 ### mode or as standard (this option is currently not set up)
 Misc;; 
-15; 1000; 1; 0;;
+15; 1000; 1; 0; 1;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
