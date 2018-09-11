@@ -18,29 +18,34 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures;;
 ### they should not be locked, and whether the program is running in software testing
 ### mode or as standard (this option is currently not set up)
 Misc;; 
-15; 1000; 1; 0;;
+15; 1000; 1; 0; 2;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
 Laser Types;;
 0;1;2;;
+### 0;1;2;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19504;828.29465;780.24612;;
+828.19800;828.29765;827.731;;
+### 828.19800;828.29765;780.24612;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
 Tolerance;;
 0.00005;0.00005;0.000075;;
+### 0.00005;0.00005;0.000075;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.545;30.923;16.135;;
+27.844;31.479;20.019;;
+### 27.604;30.732;18.205;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-160;160;160;;
+150;150;150;;
+### 160;160;160;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -62,28 +67,33 @@ D Gain;;
 ### degrees celciuc
 Lock Step Size;;
 0.001;0.001;0.001;;
+### 0.001;0.001;0.001;;
 
 ### This is the maximum allowable time that a laser is allowed to try to lock itself 
 ### before it times out, in seconds. 
 Time Limit;;
 30;30;30;;
+### 30;30;30;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
 1;1;1;;
+### 1;1;1;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
 Locking Type;;
 1;1;1;;
+### 1;1;1;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
 ### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
 ### would check the first laser 4 times before checking the other. 
 Scan Strategy;;
-0;1;2;;
+0;1;0;1;2;;
+### 0;1;0;1;2;;
 
 ### The type of etalonthat is being used. This corresponds to the typedefintion 
 ### TypeDef_EtalonTypes.ctl
@@ -92,7 +102,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-21.75;30.0;;
+21.5;30.0;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -125,28 +135,5 @@ Thor8000 Slots;;
 Wavemeter Comm Port;;
 192.168.0.166;23;1000;122;1000;;
 
-### The temperature tolerance with which to scan the original temperature. For example
-### if the value is 1, the scan will run from the original temp +- 1 degree C
-Scan Limits;;
-1;3;;
-
-### The number of steps to take when scanning the laser or etalon
-Scan Steps;;
-100;25;;
-
-### Defining what you want to scan. The first number is the laser, the second number is
-### the etalon. This corresponds to the array element to scan. So 2;0;; would scan
-### laser 2 and etalon 0.
-Scan Definition;;
-0;1;;
-
-
-### Defining the name of the base name of the scan files
-Scan File Paths;;
-.\Data\LaserLocking\;
-TemperatureScan;
-LaserLogging;
-.\ContainerResources.llb\Log_SetUserComment.vi;
-.\ContainerResources.llb\Idle_Password.vi;;
 
 
