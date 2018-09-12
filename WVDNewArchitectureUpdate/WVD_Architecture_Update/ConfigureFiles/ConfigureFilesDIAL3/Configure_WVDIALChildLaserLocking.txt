@@ -118,7 +118,7 @@ GPIB0::10::INSTR;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-1;0;3;2;10;11;13;13;;
+1;0;4;3;15;16;13;13;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
