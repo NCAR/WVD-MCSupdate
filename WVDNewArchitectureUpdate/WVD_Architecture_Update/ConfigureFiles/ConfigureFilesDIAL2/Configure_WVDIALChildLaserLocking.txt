@@ -39,7 +39,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.844;31.479;20.019;;
+27.844;30.969;20.019;;
 ### 27.604;30.732;18.205;;
 
 ### The current that the diode controller should use, in milliamps
@@ -78,7 +78,7 @@ Time Limit;;
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-1;1;1;;
+1;1;0;;
 ### 1;1;1;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
