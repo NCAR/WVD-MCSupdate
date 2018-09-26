@@ -28,8 +28,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19800;828.29765;827.731;;
-### 828.19800;828.29765;780.24612;;
+828.19800;828.29765;780.24612;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -44,7 +43,7 @@ Temperature;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-150;150;150;;
+155;155;130;;
 ### 160;160;160;;
 
 ### This is currently not being used but these should be the proportional gain constants
