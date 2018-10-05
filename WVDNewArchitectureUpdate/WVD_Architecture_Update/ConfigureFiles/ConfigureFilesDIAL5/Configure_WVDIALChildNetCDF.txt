@@ -11,7 +11,7 @@ VariousPaths;;
 .;
 C:\Users\h2odial\Anaconda3\python.exe;
 .\NetCDFPython\NetCDFScript.py;
-D:\;;
+C:\Users\h2odial\Desktop\DataStorage\;;
 
 ### how many hours of data do we want to back process
 HoursToBackProcess;;
