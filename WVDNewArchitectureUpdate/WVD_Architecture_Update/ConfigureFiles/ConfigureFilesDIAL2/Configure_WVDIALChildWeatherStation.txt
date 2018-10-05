@@ -4,7 +4,7 @@ This file is used to define the initial state of the Weather Station in the Wate
 
 ### This is where the Labview VISA communications should find the weather station.
 Comm Port;;
-COM6;;
+COM2;;
 
 ### These are miscilaneous variables that are read and used as default values
 ### by the weather station. These are currently: the update period of the weather 
