@@ -19,7 +19,7 @@ Power Channel Cluster;;
 ### note: 8 inputs muxing on first 4 channels for total of 12 channels
 ### 0 muxes to 8, 1 to 9, etc.... 
 Data Channel Cluster;;
-0; 8; 2; 3; 4; 5;;
+0; 8; 1; 9; 2; 10;;
 
 ### path to MCSControls subVI. 
 Path to MCSControls;;
