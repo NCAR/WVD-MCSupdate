@@ -13,7 +13,7 @@ Thermocouple Comm Port;;
 ### The number of measurments to save, and the number of weather station variables
 ### to keep. 
 Child Variables;;
-8;900;1;;
+8;900;2;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
