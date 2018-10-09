@@ -18,7 +18,7 @@ Global Variables;;
 ### that the container should populate the tabs with
 Relative File Paths;;
 .\MCS_NCAR.llb\ControlSystemMCS.vi;
-.\MCSControls_NCAR.llb\ControlSystemMCSControls.vi;;
+.\MCS_NCAR.llb\ControlSystemMCSControls.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.

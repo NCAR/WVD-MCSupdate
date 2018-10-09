@@ -23,7 +23,7 @@ Data Channel Cluster;;
 
 ### path to MCSControls subVI. 
 Path to MCSControls;;
-..\MCSControls_NCAR.llb\ControlSystemMCSControls.vi;;
+.\ControlSystemMCSControls.vi;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
