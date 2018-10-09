@@ -17,7 +17,7 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\WeatherStation.llb\ControlSystemWeatherStation.vi;;
+.\IndividualChildControl.llb\ChildControl_WeatherStation.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.

@@ -20,7 +20,7 @@ Relative File Paths;;
 .\MCS_NCAR.llb\ControlSystemMCS.vi;
 .\MCSControls_NCAR.llb\ControlSystemMCSControls.vi;
 .\WavelengthLocking.llb\ControlSystemWavelengthLocking.vi;
-.\WeatherStation.llb\ControlSystemWeatherStation.vi;
+.\IndividualChildControl.llb\ChildControl_WeatherStation.vi;
 .\IndividualChildControl.llb\ChildControl_Thermocouples.vi;
 .\IndividualChildControl.llb\ChildControl_UPS.vi;
 .\AdvancedVis.llb\ControlSystemVisualization.vi;
