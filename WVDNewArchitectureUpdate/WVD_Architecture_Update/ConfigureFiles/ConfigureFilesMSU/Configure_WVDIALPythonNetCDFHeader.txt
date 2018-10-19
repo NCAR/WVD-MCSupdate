@@ -1,0 +1,17 @@
+Conventions	CFRadial
+title		Water Vapor Dial Merged Data
+institution	NCAR/UCAR
+references	Fake paper here
+source		MSU
+capabilities	O2DIAL
+history		raw, merged onto master timeseries set by MCS data if available
+comment		N/A
+instrument_name	MSU O2 DIAL
+site_name	COB HALL MSU
+contact_info	Scott Spuler - spuler@ucar.edu
+project		Testing
+latitude	45.6770
+longitude	248.9571
+altitude	1470
+Online_Diode_Serial_Number	18-088 3965
+Offline_Diode_Serial_Number	18-087 3964
