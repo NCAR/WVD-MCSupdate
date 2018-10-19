@@ -13,7 +13,7 @@ Channel Multiplier Controls;;
 ### where are the power channels plugged in - HSRL; OnlineH2O; OfflineH2O; OnlineO2; OfflineO2;;
 ### note: 6 inputs, but muxed to 12. if using muxing, 0 muxes to 6, 1 to 7, etc.... 
 Power Channel Cluster;;
-1; 0; 6; 2; 3;;
+1; 0; 6; 1; 7;;
 
 ### where are the data channels plugged in - OnlineH2O; OfflineH2O; Combined HSRL; Molecular HSRL; OnlineO2; OfflineO2;;
 ### note: 8 inputs muxing on first 4 channels for total of 12 channels
