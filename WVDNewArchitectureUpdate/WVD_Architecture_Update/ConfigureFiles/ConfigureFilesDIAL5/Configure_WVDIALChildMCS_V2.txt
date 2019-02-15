@@ -1,0 +1,78 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the NCAR MCS in the WVD labview program. 
+
+### UDP communication location of MCS - IP address of MCS; port number;; 
+UDP Comms;;
+192.168.0.199;24599;;
+
+### default state for multiplying one channel - channel number; multiplication factor;; - 1;1;; by default tells the first channel to not scale at all.  
+Channel Multiplier Controls;;
+1;1;;
+
+### where are the power channels plugged in - HSRL; OnlineH2O; OfflineH2O; OnlineO2; OfflineO2;;
+### note: 6 inputs, but muxed to 12. if using muxing, 0 muxes to 6, 1 to 7, etc.... 
+Power Channel Cluster;;
+1; 0; 6; 1; 7;;
+
+### where are the data channels plugged in - OnlineH2O; OfflineH2O; Combined HSRL; Molecular HSRL; OnlineO2; OfflineO2;;
+### note: 8 inputs muxing on first 4 channels for total of 12 channels
+### 0 muxes to 8, 1 to 9, etc.... 
+Data Channel Cluster;;
+0; 8; 1; 9; 2; 10;;
+
+### 
+Channel Enable;;
+0;1;0;1;0;1;0;1;0;0;0;0;;
+
+### 
+Channel Polarity;;
+0;0;0;0;0;0;1;0;0;0;0;0;;
+
+### 
+Sync Number;;
+0;0;0;0;1;2;3;0;0;0;0;0;;
+
+### 
+NS Per Bin;;
+250;250;250;250;250;250;250;250;250;250;250;250;;
+
+###
+Shots Per Profile;;
+14000;14000;14000;14000;14000;14000;14000;14000;14000;14000;14000;14000;;
+
+###
+Number of Bins;;
+560;;
+
+###
+Sync Input Polarity;;
+0;0;0;0;;
+
+###
+Din Demux Polarity;;
+0;0;0;1;;
+
+### 
+Power Enable;;
+1;0;1;0;1;0;1;0;1;1;1;1;;
+
+###
+Power Averaging Exponent;;
+0;1;2;3;4;5;6;7;7;7;7;7;;
+
+
+###
+Power Demux Number;;
+0;0;0;1;1;1;2;2;2;3;3;3;;
+
+
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\MCS\;
+MCSData;
+MCSPower;
+MCSLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
