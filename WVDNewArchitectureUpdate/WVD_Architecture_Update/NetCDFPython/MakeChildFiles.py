@@ -288,6 +288,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     TempMeas = []
     Current = []
     Timestamp = []
+    SeedPower = []
     
     #read in file line by line
     with open(LLfile) as f:
@@ -305,7 +306,20 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
                 Current.append(linelist[6])
                 Timestamp.append(linelist[7])
                 # Datestamp.append(linelist[8]) # not using the date
-                
+                SeedPower.append([-99])
+            # Checking if laser power is in the file   
+            if len(linelist) == 10:
+                LaserNum.append(str(linelist[0]))
+                Wavelength.append(linelist[1])
+                WaveDiff.append(linelist[2])
+                IsLocked.append(linelist[3])
+                TempDesired.append(linelist[4])
+                TempMeas.append(linelist[5])
+                Current.append(linelist[6])
+                Timestamp.append(linelist[7])
+                # Datestamp.append(linelist[8]) # not using the date
+                SeedPower.append(linelist[9])
+    
     SPF.ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
     
     place = os.path.join(LocalNetCDFOutputPath,fileDate,"LLsample"+fileTime+".nc")
@@ -323,6 +337,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     TempDesiredData = LLncfile.createVariable('TempDesired',dtype('float32').char,('time'))
     TempMeasData = LLncfile.createVariable('TempMeas',dtype('float32').char,('time'))
     CurrentData = LLncfile.createVariable('Current',dtype('float32').char,('time'))
+    SeedPowerData = LLncfile.createVariable('SeedPower',dtype('float32').char,('time'))
 
     boolIsLocked=[]
     for entry in IsLocked:
@@ -340,6 +355,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     TempDesiredData[:] = TempDesired
     TempMeasData[:] = TempMeas
     CurrentData[:] = Current
+    SeedPowerData[:] = SeedPower
     
     LLncfile.description = "Laser Locking data file"
     for entry in header:
@@ -360,6 +376,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     TempDesiredData.units = "Celcius"
     TempMeasData.units = "Celcius"
     CurrentData.units = "Amp"
+    SeedPowerData.units = 'dBm'
     
     TimestampData.description = "The time of collected data in UTC hours from the start of the day"
     LaserNumData.description = "Name of the laser that was being locked (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or unknown)"
@@ -369,6 +386,7 @@ def processLL(LLfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
     TempDesiredData.description = "Laser temperature setpoint"
     TempMeasData.description = "Measured laser temperature from the Thor 8000 diode thermo-electric cooler"
     CurrentData.description = "Measured laser current from the Thor 8000 diode laser controller"
+    SeedPowerData.description = "Power of the seed laser measured by the wavemeter"
     
     LLncfile.close()
     
@@ -495,7 +513,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
                     WarningFile = os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),"NetCDFPythonWarnings",str(LastTime),".txt")
                     writeString = "WARNING: Power Channel Assignments changed mid file in " + Powerfile + " - " + str(NowTime) + '\n'
                     SPF.Write2ErrorFile(WarningFile, writeString)
-              
+                    
             HSRLPowCh = ord(couple_bytes[23:24])-48
             OnlineH2OCh = ord(couple_bytes[34:35])-48 
             OfflineH2OCh = ord(couple_bytes[46:47])-48
@@ -527,6 +545,7 @@ def processPower(Powerfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime
                 PowerCh[j].append( a + b + c )
                 j=j+1
 
+        
         SPF.ensure_dir(os.path.join(LocalNetCDFOutputPath,fileDate,""))
         place = os.path.join(LocalNetCDFOutputPath,fileDate,"Powsample"+fileTime+".nc")
         Powncfile = Dataset(place,'w')
@@ -618,7 +637,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
                 if OnlineH2OCh != ord(data[29:30])-48 or OfflineH2OCh != ord(data[42:43])-48 or CombinedHSRLCh != ord(data[57:58])-48 or MolecularHSRLCh != ord(data[73:74])-48 or OnlineO2Ch != ord(data[84:85])-48 or OfflineO2Ch != ord(data[96:97])-48:
                     ErrorFile = os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),"NetCDFPythonWarnings",str(LastTime),".txt")
                     writeString = "Warning: Data Channel Assignments changed mid file in " + str(MCSfile) + " - " + str(NowTime) + '\n'
-                    SPF.Write2ErrorFile(ErrorFile, writeString)
+                    # SPF.Write2ErrorFile(ErrorFile, writeString)
 
             OnlineH2OCh = ord(data[29:30])-48 # 48 is the number to subtract from ascii to get the numerical values
             if ord(data[28:29]) == 49: # a two digit channel assignment so add 10 
@@ -638,6 +657,8 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
             OfflineO2Ch = ord(data[96:97])-48
             if ord(data[95:96]) == 49: 
                 OfflineO2Ch = OfflineO2Ch + 10
+
+            
                 
             ChannelAssign[OnlineH2OCh] = str("WVOnline")
             ChannelAssign[OfflineH2OCh] = str("WVOffline")
@@ -765,8 +786,7 @@ def processMCS(MCSfile,LocalNetCDFOutputPath,header,NowDate,NowTime,LastTime):
         DataArrayData.description = "A profile containing the number of photons returned in each of the sequential altitude bin"
         ChannelAssignData.description = "String value defining what hardware was connected to the MCS digital detection channels (Choices are: WVOnline, WVOffline, HSRLCombined, HSRLMolecular, O2Online, O2Offline, or Unassigned)"
         RTimeData.description = "Relative time counter, 20 bit time valuerelative to the most recent system reset (or time reset)."
-        MCSncfile.close()
-        
+        MCSncfile.close()        
 
 
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,header):
@@ -835,6 +855,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         MCSPowerList = SPF.getFiles(MCSDataPath , "MCSPower", ".bin", ThenDate, ThenTime)
         MCSFileList.sort()
         MCSPowerList.sort()
+
+
         for Powerfile in MCSPowerList:
             try:
                 processPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
