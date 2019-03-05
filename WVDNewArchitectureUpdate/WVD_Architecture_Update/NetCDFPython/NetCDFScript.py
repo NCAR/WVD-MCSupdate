@@ -11,7 +11,6 @@ import sys
 import csv
 import math
 import datetime
-from datetime import timedelta
 
 from SyncBackup import DoRSync
 from MakeChildFiles import makeNetCDF
@@ -33,8 +32,6 @@ def readHeaderInfo():
         header = list(reader)
         #print (header)
         return header
-
-
 
 # --------------------------------main------------------------------------
 def main():
@@ -76,7 +73,7 @@ def main():
 
         # create timestamp for sys.argv[3] hours ago so we know which files to load
         ThenTime = float(SPF.getFractionalHours(HoursBack))
-        ThenDate = (datetime.datetime.utcnow() - timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
+        ThenDate = (datetime.datetime.utcnow() - datetime.timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
      
         header = readHeaderInfo()
 
