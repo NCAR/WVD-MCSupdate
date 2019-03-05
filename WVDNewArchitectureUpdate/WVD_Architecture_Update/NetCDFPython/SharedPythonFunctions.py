@@ -41,3 +41,11 @@ def getFractionalHours(HoursBack):
                float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%S"))/3600 + \
                float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%f"))/3600000000
     return ThenTime
+
+
+
+def convertString2CWSyntax(String):
+    Before, After = String.split(":\\",1)
+    
+    NewString = '/cygdrive/' + Before + '/' + After.replace("\\",'/')
+    return NewString
