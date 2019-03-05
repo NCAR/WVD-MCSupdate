@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os
 import sys
-
+import datetime
 
 
 # write an error message to a file
@@ -35,4 +35,9 @@ def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
                     FileList.append(os.path.join(DataPath,day,file))
     return FileList
 
-
+def getFractionalHours(HoursBack):
+    ThenTime = float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%H")) + \
+               float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%M"))/60 + \
+               float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%S"))/3600 + \
+               float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%f"))/3600000000
+    return ThenTime

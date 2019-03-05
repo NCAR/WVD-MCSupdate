@@ -2,7 +2,9 @@
 #Brad Schoenrock
 #Feb. 2018
 # useage:
-# python MyScript.py [working directory containing Data folder] [location to write files] [how many hours back in time to process]
+# python MyScript.py [working directory containing Data folder] 
+#                    [location to write files]
+#                    [how many hours back in time to process]
 
 import os
 import sys
@@ -12,7 +14,6 @@ import datetime
 from datetime import timedelta
 
 from SyncBackup import DoRSync
-from MakeMergedFiles import mergeNetCDF
 from MakeChildFiles import makeNetCDF
 import SharedPythonFunctions as SPF
 
@@ -40,19 +41,11 @@ def main():
     print ("Hello World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
        
     # create timestamp for now so we know which files to load
-    Hour = datetime.datetime.utcnow().strftime("%H")
-    Min = datetime.datetime.utcnow().strftime("%M")
-    Sec = datetime.datetime.utcnow().strftime("%S")
-    MicroSec = datetime.datetime.utcnow().strftime("%f")
-    NowTime = float(Hour) + float(Min)/60 + float(Sec)/3600 + float(MicroSec)/3600000000
+    NowTime = SPF.getFractionalHours(0)
     NowDate = datetime.datetime.utcnow().strftime("%Y%m%d")
 
     # LastHour variables used to find NetCDF Logging files for error and other logging. 
-    LastHour = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%H")
-    LastMin = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%M")
-    LastSec = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%S")
-    LastMicroSec = (datetime.datetime.utcnow()-timedelta(hours=float(1))).strftime("%f")
-    LastTime = math.ceil(float(LastHour) + float(LastMin)/60 + float(LastSec)/3600 + float(LastMicroSec)/3600000000)
+    LastTime = math.ceil(SPF.getFractionalHours(1))
 
     # creating Error file variable for use if needed ... which of course it never will be ... right?
     SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Errors",str(NowDate),""))
@@ -74,7 +67,6 @@ def main():
 
         if is_number(sys.argv[3]): # the second should be a number of hours worth of files that we want to process
             HoursBack = sys.argv[3]
-
         else:
             HoursBack = 3
             writeString = "Warning: argument 3 (hours to back process) - "+sys.argv[3]+" - is not a number. Using default "+HoursBack+" hours instead. - "+str(NowTime) + '\n'
@@ -83,19 +75,13 @@ def main():
         print ("go back "+str(sys.argv[3])+" hours")
 
         # create timestamp for sys.argv[3] hours ago so we know which files to load
-        ThenHour = (datetime.datetime.utcnow()-timedelta(hours=float(sys.argv[3]))).strftime("%H")
-        ThenMin = (datetime.datetime.utcnow()-timedelta(hours=float(sys.argv[3]))).strftime("%M")
-        ThenSec = (datetime.datetime.utcnow()-timedelta(hours=float(sys.argv[3]))).strftime("%S")
-        ThenMicroSec = (datetime.datetime.utcnow()-timedelta(hours=float(sys.argv[3]))).strftime("%f")
-        ThenTime = float(ThenHour) + float(ThenMin)/60 + float(ThenSec)/3600 + float(ThenMicroSec)/3600000000
+        ThenTime = float(SPF.getFractionalHours(HoursBack))
         ThenDate = (datetime.datetime.utcnow() - timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
      
         header = readHeaderInfo()
 
         makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,header)
 
-      #  #merge into one combined file
-      #  mergeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,LocalOutputPath,header,WarningFile,ErrorFile)
 
       #  #copy NetCDF files to external drive if applicable.
       #  print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
