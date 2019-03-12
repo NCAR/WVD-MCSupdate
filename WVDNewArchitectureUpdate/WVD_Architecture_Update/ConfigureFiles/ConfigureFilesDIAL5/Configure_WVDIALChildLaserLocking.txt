@@ -79,6 +79,12 @@ Locking On;;
 Locking Type;;
 1;1;1;1;;
 
+### This is the minimum power required to be read from teh wavemeter to perform laser
+### locking. This value is compared to the value read by the wavemeter. The units will
+### be dBm
+Min Locking Power;;
+-10;-10;-10;-10;;
+
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
 ### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
