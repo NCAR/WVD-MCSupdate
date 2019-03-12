@@ -27,7 +27,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19000;828.28925;;
+828.19100;828.29065;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -77,6 +77,12 @@ Locking On;;
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
 Locking Type;;
 1;1;;
+
+### This is the minimum power required to be read from teh wavemeter to perform laser
+### locking. This value is compared to the value read by the wavemeter. The units will
+### be dBm
+Min Locking Power;;
+-15;-15;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
