@@ -137,3 +137,23 @@ MCSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
+################################################################################
+### Setting the visibility of the graphs on the MCS child. 1 = plot visible and 
+### 0 = not visible. The colors of the plots are set by the TypeDef_ColorPallet
+### control. 
+Raw Counts Visibility;;
+1;1;1;1;0;0;;
+
+Background Subtracted Visibility;;
+1;1;1;1;0;0;;
+
+Power Visibility;;
+1;1;1;0;0;;
+
+Count Legend Entries;;
+WV On; WV Off; Molecular; Combined; Unused; Unused;;
+
+Power Legend Entries;;
+HSRL; WV On; WV Off; Unused; Unused;;
+################################################################################
+
