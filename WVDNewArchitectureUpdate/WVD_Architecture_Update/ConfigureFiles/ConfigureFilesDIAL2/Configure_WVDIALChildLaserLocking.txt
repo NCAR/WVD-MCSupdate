@@ -10,7 +10,7 @@ Wavelength Settings; Wavelength Status; Data Saving; Data Plotting;;
 ### These settings just set the names of the inner tab controller so the user knows
 ### what is contained in each large piece
 Inner Tab Names;;
-Laser Temperatures; Laser Wavelengths; Etalon Temperatures;;
+Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 
 ### These are miscilaneous settings needed for the laser locking program. They are:
 ### the time between checks of the etalons in seconds, the numbre of data scans to 
