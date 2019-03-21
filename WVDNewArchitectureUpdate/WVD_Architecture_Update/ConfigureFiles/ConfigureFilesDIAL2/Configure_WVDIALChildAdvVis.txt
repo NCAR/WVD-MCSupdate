@@ -4,7 +4,7 @@ This file is used to define the initial state of advanced visualization routines
 
 ### path to the Hitran data used as reference for calculations. By default stored with config files. 
 Path To Hitran;;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\ConfigureFiles\815nm_841nm_HITRAN_2008.csv;;
+C:\Users\h2odial\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\ConfigureFiles\815nm_841nm_HITRAN_2008.csv;;
 
 ### this is redundant but in principle make this match the MCS
 Number of Bins;;
