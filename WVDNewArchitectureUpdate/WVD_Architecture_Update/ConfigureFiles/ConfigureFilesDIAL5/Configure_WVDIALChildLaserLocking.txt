@@ -83,7 +83,7 @@ Locking Type;;
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--10;-10;-10;-10;;
+-10;-10;-15;-10;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
