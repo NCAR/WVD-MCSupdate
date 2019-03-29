@@ -1,0 +1,157 @@
+Written By: Brad Schoenrock
+Written For: NCAR
+This file is used to define the initial state of the NCAR MCS in the WVD labview program. 
+
+### UDP communication location of MCS - IP address of MCS; port number;; 
+UDP Comms;;
+192.168.0.199;24599;;
+
+### default state for multiplying one channel - channel number; multiplication factor;; - 1;1;; by default tells the first channel to not scale at all.  
+Channel Multiplier Controls;;
+1;1;;
+
+### where are the data channels plugged in - OnlineH2O; OfflineH2O; Combined HSRL; Molecular HSRL; OnlineO2; OfflineO2;;
+### note: 8 inputs muxing on first 4 channels for total of 12 channels
+### 0 muxes to 8, 1 to 9, etc.... 
+Data Channel Cluster;;
+0; 8; 2; 3; 4; 5;;
+
+### where are the power channels plugged in - HSRL; OnlineH2O; OfflineH2O; OnlineO2; OfflineO2;;
+### note: 6 inputs, but muxed to 12. if using muxing, 0 muxes to 6, 1 to 7, etc.... 
+Power Channel Cluster;;
+1; 0; 6; 2; 3;;
+
+
+################################################################################
+### Setting the state of the MCS digital controls. These are all array elements
+### and all index from lowest to highest
+Channel Number;;
+0;1;2;3;4;5;6;7;;
+
+### Here 1 = on and 0 = off
+Enable;;
+1;0;0;0;0;0;0;0;;
+
+### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
+Demux;;
+1;0;0;0;2;2;2;2;;
+
+### Options are 0-2. Numbers outside this will default to 0
+Sync Select;;
+0;0;0;0;0;0;0;0;;
+
+### Bin timing is in 5 ns incriments with valid range 10-20475. Numbers outside this
+### range will be set to 250 and values not even multiples of 5 will be rounded to the 
+### nearest multiple
+ns Per Bin;;
+250;250;250;250;250;250;250;250;;
+
+### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
+### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
+Shots Per Profile;;
+14000;14000;14000;14000;14000;14000;14000;14000;;
+
+### This is a control to set the counter to count on the rising or falling edge 
+### of the input TTL pulse. 1 = falling and 0 = rising
+Polarity;;
+0;0;0;0;0;0;0;0;;
+
+### 
+Reset Accumulator;;
+0;0;0;0;0;0;0;0;;
+################################################################################
+### Setting the state of the MCS power monitoring. These are all array elements
+### and all indexed from lowest to highest
+Channel Number;;
+0;1;2;3;4;5;;
+
+### Here 1 = on and 0 = off
+Enable;;
+1;0;0;0;0;0;;
+
+### This is the number of pulses to accumulate. Specifically this number is N and
+### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
+### numbers will be rounded.
+Accumulation Exponent;;
+8;0;0;0;0;0;;
+
+### Options are 0-3. Numbers outside this will default to 0
+Demux Select;;
+0;3;3;3;3;3;;
+################################################################################
+### Setting whether the sync fires on the rising or falling edge of the pulse
+### Rising edge = 0, falling edge = 1
+Sync Input Polarity;;
+0;0;0;;
+
+### Setting whether the demuxer fires on the rising or falling edge of the pulse
+### Rising edge = 0, falling edge = 1
+Din Demux Polarity;;
+0;0;0;0;;
+
+### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
+### will be set to 560 and non-integer values will be rounded
+Number Of Bins;;
+560;;
+
+### Telling the MCS to reset itself. This should default to off (off = 0, on = 1)
+User Reset;;
+0;;
+
+### Mode to take power measurements. 0 = 2^N pulses, 1 = all pulses in 50 milliseconds
+### Default value is 0
+Power Monitoring Accumulation Mode;;
+0;;
+
+### Voltage thresholds. Order is: Din, Demux In, Sync In, and Rower Reference. Valid
+### range is 0-65535 with non-integers rounded and default values: 
+### respectively 
+Voltage Thresholds;;
+26208;26208;26208;20960;;
+
+### Test Modes. Order is: Data Input Test Mode, Sync Test Mode, Throttle Mode, and
+### Power Monitoring test mode. 
+### Data input test mode options: Normal Ops = 0, Pulse Stream = 1, ramp = 2
+### Sync Test Mode options: Normal ops = 0, Insert pulse = 1
+### Throttle mode options: 100 milliseconds = 0, 10 milliseconds = 1, 100 nanosecond = 2
+### Power Monitoring test mode: Normal Ops = 0, Pulse = 1
+Test Modes;;
+0;0;0;0;;
+
+### 
+Advanced Status;;
+20000000;0;0;0;0;0;0;0;;
+
+### Reset the MCS relative timer on startup. 0 = no, 1 = yes
+Time Reset;;
+0;;
+
+
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\MCS\;
+MCSData;
+MCSPower;
+MCSLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+################################################################################
+### Setting the visibility of the graphs on the MCS child. 1 = plot visible and 
+### 0 = not visible. The colors of the plots are set by the TypeDef_ColorPallet
+### control. 
+Raw Counts Visibility;;
+1;1;0;0;0;0;;
+
+Background Subtracted Visibility;;
+1;1;0;0;0;0;;
+
+Power Visibility;;
+0;1;1;0;0;;
+
+Count Legend Entries;;
+WV On; WV Off; Unused; Unused; Unused; Unused;;
+
+Power Legend Entries;;
+Unused; WV On; WV Off; Unused; Unused;;
+################################################################################
