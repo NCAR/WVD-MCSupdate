@@ -4,6 +4,5 @@ This file is used to define the notification list to email updates to.
 
 ### Email addresses to send warning emails to
 Email List;;
-robert.stillwell@colorado.edu;
 stillwel@ucar.edu;
-bstill16@gmail.com;;
+spuler@ucar.edu;;

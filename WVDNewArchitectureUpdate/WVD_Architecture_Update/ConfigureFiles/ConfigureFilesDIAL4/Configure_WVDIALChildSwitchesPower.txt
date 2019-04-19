@@ -12,7 +12,7 @@ Unit Size;;
 
 ## IP Addresses of the switches
 IP Addresses;;
-192.168.0.130; 192.168.0.131;;
+192.168.0.131; 192.168.0.130;;
 
 
 
