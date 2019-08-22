@@ -1,19 +1,104 @@
-Written By: BradSchoenrock
+Written By: Robert Stillwell
 Written For: NCAR
 This file is used to define the initial state of the NetCDF writer in the Water Vapor DIAL Main labview program. 
 
-### path to the file where the python header information is defined- 
-PathToPythonHeaderConfigFile;;
-C:\Users\eol-lidar\WVD-MCSupdate\WVDNewArchitectureUpdate\WVD_Architecture_Update\ConfigureFiles\Configure_WVDIALPythonNetCDFHeader.txt;;
-
 ### IP address of quantum composer, and port number
-IPAddrQC;;
-192.168.0.136; 2101;;
+IP Address;;
+192.168.0.136; 2101; 1000; -1; 50;;
 
-### paths to error and comment logging
+### Update times used to check the quantum composer. The first number is the 
+### Fast update time which is how often to check if the system is in run/stop 
+### mode. The second is slow update time and is how often to check the complete
+### Quantum Composer state. 
+Timing;; 
+15; 150;;
+
+### Initial state of the quantum composer box(s). Each value corresponds 
+### to a different timing state.
+### The type of lidar system running. See TypeDef_QuantumComposerUserOptions.ctl
+### to convert integer numbers to definitions.
+DriveType;;
+1;;
+
+### How to run the TSOA. See TypeDef_QuantumComposerUserOptions.ctl
+### to convert integer numbers to definitions.
+TSOA;;
+0;;
+
+### How to run the online 1x1 switch (if availible). See 
+### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
+### to definitions.
+Online 1x1;;
+0;;
+
+### How to run the offline 1x1 switch (if availible). See 
+### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
+### to definitions.
+Offline 1x1;;
+0;;
+
+### How to run the detector gate (if availible). See 
+### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
+### to definitions.
+Gate;;
+0;;
+
+### Testing mode that allows the user to turn off online/offline channels
+### to focus on only the single item, or switch. See 
+### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
+### to definitions.
+Single Channel;;
+0;;
+
+### The time to delay the start of the MCS from the time of the laser pulse. 
+### Units are in [micro seconds]
+Air Lag;;
+0.1;;
+
+### The time to delay the end of the detector gate from the time of the laser
+### pulse. Units are in [micro seconds]
+Bang Lag;;
+0.05;;
+
+### The duty cycle to run the offline laser. Value is between 0 (laser off) and
+### 1 (laser on). Online duty cycle is just 1 - this value.
+Duty Cycle;;
+0.5;;
+
+### The rate at which the systems interleaves online and offline pulses. Units 
+### are in [Hz]
+Switch Rate;;
+100.60362;;
+
+### The duration of the pulse (duration of the current pulse delivered to the 
+### TSOA). Units are [micro seconds]. 
+Pulse Duration;;
+1;;
+
+### The pulse repetition frequency of all laser pulses. Units are in [Hz]
+PRF;;
+7042.25352;;
+
+### The rise time of the electro-optical switches from closed to open. Units
+### are in [micro seconds].
+Switch Rise Time;;
+0.2;;
+
+### Quantum composer map. This tells the Quantum Composer what type of channel
+### is plugged in to each of the output ports. The definition can be found in 
+### TypeDef_QuantumComposerChannelType.ctl. 
+Quantum Composer Channels;;
+1;9;13;16;24;19;22;5;;
+
+### The state of the run/stop button for each Quantum Composer. 1 = run, 0 = stop
+Run/Stop State;;
+1;;
+
+### Paths to error and comment logging
 FilePaths;;
-.\Data\QuantumComposerChild\;
-QuantumComposerChild;
+.\Data\QuantumComposer\;
+QuantumComposerOps;
+QuantumComposerDetailed;
 QuantumComposerLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
