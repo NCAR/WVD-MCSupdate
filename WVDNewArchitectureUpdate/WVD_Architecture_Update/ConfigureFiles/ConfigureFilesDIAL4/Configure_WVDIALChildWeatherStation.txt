@@ -12,7 +12,7 @@ COM15;;
 ### The number of measurments to save, and the number of weather station variables
 ### to keep. 
 Child Variables;;
-5;50;1440;4;;
+5;100;1440;4;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
