@@ -2,15 +2,23 @@ Written By: Robert Stillwell
 Written For: NCAR
 This file is used to define the initial state of the Weather Station in the Water Vapor DIAL Main labview program. 
 
+### This is the communication protocol to use for the weather station.
+### RS485 to USB = 0, RS485 to Ethernet = 1
+Communication Protocol;;
+0;;
+
 ### This is where the Labview VISA communications should find the weather station.
 Comm Port;;
 COM4;;
 
+TCP Info;;
+192.168.0.110;4760;100;-1;-1;;
+
 ### These are miscilaneous variables that are read and used as default values
 ### by the weather station. These are currently: the update period of the weather 
 ### station in seconds, the time to wait between write and read of the comm port,
-### The number of measurments to save, and the number of weather station variables
-### to keep. 
+### The number of measurments to save, the number of weather station variables
+### to keep, and the weather station communication protocol. 
 Child Variables;;
 5;50;1440;4;;
 
