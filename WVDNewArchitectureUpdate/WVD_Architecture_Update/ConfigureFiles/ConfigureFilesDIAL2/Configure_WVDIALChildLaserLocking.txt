@@ -23,24 +23,24 @@ Misc;;
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
 Laser Types;;
-0;1;5;2;;
+0;1;2;5;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19900;828.29825;828.2985;780.246;;
+828.19900;828.29825;780.246;828.2985;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
 Tolerance;;
-0.00005;0.00005;0.00005;0.0001;;
+0.00005;0.00005;0.0001;0.00005;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-26.414;26.894;25.0;8.736;;
+26.414;26.894;8.736;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-125;125;125;130;;
+125;125;130;125;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -71,7 +71,7 @@ Time Limit;;
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-1;1;0;0;;
+1;1;1;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
@@ -89,7 +89,7 @@ Min Locking Power;;
 ### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
 ### would check the first laser 4 times before checking the other. 
 Scan Strategy;;
-0;1;3;;
+0;1;2;;
 
 ### The type of etalonthat is being used. This corresponds to the typedefintion 
 ### TypeDef_EtalonTypes.ctl
