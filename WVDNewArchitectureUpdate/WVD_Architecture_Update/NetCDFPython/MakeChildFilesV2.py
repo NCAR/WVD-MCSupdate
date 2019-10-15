@@ -6,18 +6,15 @@
 #       1) Files where the data are jagged arrays instead of full are filled 
 #          with a bad data marker (-1000000000) to make all rows the same size
 
-#import pdb
-#import os
 import datetime
 import DataFileFunctions as DFF
 import NCARMCSFunctions  as NMF
 import numpy             as np
 import sys 
-sys.dont_write_bytecode = True
 
 #%%################################# Etalon ################################### 
 def processEtalons(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
-    print "Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
     DataType = ['str','f','f','b','f','f'] 
@@ -48,7 +45,7 @@ def processEtalons(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     
 #%%############################## Housekeeping ################################ 
 def processHK(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
-    print "Making Housekeeping Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making Housekeeping Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float)    
@@ -76,7 +73,7 @@ def processHK(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%############################# Laser Locking ################################ 
 def processLL(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
-    print "Making LL Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making LL Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a padded array as needed 
     DataType = ['str','f','f','b','f','f','f','f','f','f'] 
@@ -112,7 +109,7 @@ def processLL(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%
 def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
-    print "Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','str','f','f','f','f','f','f','f','f','Pass'] 
@@ -153,7 +150,7 @@ def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%
 def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
-    print "Making MCS Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making MCS Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','f','f','f','f','str','Pass']    
@@ -192,7 +189,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%################################## UPS #####################################
 def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
-    print "Making UPS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making UPS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
@@ -228,7 +225,7 @@ def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%############################ Weather Station ###############################               
 def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
-    print "Making WS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S")
+    print("Making WS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
