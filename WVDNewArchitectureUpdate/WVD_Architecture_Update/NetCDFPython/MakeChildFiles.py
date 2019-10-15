@@ -865,8 +865,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
 
         for Powerfile in MCSPowerList:
             try:
-                processPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
-                #VT.processMCSPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                #processPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                VT.processMCSPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "WARNING: Failure to process Power data - " + "Powerfile = " + str(Powerfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(WarningFile, writeString)

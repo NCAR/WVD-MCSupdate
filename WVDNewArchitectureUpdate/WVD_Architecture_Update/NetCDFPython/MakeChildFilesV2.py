@@ -153,7 +153,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     print("Making MCS Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
-    DataType = ['f','f','f','f','f','str','Pass']    
+    DataType = ['f','f','f','f','f','str','Pass']  
     VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPowerFile(FileName)),DataType,False)  
     # Checking to see if there were any file reading errors
     if not VarData[-1]:  # No error observed

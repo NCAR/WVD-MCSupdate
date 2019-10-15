@@ -156,14 +156,13 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
     ChannelAssign = []
     for index in range(Channels):
         ChannelAssign.append("Unassigned")
-    
     # Pre-allocating data arrays
     AccumExp  = []; Demux = []; PowerCh = []; RTime = [];Timestamp = [];
     HSRLPowCh = []; OnlineH2OCh = []; OfflineH2OCh = []; OnlineO2Ch = []; OfflineO2Ch = [];
     # Opening the file as a binary file and looping over availible data bytes
     with open(Powerfile, "rb") as file:
         file.seek(0)  # Go to beginning of the file
-        for k in range((os.path.getsize(Powerfile))/MeasurementBytes):
+        for k in list(range(int(os.path.getsize(Powerfile)/MeasurementBytes))):
             # Reading next chunk of data
             Data = file.read(MeasurementBytes)
             # Reading the data time stamp
@@ -172,33 +171,33 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
             # 12 (Carrage Return), 13 (Line feed), 14-16 (null), 17 (2)
             # Reading the channel numbers
             # For reference now...Bytes 18-22 are the word "HSRL "
-            HSRLPowCh.append(ord(Data[23])-48)
+            HSRLPowCh.append(int(ord(Data[23:24])-48))
             # For reference now...Bytes 24-33 are the word "OnlineH2O "
-            OnlineH2OCh.append(ord(Data[34])-48) 
+            OnlineH2OCh.append(ord(Data[34:35])-48) 
             # For reference now...Bytes 35-45 are the word "OfflineH2O "
-            OfflineH2OCh.append(ord(Data[46])-48)
+            OfflineH2OCh.append(ord(Data[46:47])-48)
             # For reference now...Bytes 47-55 are the word "OnlineO2 "
-            OnlineO2Ch.append(ord(Data[56])-48)
+            OnlineO2Ch.append(ord(Data[56:57])-48)
             # For reference now...Bytes 57-66 are the word "OfflineO2 "
-            OfflineO2Ch.append(ord(Data[67])-48)
+            OfflineO2Ch.append(ord(Data[67:68])-48)
             # Temp variable to match the current output
-            ChannelAssign[ord(Data[23])-48] = str("HSRL")
-            ChannelAssign[ord(Data[34])-48] = str("OnlineH2O")
-            ChannelAssign[ord(Data[46])-48] = str("OfflineH2O")
-            ChannelAssign[ord(Data[56])-48] = str("OnlineO2")
-            ChannelAssign[ord(Data[67])-48] = str("OfflineO2")
+            ChannelAssign[ord(Data[23:24])-48] = str("HSRL")
+            ChannelAssign[ord(Data[34:35])-48] = str("OnlineH2O")
+            ChannelAssign[ord(Data[46:47])-48] = str("OfflineH2O")
+            ChannelAssign[ord(Data[56:57])-48] = str("OnlineO2")
+            ChannelAssign[ord(Data[67:68])-48] = str("OfflineO2")
             # For reference the next several bytes are: 68-70 (null), 71 (Start of Text),
             # 72 (Carrage Return), 73 (Line feed), 74-76 (null), 77 (<)
             # Checking that the header word is there and equal to 0x4D430000
-            if ''.join('{:08b}'.format(ord(Data[i])) for i in range(StartByte,StartByte+4)) != \
+            if ''.join('{:08b}'.format(ord(Data[i:i+1])) for i in range(StartByte,StartByte+4)) != \
                ''.join('{:08b}'.format(ord(x))       for x in '\x00\x00\x50\x4D'):
                    HeaderError = 'The MCS power frame header word does not match the expected value. ~RS'
                    print(HeaderError)
                    return([],[],[],[],[],[],HeaderError)
             # Pulling out the relative time counter
-            RTime.append(ord(Data[StartByte+4])+
-                         ord(Data[StartByte+5])*2**8+ 
-                         ord(Data[StartByte+6])*2**16)
+            RTime.append(ord(Data[StartByte+4:StartByte+5])+
+                         ord(Data[StartByte+5:StartByte+6])*2**8+ 
+                         ord(Data[StartByte+6:StartByte+7])*2**16)
             # byte (StartByte + 7) is empty
             # Looping over all the channels to pull out channel specific data
             for m in range(Channels):
@@ -209,16 +208,16 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
                     AccumExp.append([])
                     Demux.append([])
                 # Pulling power channel data out of the file
-                PowerCh[m].append(ord(Data[4*m+StartByte+8]) + 
-                                  ord(Data[4*m+StartByte+9])*2**8 + 
-                                  ord(Data[4*m+StartByte+10])*2**16)
+                PowerCh[m].append(ord(Data[4*m+StartByte+8:4*m+StartByte+9]) + 
+                                  ord(Data[4*m+StartByte+9:4*m+StartByte+10])*2**8 + 
+                                  ord(Data[4*m+StartByte+10:4*m+StartByte+11])*2**16)
                 # Pulling the accumulation exponent out of the file
-                AccumExp[m].append(ord(Data[4*m+StartByte+11])%2**4)
+                AccumExp[m].append(ord(Data[4*m+StartByte+11:4*m+StartByte+12])%2**4)
                 # Pulling the demux selection out of the file
-                Demux[m].append(ord(Data[4*m+StartByte+11])/2**4)
+                Demux[m].append(ord(Data[4*m+StartByte+11:4*m+StartByte+12])/2**4)
             # Checking that the footer word is there and equal to 0xFFFFFFFF
             # For reference bytes 134-137 should be the footer word
-            if ''.join('{:08b}'.format(ord(Data[4*m+StartByte+12+i])) for i in range(0,4)) != \
+            if ''.join('{:08b}'.format(ord(Data[4*m+StartByte+12+i:4*m+StartByte+13+i])) for i in range(0,4)) != \
                ''.join('{:08b}'.format(ord(x))                        for x in '\xFF\xFF\xFF\xFF'):
                    FooterError = 'The MCS power frame footer word does not match the expected value. ~RS'
                    print(FooterError)
