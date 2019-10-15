@@ -14,7 +14,7 @@ Channel Multiplier Controls;;
 ### note: 8 inputs muxing on first 4 channels for total of 12 channels
 ### 0 muxes to 8, 1 to 9, etc.... 
 Data Channel Cluster;;
-0; 8; 2; 3; 4; 5;;
+0; 8; 2; 3; 1; 9;;
 
 ### where are the power channels plugged in - HSRL; OnlineH2O; OfflineH2O; OnlineO2; OfflineO2;;
 ### note: 6 inputs, but muxed to 12. if using muxing, 0 muxes to 6, 1 to 7, etc.... 
@@ -30,11 +30,11 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;0;0;0;0;0;0;0;;
+1;1;0;0;0;0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-1;0;0;0;2;2;2;2;;
+1;1;0;0;2;2;2;2;;
 
 ### Options are 0-2. Numbers outside this will default to 0
 Sync Select;;
@@ -141,16 +141,16 @@ MCSLogging;
 ### 0 = not visible. The colors of the plots are set by the TypeDef_ColorPallet
 ### control. 
 Raw Counts Visibility;;
-1;1;0;0;0;0;;
+1;1;0;0;1;1;;
 
 Background Subtracted Visibility;;
-1;1;0;0;0;0;;
+1;1;0;0;1;1;;
 
 Power Visibility;;
 0;1;1;0;0;;
 
 Count Legend Entries;;
-WV On; WV Off; Unused; Unused; Unused; Unused;;
+WV On; WV Off; Unused; Unused; WV_on_low; WV_off_low;;
 
 Power Legend Entries;;
 Unused; WV On; WV Off; Unused; Unused;;
