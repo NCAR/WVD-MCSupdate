@@ -5,6 +5,7 @@ import datetime
 import struct
 
 import SharedPythonFunctions as SPF
+import MakeChildFilesV2      as V2
 
 from netCDF4 import Dataset
 
@@ -796,7 +797,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         UPSFileList.sort()
         for UPSfile in UPSFileList: # read in file, process into NetCDF, and write out file
             try:
-                processUPS(UPSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+#                processUPS(UPSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                V2.processUPS(UPSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "WARNING: Failure to process UPS data - " + "UPSfile = " + str(UPSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(WarningFile, writeString)
@@ -807,7 +809,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         HKeepFileList.sort()
         for HKeepfile in HKeepFileList: # read in file, process into NetCDF, and write out file
             try:
-                processHKeep(HKeepfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+#                processHKeep(HKeepfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                V2.processHK(HKeepfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "WARNING: Failure to process Housekeeping data - " + "HKeepfile = " + str(HKeepfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(WarningFile, writeString)
@@ -818,7 +821,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         WSFileList.sort()
         for WSfile in WSFileList: # read in file, process into NetCDF, and write out file
             try:
-                processWS(WSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+#                processWS(WSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                V2.processWS(WSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "WARNING: Failure to process weather station data - " + "WSfile = " + str(WSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(WarningFile, writeString)
@@ -829,7 +833,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         LLFileList.sort()
         for LLfile in LLFileList:
             try:
-                processLL(LLfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+#                processLL(LLfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                V2.processLL(LLfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "ERROR: Failure to process laser locking data - " + "LLfile = " + str(LLfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(ErrorFile, writeString)
@@ -837,7 +842,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         EtalonFileList.sort()
         for EtalonFile in EtalonFileList:
             try:
-                processEtalons(EtalonFile,NetCDFPath,header,NowDate,NowTime,LastTime)
+#                processEtalons(EtalonFile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                V2.processEtalons(EtalonFile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "WARNING: Failure to process etalon data - " + "Etalonfile = " + str(EtalonFile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(WarningFile, writeString)
@@ -859,7 +865,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
 
         for Powerfile in MCSPowerList:
             try:
-                processPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+#                processPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                V2.processMCSPower(Powerfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "WARNING: Failure to process Power data - " + "Powerfile = " + str(Powerfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(WarningFile, writeString)
