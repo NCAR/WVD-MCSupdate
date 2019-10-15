@@ -165,7 +165,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
         # Defining variable descriptions to be written
         VariableName        = ['time','RTime','Power','ChannelAssignment','AccumEx','Demux']
         VariableColumn      = [4,3,2,5,0,1] # column in the data file to find these variables
-        Transpose           = [False,False,True,False,True,True]
+        Transpose           = [False,False,False,False,False,False]
         VariableDimension   = [('time'),('time'),('nChannels','time'),('nChannels'),('nChannels','time'),('nChannels','time')]
         VariableType        = ['float','float32','float32','U','float32','float32']
         VariableUnit        = ['Fractional Hours','Unitless','Pin count','Unitless','Unitless','Unitless']
