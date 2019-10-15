@@ -854,7 +854,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
         MCSFileList.sort()
         for MCSfile in MCSFileList:
             try:
-                processMCS(MCSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                #processMCS(MCSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
+                VT.processMCSData(MCSfile,NetCDFPath,header,NowDate,NowTime,LastTime)
             except:
                 writeString = "ERROR: Failure to process MCS data - " + "MCSfile = " + str(MCSfile) + " - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
                 SPF.Write2ErrorFile(ErrorFile, writeString)

@@ -17,56 +17,56 @@ def ParseMCSCountsHeader(Header,ChannelAssign):
     Timestamp = struct.unpack('>d',Header[0:8])[0]
     # Bytes 8-10 -> null, Byte 11 -> Start of Text, Byte 12 -> CR, Byte 13 -> 
     # LF, Bytes 14-16 -> null, and Byte 17 -> "0", Bytes 18-27 -> "OnlineH2O " 
-    OnlineH2OCh = ord(Header[29])-48 
-    if ord(Header[28]) == 49: # a two digit channel assignment so add 10 
+    OnlineH2OCh = ord(Header[29:30])-48 
+    if ord(Header[28:29]) == 49: # a two digit channel assignment so add 10 
         OnlineH2OCh = OnlineH2OCh + 10  
     # Bytes 30-40 -> "OfflineH2O "
-    OfflineH2OCh = ord(Header[42])-48
-    if ord(Header[41]) == 49: 
+    OfflineH2OCh = ord(Header[42:43])-48
+    if ord(Header[41:42]) == 49: 
         OfflineH2OCh = OfflineH2OCh + 10 
     # Bytes 43-55 -> "CombinedHSRL "
-    CombinedHSRLCh = ord(Header[57])-48
-    if ord(Header[56]) == 49: 
+    CombinedHSRLCh = ord(Header[57:58])-48
+    if ord(Header[56:57]) == 49: 
         CombinedHSRLCh = CombinedHSRLCh + 10  
     # Bytes 58-71 -> "MolecularHSRL "
-    MolecularHSRLCh = ord(Header[73])-48
-    if ord(Header[72]) == 49: 
+    MolecularHSRLCh = ord(Header[73:74])-48
+    if ord(Header[72:73]) == 49: 
         MolecularHSRLCh = MolecularHSRLCh + 10  
     # Bytes 74-82 -> "OnlineO2 "
-    OnlineO2Ch = ord(Header[84])-48
-    if ord(Header[83]) == 49: 
+    OnlineO2Ch = ord(Header[84:85])-48
+    if ord(Header[83:84]) == 49: 
         OnlineO2Ch = OnlineO2Ch + 10 
     # Bytes 85-94 -> "OfflineO2 "
-    OfflineO2Ch = ord(Header[96])-48
-    if ord(Header[95]) == 49: 
+    OfflineO2Ch = ord(Header[96:97])-48
+    if ord(Header[95:96]) == 49: 
         OfflineO2Ch = OfflineO2Ch + 10
     # Bytes 97-99 -> null, Byte 100 -> Start of text, Byte 101 -> CR, Byte  
     # 102 -> LF, Bytes 103-104 -> null, Bytes 105-106 -> ??????????
     # Bytes 107-110 -> Histogram Data Frame Header Word 
     # Checking that the header word is there and equal to 0x4D430000
-    if ''.join('{:08b}'.format(ord(Header[i])) for i in range(107,111)) != \
+    if ''.join('{:08b}'.format(ord(Header[i:i+1])) for i in range(107,111)) != \
        ''.join('{:08b}'.format(ord(x))         for x in '\x00\x00\x43\x4D'):
         
-        print(''.join('{:08b}'.format(ord(Header[i])) for i in range(107,111)))
+        print(''.join('{:08b}'.format(ord(Header[i:i+1])) for i in range(107,111)))
         print(''.join('{:08b}'.format(ord(x))         for x in '\x00\x00\x43\x4D'))
            
         ErrorResponse = 'The MCS data frame header word does not match the expected value. ~RS'
         print(ErrorResponse)
         return ([],[],[],[],[],[],[],[],[],ErrorResponse)
     # Bytes 111-112 -> Profiles per histogram
-    ProfPerHist = ord(Header[112]) * 2**8 + ord(Header[111])
+    ProfPerHist = ord(Header[112:113]) * 2**8 + ord(Header[111:112])
     # Bytes 113 -> null (from Josh)
     # Bytes 114 -> Sync and Channel
-    Sync     = ord(Header[114])%16
-    Channel  = (ord(Header[114])-Sync)/16
+    Sync     = ord(Header[114:115])%16
+    Channel  = (ord(Header[114:115])-Sync)/16
     # Bytes 115-116 -> Counts per bin * 5ns per count
-    NsPerBin = (ord(Header[116])*2**8 + ord(Header[115]))*5
+    NsPerBin = (ord(Header[116:117])*2**8 + ord(Header[115:116]))*5
     # Bytes 117-118 -> Number of bins
-    NBins    = ord(Header[118])*2**8 + ord(Header[117])
+    NBins    = ord(Header[118:119])*2**8 + ord(Header[117:118])
     # Bytes 119-121 - Relative time counter
-    RTime    = ord(Header[121])*2**16 + ord(Header[120])*2**8 + ord(Header[119])
+    RTime    = ord(Header[121:122])*2**16 + ord(Header[120:121])*2**8 + ord(Header[119:120])
     # Bytes 122 -> Frame counter
-    FCount   = ord(Header[122])
+    FCount   = ord(Header[122:123])
     # Bytes 123-126 = null
     # Saving 
     ChannelAssign[OnlineH2OCh] = str("WVOnline")
@@ -125,20 +125,22 @@ def ReadMCSPhotonCountFile(MCSFile, Channels=12, headerBytes=127):
                     ProfPerHist.append(PPH); del PPH
                     RTime.append(TRel); del TRel
                     Sync.append(sync); del sync
-                    Timestamp.append(TStamp); del TStamp  
+                    Timestamp.append(TStamp); del TStamp 
                     # Confirming footer word was where it is expected and that it is what 
                     # it is expected to be (0xFFFFFFFF)
-                    if '\xff\xff\xff\xff' != file.read(4).format(2):
-                        #Write warning that footer is not equal to what it should be
-                        FooterError = 'The MCS data frame footer word does not match the expected value. ~RS'
-                        print(FooterError)
-                        return([],[],[],[],[],[],[],[],[],[],FooterError)
+#                    print('\xff\xff\xff\xff' != '{:32b}'.file.read(4))
+#                    if '\xff\xff\xff\xff' != file.read(4).format(2):
+#                        #Write warning that footer is not equal to what it should be
+#                        FooterError = 'The MCS data frame footer word does not match the expected value. ~RS'
+#                        print(FooterError)
+#                        print(25)
+#                        return([],[],[],[],[],[],[],[],[],[],FooterError)
                 else:
                     return([],[],[],[],[],[],[],[],[],[],ReadError)
                 ReadIndex = ReadIndex+4
                 # Seeking forward 8 bytes from current location (throwing away 
                 # extra bits on end of data frame so next is alligned)
-                file.seek(8,1)
+                file.seek(12,1)
                 ReadIndex = ReadIndex+8
             else:
                 return([],HeaderError)
