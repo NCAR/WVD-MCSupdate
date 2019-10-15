@@ -9,7 +9,7 @@ Communication Protocol;;
 
 ### This is where the Labview VISA communications should find the weather station.
 Comm Port;;
-COM4;;
+COM5;;
 
 TCP Info;;
 192.168.0.110;4760;100;-1;-1;;
