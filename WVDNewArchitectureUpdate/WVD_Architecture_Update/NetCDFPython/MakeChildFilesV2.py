@@ -71,6 +71,36 @@ def processHK(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
+    
+#%%################################# Etalon ################################### 
+def processHumidity(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+    print("Making Humidity Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
+    # Reading data file and returning a padded array as needed 
+    VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
+    # Defining file attributes
+    FileType              = 'Humidity'
+    FileDescription       = 'Humidity sensor data file'
+    FileDimensionNames    = ['time']
+    FileDimensionSize     = [len(VarData[1])]
+    # Defining variable descriptions to be written
+    VariableName        = ['time','InternalTemperature','ExternalTemperature','DewPoint','RelativeHumidity']
+    VariableColumn      = [4,0,1,3,2] # column in the data file to find these variables
+    Transpose           = [False,False,False,False,False]
+    VariableDimension   = [('time'),('time'),('time'),('time'),('time')]
+    VariableType        = ['float','float32','float32','float32','float32']
+    VariableUnit        = ['Fractional Hours','Unitless','Celcius','Celcius','Unitless']
+    VariableDescription = ['The time of collected data in UTC hours from the start of the day',
+                           'Temperature measured by the humidity sensor base station',
+                           'Temperature measured by the humidity sensor head',
+                           'Dew point temperature measured by the humidity sensor head',
+                           'The relative humidity measured by the humidity sensor head']
+    # Writing the netcdf file 
+    DFF.WriteNetCDFFile(NetCDFOutputPath ,Header         ,Transpose          ,
+                        FileDate         ,FileDescription,FileDimensionNames ,
+                        FileDimensionSize,FileTime       ,FileType           , 
+                        VarData          ,VariableColumn ,VariableDescription,
+                        VariableDimension,VariableName   , VariableType      , VariableUnit)
 
 #%%############################# Laser Locking ################################ 
 def processLL(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
@@ -255,9 +285,9 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 ##%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'    ,'MCS'     ]    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'MCSData','MCSPower']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'   ,'.bin'    ]
+    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'    ,'MCS'     ,'HumiditySensor']    
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'MCSData','MCSPower','Humidity']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'   ,'.bin'    ,'.txt']
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
         # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
@@ -271,6 +301,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                 try:    # trying to process each file by type
                     if   FileType == 'Etalon':         processEtalons(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'Housekeeping':   processHK(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+                    elif FileType == 'Humidity':       processHumidity(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'LaserLocking':   processLL(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'MCSData':        processMCSData(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header,NowDate,NowTime,LastTime)

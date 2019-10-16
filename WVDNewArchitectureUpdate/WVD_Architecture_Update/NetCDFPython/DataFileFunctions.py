@@ -3,10 +3,10 @@
 # These functions are used to open, read, and write data files needed for the 
 # MicroPulse DIAL lidar system. 
 import os
-import sys
+from   netCDF4 import Dataset
 import SharedPythonFunctions as SPF
-import numpy as np
-from netCDF4 import Dataset
+import numpy                 as np
+
 
 #%% 
 # This function takes a list of data (rows are individual measurments) and 
