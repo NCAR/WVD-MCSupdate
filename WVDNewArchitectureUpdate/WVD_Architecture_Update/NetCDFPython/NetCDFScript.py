@@ -13,7 +13,7 @@ import math
 import datetime
 
 from SyncBackup import DoRSync
-from MakeChildFiles import makeNetCDF
+from MakeChildFilesV2 import makeNetCDF
 import SharedPythonFunctions as SPF
 
 
