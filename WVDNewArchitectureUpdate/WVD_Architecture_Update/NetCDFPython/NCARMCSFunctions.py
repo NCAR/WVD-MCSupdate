@@ -7,7 +7,7 @@
 # are returned. 
 
 import os
-import sys
+#import sys
 import struct
 
 #%%
@@ -99,9 +99,7 @@ def ReadMCSPhotonCountFile(MCSFile, Channels=12, headerBytes=127):
     Timestamp = []; ProfPerHist = []; Channel = []; DataArray = []; Sync = []
     CntsPerBin = []; NBins = []; RTime = []; FrameCtr = []; ChannelAssign = []
     # Pre-allocating Channel asignment array
-    for i in range(Channels):
-        ChannelAssign.append("Unassigned")
-    del i
+    for i in range(Channels): ChannelAssign.append("Unassigned")
     # Opening the file and reading its data contents
     with open(MCSFile , 'rb') as file:
         file_length=len(file.read())
@@ -151,8 +149,7 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
                            # power monitoring data frame (see Josh's document
                            # for details about this data frame)               
     ChannelAssign = []
-    for index in range(Channels):
-        ChannelAssign.append("Unassigned")
+    for index in range(Channels): ChannelAssign.append("Unassigned")
     # Pre-allocating data arrays
     AccumExp  = []; Demux = []; PowerCh = []; RTime = [];Timestamp = [];
     HSRLPowCh = []; OnlineH2OCh = []; OfflineH2OCh = []; OnlineO2Ch = []; OfflineO2Ch = [];
@@ -200,10 +197,7 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
             for m in range(Channels):
                 # Pre-allocating the power channel list, accumulation exponent
                 # list and the demux select list
-                if k == 0:
-                    PowerCh.append([])
-                    AccumExp.append([])
-                    Demux.append([])
+                if k==0:PowerCh.append([]);AccumExp.append([]);Demux.append([])
                 # Pulling power channel data out of the file
                 PowerCh[m].append(ord(Data[4*m+StartByte+8:4*m+StartByte+9]) + 
                                   ord(Data[4*m+StartByte+9:4*m+StartByte+10])*2**8 + 

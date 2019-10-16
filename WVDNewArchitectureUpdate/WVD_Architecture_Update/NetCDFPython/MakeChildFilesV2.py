@@ -7,9 +7,12 @@
 #          with a bad data marker (-1000000000) to make all rows the same size
 
 import datetime
-import DataFileFunctions as DFF
-import NCARMCSFunctions  as NMF
-import numpy             as np
+import os
+import sys
+import DataFileFunctions     as DFF
+import NCARMCSFunctions      as NMF
+import numpy                 as np
+import SharedPythonFunctions as SPF
 
 #%%################################# Etalon ################################### 
 def processEtalons(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
@@ -144,7 +147,7 @@ def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit)
     else:                # Some error is reported
-        print(13)
+        print('An error occured when reading the data file.')
         
 #%%############################### MCS Power ##################################
 def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
@@ -181,9 +184,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit)
     else:                # Some error is reported
-        print(13)
-        
-
+        print('An error occured when reading the data file.')
         
 #%%################################## UPS #####################################
 def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
@@ -220,7 +221,6 @@ def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
 
-
 #%%############################ Weather Station ###############################               
 def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
@@ -251,3 +251,33 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
+    
+##%%
+#def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
+#    # Defining the files to be written
+#    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'    ,'MCS'     ]    
+#    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'MCSData','MCSPower']
+#    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'   ,'.bin'    ]
+#    # Looping over all the file types of interest
+#    for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
+#        # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
+#        Where2FindData = os.path.join(sys.argv[1],'Data',PathType)
+#        if os.path.isdir(Where2FindData):
+#            # Making a list of possible files
+#            FileList = SPF.getFiles(Where2FindData , FileType, FileExt, ThenDate, ThenTime)
+#            FileList.sort()
+#            # Looping over all the files found
+#            for File in FileList: # read in file, process into NetCDF, and write out file
+#                try:    # trying to process each file by type
+#                    if   FileType == 'Etalon':         processEtalons(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                    elif FileType == 'Housekeeping':   processHK(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                    elif FileType == 'LaserLocking':   processLL(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                    elif FileType == 'MCSData':        processMCSData(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                    elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                    elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                    elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+#                except:   # Logging the failure of any file to write
+#                    writeString = 'WARNING: Failure to process ' + FileType + ' data - ' + \
+#                                   FileType + ' file = ' + str(File) + ' - ' + str(NowTime) + \
+#                                   '\n' + str(sys.exc_info()[0]) + '\n\n'
+#                    print(writeString)

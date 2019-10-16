@@ -116,8 +116,7 @@ def ReadAndPadTextFile(FileName):
                 Data.append(line.split('\t'))
     # Determining the needed size of the array
     Len = []
-    for m in range(len(Data)):
-        Len.append(len(Data[m]))
+    for m in range(len(Data)): Len.append(len(Data[m]))
     ArrayWidth = max(Len)
     # Defining a padded data array
     Padded = []
