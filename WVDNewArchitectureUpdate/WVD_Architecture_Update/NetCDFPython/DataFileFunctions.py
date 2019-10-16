@@ -2,13 +2,11 @@
 # Written For: National Center for Atmospheric Research
 # These functions are used to open, read, and write data files needed for the 
 # MicroPulse DIAL lidar system. 
-#import pdb
 import os
 import sys
 import SharedPythonFunctions as SPF
 import numpy as np
 from netCDF4 import Dataset
-sys.dont_write_bytecode = True
 
 #%% 
 # This function takes a list of data (rows are individual measurments) and 
@@ -25,7 +23,7 @@ def ConvertAlphaNumericFile(ListData,Type,Transpose=True):
     else:
         Collected = ListData
     # Determining if the data type selected is recognized
-    CellArray = []; DataType = 12
+    CellArray = []; 
     for m in range(len(Type)):
         DataType = 12
         if Type[m] == 'str':
@@ -45,7 +43,7 @@ def ConvertAlphaNumericFile(ListData,Type,Transpose=True):
         else:
             CellArray.append([])  
             print('Data type in file not recognized')
-     # returning cell array
+    # returning cell array
     return CellArray    
 
 #%%
@@ -57,7 +55,8 @@ def CreateAndPlaceNetCDFVariable(File,VarData,VarDescription,VarDimension,VarNam
     Data.units = VarUnit
     Data.description = VarDescription
     
-#%%
+#%% 
+# This function strips off the date and time from the files written by Labview
 def FindFileDateAndTime(FileName,Print = False):
     FileDate = FileName[-19:-11]
     FileTime = FileName[-10:-4]
@@ -79,27 +78,21 @@ def WriteNetCDFFile(LocalNetCDFOutputPath,Header,Transpose,
     DataFile.description = FileDescription
     # Load up header information for file
 
-
-
     # Creating dimensions
     for m in range(len(FileDimensionNames)):
         DataFile.createDimension(FileDimensionNames[m],FileDimensionSize[m])
     # Writing individual variables
-    if (type(VarData) == list):           # File was an alpha-numeric file or contained complicated data
+    if (type(VarData) == list):      # File was an alpha-numeric file or contained complicated data
         for m in range(len(VarName)):
             if Transpose[m]:
-                # transposing the data arrays (not yet sure why but the phton
-                # count array requires it...and it is the only array that 
-                # enters this portion of the loop)
+                # transposing the data arrays 
                 VarData[VarColumn[m]] = np.transpose(VarData[VarColumn[m]])
             CreateAndPlaceNetCDFVariable(DataFile, VarData[VarColumn[m]], VarDescription[m], 
                                          VarDimension[m], VarName[m], VarType[m], VarUnit[m])
     else:
-        for m in range(len(VarName)):     # File only contained numbers
+        for m in range(len(VarName)):# File only contained numbers
             if Transpose[m]:
-                # transposing the data arrays (not yet sure why but the 
-                # thermocouple array requires it...and it is the only array that 
-                # enters this portion of the loop)
+                # transposing the data arrays
                 CreateAndPlaceNetCDFVariable(DataFile, np.transpose(VarData[:,VarColumn[m]]), VarDescription[m], 
                                          VarDimension[m], VarName[m], VarType[m], VarUnit[m])
             else:
@@ -111,14 +104,14 @@ def WriteNetCDFFile(LocalNetCDFOutputPath,Header,Transpose,
 #%%
 # This function reads a given text file line by line and checks to make sure 
 # all lines are the same length. If they are not, it pads the lines that are 
-# shorter with nan values
+# shorter with bad values
 def ReadAndPadTextFile(FileName):
-    # Defining the original data arra
+    # Defining the original data array
     Data = []
     # Opening the file to be read
     with open(FileName,'r') as file:     # opening the file as read only
         for line in file:                # Looping over all lines in the file
-            line = line.replace(' ','\t').strip('\r\n')
+            line = line.replace(' ','\t').strip('\r\n') # making sure the deliminator is consistent 
             if len(line.split('\t')) > 0: # Reading each non-zero length line
                 Data.append(line.split('\t'))
     # Determining the needed size of the array

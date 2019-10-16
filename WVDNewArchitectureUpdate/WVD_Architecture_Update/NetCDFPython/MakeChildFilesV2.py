@@ -105,7 +105,7 @@ def processLL(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
 
-#%%
+#%%################################ MCS Data ##################################
 def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
     print("Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
@@ -146,7 +146,7 @@ def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     else:                # Some error is reported
         print(13)
         
-#%%
+#%%############################### MCS Power ##################################
 def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
     print("Making MCS Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
@@ -251,38 +251,3 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
-    
-
-#
-#   
-## %% Defining constants
-#CodePath         = os.path.dirname(os.path.realpath(__file__))
-#DataPath         = os.path.join(CodePath,'RawData')
-#NetCDFOutputPath = os.path.join(CodePath,'NetCDF')
-#WSFileName       = 'WeatherStation_20190612_080000.txt'
-#LLFileName       = 'LaserLockingData_20190612_080000.txt'
-#HKFileName       = 'Housekeeping_20190612_080000.txt'
-#EtalonFileName1  = 'EtalonData_20190612_060000.txt'
-#EtalonFileName2  = 'EtalonData_20190612_080000.txt'
-#UPSFileName      = 'UPS_20190612_080000.txt'
-#MCSFileName      = 'MCSData_20190612_080000.bin'
-#Header = ''    
-##  
-
-
-
-## %% Processing the data files
-#processEtalons(os.path.join(DataPath,EtalonFileName1),NetCDFOutputPath,Header,'','','')
-#processEtalons(os.path.join(DataPath,EtalonFileName2),NetCDFOutputPath,Header,'','','')
-#
-#processHK(os.path.join(DataPath,HKFileName),NetCDFOutputPath,Header,'','','')
-#
-#processLL(os.path.join(DataPath,LLFileName),NetCDFOutputPath,Header,'','','')
-#
-#processMCSData(os.path.join(DataPath,MCSFileName),NetCDFOutputPath,Header,'','','')
-#
-#processUPS(os.path.join(DataPath,UPSFileName),NetCDFOutputPath,Header,'','','')
-#
-#processWS(os.path.join(DataPath,WSFileName),NetCDFOutputPath,Header,'','','')
-
-

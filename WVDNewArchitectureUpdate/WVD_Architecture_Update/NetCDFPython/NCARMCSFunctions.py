@@ -9,7 +9,6 @@
 import os
 import sys
 import struct
-sys.dont_write_bytecode = True
 
 #%%
 def ParseMCSCountsHeader(Header,ChannelAssign):
@@ -45,16 +44,14 @@ def ParseMCSCountsHeader(Header,ChannelAssign):
     # Bytes 107-110 -> Histogram Data Frame Header Word 
     # Checking that the header word is there and equal to 0x4D430000
     if ''.join('{:08b}'.format(ord(Header[i:i+1])) for i in range(107,111)) != \
-       ''.join('{:08b}'.format(ord(x))         for x in '\x00\x00\x43\x4D'):
-        
+       ''.join('{:08b}'.format(ord(x))             for x in '\x00\x00\x43\x4D'):
         print(''.join('{:08b}'.format(ord(Header[i:i+1])) for i in range(107,111)))
-        print(''.join('{:08b}'.format(ord(x))         for x in '\x00\x00\x43\x4D'))
-           
+        print(''.join('{:08b}'.format(ord(x))             for x in '\x00\x00\x43\x4D'))
         ErrorResponse = 'The MCS data frame header word does not match the expected value. ~RS'
         print(ErrorResponse)
         return ([],[],[],[],[],[],[],[],[],ErrorResponse)
     # Bytes 111-112 -> Profiles per histogram
-    ProfPerHist = ord(Header[112:113]) * 2**8 + ord(Header[111:112])
+    ProfPerHist = ord(Header[112:113])*2**8 + ord(Header[111:112])
     # Bytes 113 -> null (from Josh)
     # Bytes 114 -> Sync and Channel
     Sync     = ord(Header[114:115])%16
@@ -128,20 +125,19 @@ def ReadMCSPhotonCountFile(MCSFile, Channels=12, headerBytes=127):
                     Timestamp.append(TStamp); del TStamp 
                     # Confirming footer word was where it is expected and that it is what 
                     # it is expected to be (0xFFFFFFFF)
-#                    print('\xff\xff\xff\xff' != '{:32b}'.file.read(4))
-#                    if '\xff\xff\xff\xff' != file.read(4).format(2):
-#                        #Write warning that footer is not equal to what it should be
-#                        FooterError = 'The MCS data frame footer word does not match the expected value. ~RS'
-#                        print(FooterError)
-#                        print(25)
-#                        return([],[],[],[],[],[],[],[],[],[],FooterError)
+                    Footer = file.read(4)
+                    if ''.join('{:08b}'.format(ord(Footer[i:i+1])) for i in range(0,4)) != \
+                       ''.join('{:08b}'.format(ord(x))           for x in '\xff\xff\xff\xff'):
+                        #Write warning that footer is not equal to what it should be
+                        FooterError = 'The MCS data frame footer word does not match the expected value. ~RS'
+                        print(FooterError)
+                        return([],[],[],[],[],[],[],[],[],[],FooterError)
                 else:
                     return([],[],[],[],[],[],[],[],[],[],ReadError)
-                ReadIndex = ReadIndex+4
                 # Seeking forward 8 bytes from current location (throwing away 
                 # extra bits on end of data frame so next is alligned)
-                file.seek(12,1)
-                ReadIndex = ReadIndex+8
+                file.seek(8,1)
+                ReadIndex = ReadIndex+12
             else:
                 return([],HeaderError)
     # If there are no observed errors, return the data as a tuple
@@ -191,7 +187,7 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
             # 72 (Carrage Return), 73 (Line feed), 74-76 (null), 77 (<)
             # Checking that the header word is there and equal to 0x4D430000
             if ''.join('{:08b}'.format(ord(Data[i:i+1])) for i in range(StartByte,StartByte+4)) != \
-               ''.join('{:08b}'.format(ord(x))       for x in '\x00\x00\x50\x4D'):
+               ''.join('{:08b}'.format(ord(x))           for x in '\x00\x00\x50\x4D'):
                    HeaderError = 'The MCS power frame header word does not match the expected value. ~RS'
                    print(HeaderError)
                    return([],[],[],[],[],[],HeaderError)
