@@ -82,14 +82,14 @@ def processHumidity(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     FileType              = 'Humidity'
     FileDescription       = 'Humidity sensor data file'
     FileDimensionNames    = ['time']
-    FileDimensionSize     = [len(VarData[1])]
+    FileDimensionSize     = [len(VarData[:,1])]
     # Defining variable descriptions to be written
     VariableName        = ['time','InternalTemperature','ExternalTemperature','DewPoint','RelativeHumidity']
     VariableColumn      = [4,0,1,3,2] # column in the data file to find these variables
     Transpose           = [False,False,False,False,False]
     VariableDimension   = [('time'),('time'),('time'),('time'),('time')]
     VariableType        = ['float','float32','float32','float32','float32']
-    VariableUnit        = ['Fractional Hours','Unitless','Celcius','Celcius','Unitless']
+    VariableUnit        = ['Fractional Hours','Celcius','Celcius','Celcius','%']
     VariableDescription = ['The time of collected data in UTC hours from the start of the day',
                            'Temperature measured by the humidity sensor base station',
                            'Temperature measured by the humidity sensor head',
