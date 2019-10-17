@@ -205,7 +205,7 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
                 # Pulling the accumulation exponent out of the file
                 AccumExp[m].append(ord(Data[4*m+StartByte+11:4*m+StartByte+12])%2**4)
                 # Pulling the demux selection out of the file
-                Demux[m].append(ord(Data[4*m+StartByte+11:4*m+StartByte+12])/2**4)
+                Demux[m].append(ord(Data[4*m+StartByte+11:4*m+StartByte+12])//2**4)
             # Checking that the footer word is there and equal to 0xFFFFFFFF
             # For reference bytes 134-137 should be the footer word
             if ''.join('{:08b}'.format(ord(Data[4*m+StartByte+12+i:4*m+StartByte+13+i])) for i in range(0,4)) != \
