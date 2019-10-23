@@ -216,6 +216,42 @@ def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     else:                # Some error is reported
         print('An error occured when reading the data file.')
         
+#%%############################### MCS Power ##################################
+def processMCSPowerV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+    # Printing text to the console to tell the user what is happening
+    print("Making MCS V2 Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    # Reading data file and returning a data array as needed 
+    DataType = ['f','f','f','f','f','str','Pass']   
+    VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPowerFileV2(FileName)),DataType,False)  
+    # Checking to see if there were any file reading errors
+    if not VarData[-1]:  # No error observed
+        # Defining file attributes
+        FileType              = 'Powsample'
+        FileDescription       = 'Multi-channel scalar (MCS) power monitor data file'
+        FileDimensionNames    = ['time','nChannels']
+        FileDimensionSize     = [len(VarData[4]),len(VarData[2])]
+        # Defining variable descriptions to be written
+        VariableName        = ['time','RTime','Power','ChannelAssignment','AccumEx','Demux']
+        VariableColumn      = [4,3,2,5,0,1] # column in the data file to find these variables
+        Transpose           = [False,False,False,False,False,False]
+        VariableDimension   = [('time'),('time'),('nChannels','time'),('nChannels'),('nChannels','time'),('nChannels','time')]
+        VariableType        = ['float','float32','float32','U','float32','float32']
+        VariableUnit        = ['Fractional Hours','Unitless','Pin count','Unitless','Unitless','Unitless']
+        VariableDescription = ['The time of collected data in UTC hours from the start of the day',
+                               'Raw pin count from the MCS analog detectors (must be converted to power by _______)',
+                               'String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)',
+                               'Relative time counter, 20 bit time value relative to the most recent system reset (or time reset)',
+                               'Number of shots to accumulate to average out the power (2^#)',
+                               'The source of the demuxing signal used to split power measurements']
+        # Writing the netcdf file 
+        DFF.WriteNetCDFFile(NetCDFOutputPath ,Header         ,Transpose          ,
+                            FileDate         ,FileDescription,FileDimensionNames ,
+                            FileDimensionSize,FileTime       ,FileType           , 
+                            VarData          ,VariableColumn ,VariableDescription,
+                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+    else:                # Some error is reported
+        print('An error occured when reading the data file.')
 #%%################################## UPS #####################################
 def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Printing text to the console to tell the user what is happening
@@ -282,12 +318,12 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
     
-##%%
+#%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'    ,'MCS'     ,'HumiditySensor']    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'MCSData','MCSPower','Humidity']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'   ,'.bin'    ,'.txt']
+    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'    ,'MCS'         ,'HumiditySensor']    
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'MCSData','TestingPower','Humidity']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'   ,'.bin'        ,'.txt']
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
         # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
@@ -307,6 +343,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                     elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+                    elif FileType == 'TestingPower':   processMCSPowerV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                 except:   # Logging the failure of any file to write
                     writeString = 'WARNING: Failure to process ' + FileType + ' data - ' + \
                                    FileType + ' file = ' + str(File) + ' - ' + str(NowTime) + \

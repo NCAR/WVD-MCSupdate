@@ -218,3 +218,80 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
             # return), 143 (Line Feed), 144 (Carriage return), 145 (Line Feed)
     # Return the data arrays read from the file
     return(AccumExp,Demux,PowerCh,RTime,Timestamp,ChannelAssign,'')
+
+#%%
+def ReadMCSPowerFileV2(Powerfile):            
+    # Variables for running the loop
+    ReadIndex = 0; FirstTime = True; Count = 0
+    # Pre-allocating data arrays
+    AccumExp  = []; Demux = []; Power = []; RTime = [];Timestamp = [];
+    # Opening the file as a binary file and looping over availible data bytes
+    with open(Powerfile, "rb") as file:
+        file_length=len(file.read())
+        file.seek(0) # Go to beginning of the file
+        while ReadIndex < file_length:
+#            # Getting rid of the start of text bytes from labview
+#            file.seek(4,1); ReadIndex += 4                
+            # Reading next chunk of data
+            Data = file.read(10); ReadIndex += 10;             
+            # Reading the data time stamp
+            Timestamp.append(struct.unpack('>d',Data[0:8])[0])
+            # Reading the number of channels and the MPD Number
+#            MPDNum    = ord(Data[8:9])
+            NChannels = ord(Data[9:10])
+            # Reading the channel map
+            ChannelMap = []  
+            for m in range(NChannels): 
+                ChannelMap.append(MCSPowerMap(ord(file.read(1))))
+            ReadIndex += NChannels
+            # Checking that the header word is there and equal to 0x4D430000
+            if ''.join('{:08b}'.format(ord(file.read(1))) for i in range(0,4)) != \
+               ''.join('{:08b}'.format(ord(x))            for x in '\x00\x00\x50\x4D'):  
+                   HeaderError = 'The MCS power frame header word does not match the expected value. ~RS'
+                   print(HeaderError)
+                   return([],[],[],[],[],[],HeaderError)
+            ReadIndex += 4
+            # Reading the relative time counter
+            Data = file.read(4); ReadIndex += 4;
+            RTime.append(ord(Data[0:1])+ord(Data[1:2])*2**8+ord(Data[2:3])*2**16)
+            # Reading the power information
+            for m in range(NChannels):
+                # Reading data from the file
+                Data = file.read(4); ReadIndex += 4;
+                # Pre-allocating 2d-power list, accumulation exponent list, and demux list
+                if FirstTime:Power.append([]);AccumExp.append([]);Demux.append([])
+                # Pulling power channel data out of the file
+                Power[m].append(ord(Data[0:1])+ord(Data[1:2])*2**8+ord(Data[2:3])*2**16)
+                # Pulling the accumulation exponent out of the file
+                AccumExp[m].append(ord(Data[3:4])%2**4)
+                # Pulling the demux selection out of the file
+                Demux[m].append(ord(Data[3:4])//2**4)
+            # Checking that the footer word is there and equal to 0xFFFFFFFF
+            if ''.join('{:08b}'.format(ord(file.read(1))) for i in range(0,4)) != \
+               ''.join('{:08b}'.format(ord(x))            for x in '\xFF\xFF\xFF\xFF'):  
+                   FooterError = 'The MCS power frame footer word does not match the expected value. ~RS'
+                   print(FooterError)
+                   return([],[],[],[],[],[],FooterError)
+            ReadIndex += 4
+            # Checking that the data chunk ends with a carriage return and line feed
+            if (ord(file.read(1)) != 13) or (ord(file.read(1)) != 10):
+                FootError = 'The data write footer word does not match the expected value. ~RS'
+                print(FootError)
+                return([],[],[],[],[],[],FootError)
+            ReadIndex += 2
+            # Updating the counter describing the number of power measurements
+            FirstTime = False
+            Count += 1
+    # Return the data arrays read from the file
+    return(AccumExp,Demux,Power,RTime,Timestamp,ChannelMap,'')
+    
+    
+def MCSPowerMap(Type):
+    if   Type == 1: String = 'Unknown'
+    elif Type == 2: String = 'WVOnline'
+    elif Type == 3: String = 'WVOffline'
+    elif Type == 4: String = 'O2Online'
+    elif Type == 5: String = 'O2Offline'
+    elif Type == 6: String = 'HSRL'
+    else:         	String = 'Unassigned'
+    return String
