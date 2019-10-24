@@ -203,12 +203,14 @@ def ReadMCSPhotonCountFileV2(MCSFile, Channels=12, headerBytes=30):
                     Timestamp.append(TStamp); del TStamp  
                     # Confirming footer word was where it is expected and that it is what 
                     # it is expected to be (0xFFFFFFFF)
-                    if '\xff\xff\xff\xff' != file.read(4).format(2):
+                    Footer = file.read(4)
+                    if ''.join('{:08b}'.format(ord(Footer[i:i+1])) for i in range(0,4)) != \
+                       ''.join('{:08b}'.format(ord(x))           for x in '\xff\xff\xff\xff'):
                         #Write warning that footer is not equal to what it should be
                         FooterError = 'The MCS data frame footer word does not match the expected value. ~RS'
                         print(FooterError)
                         return([],[],[],[],[],[],[],[],[],[],FooterError)
-                    ReadIndex = ReadIndex+4
+                    ReadIndex += 4
                     # Checking that the data chunk ends with a carriage return and line feed
                     if (ord(file.read(1)) != 13) or (ord(file.read(1)) != 10):
                         FootError = 'The data write footer word does not match the expected value. ~RS'
