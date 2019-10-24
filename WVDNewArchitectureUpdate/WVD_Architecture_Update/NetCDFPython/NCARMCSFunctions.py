@@ -74,6 +74,35 @@ def ParseMCSCountsHeader(Header,ChannelAssign):
     ChannelAssign[OfflineO2Ch] = str("O2Offline")
     return(Channel,FCount,NBins,NsPerBin,ProfPerHist,RTime,Sync,Timestamp,ChannelAssign,'')
 
+def ParseMCSCountsHeaderV2(Header,ChannelAssign):
+    # Reading the data time stamp
+    Timestamp = struct.unpack('>d',Header[0:8])[0]
+    # Reading the number of channels and the MPD Number
+#            MPDNum    = ord(Header[8:9])
+    ChannelMap = MCSPhotonCountMap(ord(Header[9:10]))
+    # Checking that the header word is there and equal to 0x4D430000
+    if ''.join('{:08b}'.format(ord(Header[i:i+1])) for i in range(10,14)) != \
+       ''.join('{:08b}'.format(ord(x))             for x in '\x00\x00\x43\x4D'):
+        ErrorResponse = 'The MCS data frame header word does not match the expected value. ~RS'
+        print(ErrorResponse)
+        return ([],[],[],[],[],[],[],[],[],ErrorResponse)
+    # Bytes 14-15 -> Profiles per histogram
+    ProfPerHist = ord(Header[15:16])*2**8 + ord(Header[14:15])
+    # Byte 17 -> Sync and Channel
+    Sync     = ord(Header[17:18])%16
+    Channel  = (ord(Header[17:18])-Sync)//16
+    # Bytes 18-19 -> Counts per bin * 5ns per count
+    NsPerBin = (ord(Header[19:20])*2**8 + ord(Header[18:19]))*5
+    # Bytes 20-21 -> Number of bins
+    NBins    = ord(Header[21:22])*2**8 + ord(Header[20:21])
+    # Bytes 22-24 - Relative time counter
+    RTime    = ord(Header[24:25])*2**16 + ord(Header[23:24])*2**8 + ord(Header[22:23])
+    # Bytes 25 -> Frame counter
+    FCount   = ord(Header[25:26])
+    # 
+    ChannelAssign[Channel] = ChannelMap
+    return(Channel,FCount,NBins,NsPerBin,ProfPerHist,RTime,Sync,Timestamp,ChannelAssign,'')
+
 #%%
 def ReadMCSCounts(Bins,File,ReadIndex,ExpectedChannel):
     # Reading the data from the MCS
@@ -136,6 +165,58 @@ def ReadMCSPhotonCountFile(MCSFile, Channels=12, headerBytes=127):
                 # extra bits on end of data frame so next is alligned)
                 file.seek(8,1)
                 ReadIndex = ReadIndex+12
+            else:
+                return([],HeaderError)
+    # If there are no observed errors, return the data as a tuple
+    return(Channel, ChannelAssign, CntsPerBin, DataArray, FrameCtr, NBins, ProfPerHist, RTime, Sync, Timestamp, '')
+
+def ReadMCSPhotonCountFileV2(MCSFile, Channels=12, headerBytes=30):
+    # Constants
+    ReadIndex = 0
+    # Pre-allocating data arrays 
+    Timestamp = []; ProfPerHist = []; Channel = []; DataArray = []; Sync = []
+    CntsPerBin = []; NBins = []; RTime = []; FrameCtr = []; ChannelAssign = []
+    # Pre-allocating Channel asignment array
+    for i in range(Channels):
+        ChannelAssign.append("Unassigned")
+    del i
+    # Opening the file and reading its data contents
+    with open(MCSFile , 'rb') as file:
+        file_length=len(file.read())
+        file.seek(0)
+        # Looping over the availible bytes
+        while ReadIndex+headerBytes < file_length:
+            # Reading and saving header information and photon counting information  
+            (Ch,FC,Bins,NPB,PPH,TRel,sync,TStamp,ChannelAssign,HeaderError) = ParseMCSCountsHeaderV2(file.read(headerBytes),ChannelAssign)
+            ReadIndex+=headerBytes
+            if HeaderError == '':
+                (DataReturn,ReadIndex,ReadError) = ReadMCSCounts(Bins,file,ReadIndex,Ch)
+                if ReadError == '':
+                    Channel.append(Ch); del Ch
+                    CntsPerBin.append(NPB); del NPB
+                    DataArray.append(DataReturn); del DataReturn
+                    FrameCtr.append(FC); del FC
+                    NBins.append(Bins); del Bins
+                    ProfPerHist.append(PPH); del PPH
+                    RTime.append(TRel); del TRel
+                    Sync.append(sync); del sync
+                    Timestamp.append(TStamp); del TStamp  
+                    # Confirming footer word was where it is expected and that it is what 
+                    # it is expected to be (0xFFFFFFFF)
+                    if '\xff\xff\xff\xff' != file.read(4).format(2):
+                        #Write warning that footer is not equal to what it should be
+                        FooterError = 'The MCS data frame footer word does not match the expected value. ~RS'
+                        print(FooterError)
+                        return([],[],[],[],[],[],[],[],[],[],FooterError)
+                    ReadIndex = ReadIndex+4
+                    # Checking that the data chunk ends with a carriage return and line feed
+                    if (ord(file.read(1)) != 13) or (ord(file.read(1)) != 10):
+                        FootError = 'The data write footer word does not match the expected value. ~RS'
+                        print(FootError)
+                        return([],[],[],[],[],[],FootError)
+                    ReadIndex += 2
+                else:
+                    return([],[],[],[],[],[],[],[],[],[],ReadError)
             else:
                 return([],HeaderError)
     # If there are no observed errors, return the data as a tuple
@@ -219,7 +300,6 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
     # Return the data arrays read from the file
     return(AccumExp,Demux,PowerCh,RTime,Timestamp,ChannelAssign,'')
 
-#%%
 def ReadMCSPowerFileV2(Powerfile):            
     # Variables for running the loop
     ReadIndex = 0; FirstTime = True; Count = 0
@@ -285,7 +365,7 @@ def ReadMCSPowerFileV2(Powerfile):
     # Return the data arrays read from the file
     return(AccumExp,Demux,Power,RTime,Timestamp,ChannelMap,'')
     
-    
+#%% MCS Maps    
 def MCSPowerMap(Type):
     if   Type == 1: String = 'Unknown'
     elif Type == 2: String = 'WVOnline'
@@ -295,3 +375,34 @@ def MCSPowerMap(Type):
     elif Type == 6: String = 'HSRL'
     else:         	String = 'Unassigned'
     return String
+
+def MCSPhotonCountMap(Type):
+    if   Type ==  1: String = 'Unknown'
+################## WV DIAL ##################
+    elif Type ==  2: String = 'WVOnline'
+    elif Type ==  3: String = 'WVOnlineLow'
+    elif Type ==  4: String = 'WVOffline'
+    elif Type ==  5: String = 'WVOnlineLow'
+################## O2 DIAL without Built In HSRL ##################
+    elif Type ==  6: String = 'O2Online'
+    elif Type ==  7: String = 'O2OnlineLow'
+    elif Type ==  8: String = 'O2Offline'
+    elif Type ==  9: String = 'O2OnlineLow'
+################## O2 With Built In HSRL ##################
+    elif Type == 10: String = 'O2OnlineMol'
+    elif Type == 11: String = 'O2OnlineMolLow'
+    elif Type == 12: String = 'O2OnlineComb'
+    elif Type == 13: String = 'O2OnlineCombLow'
+    elif Type == 14: String = 'O2OfflineMol'
+    elif Type == 15: String = 'O2OfflineMolLow'
+    elif Type == 16: String = 'O2OfflineComb'
+    elif Type == 17: String = 'O2OfflineCombLow'
+################## Stand Alone HSRL ##################
+    elif Type == 18: String = 'HSRLMol'
+    elif Type == 19: String = 'HSRLMolLow'
+    elif Type == 20: String = 'HSRLCombined'
+    elif Type == 21: String = 'HSRLCombinedLow'
+################## Default ##################
+    else:         	 String = 'Unassigned'
+    return String
+    

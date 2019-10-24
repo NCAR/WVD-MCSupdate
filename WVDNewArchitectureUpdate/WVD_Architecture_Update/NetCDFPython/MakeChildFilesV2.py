@@ -178,6 +178,47 @@ def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                             VariableDimension,VariableName   , VariableType      , VariableUnit)
     else:                # Some error is reported
         print('An error occured when reading the data file.')
+
+#%%################################ MCS Data ##################################
+def processMCSDataV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+    # Printing text to the console to tell the user what is happening
+    print("Making MCS V2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    # Reading data file and returning a data array as needed 
+    DataType = ['f','str','f','f','f','f','f','f','f','f','Pass'] 
+    VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPhotonCountFileV2(FileName)),DataType,False)
+    # Checking to see if there were any file reading errors
+    if not VarData[-1]:  # No error observed
+        # Defining file attributes
+        FileType              = 'MCSsample'
+        FileDescription       = 'Multi-channel scalar (MCS) photon count histogram data file'
+        FileDimensionNames    = ['time','nBins','nChannels']
+        FileDimensionSize     = [len(VarData[9]),len(VarData[3][0]),len(VarData[1])]
+        # Defining variable descriptions to be written
+        VariableName        = ['time','ProfilesPerHist','Channel','nsPerBin','NBins','Data','ChannelAssignment','RTime','FrameCount','SyncSource']
+        VariableColumn      = [9,6,0,2,5,3,1,7,4,8] # column in the data file to find these variables
+        Transpose           = [False,False,False,False,False,True,False,False,False,False]
+        VariableDimension   = [('time'),('time'),('time'),('time'),('time'),('nBins','time'),('nChannels'),('time'),('time'),('time')]
+        VariableType        = ['float','float32','float32','float32','float32','float32','U','float32','float32','float32']
+        VariableUnit        = ['Fractional Hours','Number of shots','Unitless','ns','Unitless','photons','unitless','ms','Unitless','Unitless']
+        VariableDescription = ['The time of collected data in UTC hours from the start of the day',
+                               'Number of laser shots summed to create a single verticle histogram',
+                               'MCS hardware channel number for each measurement. There are 8 real valued inputs and 4 extra channels resulting from demuxing',
+                               'The width of each altitude bin',
+                               'Number of sequential altitude bins measured for each histogram profile',
+                               'A profile containing the number of photons returned in each of the sequential altitude bin',
+                               'String value defining what hardware was connected to the MCS digital detection channels (Choices are: WVOnline, WVOffline, HSRLCombined, HSRLMolecular, O2Online, O2Offline, or Unassigned)',
+                               'Relative time counter, 20 bit time valuerelative to the most recent system reset (or time reset)',
+                               'Number of the data frame sent by the MCS. This should be sequential and incrimenting by 1 each new measurement',
+                               'The number of the input sync source used on the MCS. There are 3 availible numbered 0-2.']
+        # Writing the netcdf file 
+        DFF.WriteNetCDFFile(NetCDFOutputPath ,Header         , Transpose         ,
+                            FileDate         ,FileDescription,FileDimensionNames ,
+                            FileDimensionSize,FileTime       ,FileType           , 
+                            VarData          ,VariableColumn ,VariableDescription,
+                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+    else:                # Some error is reported
+        print('An error occured when reading the data file.')
         
 #%%############################### MCS Power ##################################
 def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
@@ -321,9 +362,9 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'    ,'MCS'         ,'HumiditySensor']    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'MCSData','TestingPower','Humidity']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'   ,'.bin'        ,'.txt']
+    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'HumiditySensor']    
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','Humidity']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.txt']
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
         # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
@@ -343,6 +384,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                     elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+                    elif FileType == 'TestingData':    processMCSDataV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'TestingPower':   processMCSPowerV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                 except:   # Logging the failure of any file to write
                     writeString = 'WARNING: Failure to process ' + FileType + ' data - ' + \
