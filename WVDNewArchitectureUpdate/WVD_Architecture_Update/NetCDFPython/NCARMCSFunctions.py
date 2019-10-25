@@ -384,12 +384,12 @@ def MCSPhotonCountMap(Type):
     elif Type ==  2: String = 'WVOnline'
     elif Type ==  3: String = 'WVOnlineLow'
     elif Type ==  4: String = 'WVOffline'
-    elif Type ==  5: String = 'WVOnlineLow'
+    elif Type ==  5: String = 'WVOfflineLow'
 ################## O2 DIAL without Built In HSRL ##################
     elif Type ==  6: String = 'O2Online'
     elif Type ==  7: String = 'O2OnlineLow'
     elif Type ==  8: String = 'O2Offline'
-    elif Type ==  9: String = 'O2OnlineLow'
+    elif Type ==  9: String = 'O2OfflineLow'
 ################## O2 With Built In HSRL ##################
     elif Type == 10: String = 'O2OnlineMol'
     elif Type == 11: String = 'O2OnlineMolLow'
