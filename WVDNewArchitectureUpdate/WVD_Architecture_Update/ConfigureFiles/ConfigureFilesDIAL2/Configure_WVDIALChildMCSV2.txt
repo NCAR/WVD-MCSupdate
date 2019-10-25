@@ -22,6 +22,14 @@ Data Channel Cluster;;
 Power Channel Cluster;;
 1; 0; 6; 2; 3;;
 
+###  TypeDef_MCSPhotonCountingMMap.ctl
+Data Hardware Connectivity;;
+2;18;20;0;0;0;0;0;4;0;0;0;;
+
+### TypeDef_MCSPowerMap.ctl
+Power Hardware Connectivity;;
+2;6;0;0;0;0;3;0;0;0;0;0;;
+
 
 ################################################################################
 ### Setting the state of the MCS digital controls. These are all array elements
