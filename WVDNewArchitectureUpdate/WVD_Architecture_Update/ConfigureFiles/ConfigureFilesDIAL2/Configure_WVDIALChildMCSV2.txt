@@ -24,7 +24,7 @@ Power Channel Cluster;;
 
 ###  TypeDef_MCSPhotonCountingMMap.ctl
 Data Hardware Connectivity;;
-2;18;20;0;0;0;0;0;4;0;0;0;;
+2;0;18;20;0;0;0;0;4;0;0;0;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
