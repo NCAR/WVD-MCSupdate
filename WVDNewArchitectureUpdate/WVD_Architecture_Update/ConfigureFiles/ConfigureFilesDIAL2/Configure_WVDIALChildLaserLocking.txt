@@ -57,12 +57,6 @@ I Gain;;
 D Gain;;
 6;7;8;8;;
 
-### This is the current and only locking method for locking the laser. This is the 
-### temperature step size to take when trying to temperature tune the lasers in 
-### degrees celciuc
-Lock Step Size;;
-0.001;0.001;0.001;0.001;;
-
 ### This is the maximum allowable time that a laser is allowed to try to lock itself 
 ### before it times out, in seconds. 
 Time Limit;;
@@ -77,6 +71,12 @@ Locking On;;
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
 Locking Type;;
 1;1;1;1;;
+
+### This is the current and only locking method for locking the laser. This is the 
+### temperature step size to take when trying to temperature tune the lasers in 
+### degrees celciuc
+Lock Step Size;;
+0.001;0.001;0.001;0.001;;
 
 ### This is the minimum power required to be read from teh wavemeter to perform laser
 ### locking. This value is compared to the value read by the wavemeter. The units will
