@@ -36,11 +36,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-24.084;30.803;25;;
+24.096;27.840;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-100;100;84;;
+100;100;90;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -65,7 +65,7 @@ Time Limit;;
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-1;0;0;;
+1;1;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
