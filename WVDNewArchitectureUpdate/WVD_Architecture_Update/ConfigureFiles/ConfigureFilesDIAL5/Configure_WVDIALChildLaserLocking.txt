@@ -119,7 +119,7 @@ LaserLogging;
 ### desired, there should be multiple locations. This is likely the GPIB port that the 
 ### GPIB to USB cable is associated with.
 Thor8000 Locations;;
-GPIB0::10::INSTR;;
+0;GPIB0::10::INSTR;;
 
 ### The type of control plugged into each slot in the Thor 8000 box. These numbers 
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
