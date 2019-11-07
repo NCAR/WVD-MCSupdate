@@ -40,7 +40,7 @@ Sync Select;;
 ### range will be set to 250 and values not even multiples of 5 will be rounded to the 
 ### nearest multiple
 ns Per Bin;;
-250;250;250;250;250;250;250;250;;
+125;125;125;125;125;125;125;125;;
 
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
@@ -88,7 +88,7 @@ Din Demux Polarity;;
 ### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
 ### will be set to 560 and non-integer values will be rounded
 Number Of Bins;;
-560;;
+1120;;
 
 ### Telling the MCS to reset itself. This should default to off (off = 0, on = 1)
 User Reset;;
