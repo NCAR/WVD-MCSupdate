@@ -125,7 +125,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-5;2;15;17;12;13;9;10;;
+5;2;24;26;12;13;9;10;;
 
 ###2;3;0;1;10;13;6;7;;  (Hacked version Old)
 
