@@ -1,4 +1,4 @@
-Written By: Brad Schoenrock
+Written By: Robert Stillwell
 Written For: NCAR
 This file is used to define the initial state of the NCAR MCS in the WVD labview program. 
 
@@ -9,17 +9,6 @@ UDP Comms;;
 ### default state for multiplying one channel - channel number; multiplication factor;; - 1;1;; by default tells the first channel to not scale at all.  
 Channel Multiplier Controls;;
 1;1;;
-
-### where are the data channels plugged in - OnlineH2O; OfflineH2O; Combined HSRL; Molecular HSRL; OnlineO2; OfflineO2;;
-### note: 8 inputs muxing on first 4 channels for total of 12 channels
-### 0 muxes to 8, 1 to 9, etc.... 
-Data Channel Cluster;;
-0; 8; 2; 3; 1; 9;;
-
-### where are the power channels plugged in - HSRL; OnlineH2O; OfflineH2O; OnlineO2; OfflineO2;;
-### note: 6 inputs, but muxed to 12. if using muxing, 0 muxes to 6, 1 to 7, etc.... 
-Power Channel Cluster;;
-1; 0; 6; 2; 3;;
 
 ###  TypeDef_MCSPhotonCountingMMap.ctl
 Data Hardware Connectivity;;
@@ -133,7 +122,7 @@ Advanced Status;;
 Time Reset;;
 0;;
 
-
+################################################################################
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
 .\Data\MCS\;
@@ -143,22 +132,3 @@ MCSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
-################################################################################
-### Setting the visibility of the graphs on the MCS child. 1 = plot visible and 
-### 0 = not visible. The colors of the plots are set by the TypeDef_ColorPallet
-### control. 
-Raw Counts Visibility;;
-1;1;0;0;1;1;;
-
-Background Subtracted Visibility;;
-1;1;0;0;1;1;;
-
-Power Visibility;;
-0;1;1;0;0;;
-
-Count Legend Entries;;
-WV On; WV Off; Unused; Unused; WV_on_low; WV_off_low;;
-
-Power Legend Entries;;
-Unused; WV On; WV Off; Unused; Unused;;
-################################################################################
