@@ -36,11 +36,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-28.877;28.202;;
+24.052;28.707;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-160;160;;
+115;100;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -124,7 +124,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-1;0;4;3;24;28;28;28;;
+2;5;17;28;24;28;28;28;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
