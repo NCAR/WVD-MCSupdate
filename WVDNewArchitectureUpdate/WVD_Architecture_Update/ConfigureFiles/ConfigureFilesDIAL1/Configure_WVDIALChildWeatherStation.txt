@@ -5,14 +5,14 @@ This file is used to define the initial state of the Weather Station in the Wate
 ### This is the communication protocol to use for the weather station.
 ### RS485 to USB = 0, RS485 to Ethernet = 1
 Communication Protocol;;
-0;;
+1;;
 
 ### This is where the Labview VISA communications should find the weather station.
 Comm Port;;
-COM4;;
+COM15;;
 
 TCP Info;;
-192.168.0.110;4760;100;-1;-1;;
+192.168.0.50;4761;100;-1;-1;;
 
 ### These are miscilaneous variables that are read and used as default values
 ### by the weather station. These are currently: the update period of the weather 
