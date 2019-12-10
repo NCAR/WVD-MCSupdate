@@ -1,55 +1,29 @@
-Written By: Brad Schoenrock
+Written By: Robert Stillwell
 Written For: NCAR
 This file is used to define the initial state of advanced visualization routines in the WVD labview program. 
 
-### path to the Hitran data used as reference for calculations. By default stored with config files. 
-Path To Hitran;;
-.\ConfigureFiles\815nm_841nm_HITRAN_2008.csv;;
+### 
+Tab Names;;
+Main; Water Vapor; Water Vapor Low; HSRL; Oxygen; Oxygen Low; Housekeeping; Unused; Unused; Unused; Unused;;
 
-### this is redundant but in principle make this match the MCS
-Number of Bins;;
-560;;
+### In its current state, these two variables are the width and height of the 
+### tab containers. This location is, however, a catch all for data you need to 
+### read in quickly from this configure file
+Global Variables;;
+445;950;;
 
-### this is redundant but in principle make this match the MCS
-Number of Accumulates;;
-14285;;
+### This is the relative file path(s) (identified by the .\) to the program(s) 
+### that the container should populate the tabs with
+Relative File Paths;;
+.\Template.llb\ControlSystemSubTemplate.vi;
+.\Template.llb\ControlSystemSubTemplate2.vi;
+.\Template.llb\ControlSystemSubTemplate3.vi;
+.\Template.llb\ControlSystemSubTemplate4.vi;
+.\Template.llb\ControlSystemSubTemplate5.vi;
+.\Template.llb\ControlSystemSubTemplate6.vi;;
 
-### this is redundant but in principle make this match the MCS
-Time Resolution Per Bin ns;;
-250;;
-
-### values used for smoothing and/or calculation of composite quantities
-Data Reads number of loops;;
-1;;
-
-### values used for smoothing and/or calculation of composite quantities
-Total Dial Integration Time Minutes;;
-3;;
-
-### values used for smoothing and/or calculation of composite quantities
-Total Aerosol Integration Time Minutes;;
-0.08;;
-
-### values used for smoothing and/or calculation of composite quantities
-Smoothing Range;;
-75;;
-
-### values used for smoothing and/or calculation of composite quantities
-Receiver Scale Factor;;
-0.75;;
-
-### values used for smoothing and/or calculation of composite quantities
-background length;;
-25;;
-
-### values used for smoothing and/or calculation of composite quantities
-dead time;;
-3.7e-8;;
-
-### time averaging for WV ND and Aerosol Backscatter 
-### display is 1000 itterations long which corresponds to about 30 min
-Integration Itterations;;
-50;;
+Function Types;;
+0;1;2;3;4;5;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
@@ -57,4 +31,3 @@ FilePaths;;
 AdvVisLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
-
