@@ -31,3 +31,28 @@ FilePaths;;
 AdvVisLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
+
+
+
+### Water Vapor Sub Child
+### This variable tells the subchild what photon counting channels to use as 
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMMap.ctl
+WV Channels;;
+2;4;;
+
+### These variables tell the subchild what resolution to use for the plots. They
+### are in order: Time To Save [min]; WV Calculation Time [min]; Range Res [m];
+### and Max Range [m];;
+WV Range and Time;;
+60; 0.5; 37.5; 12000;;;
+
+### Plot Labels
+WV Profile Labels;;
+Counts; Altitude [km]; Normalized Relative Backscatter; Altitude [km]; Absolute Humidity [g/m^3]; Altitude [km]; Optical Depth;;
+
+WV Time Series Labels;;
+Time [UTC]; Background Counts;;
+
+WV Contour Labels;;
+Online Counts; Altitude [km]; Offline Counts; Altitude [km]; Online NRB; Altitude [km]; Offline NRB; Altitude [km]; Optical Depth; Altitude [km]; Absolute Humidity [g/m^2]; Altitude [km];;
+
