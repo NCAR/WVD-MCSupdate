@@ -22,7 +22,7 @@ Relative File Paths;;
 .\IndividualChildControl.llb\ChildControl_WeatherStation.vi;
 .\IndividualChildControl.llb\ChildControl_Thermocouples.vi;
 .\IndividualChildControl.llb\ChildControl_UPS.vi;
-.\AdvancedVis.llb\ControlSystemVisualization.vi;
+.\AdvancedVisV2.llb\ControlSystemAdvancedVisualization.vi;
 .\NetCDFWriter.llb\ControlSystemNetCDF.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
