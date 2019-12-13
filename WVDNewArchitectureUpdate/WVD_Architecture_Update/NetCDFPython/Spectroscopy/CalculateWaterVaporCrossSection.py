@@ -5,6 +5,7 @@
 # statics pressure profile. 
 
 # %% Importing libraries
+import sys
 import numpy as np
 import Spectroscopy as Spec
 
@@ -17,12 +18,12 @@ XMax      = 828.55   # Maximum wavelength to use for line selection
 LapseRate = 0.0065   # Moist adiabatic lapse rate (K/m)
 
 # %% Input parameters
-BaseTemp   = 300     # Temperature of interest [K]
-BasePress  = 1.      # Pressure of interest [atm]
-Lambda     = 828.2   # Wavelength to use 
-BaseAlt    = 0       # Minimum altitude to process
-MaxAlt     = 12000   # Maximum altitude to process
-AltRes     = 37.5    # Resolution at which to calculate temp/pressure profiles
+BaseTemp   = float(sys.argv[1])   # Temperature of interest [K]
+BasePress  = float(sys.argv[2])   # Pressure of interest [atm]
+Lambda     = float(sys.argv[3])   # Wavelength to use 
+BaseAlt    = float(sys.argv[4])   # Minimum altitude to process
+MaxAlt     = float(sys.argv[5])   # Maximum altitude to process
+AltRes     = float(sys.argv[6])   # Resolution at which to calculate temp/pressure profiles
 
 # %% Calculating temperature and pressure profiles
 Alts  = np.arange(BaseAlt,MaxAlt,AltRes)    # Units of meters
