@@ -43,11 +43,11 @@ WV Range and Time;;
 
 ### Plot Labels
 WV Profile Labels;;
-Counts; Altitude [km]; Normalized Relative Backscatter; Altitude [km]; Absolute Humidity [g/m^3]; Altitude [km]; Optical Depth;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
 
 WV Time Series Labels;;
 Time [UTC]; Background Counts;;
 
 WV Contour Labels;;
-Online Counts; Altitude [km]; Offline Counts; Altitude [km]; Online NRB; Altitude [km]; Offline NRB; Altitude [km]; Optical Depth; Altitude [km]; Absolute Humidity [g/m^2]; Altitude [km];;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
 
