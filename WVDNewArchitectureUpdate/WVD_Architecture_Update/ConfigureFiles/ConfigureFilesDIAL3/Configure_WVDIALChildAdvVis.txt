@@ -31,7 +31,7 @@ AdvVisLogging;
 
 ### Water Vapor Sub Child
 ### This variable tells the subchild what photon counting channels to use as 
-### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMMap.ctl
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
 WV Channels;;
 2;4;;
 
