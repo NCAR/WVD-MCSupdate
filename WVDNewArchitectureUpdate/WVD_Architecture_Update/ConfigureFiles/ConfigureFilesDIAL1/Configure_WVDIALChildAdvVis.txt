@@ -4,7 +4,7 @@ This file is used to define the initial state of advanced visualization routines
 
 ### 
 Tab Names;;
-Main; Water Vapor; Water Vapor Low; HSRL; Oxygen; Oxygen Low; Housekeeping; Unused; Unused; Unused; Unused;;
+Main; Water Vapor; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -15,15 +15,10 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;
-.\Template.llb\ControlSystemSubTemplate2.vi;
-.\Template.llb\ControlSystemSubTemplate3.vi;
-.\Template.llb\ControlSystemSubTemplate4.vi;
-.\Template.llb\ControlSystemSubTemplate5.vi;
-.\Template.llb\ControlSystemSubTemplate6.vi;;
+.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;;
 
 Function Types;;
-0;1;2;3;4;5;;
+0;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
@@ -36,23 +31,23 @@ AdvVisLogging;
 
 ### Water Vapor Sub Child
 ### This variable tells the subchild what photon counting channels to use as 
-### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMMap.ctl
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
 WV Channels;;
 2;4;;
 
 ### These variables tell the subchild what resolution to use for the plots. They
-### are in order: Time To Save [min]; WV Calculation Time [min]; Range Res [m];
+### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
 ### and Max Range [m];;
 WV Range and Time;;
-60; 0.5; 37.5; 12000; 5;;;
+60; 15; 37.5; 12000;5;;;
 
 ### Plot Labels
 WV Profile Labels;;
-Counts; Altitude [km]; Normalized Relative Backscatter; Altitude [km]; Absolute Humidity [g/m^3]; Altitude [km]; Optical Depth;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
 
 WV Time Series Labels;;
 Time [UTC]; Background Counts;;
 
 WV Contour Labels;;
-Online Counts; Altitude [km]; Offline Counts; Altitude [km]; Online NRB; Altitude [km]; Offline NRB; Altitude [km]; Optical Depth; Altitude [km]; Absolute Humidity [g/m^2]; Altitude [km];;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
 
