@@ -73,7 +73,7 @@ Switch Rate;;
 ### The duration of the pulse (duration of the current pulse delivered to the 
 ### TSOA). Units are [micro seconds]. 
 Pulse Duration;;
-1;;
+0.5;;
 
 ### The pulse repetition frequency of all laser pulses. Units are in [Hz]
 PRF;;
