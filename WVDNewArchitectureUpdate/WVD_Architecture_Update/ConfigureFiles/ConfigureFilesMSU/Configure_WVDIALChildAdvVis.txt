@@ -1,55 +1,24 @@
-Written By: Brad Schoenrock
+Written By: Robert Stillwell
 Written For: NCAR
 This file is used to define the initial state of advanced visualization routines in the WVD labview program. 
 
-### path to the Hitran data used as reference for calculations. By default stored with config files. 
-Path To Hitran;;
-.\ConfigureFiles\815nm_841nm_HITRAN_2008.csv;;
+### 
+Tab Names;;
+Main; Water Vapor; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
-### this is redundant but in principle make this match the MCS
-Number of Bins;;
-560;;
+### In its current state, these two variables are the width and height of the 
+### tab containers. This location is, however, a catch all for data you need to 
+### read in quickly from this configure file
+Global Variables;;
+445;950;;
 
-### this is redundant but in principle make this match the MCS
-Number of Accumulates;;
-14285;;
+### This is the relative file path(s) (identified by the .\) to the program(s) 
+### that the container should populate the tabs with
+Relative File Paths;;
+.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;;
 
-### this is redundant but in principle make this match the MCS
-Time Resolution Per Bin ns;;
-250;;
-
-### values used for smoothing and/or calculation of composite quantities
-Data Reads number of loops;;
-1;;
-
-### values used for smoothing and/or calculation of composite quantities
-Total Dial Integration Time Minutes;;
-3;;
-
-### values used for smoothing and/or calculation of composite quantities
-Total Aerosol Integration Time Minutes;;
-0.08;;
-
-### values used for smoothing and/or calculation of composite quantities
-Smoothing Range;;
-75;;
-
-### values used for smoothing and/or calculation of composite quantities
-Receiver Scale Factor;;
-0.75;;
-
-### values used for smoothing and/or calculation of composite quantities
-background length;;
-25;;
-
-### values used for smoothing and/or calculation of composite quantities
-dead time;;
-3.7e-8;;
-
-### time averaging for WV ND and Aerosol Backscatter 
-### display is 1000 itterations long which corresponds to about 30 min
-Integration Itterations;;
-50;;
+Function Types;;
+0;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
@@ -57,4 +26,28 @@ FilePaths;;
 AdvVisLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
+
+
+
+### Water Vapor Sub Child
+### This variable tells the subchild what photon counting channels to use as 
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
+WV Channels;;
+2;4;;
+
+### These variables tell the subchild what resolution to use for the plots. They
+### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
+### and Max Range [m];;
+WV Range and Time;;
+60; 15; 37.5; 12000;5;;;
+
+### Plot Labels
+WV Profile Labels;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
+
+WV Time Series Labels;;
+Time [UTC]; Background Counts;;
+
+WV Contour Labels;;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
 
