@@ -147,11 +147,10 @@ Scan Definition;;
 0;0;;
 
 
-### Defining the name of the base name of the scan files
-Scan File Paths;;
-.\Data\LaserLocking\;
-TemperatureScan;
-LaserLogging;
+Wavemeter File Paths;;
+.\Data\ReceiverScan\;
+Wavemeter;
+WavemeterLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
