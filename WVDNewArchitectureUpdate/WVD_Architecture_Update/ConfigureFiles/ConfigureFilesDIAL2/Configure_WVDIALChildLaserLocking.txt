@@ -65,7 +65,7 @@ Time Limit;;
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-1;1;1;0;;
+0;1;1;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
@@ -133,24 +133,29 @@ Wavemeter Comm Port;;
 
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
-Scan Limits;;
-0.5;1;;
+Laser Scan Limits;;
+1;1;;
+Etalon Scan Limits;;
+0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
-Scan Steps;;
-50;1;;
+Laser Scan Steps;;
+10;20;;
+Etalon Scan Steps;;
+1;1;;
 
-### Defining what you want to scan. The first number is the laser, the second number is
-### the etalon. This corresponds to the array element to scan. So 2;0;; would scan
-### laser 2 and etalon 0.
-Scan Definition;;
+### 
+Laser To Scan;;
+0;1;;
+Etalon To Scan;;
 0;0;;
 
 
-### Defining the name of the base name of the scan files
 Wavemeter File Paths;;
 .\Data\ReceiverScan\;
 Wavemeter;
 WavemeterLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
+
+
