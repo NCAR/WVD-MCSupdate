@@ -5,7 +5,7 @@ This file is used to define the initial state of the template in the Water Vapor
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
 Outter Tab Names;;
-Wavelength Settings; Wavelength Status; Data Saving; Data Plotting;;
+Wavelength Settings; Scan Info; Wavelength Status; Data Saving; Data Plotting;;
 
 ### These settings just set the names of the inner tab controller so the user knows
 ### what is contained in each large piece
@@ -133,17 +133,21 @@ Wavemeter Comm Port;;
 
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
-Scan Limits;;
-1;1.01;;
+Laser Scan Limits;;
+1;1;;
+Etalon Scan Limits;;
+0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
-Scan Steps;;
-10;10;;
+Laser Scan Steps;;
+10;20;;
+Etalon Scan Steps;;
+1;1;;
 
-### Defining what you want to scan. The first number is the laser, the second number is
-### the etalon. This corresponds to the array element to scan. So 2;0;; would scan
-### laser 2 and etalon 0.
-Scan Definition;;
+### 
+Laser To Scan;;
+0;1;;
+Etalon To Scan;;
 0;0;;
 
 
