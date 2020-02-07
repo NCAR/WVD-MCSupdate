@@ -129,29 +129,32 @@ Thor8000 Slots;;
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
 Wavemeter Comm Port;;
-Exfo;8;-1;-1;-1;;
+Exfo;4;-1;-1;-1;;
 
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
-Scan Limits;;
-1;1.01;;
+Laser Scan Limits;;
+1;1;;
+Etalon Scan Limits;;
+0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
-Scan Steps;;
-10;10;;
+Laser Scan Steps;;
+10;20;;
+Etalon Scan Steps;;
+1;1;;
 
-### Defining what you want to scan. The first number is the laser, the second number is
-### the etalon. This corresponds to the array element to scan. So 2;0;; would scan
-### laser 2 and etalon 0.
-Scan Definition;;
+### 
+Laser To Scan;;
+0;1;;
+Etalon To Scan;;
 0;0;;
 
 
-### Defining the name of the base name of the scan files
-Scan File Paths;;
-.\Data\LaserLocking\;
-TemperatureScan;
-LaserLogging;
+Wavemeter File Paths;;
+.\Data\ReceiverScan\;
+Wavemeter;
+WavemeterLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 

@@ -1,0 +1,7 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the notification list to email updates to.  
+
+### Email addresses to send warning emails to
+Email List;;
+stillwel@ucar.edu;;
