@@ -16,9 +16,11 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### the time between checks of the etalons in seconds, the numbre of data scans to 
 ### keep and plot, whether to check the lasers or not (1 = yes and 0 = no) even if
 ### they should not be locked, and whether the program is running in software testing
-### mode or as standard (this option is currently not set up)
+### mode or as standard (this option is currently not set up), what type of switch
+### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
+### the time between scan steps in seconds. 
 Misc;; 
-15; 1000; 1; 0; 2;;
+15; 1000; 1; 0; 2; 2;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
