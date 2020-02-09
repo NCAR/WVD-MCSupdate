@@ -5,7 +5,7 @@ This file is used to define the initial state of the template in the Water Vapor
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
 Outter Tab Names;;
-Wavelength Settings; Wavelength Status; Data Saving; Data Plotting;;
+Wavelength Settings; Scan Details; Wavelength Status; Data Saving; Data Plotting;;
 
 ### These settings just set the names of the inner tab controller so the user knows
 ### what is contained in each large piece
@@ -142,19 +142,28 @@ Etalon Scan Limits;;
 Laser Scan Steps;;
 10;20;;
 Etalon Scan Steps;;
-1;1;;
+2;1;;
 
 ### 
 Laser To Scan;;
-0;1;;
+2;1;;
 Etalon To Scan;;
 0;0;;
 
 
+### File paths to the data storage and data logging locations and functions.
 Wavemeter File Paths;;
 .\Data\ReceiverScan\;
 Wavemeter;
 WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+Scan File Paths;;
+.\Data\ReceiverScan\;
+LaserScanData;
+EtalonScanData;
+ScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 

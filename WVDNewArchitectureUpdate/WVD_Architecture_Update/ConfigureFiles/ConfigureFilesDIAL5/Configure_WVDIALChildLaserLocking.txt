@@ -150,10 +150,19 @@ Scan Definition;;
 0;0;;
 
 
+### File paths to the data storage and data logging locations and functions.
 Wavemeter File Paths;;
 .\Data\ReceiverScan\;
 Wavemeter;
 WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+Scan File Paths;;
+.\Data\ReceiverScan\;
+LaserScanData;
+EtalonScanData;
+ScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
