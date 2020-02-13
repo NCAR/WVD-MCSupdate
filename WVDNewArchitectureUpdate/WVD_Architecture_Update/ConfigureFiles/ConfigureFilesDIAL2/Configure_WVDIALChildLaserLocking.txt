@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-26.339;26.815;8.775;25.0;;
+27.022;29.373;8.799;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-125;125;130;130;;
+120;90;130;135;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -67,7 +67,7 @@ Time Limit;;
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-0;1;1;0;;
+1;1;1;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
@@ -136,19 +136,19 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-1;1;;
+0.1;1;;
 Etalon Scan Limits;;
 0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-10;20;;
+30;20;;
 Etalon Scan Steps;;
 2;1;;
 
 ### 
 Laser To Scan;;
-2;1;;
+0;1;;
 Etalon To Scan;;
 0;0;;
 
