@@ -4,7 +4,7 @@ This file is used to define the initial state of advanced visualization routines
 
 ### 
 Tab Names;;
-Main; Water Vapor; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main; Water Vapor; Water Vapor Low; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -15,10 +15,11 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;;
+.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;
+.\AdvancedVisV2.llb\ControlSystemWVLowPlotting.vi;;
 
 Function Types;;
-0;;
+0;0;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
@@ -27,7 +28,7 @@ AdvVisLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
-
+###########################################################################################################
 ### Water Vapor Sub Child
 ### This variable tells the subchild what photon counting channels to use as 
 ### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
@@ -49,3 +50,28 @@ Time [UTC]; Background Counts;;
 
 WV Contour Labels;;
 Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+
+
+###########################################################################################################
+### Water Vapor Sub Child
+### This variable tells the subchild what photon counting channels to use as 
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
+WVLow Channels;;
+3;5;;
+
+### These variables tell the subchild what resolution to use for the plots. They
+### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
+### and Max Range [m];;
+WVLow Range and Time;;
+60; 15; 37.5; 12000;5;;;
+
+### Plot Labels
+WVLow Profile Labels;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
+
+WVLow Time Series Labels;;
+Time [UTC]; Background Counts;;
+
+WVLow Contour Labels;;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+
