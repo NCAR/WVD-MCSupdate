@@ -53,7 +53,7 @@ def processEtalonScan(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime)
     DataType = ['str','f','f','b','f','f'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
     # Defining file attributes
-    FileType              = 'EtalonScan'
+    FileType              = 'ReceiverScanEtalon'
     FileDescription       = 'Etalon scan data file'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[1])]
@@ -175,10 +175,10 @@ def processLaserScan(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     print("Making Laser Scan Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a padded array as needed 
-    DataType = ['str','f','f','b','f','f','f','f','f','f'] 
+    DataType = ['str','str','str','str','f','f','f','f','f','str'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
     # Defining file attributes
-    FileType              = 'LaserScan'
+    FileType              = 'ReceiverScanLaser'
     FileDescription       = 'Laser Scanning data file'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[1])]
@@ -441,7 +441,7 @@ def processWavemeter(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
     # Defining file attributes
-    FileType              = 'Wavemeter'
+    FileType              = 'ReceiverScanWavemeter'
     FileDescription       = 'Wavemeter raw data'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[:,1])]
@@ -496,9 +496,12 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
+    #PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
+    #FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
+    #FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
+    PathTypes = ['ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
+    FileTypes = ['TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
+    FileExts  = ['.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
         # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
