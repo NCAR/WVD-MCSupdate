@@ -525,7 +525,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                     elif FileType == 'TestingPower':   processMCSPowerV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'Wavemeter':      processWavemeter(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
                     elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == ''
+                    elif FileType == '':               12
                 except:   # Logging the failure of any file to write
                     writeString = 'WARNING: Failure to process ' + FileType + ' data - ' + \
                                    FileType + ' file = ' + str(File) + ' - ' + str(NowTime) + \
