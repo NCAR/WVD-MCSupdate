@@ -496,12 +496,9 @@ def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    #PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
-    #FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
-    #FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
-    PathTypes = ['ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
-    FileTypes = ['TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
-    FileExts  = ['.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
+    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
         # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
