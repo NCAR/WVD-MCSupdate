@@ -4,7 +4,7 @@ This file is used to define the initial state of the NetCDF writer in the Water 
 
 ### IP address of quantum composer, and port number
 IP Address;;
-192.168.0.136; 2101; 100; -1; 50;;
+192.168.0.136; 2101; 1000; -1; 50;;
 
 ### Update times used to check the quantum composer. The first number is the 
 ### Fast update time which is how often to check if the system is in run/stop 
