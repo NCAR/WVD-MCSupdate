@@ -446,7 +446,7 @@ def processWavemeter(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[:,1])]
     # Defining variable descriptions to be written
-    VariableName        = ['time','Wavelength','SedPower']
+    VariableName        = ['time','Wavelength','SeedPower']
     VariableColumn      = [0,3,4] # column in the data file to find these variables
     Transpose           = [False,False,False]
     VariableDimension   = [('time'),('time'),('time')]
