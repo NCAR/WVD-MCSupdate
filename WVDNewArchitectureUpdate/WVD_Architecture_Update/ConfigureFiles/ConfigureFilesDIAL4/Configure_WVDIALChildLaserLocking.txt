@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19400;828.29365;828.29365;;
+828.19100;828.29065;828.29365;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-30.299;32.690;25;;
+30.252;32.628;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-22;;
+21.5;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -135,17 +135,21 @@ Wavemeter Comm Port;;
 
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
-Scan Limits;;
-1;1.01;;
+Laser Scan Limits;;
+0.75;1;;
+Etalon Scan Limits;;
+0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
-Scan Steps;;
-10;10;;
+Laser Scan Steps;;
+150;1;;
+Etalon Scan Steps;;
+2;1;;
 
-### Defining what you want to scan. The first number is the laser, the second number is
-### the etalon. This corresponds to the array element to scan. So 2;0;; would scan
-### laser 2 and etalon 0.
-Scan Definition;;
+### 
+Laser To Scan;;
+0;1;;
+Etalon To Scan;;
 0;0;;
 
 
