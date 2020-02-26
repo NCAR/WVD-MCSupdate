@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
 ### the time between scan steps in seconds. 
 Misc;; 
-15; 1000; 1; 0; 2; 2;;
+15; 1000; 1; 0; 5; 2;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.022;29.373;8.799;25.0;;
+27.011;29.362;9.598;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -136,13 +136,13 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.1;1;;
+0.5;1;;
 Etalon Scan Limits;;
 0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-30;20;;
+90;20;;
 Etalon Scan Steps;;
 2;1;;
 
