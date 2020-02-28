@@ -14,8 +14,12 @@ import NCARMCSFunctions      as NMF
 import numpy                 as np
 import SharedPythonFunctions as SPF
 
+#%%################################# General ##################################
+#def processGeneral()
+    
+
 #%%################################# Etalon ################################### 
-def processEtalons(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processEtalons(FileName,NetCDFOutputPath,Header):
     print("Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
@@ -46,7 +50,7 @@ def processEtalons(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
                         
 #%%############################### Etalon Scan ################################# 
-def processEtalonScan(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processEtalonScan(FileName,NetCDFOutputPath,Header):
     print("Making Etalon Scan Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
@@ -77,7 +81,7 @@ def processEtalonScan(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime)
                         VariableDimension,VariableName   , VariableType      , VariableUnit)                        
     
 #%%############################## Housekeeping ################################ 
-def processHK(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processHK(FileName,NetCDFOutputPath,Header):
     print("Making Housekeeping Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed  
@@ -104,7 +108,7 @@ def processHK(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
     
 #%%################################# Etalon ################################### 
-def processHumidity(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processHumidity(FileName,NetCDFOutputPath,Header):
     print("Making Humidity Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
@@ -134,7 +138,7 @@ def processHumidity(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
 
 #%%############################# Laser Locking ################################ 
-def processLL(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processLL(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making LL Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -170,7 +174,7 @@ def processLL(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
 
 #%%############################# Laser Locking ################################ 
-def processLaserScan(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processLaserScan(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making Laser Scan Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -202,7 +206,7 @@ def processLaserScan(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
 
 #%%################################ MCS Data ##################################
-def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processMCSData(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -243,7 +247,7 @@ def processMCSData(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
         print('An error occured when reading the data file.')
 
 #%%################################ MCS Data ##################################
-def processMCSDataV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processMCSDataV2(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS V2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -284,7 +288,7 @@ def processMCSDataV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
         print('An error occured when reading the data file.')
         
 #%%################################ MCS Data ##################################
-def processMCSScanDataV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processMCSScanDataV2(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS V2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -325,7 +329,7 @@ def processMCSScanDataV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTi
         print('An error occured when reading the data file.')
         
 #%%############################### MCS Power ##################################
-def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processMCSPower(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -362,7 +366,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
         print('An error occured when reading the data file.')
         
 #%%############################### MCS Power ##################################
-def processMCSPowerV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processMCSPowerV2(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS V2 Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
@@ -399,7 +403,7 @@ def processMCSPowerV2(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime)
         print('An error occured when reading the data file.')
 
 #%%################################## UPS #####################################
-def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processUPS(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making UPS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
@@ -434,7 +438,7 @@ def processUPS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
 
 #%%############################### Wavemeter ##################################               
-def processWavemeter(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processWavemeter(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making Wavemeter Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
@@ -463,7 +467,7 @@ def processWavemeter(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
                         VariableDimension,VariableName   , VariableType      , VariableUnit)
                            
 #%%############################ Weather Station ###############################               
-def processWS(FileName,NetCDFOutputPath,Header,NowDate,NowTime,LastTime):
+def processWS(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making WS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
@@ -510,21 +514,21 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
             # Looping over all the files found
             for File in FileList: # read in file, process into NetCDF, and write out file
                 try:    # trying to process each file by type
-                    if   FileType == 'Etalon':         processEtalons(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'EtalonScanData': processEtalonScan(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'Housekeeping':   processHK(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'Humidity':       processHumidity(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'LaserLocking':   processLL(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'LaserScanData':  processLaserScan(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'MCSData':        processMCSData(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+                    if   FileType == 'Etalon':         processEtalons(File,NetCDFPath,Header)
+                    elif FileType == 'EtalonScanData': processEtalonScan(File,NetCDFPath,Header)
+                    elif FileType == 'Housekeeping':   processHK(File,NetCDFPath,Header)
+                    elif FileType == 'Humidity':       processHumidity(File,NetCDFPath,Header)
+                    elif FileType == 'LaserLocking':   processLL(File,NetCDFPath,Header)
+                    elif FileType == 'LaserScanData':  processLaserScan(File,NetCDFPath,Header)
+                    elif FileType == 'MCSData':        processMCSData(File,NetCDFPath,Header)
+                    elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header)
+                    elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header)
                     elif FileType == 'TestingData':    
-                    	if    PathType == 'MCS':          processMCSDataV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    	elif  PathType == 'ReceiverScan': processMCSScanDataV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'TestingPower':   processMCSPowerV2(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'Wavemeter':      processWavemeter(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
-                    elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header,NowDate,NowTime,LastTime)
+                    	if    PathType == 'MCS':          processMCSDataV2(File,NetCDFPath,Header)
+                    	elif  PathType == 'ReceiverScan': processMCSScanDataV2(File,NetCDFPath,Header)
+                    elif FileType == 'TestingPower':   processMCSPowerV2(File,NetCDFPath,Header)
+                    elif FileType == 'Wavemeter':      processWavemeter(File,NetCDFPath,Header)
+                    elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header)
                     elif FileType == '':               12
                 except:   # Logging the failure of any file to write
                     writeString = 'WARNING: Failure to process ' + FileType + ' data - ' + \
