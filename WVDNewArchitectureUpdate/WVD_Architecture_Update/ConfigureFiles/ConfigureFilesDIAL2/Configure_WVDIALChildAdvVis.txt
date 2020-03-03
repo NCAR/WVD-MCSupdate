@@ -37,7 +37,7 @@ WV Channels;;
 
 ### These variables tell the subchild what resolution to use for the plots. They
 ### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
-### and Max Range [m];;
+### Max Range [m], and Profile Time [min];;
 WV Range and Time;;
 60; 15; 37.5; 2000;5;;;
 
