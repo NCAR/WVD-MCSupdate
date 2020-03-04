@@ -136,13 +136,13 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.05;0.05;;
+0.5;0.5;;
 Etalon Scan Limits;;
 0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-9;9;;
+90;90;;
 Etalon Scan Steps;;
 2;2;;
 
