@@ -8,12 +8,11 @@ Thermocouple Comm Port;;
 
 
 ### These are miscilaneous variables that are read and used as default values
-### by the weather station. These are currently: the update period of the weather 
-### station in seconds, the time to wait between write and read of the comm port,
-### The number of measurments to save, and the number of weather station variables
+### by the thermocouple child. These are currently: the update period of the thermocouples 
+### in seconds, the number of measurments to save, and the number of thermocouples
 ### to keep. 
 Child Variables;;
-8;900;3;;
+8;900;1;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
