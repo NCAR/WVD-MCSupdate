@@ -11,7 +11,9 @@ VariousPaths;;
 .;
 C:\Users\wvlidar\Anaconda3\python.exe;
 .\NetCDFPython\NetCDFScript.py;
-D:\;;
+BLAST;;
+
+
 
 ### how many hours of data do we want to back process
 HoursToBackProcess;;
