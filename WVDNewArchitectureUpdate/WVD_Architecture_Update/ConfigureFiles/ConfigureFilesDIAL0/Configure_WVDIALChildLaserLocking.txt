@@ -18,7 +18,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### they should not be locked, and whether the program is running in software testing
 ### mode or as standard (this option is currently not set up)
 Misc;; 
-15; 1000; 1; 0; 1;;
+15; 1000; 1; 0; 1; 3;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-22.448;29.556;25;;
+21.542;28.738;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-100;100;162;;
+138;130;145;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -120,7 +120,7 @@ LaserLogging;
 ### desired, there should be multiple locations. This is likely the GPIB port that the 
 ### GPIB to USB cable is associated with.
 Thor8000 Locations;;
-0;GPIB0::10::INSTR;;
+0;GPIB1::10::INSTR;;
 
 ### The type of control plugged into each slot in the Thor 8000 box. These numbers 
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
@@ -136,27 +136,35 @@ EXFO;4;-1;-1;-1;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-1;1;;
+0.25;;
 Etalon Scan Limits;;
-0;0;;
+0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-10;20;;
+120;;
 Etalon Scan Steps;;
-1;1;;
+2;;
 
 ### 
 Laser To Scan;;
-0;1;;
+1;;
 Etalon To Scan;;
-0;0;;
+0;;
 
-
+### File paths to the data storage and data logging locations and functions.
 Wavemeter File Paths;;
 .\Data\ReceiverScan\;
 Wavemeter;
 WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+Scan File Paths;;
+.\Data\ReceiverScan\;
+LaserScanData;
+EtalonScanData;
+ScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
