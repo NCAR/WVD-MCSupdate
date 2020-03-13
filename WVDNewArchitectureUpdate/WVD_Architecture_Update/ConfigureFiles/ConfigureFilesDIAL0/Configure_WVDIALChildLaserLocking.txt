@@ -34,7 +34,7 @@ Wavelength;;
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
 Tolerance;;
-0.0002;0.0002;0.0002;;
+0.0001;0.0001;0.0002;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
