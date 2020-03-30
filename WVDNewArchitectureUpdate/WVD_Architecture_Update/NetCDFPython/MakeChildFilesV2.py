@@ -523,10 +523,11 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                     elif FileType == 'MCSData':        processMCSData(File,NetCDFPath,Header)
                     elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header)
                     elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header)
-                    elif FileType == 'TestingData':    
+                    elif FileType == 'TestingData' or FileType == 'MCSDataV2':    
                     	if    PathType == 'MCS':          processMCSDataV2(File,NetCDFPath,Header)
                     	elif  PathType == 'ReceiverScan': processMCSScanDataV2(File,NetCDFPath,Header)
-                    elif FileType == 'TestingPower':   processMCSPowerV2(File,NetCDFPath,Header)
+                    elif FileType == 'TestingPower' or FileType == 'MCSPowerV2':   
+                    	processMCSPowerV2(File,NetCDFPath,Header)
                     elif FileType == 'Wavemeter':      processWavemeter(File,NetCDFPath,Header)
                     elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header)
                     elif FileType == '':               12

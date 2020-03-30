@@ -127,8 +127,8 @@ Time Reset;;
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
 .\Data\MCS\;
-MCSData;
-MCSPower;
+MCSDataV2;
+MCSPowerV2;
 MCSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
