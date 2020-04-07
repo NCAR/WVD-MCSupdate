@@ -5,16 +5,10 @@
 # python MyScript.py [working directory containing Data folder] 
 #                    [location to write files]
 #                    [how many hours back in time to process]
-
-import os
-import sys
-import csv
-import math
-import datetime
-
+# Importing needed modules
+import os, sys, csv, math, datetime, SharedPythonFunctions as SPF
 from SyncBackup import DoRSync
 from MakeChildFilesV2 import makeNetCDF
-import SharedPythonFunctions as SPF
 
 
 #checks if a value is a number
@@ -28,25 +22,19 @@ def is_number(n):
 # reads in config file which hold information for headers of NetCDF files
 def readHeaderInfo():
     with open(os.path.join(sys.argv[1],"ConfigureFiles","Configure_WVDIALPythonNetCDFHeader.txt")) as f:
-        reader = csv.reader(f, delimiter="\t")
-        header = list(reader)
-        #print (header)
-        return header
+        return list(csv.reader(f, delimiter="\t"))
+         
 
 # --------------------------------main------------------------------------
 def main():
     print ("Hello World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
        
-    # create timestamp for now so we know which files to load
-    NowTime = SPF.getFractionalHours(0)
-    NowDate = datetime.datetime.utcnow().strftime("%Y%m%d")
-
-    # LastHour variables used to find NetCDF Logging files for error and other logging. 
+    # Creating timestamps used to find which files should be processed
+    NowTime  = SPF.getFractionalHours(0)
+    NowDate  = datetime.datetime.utcnow().strftime("%Y%m%d")
     LastTime = math.ceil(SPF.getFractionalHours(1))
-
-    # creating Error file variable for use if needed ... which of course it never will be ... right?
-    SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Errors",str(NowDate),""))
-    SPF.ensure_dir(os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),""))
+    
+    # creating Error file variable for use if needed 
     ErrorFile = os.path.join(sys.argv[1],"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+str(NowDate)+"_"+str(NowTime)+".txt")
     WarningFile = os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+str(NowDate)+"_"+str(NowTime)+".txt")
 
@@ -55,24 +43,19 @@ def main():
 
     LocalOutputPath = os.path.join(sys.argv[1],"Data","")
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
-
-        SPF.ensure_dir(LocalOutputPath)
+        # Making sure the filepath is availible 
         NetCDFPath = os.path.join(LocalOutputPath,"NetCDFOutput","")
         SPF.ensure_dir(NetCDFPath)
-
-        if is_number(sys.argv[3]): # the second should be a number of hours worth of files that we want to process
+        # Checking how far back to process
+        if is_number(sys.argv[3]): 
             HoursBack = sys.argv[3]
         else:
             HoursBack = 3
             writeString = "Warning: argument 3 (hours to back process) - "+sys.argv[3]+" - is not a number. Using default "+HoursBack+" hours instead. - "+str(NowTime) + '\n'
             SPF.Write2ErrorFile(WarningFile, writeString)
-
-        print ("go back "+str(sys.argv[3])+" hours")
-
         # create timestamp for sys.argv[3] hours ago so we know which files to load
         ThenTime = float(SPF.getFractionalHours(HoursBack))
         ThenDate = (datetime.datetime.utcnow() - datetime.timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
-     
         # Making the netcdf child files
         makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,readHeaderInfo())
 
