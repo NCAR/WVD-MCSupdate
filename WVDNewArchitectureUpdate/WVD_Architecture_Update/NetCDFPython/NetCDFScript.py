@@ -46,21 +46,14 @@ def main():
         NetCDFPath = os.path.join(LocalOutputPath,"NetCDFOutput","")
         SPF.ensure_dir(NetCDFPath)
         # Checking how far back to process
-        if is_number(sys.argv[3]): 
-            HoursBack = sys.argv[3]
-        else:
-            HoursBack = 3
-            writeString = "Warning: argument 3 (hours to back process) - "+sys.argv[3]+" - is not a number. Using default "+HoursBack+" hours instead. - "+str(NowTime) + '\n'
-            SPF.Write2ErrorFile(WarningFile, writeString)
-        # create timestamp for sys.argv[3] hours ago so we know which files to load
+        HoursBack = sys.argv[3] if is_number(sys.argv[3]) else 3
+        # Create timestamp so we know which files to load
         ThenTime = float(SPF.getFractionalHours(HoursBack))
-        ThenDate = (datetime.datetime.utcnow() - datetime.timedelta(hours=float(sys.argv[3]))).strftime("%Y%m%d")
+        ThenDate = (datetime.datetime.utcnow() - datetime.timedelta(hours=float(HoursBack))).strftime("%Y%m%d")
         # Making the netcdf child files
         makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,readHeaderInfo())
-
-        #copy NetCDF files to external drive if applicable.
+        # Copy NetCDF files to external drive
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-#        OutputPath = os.path.join(sys.argv[2],"Data","")
         try:
             12#Response = DoRSync(os.getcwd(),sys.argv[2],WarningFile,ErrorFile)
             #print(Response)
