@@ -59,8 +59,6 @@ def main():
         SPF.ensure_dir(LocalOutputPath)
         NetCDFPath = os.path.join(LocalOutputPath,"NetCDFOutput","")
         SPF.ensure_dir(NetCDFPath)
-        CFRadPath = os.path.join(LocalOutputPath, "CFRadialOutput", "")
-        SPF.ensure_dir(CFRadPath)
 
         if is_number(sys.argv[3]): # the second should be a number of hours worth of files that we want to process
             HoursBack = sys.argv[3]
