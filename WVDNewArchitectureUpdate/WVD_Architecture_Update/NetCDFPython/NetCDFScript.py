@@ -27,7 +27,7 @@ def readHeaderInfo():
 
 # --------------------------------main------------------------------------
 def main():
-    print ("Hello World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    print ("Start Processing: The date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
        
     # Creating timestamps used to find which files should be processed
     NowTime  = SPF.getFractionalHours(0)
@@ -35,12 +35,11 @@ def main():
     LastTime = math.ceil(SPF.getFractionalHours(1))
     
     # creating Error file variable for use if needed 
-    ErrorFile = os.path.join(sys.argv[1],"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+str(NowDate)+"_"+str(NowTime)+".txt")
-    WarningFile = os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+str(NowDate)+"_"+str(NowTime)+".txt")
+    FileEnding = NowDate + '_' + datetime.datetime.utcnow().strftime("%H%M%S") + '.txt'
+    ErrorFile = os.path.join(sys.argv[1],"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+FileEnding)
+    WarningFile = os.path.join(sys.argv[1],"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+FileEnding)
 
-    print ("Loction of error file if needed = ", ErrorFile)
-    print ("Loction of warning file if needed = ", WarningFile)
-
+    # Processing files
     LocalOutputPath = os.path.join(sys.argv[1],"Data","")
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
         # Making sure the filepath is availible 
@@ -61,7 +60,7 @@ def main():
 
         #copy NetCDF files to external drive if applicable.
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-        OutputPath = os.path.join(sys.argv[2],"Data","")
+#        OutputPath = os.path.join(sys.argv[2],"Data","")
         try:
             12#DoRSync(os.getcwd(),sys.argv[2],WarningFile,ErrorFile)
         except:
@@ -71,7 +70,7 @@ def main():
         writeString = "ERROR: argument 1 (path to directory containing Data folder) - "+sys.argv[1]+" - is not a dir, looking for directory containing Data. - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
         SPF.Write2ErrorFile(ErrorFile, writeString)
 
-    print ("Goodnight World - the date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    print ("End Processing: The date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
 
 
 
