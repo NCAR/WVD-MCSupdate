@@ -61,8 +61,7 @@ def FindFileDateAndTime(FileName,Print = False):
     FileDate = FileName[-19:-11]
     FileTime = FileName[-10:-4]
     if Print:
-        print (FileDate)
-        print (FileTime)
+        print ('File Date: ' + FileDate + ', File Time:' + FileTime)
     return (FileDate,FileTime)
 
 #%%

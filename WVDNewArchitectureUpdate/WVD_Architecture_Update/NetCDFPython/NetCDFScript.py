@@ -66,8 +66,6 @@ def main():
 
     print ("End Processing: The date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
 
-
-
 if __name__ == '__main__':
     main()
 
