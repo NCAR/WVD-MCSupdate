@@ -62,7 +62,8 @@ def main():
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
 #        OutputPath = os.path.join(sys.argv[2],"Data","")
         try:
-            12#DoRSync(os.getcwd(),sys.argv[2],WarningFile,ErrorFile)
+            12#Response = DoRSync(os.getcwd(),sys.argv[2],WarningFile,ErrorFile)
+            #print(Response)
         except:
             writeString = "WARNING: unable to RSync to external hard drive - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
             SPF.Write2ErrorFile(WarningFile, writeString)        
