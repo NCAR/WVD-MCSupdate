@@ -23,11 +23,14 @@ def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
         TempFileList = os.listdir(os.path.join(DataPath,day))
         if float(day) == float(ThenDate):
             for file in TempFileList:
+                # Checking if the file type and extension are as expected
                 if file[:len(dataname)] == dataname and file[-1*len(datatype):] == datatype:
+                    # Checking if the file timestamp is after the "ThenTime" variable
                     if int(file[-1*len(datatype)-6:-1*len(datatype)])/10000 > ThenTime:
                         FileList.append(os.path.join(DataPath,day,file))
         elif float(day) > float(ThenDate):
             for file in TempFileList:
+                # Checking if the file type and extension are as expected
                 if file[:len(dataname)] == dataname and file[-1*len(datatype):] == datatype:
                     FileList.append(os.path.join(DataPath,day,file))
     return FileList
