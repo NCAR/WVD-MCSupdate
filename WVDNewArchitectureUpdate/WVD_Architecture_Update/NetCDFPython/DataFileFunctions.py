@@ -70,10 +70,11 @@ def FindFileDateAndTime(FileName,Print = False):
 # the description of that file as input and returns no output. 
 def WriteNetCDFFile(LocalNetCDFOutputPath,Header,Transpose,
                     FileDate,FileDescription,FileDimensionNames,FileDimensionSize,FileTime,FileType, 
-                    VarData, VarColumn, VarDescription, VarDimension, VarName, VarType, VarUnit):
+                    VarData, VarColumn, VarDescription, VarDimension, VarName, VarType, VarUnit, MPDUnit):
     # Create a netcdf file and set its inital parameters
     SPF.ensure_dir(os.path.join(LocalNetCDFOutputPath,FileDate,''))
-    DataFile = Dataset(os.path.join(LocalNetCDFOutputPath,FileDate,FileType+FileTime+'.nc'),'w')
+    FileNameFinal = FileType + '_', MPDUnit + '_' + FileDate + '_' + FileTime + '.nc'
+    DataFile = Dataset(os.path.join(LocalNetCDFOutputPath,FileDate,FileNameFinal),'w')
     # Write a brief description of file
     DataFile.description = FileDescription
     # Load up header information for file

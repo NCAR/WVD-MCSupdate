@@ -47,7 +47,7 @@ def processEtalons(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
                         
 #%%############################### Etalon Scan ################################# 
 def processEtalonScan(FileName,NetCDFOutputPath,Header):
@@ -78,7 +78,7 @@ def processEtalonScan(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)                        
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)                        
     
 #%%############################## Housekeeping ################################ 
 def processHK(FileName,NetCDFOutputPath,Header):
@@ -105,7 +105,7 @@ def processHK(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     
 #%%################################# Etalon ################################### 
 def processHumidity(FileName,NetCDFOutputPath,Header):
@@ -135,7 +135,7 @@ def processHumidity(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
 
 #%%############################# Laser Locking ################################ 
 def processLL(FileName,NetCDFOutputPath,Header):
@@ -171,7 +171,7 @@ def processLL(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
 
 #%%############################# Laser Locking ################################ 
 def processLaserScan(FileName,NetCDFOutputPath,Header):
@@ -203,7 +203,7 @@ def processLaserScan(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
 
 #%%################################ MCS Data ##################################
 def processMCSData(FileName,NetCDFOutputPath,Header):
@@ -242,7 +242,7 @@ def processMCSData(FileName,NetCDFOutputPath,Header):
                             FileDate         ,FileDescription,FileDimensionNames ,
                             FileDimensionSize,FileTime       ,FileType           , 
                             VarData          ,VariableColumn ,VariableDescription,
-                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+                            VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
         print('An error occured when reading the data file.')
 
@@ -283,7 +283,7 @@ def processMCSDataV2(FileName,NetCDFOutputPath,Header):
                             FileDate         ,FileDescription,FileDimensionNames ,
                             FileDimensionSize,FileTime       ,FileType           , 
                             VarData          ,VariableColumn ,VariableDescription,
-                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+                            VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
         print('An error occured when reading the data file.')
         
@@ -324,7 +324,7 @@ def processMCSScanDataV2(FileName,NetCDFOutputPath,Header):
                             FileDate         ,FileDescription,FileDimensionNames ,
                             FileDimensionSize,FileTime       ,FileType           , 
                             VarData          ,VariableColumn ,VariableDescription,
-                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+                            VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
         print('An error occured when reading the data file.')
         
@@ -361,7 +361,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header):
                             FileDate         ,FileDescription,FileDimensionNames ,
                             FileDimensionSize,FileTime       ,FileType           , 
                             VarData          ,VariableColumn ,VariableDescription,
-                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+                            VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
         print('An error occured when reading the data file.')
         
@@ -398,7 +398,7 @@ def processMCSPowerV2(FileName,NetCDFOutputPath,Header):
                             FileDate         ,FileDescription,FileDimensionNames ,
                             FileDimensionSize,FileTime       ,FileType           , 
                             VarData          ,VariableColumn ,VariableDescription,
-                            VariableDimension,VariableName   , VariableType      , VariableUnit)
+                            VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
         print('An error occured when reading the data file.')
 
@@ -435,7 +435,7 @@ def processUPS(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
 
 #%%############################### Wavemeter ##################################               
 def processWavemeter(FileName,NetCDFOutputPath,Header):
@@ -464,7 +464,7 @@ def processWavemeter(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
                            
 #%%############################ Weather Station ###############################               
 def processWS(FileName,NetCDFOutputPath,Header):
@@ -495,7 +495,7 @@ def processWS(FileName,NetCDFOutputPath,Header):
                         FileDate         ,FileDescription,FileDimensionNames ,
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
-                        VariableDimension,VariableName   , VariableType      , VariableUnit)
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
