@@ -21,12 +21,12 @@ import SharedPythonFunctions as SPF
 #%%################################# Etalon ################################### 
 def processEtalons(FileName,NetCDFOutputPath,Header):
     print("Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
     DataType = ['str','f','f','b','f','f'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
     # Defining file attributes
-    FileType              = 'Etalonsample'
+    FileType              = 'Etalon'
     FileDescription       = 'Etalon data file'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[1])]
@@ -52,7 +52,7 @@ def processEtalons(FileName,NetCDFOutputPath,Header):
 #%%############################### Etalon Scan ################################# 
 def processEtalonScan(FileName,NetCDFOutputPath,Header):
     print("Making Etalon Scan Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
     DataType = ['str','f','f','b','f','f'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
@@ -83,11 +83,11 @@ def processEtalonScan(FileName,NetCDFOutputPath,Header):
 #%%############################## Housekeeping ################################ 
 def processHK(FileName,NetCDFOutputPath,Header):
     print("Making Housekeeping Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float)    
     # Defining file attributes
-    FileType              = 'HKeepsample'
+    FileType              = 'HKeep'
     FileDescription       = 'Housekeeping data file: Thermocouples monitoring internal temperature of container'
     FileDimensionNames    = ['time', 'nSensors']
     FileDimensionSize     = [len(VarData[:,1]), len(VarData[1,:])-1]
@@ -110,7 +110,7 @@ def processHK(FileName,NetCDFOutputPath,Header):
 #%%################################# Etalon ################################### 
 def processHumidity(FileName,NetCDFOutputPath,Header):
     print("Making Humidity Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
     # Defining file attributes
@@ -141,12 +141,12 @@ def processHumidity(FileName,NetCDFOutputPath,Header):
 def processLL(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making LL Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a padded array as needed 
     DataType = ['str','f','f','b','f','f','f','f','f','f'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
     # Defining file attributes
-    FileType              = 'LLsample'
+    FileType              = 'LL'
     FileDescription       = 'Laser Locking data file'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[1])]
@@ -177,7 +177,7 @@ def processLL(FileName,NetCDFOutputPath,Header):
 def processLaserScan(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making Laser Scan Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a padded array as needed 
     DataType = ['str','str','str','str','f','f','f','f','f','str'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
@@ -209,14 +209,14 @@ def processLaserScan(FileName,NetCDFOutputPath,Header):
 def processMCSData(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','str','f','f','f','f','f','f','f','f','Pass'] 
     VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPhotonCountFile(FileName)),DataType,False)
     # Checking to see if there were any file reading errors
     if not VarData[-1]:  # No error observed
         # Defining file attributes
-        FileType              = 'MCSsample'
+        FileType              = 'MCS'
         FileDescription       = 'Multi-channel scalar (MCS) photon count histogram data file'
         FileDimensionNames    = ['time','nBins','nChannels']
         FileDimensionSize     = [len(VarData[9]),len(VarData[3][0]),len(VarData[1])]
@@ -250,14 +250,14 @@ def processMCSData(FileName,NetCDFOutputPath,Header):
 def processMCSDataV2(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS V2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','str','f','f','f','f','f','f','f','f','Pass'] 
     VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPhotonCountFileV2(FileName)),DataType,False)
     # Checking to see if there were any file reading errors
     if not VarData[-1]:  # No error observed
         # Defining file attributes
-        FileType              = 'MCSsample'
+        FileType              = 'MCS'
         FileDescription       = 'Multi-channel scalar (MCS) photon count histogram data file'
         FileDimensionNames    = ['time','nBins','nChannels']
         FileDimensionSize     = [len(VarData[9]),len(VarData[3][0]),len(VarData[1])]
@@ -291,7 +291,7 @@ def processMCSDataV2(FileName,NetCDFOutputPath,Header):
 def processMCSScanDataV2(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS V2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','str','f','f','f','f','f','f','f','f','Pass'] 
     VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPhotonCountFileV2(FileName)),DataType,False)
@@ -332,14 +332,14 @@ def processMCSScanDataV2(FileName,NetCDFOutputPath,Header):
 def processMCSPower(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','f','f','f','f','str','Pass']   
     VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPowerFile(FileName)),DataType,False)  
     # Checking to see if there were any file reading errors
     if not VarData[-1]:  # No error observed
         # Defining file attributes
-        FileType              = 'Powsample'
+        FileType              = 'Power'
         FileDescription       = 'Multi-channel scalar (MCS) power monitor data file'
         FileDimensionNames    = ['time','nChannels']
         FileDimensionSize     = [len(VarData[4]),len(VarData[2])]
@@ -369,14 +369,14 @@ def processMCSPower(FileName,NetCDFOutputPath,Header):
 def processMCSPowerV2(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making MCS V2 Power Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True) 
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True) 
     # Reading data file and returning a data array as needed 
     DataType = ['f','f','f','f','f','str','Pass']   
     VarData = DFF.ConvertAlphaNumericFile(list(NMF.ReadMCSPowerFileV2(FileName)),DataType,False)  
     # Checking to see if there were any file reading errors
     if not VarData[-1]:  # No error observed
         # Defining file attributes
-        FileType              = 'Powsample'
+        FileType              = 'Power'
         FileDescription       = 'Multi-channel scalar (MCS) power monitor data file'
         FileDimensionNames    = ['time','nChannels']
         FileDimensionSize     = [len(VarData[4]),len(VarData[2])]
@@ -406,11 +406,11 @@ def processMCSPowerV2(FileName,NetCDFOutputPath,Header):
 def processUPS(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making UPS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)   
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
     # Defining file attributes
-    FileType              = 'UPSsample'
+    FileType              = 'UPS'
     FileDescription       = 'UPS data file'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[:,1])]
@@ -441,7 +441,7 @@ def processUPS(FileName,NetCDFOutputPath,Header):
 def processWavemeter(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making Wavemeter Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)   
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
     # Defining file attributes
@@ -470,11 +470,11 @@ def processWavemeter(FileName,NetCDFOutputPath,Header):
 def processWS(FileName,NetCDFOutputPath,Header):
     # Printing text to the console to tell the user what is happening
     print("Making WS Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
-    (FileDate,FileTime) = DFF.FindFileDateAndTime(FileName,True)   
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)   
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float) 
     # Defining file attributes
-    FileType              = 'WSsample'
+    FileType              = 'WS'
     FileDescription       = 'Weather Station data file: taken at surface level'
     FileDimensionNames    = ['time']
     FileDimensionSize     = [len(VarData[:,1])]

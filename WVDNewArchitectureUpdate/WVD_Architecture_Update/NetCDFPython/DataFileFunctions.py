@@ -60,9 +60,10 @@ def CreateAndPlaceNetCDFVariable(File,VarData,VarDescription,VarDimension,VarNam
 def FindFileDateAndTime(FileName,Print = False):
     FileDate = FileName[-19:-11]
     FileTime = FileName[-10:-4]
+    MPDNum   = FileName[-22:-20]
     if Print:
         print ('  File Date: ' + FileDate + ', File Time:' + FileTime)
-    return (FileDate,FileTime)
+    return (FileDate,FileTime,MPDNum)
 
 #%%
 # This function is used to write a netcdf file for the MPD systems. It takes 
