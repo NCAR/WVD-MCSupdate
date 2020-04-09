@@ -73,7 +73,7 @@ def WriteNetCDFFile(LocalNetCDFOutputPath,Header,Transpose,
                     VarData, VarColumn, VarDescription, VarDimension, VarName, VarType, VarUnit, MPDUnit):
     # Create a netcdf file and set its inital parameters
     SPF.ensure_dir(os.path.join(LocalNetCDFOutputPath,FileDate,''))
-    FileNameFinal = FileType + '_', MPDUnit + '_' + FileDate + '_' + FileTime + '.nc'
+    FileNameFinal = FileType + '_' + MPDUnit + '_' + FileDate + '_' + FileTime + '.nc'
     DataFile = Dataset(os.path.join(LocalNetCDFOutputPath,FileDate,FileNameFinal),'w')
     # Write a brief description of file
     DataFile.description = FileDescription
