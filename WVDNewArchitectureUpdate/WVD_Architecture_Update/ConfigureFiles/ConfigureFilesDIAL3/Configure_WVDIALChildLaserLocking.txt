@@ -13,7 +13,7 @@ Inner Tab Names;;
 Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 
 ### These are miscilaneous settings needed for the laser locking program. They are:
-### the time between checks of the etalons in seconds, the numbre of data scans to 
+### the time between checks of the etalons in seconds, the number of data scans to 
 ### keep and plot, whether to check the lasers or not (1 = yes and 0 = no) even if
 ### they should not be locked, and whether the program is running in software testing
 ### mode or as standard (this option is currently not set up), what type of switch
@@ -167,4 +167,8 @@ EtalonScanData;
 ScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
+
+### The location of the electrical switch used to flip the Opto-electric switches
+Hardware Switch Location;;
+192.168.0.50;9500;2000;-1;20;;
 

@@ -167,4 +167,6 @@ ScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
-
+### The location of the electrical switch used to flip the Opto-electric switches
+Hardware Switch Location;;
+192.168.0.50;9500;2000;-1;20;;
