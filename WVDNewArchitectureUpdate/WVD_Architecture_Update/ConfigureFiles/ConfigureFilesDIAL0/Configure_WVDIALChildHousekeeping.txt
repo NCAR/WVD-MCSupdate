@@ -12,7 +12,7 @@ Thermocouple Comm Port;;
 ### in seconds, the number of measurments to save, and the number of thermocouples
 ### to keep. 
 Child Variables;;
-8;900;2;;
+8;900;4;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
