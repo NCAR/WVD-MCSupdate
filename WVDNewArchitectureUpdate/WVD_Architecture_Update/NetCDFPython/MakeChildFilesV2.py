@@ -18,6 +18,45 @@ import SharedPythonFunctions as SPF
 #def processGeneral()
     
 
+def processClock(FileName,NetCDFOutputPath,Header):
+    print("Making Clock Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
+    # Reading data file and returning a padded array as needed 
+    FileData = [' '.join(Line).split() for Line in DFF.ReadAndPadTextFile(FileName)]
+    VarData = np.array(FileData).astype(np.float) 
+    # Defining file attributes
+    FileType              = 'Clock'
+    FileDescription       = 'Master clock  data file'
+    FileDimensionNames    = ['time']
+    FileDimensionSize     = [len(VarData[:,1])]
+    # Defining variable descriptions to be written
+    VariableName        = ['time','PulseDelay','GateDelay','DutyCycle','SwitchRate','PulseDuration','PRF','RiseTime',\
+                           'TSOA','Online','Offline','Gate']
+    VariableColumn      = [0,9,10,11,12,13,14,15,4,5,6,7] # column in the data file to find these variables
+    Transpose           = [False]*len(VariableColumn)
+    VariableDimension   = [('time')]*len(VariableColumn)
+    VariableType        = ['float'] + ['float32']*(len(VariableColumn)-1)
+    VariableUnit        = ['Fractional Hours','MicroSeconds','MicroSeconds','Unitless','Hz','MicroSeconds','Hz','MicroSeconds',\
+                           'Unitless','Unitless','Unitless','Unitless']
+    VariableDescription = ['The time of collected data in UTC hours from the start of the day',
+                           'Time from the clock trigger to the laser pulse trigger',
+                           'Time from the clock trigger to the gate pulse trigger',
+                           'Duty cyle of the offline pulse (0 = always off, 1 = always on)',
+                           'Rate of switching from online to offline',
+                           'The duration of the laser pulse',
+                           'Pulse repetition frequency',
+                           'Rise time of the opto-electric switches',
+                           'Operating mode of the TSOA (0 = Operations, 1 = Off)',
+                           'Operating mode of the Online 1x1 switch (0 = Operations, 1 = Open, 2 = Closed, 3 = Receiver Scan)',
+                           'Operating mode of the Offline 1x1 switch (0 = Operations, 1 = Open, 2 = Closed, 3 = Receiver Scan)',
+                           'Operating mode of the detector gate (0 = Operations, 1 = Off)']
+    # Writing the netcdf file 
+    DFF.WriteNetCDFFile(NetCDFOutputPath ,Header         ,Transpose          ,
+                        FileDate         ,FileDescription,FileDimensionNames ,
+                        FileDimensionSize,FileTime       ,FileType           , 
+                        VarData          ,VariableColumn ,VariableDescription,
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
+
 #%%################################# Etalon ################################### 
 def processEtalons(FileName,NetCDFOutputPath,Header):
     print("Making Etalon Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
@@ -500,9 +539,12 @@ def processWS(FileName,NetCDFOutputPath,Header):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ]    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ]
+    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ]    
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt']
+#    PathTypes = ['QuantumComposer'   ]    
+#    FileTypes = ['QuantumComposerOps']
+#    FileExts  = ['.txt']
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
         # Where2FindData = os.path.join(sys.argv[1],PathType,FileType)
@@ -514,23 +556,24 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
             # Looping over all the files found
             for File in FileList: # read in file, process into NetCDF, and write out file
                 try:    # trying to process each file by type
-                    if   FileType == 'Etalon':         processEtalons(File,NetCDFPath,Header)
-                    elif FileType == 'EtalonScanData': processEtalonScan(File,NetCDFPath,Header)
-                    elif FileType == 'Housekeeping':   processHK(File,NetCDFPath,Header)
-                    elif FileType == 'Humidity':       processHumidity(File,NetCDFPath,Header)
-                    elif FileType == 'LaserLocking':   processLL(File,NetCDFPath,Header)
-                    elif FileType == 'LaserScanData':  processLaserScan(File,NetCDFPath,Header)
-                    elif FileType == 'MCSData':        processMCSData(File,NetCDFPath,Header)
-                    elif FileType == 'MCSPower':       processMCSPower(File,NetCDFPath,Header)
-                    elif FileType == 'UPS':            processUPS(File,NetCDFPath,Header)
+                    if   FileType == 'Etalon':             processEtalons(File,NetCDFPath,Header)
+                    elif FileType == 'EtalonScanData':     processEtalonScan(File,NetCDFPath,Header)
+                    elif FileType == 'Housekeeping':       processHK(File,NetCDFPath,Header)
+                    elif FileType == 'Humidity':           processHumidity(File,NetCDFPath,Header)
+                    elif FileType == 'LaserLocking':       processLL(File,NetCDFPath,Header)
+                    elif FileType == 'LaserScanData':      processLaserScan(File,NetCDFPath,Header)
+                    elif FileType == 'MCSData':            processMCSData(File,NetCDFPath,Header)
+                    elif FileType == 'MCSPower':           processMCSPower(File,NetCDFPath,Header)
+                    elif FileType == 'QuantumComposerOps': processClock(File,NetCDFPath,Header)
+                    elif FileType == 'UPS':                processUPS(File,NetCDFPath,Header)
                     elif FileType == 'TestingData' or FileType == 'MCSDataV2':    
-                    	if    PathType == 'MCS':          processMCSDataV2(File,NetCDFPath,Header)
-                    	elif  PathType == 'ReceiverScan': processMCSScanDataV2(File,NetCDFPath,Header)
+                    	if    PathType == 'MCS':              processMCSDataV2(File,NetCDFPath,Header)
+                    	elif  PathType == 'ReceiverScan':     processMCSScanDataV2(File,NetCDFPath,Header)
                     elif FileType == 'TestingPower' or FileType == 'MCSPowerV2':   
                     	processMCSPowerV2(File,NetCDFPath,Header)
-                    elif FileType == 'Wavemeter':      processWavemeter(File,NetCDFPath,Header)
-                    elif FileType == 'WeatherStation': processWS(File,NetCDFPath,Header)
-                    elif FileType == '':               12
+                    elif FileType == 'Wavemeter':          processWavemeter(File,NetCDFPath,Header)
+                    elif FileType == 'WeatherStation':     processWS(File,NetCDFPath,Header)
+                    elif FileType == '':                   12
                 except:   # Logging the failure of any file to write
                     writeString = 'WARNING: Failure to process ' + FileType + ' data - ' + \
                                    FileType + ' file = ' + str(File) + ' - ' + str(NowTime) + \
