@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-21.542;28.738;25;;
+20.78;28.73;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -136,13 +136,13 @@ EXFO;4;-1;-1;-1;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.25;;
+1.4;;
 Etalon Scan Limits;;
 0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-120;;
+420;;
 Etalon Scan Steps;;
 2;;
 
@@ -171,3 +171,5 @@ ScanLogging;
 ### The location of the electrical switch used to flip the Opto-electric switches
 Hardware Switch Location;;
 192.168.0.50;9500;2000;-1;20;;
+
+
