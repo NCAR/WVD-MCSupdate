@@ -97,7 +97,8 @@ class TCPComms(Common):
             # Raise an exception if the socket crashes
             if Chunks[-1] == '': print('Connection closed unintentionally')
             # Adding a small delay to prevent possibe race condition
-            time.sleep(0.050)
+            if True not in [Timeout,TermChar]:
+                time.sleep(0.005)
         # Return the chunk data combined into a single response
         return(b"".join(Chunks))
     
