@@ -8,34 +8,33 @@ import socket, time
 class Common(object):
     # Initializer to hold all variables. Variables with _ in front are private
     def __init__(self,IPAdd,Port,Timeout,HeaderLen=None,BodyLen=None,TermChar=None,Type=None):        
-        self._IPAddress  = IPAdd
-        self._Port       = Port
-        self._Timeout    = Timeout
-        self._HeaderLen  = HeaderLen
-        self._BodyLen    = BodyLen
-        self._TermChar   = TermChar
+        self._IPAddress  = IPAdd;    self._Port       = Port
+        self._Timeout    = Timeout;  self._HeaderLen  = HeaderLen
+        self._BodyLen    = BodyLen;  self._TermChar   = TermChar
         self._Type       = Type
         self.Socket      = None
         self.SocketError = False
         self.ErrorString = None
+        self.ErrorNumber = None
+    # Communicate with hardware with a single command and response
     def _CommSingle(self,String):
         self.Send(String)
         time.sleep(0.050)
-        H = self.Read(self._HeaderLen)
-        R = self.Read(self._BodyLen)
-        return (H,R)
+        Header = self.Read(self._HeaderLen)
+        Rest   = self.Read(self._BodyLen)
+        return (Header,Rest)
     # Method to do communications with a single string or a list of strings
     def Communicate(self,Strings):
         self.Connect()
         if type(Strings) is list:
             Header = []; Response = []
             for String in Strings:
-                (H,R) = self._CommSingle(String)
+                H,R = self._CommSingle(String)
                 Header.append(H); Response.append(R)
         else:
             (Header,Response) = self._CommSingle(Strings)
         self.Disconnect()
-        return Header,Response,self.ErrorString
+        return Header,Response,self.ErrorString,self.ErrorNumber
     # Method used to initialize the socket for TCP communications
     def Connect(self):
         try:
@@ -57,17 +56,21 @@ class Common(object):
             pass
     # Method used to clean up errors and signal errors 
     def ErrorHandler(self,Where):
+        # Defining the known error codes for socket based issues 
+        Dict = {'Initialization': -2001, 'Send': -2002, 'Read': -2003}
+        # Performing error steps
         self.Disconnect()
         self.Socket      = None
         self.SocketError = True
         self.ErrorString = 'Error in the ' + Where + ' method'
-                
+        self.ErrorNumber = Dict.get(Where,-2000) 
+        
 #%% Defining raw TCP socket communication class     
 class TCPComms(Common):
     """Definition string"""
     # Initilizer...uses common initilaizer but specifies TCP type
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, Type = 'TCP')            
+        super().__init__(*args,**kwargs,Type='TCP')            
     # Method used to send data to a socket via TCP communications
     def Send(self,Message):
         if self.Socket is not None and self.SocketError is False:
@@ -84,7 +87,7 @@ class TCPComms(Common):
                 self.ErrorHandler('Read')
                 return None
     def _ReadChunks(self,Length):
-        Chunks = []; BytesReceived = 0; Timeout  = False; TermChar = False;
+        Chunks = []; BytesReceived = 0; Timeout = False; TermChar = False;
         Start = time.time()
         while BytesReceived < Length and True not in [Timeout,TermChar]:
             # Reading a chunk of data availible at the TCP port
@@ -97,8 +100,6 @@ class TCPComms(Common):
             # Raise an exception if the socket crashes
             if Chunks[-1] == '': print('Connection closed unintentionally')
             # Adding a small delay to prevent possibe race condition
-            if True not in [Timeout,TermChar]:
-                time.sleep(0.005)
+            if True not in [Timeout,TermChar]: time.sleep(0.005)
         # Return the chunk data combined into a single response
         return(b"".join(Chunks))
-    

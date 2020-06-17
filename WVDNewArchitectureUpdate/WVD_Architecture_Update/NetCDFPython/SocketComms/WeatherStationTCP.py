@@ -10,23 +10,14 @@ def WeatherStationProbe(IPAddress='192.168.0.110',Port=4760,Timeout=1,Body=30,Te
     # Initializing the communication class
     S = TCP(IPAdd=IPAddress,Port=Port,Timeout=Timeout,BodyLen=Body,TermChar=Term)
     # Send the communications
-    _ , Response, Error = S.Communicate(CommList)
+    _ , Response, Error, ErrorNumber = S.Communicate(CommList)
     # Parsing and understanding the response
-    ResponseList = CheckResponse(CommList,Response,Error,Term,Range,Offset)
+    ResponseList = CheckResponse(CommList,Response,ErrorNumber,Term,Range,Offset)
     return(ResponseList)
     
-def CheckResponse(CommList,Response,Error,Term,Range,Offset):
-    # Checking the weather station response
-    if Error is None :
-        # No error occurred
-        return(Decode(CommList, Response,Term,Range,Offset))
-    else:
-        # An error occured so make a fake response
-        if   Error == 'Error in the Initialization method':  ErrorCode = -2001
-        elif Error == 'Error in the Send method':            ErrorCode = -2002
-        elif Error == 'Error in the Read method':            ErrorCode = -2003
-        else:                                                ErrorCode = -2000       
-        return([ErrorCode]*len(CommList))
+def CheckResponse(Commands,Response,Error,Term,Range,Offset):
+    # Checking the response or return error code instead of the data
+    return(Decode(Commands,Response,Term,Range,Offset) if Error is None else [Error]*len(Commands))
     
 def Decode(Commands,Responses,TermChar,Ranges,Offsets):
     # Looping over all of the responses and checking that they are reasonable
@@ -34,8 +25,8 @@ def Decode(Commands,Responses,TermChar,Ranges,Offsets):
     Value = []
     for Comm,Resp,Range,Offset in zip(Commands,Responses,Ranges,Offsets):
         # Stripping off the initiation and termination characters
-        Comm = Comm.decode("utf-8").replace(TermChar.decode("utf-8"),'')[1:]
-        Resp = Resp.decode("utf-8").replace(TermChar.decode("utf-8"),'')[1:]
+        Strip = lambda S: S.decode("utf-8").replace(TermChar.decode("utf-8"),'')[1:]
+        Comm = Strip(Comm); Resp = Strip(Resp);
         # Checking for the command echo and converting to a physical value
         try:
             Resp = int(Resp.replace(Comm,'')) if Comm in Resp else -99
