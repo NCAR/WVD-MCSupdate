@@ -12,7 +12,7 @@ Comm Port;;
 COM15;;
 
 TCP Info;;
-192.168.0.50;4761;100;-1;-1;;
+192.168.0.110;4760;100;-1;-1;;
 
 ### These are miscilaneous variables that are read and used as default values
 ### by the weather station. These are currently: the update period of the weather 
