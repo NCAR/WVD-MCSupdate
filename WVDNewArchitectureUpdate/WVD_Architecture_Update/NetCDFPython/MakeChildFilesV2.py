@@ -56,6 +56,36 @@ def processClock(FileName,NetCDFOutputPath,Header):
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
+#%%############################### Container ################################## 
+def processContainer(FileName,NetCDFOutputPath,Header):
+    print("Making Container Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
+    # Reading data file and returning a padded array as needed 
+    DataType = ['f','f','f','f','f'] 
+    VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
+    # Defining file attributes
+    FileType              = 'Container'
+    FileDescription       = 'Container data file'
+    FileDimensionNames    = ['time']
+    FileDimensionSize     = [len(VarData[1])]
+    # Defining variable descriptions to be written
+    VariableName        = ['time','FunctionType','CQueueEl','RQueueEl','Status']
+    VariableColumn      = [1,0,2,3,4] # column in the data file to find these variables
+    Transpose           = [False,False,False,False,False]
+    VariableDimension   = [('time'),('time'),('time'),('time'),('time')]
+    VariableType        = ['float32','float32','float32','float32','float32']
+    VariableUnit        = ['Fractional days since Jan. 1. 2000','Unitless','Unitless','Unitless','Unitless']
+    VariableDescription = ['Fractional days since Jan. 1. 2000',
+                           'Type of function reporting status',
+                           'Number of elements currently reported in the child command queue',
+                           'Number of elements currently reported in the child response queue',
+                           'Status of the child. Bit tested with the order: Child exiting, Child COmmanded Stop, Child Responding']
+    # Writing the netcdf file 
+    DFF.WriteNetCDFFile(NetCDFOutputPath ,Header         ,Transpose          ,
+                        FileDate         ,FileDescription,FileDimensionNames ,
+                        FileDimensionSize,FileTime       ,FileType           , 
+                        VarData          ,VariableColumn ,VariableDescription,
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
 
 #%%################################# Etalon ################################### 
 def processEtalons(FileName,NetCDFOutputPath,Header):
@@ -539,9 +569,9 @@ def processWS(FileName,NetCDFOutputPath,Header):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ]    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt']
+    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ,'Container']    
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps','ContainerLogging']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt'              ,'.txt']
 #    PathTypes = ['QuantumComposer'   ]    
 #    FileTypes = ['QuantumComposerOps']
 #    FileExts  = ['.txt']
@@ -556,7 +586,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
             # Looping over all the files found
             for File in FileList: # read in file, process into NetCDF, and write out file
                 try:    # trying to process each file by type
-                    if   FileType == 'Etalon':             processEtalons(File,NetCDFPath,Header)
+                    if   FileType == 'Container':          processContainer(File,NetCDFPath,Header)
+                    elif FileType == 'Etalon':             processEtalons(File,NetCDFPath,Header)
                     elif FileType == 'EtalonScanData':     processEtalonScan(File,NetCDFPath,Header)
                     elif FileType == 'Housekeeping':       processHK(File,NetCDFPath,Header)
                     elif FileType == 'Humidity':           processHumidity(File,NetCDFPath,Header)
