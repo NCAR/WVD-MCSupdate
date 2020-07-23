@@ -586,7 +586,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
             # Looping over all the files found
             for File in FileList: # read in file, process into NetCDF, and write out file
                 try:    # trying to process each file by type
-                    if   FileType == 'Container':          processContainer(File,NetCDFPath,Header)
+                    if   FileType == 'ContainerLogging':   processContainer(File,NetCDFPath,Header)
                     elif FileType == 'Etalon':             processEtalons(File,NetCDFPath,Header)
                     elif FileType == 'EtalonScanData':     processEtalonScan(File,NetCDFPath,Header)
                     elif FileType == 'Housekeeping':       processHK(File,NetCDFPath,Header)
