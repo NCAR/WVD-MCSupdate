@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
 ### the time between scan steps in seconds. 
 Misc;; 
-15; 1000; 1; 0; 9; 2;;
+15; 1000; 1; 0; 9; 3;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19900;828.29865;769.7958;770.1085;828.29865;770.1085;;
+828.19900;828.29815;769.7958;770.1085;828.29865;770.1085;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.712;29.002;25.0;25.0;25.0;25.0;;
+27.729;29.006;24.009;29.557;25.0;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-105;105;75;75;95;75;;
+105;105;75;75;95;135;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -67,7 +67,7 @@ Time Limit;;
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-1;1;0;0;0;0;;
+1;1;1;1;0;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
@@ -100,12 +100,12 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-22.4;25.00;;
+21.80;25.00;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
 Etalon TEC On;;
-0;0;;
+1;1;;
 
 ### File paths to the data storage and data logging locations and functions.
 File Paths;;
@@ -136,21 +136,21 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.75;0.75;;
+0.75;0.75;0.75;0.75;;
 Etalon Scan Limits;;
-0;0;;
+0;0;0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-150;150;;
+120;120;120;120;;
 Etalon Scan Steps;;
-2;2;;
+2;2;2;2;;
 
 ### 
 Laser To Scan;;
-0;1;;
+0;1;2;3;;
 Etalon To Scan;;
-0;0;;
+0;0;1;1;;
 
 
 ### File paths to the data storage and data logging locations and functions.
