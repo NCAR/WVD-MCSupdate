@@ -6,7 +6,7 @@ This file is used to define the initial state of the Water Vapor DIAL Main labvi
 ### The tag "Unused" tells the container not to populate a tab. Note that this 
 ### command is case sensitive.
 Tab Names;;
-Main Controls; Raw Data; Wavemeter; Laser Locking; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main Controls; Raw Data; Wavemeter; Laser Locking; Adv. Visualization; NetCDF; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -19,10 +19,12 @@ Global Variables;;
 Relative File Paths;;
 .\MCS_NCARV2.llb\MCSControl_V02.vi;
 .\IndividualChildControl.llb\ChildControl_Wavemeter.vi;
-.\WavelengthLocking.llb\ControlSystemWavelengthLocking.vi;;
+.\WavelengthLocking.llb\ControlSystemWavelengthLocking.vi;
+.\AdvancedVisV2.llb\ControlSystemAdvancedVisualization.vi;
+.\NetCDFWriter.llb\ControlSystemNetCDF.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
 Function Types;;
-0;1;10;9;;
+0;1;10;9;6;7;;
 
