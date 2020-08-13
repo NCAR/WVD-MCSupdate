@@ -25,66 +25,66 @@ Misc;;
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
 Laser Types;;
-0;1;2;5;;
+0;1;2;5;6;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19400;828.29325;780.246;828.2935;;
+828.19900;828.29815;780.246;828.2935;780.246;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
 Tolerance;;
-0.00005;0.00005;0.0001;0.00005;;
+0.00005;0.00005;0.00005;0.00005;0.00005;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.051;29.397;9.653;25.0;;
+25.0;25.0;25.0;25.0;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-120;90;130;135;;
+75;75;75;75;75;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
 P Gain;;
-0;1;2;2;;
+0;1;2;3;4;;
 
 ### This is currently not being used but these should be the integral gain constants
 ### for each laser to do locking via PID control
 I Gain;;
-3;4;5;5;;
+3;4;5;6;7;;
 
 ### This is currently not being used but these should be the derivative gain constants
 ### for each laser to do locking via PID control
 D Gain;;
-6;7;8;8;;
+6;7;8;9;10;;
 
 ### This is the maximum allowable time that a laser is allowed to try to lock itself 
 ### before it times out, in seconds. 
 Time Limit;;
-30;30;30;30;;
+30;30;30;30;30;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves
 ### or just simply check their status (1 = yes lock and 0 = just check)
 Locking On;;
-1;1;1;0;;
+1;1;1;0;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
 ### usin ga single step or PID control method (1 = single step and 0 = PID)
 Locking Type;;
-1;1;1;1;;
+1;1;1;1;1;;
 
 ### This is the current and only locking method for locking the laser. This is the 
 ### temperature step size to take when trying to temperature tune the lasers in 
 ### degrees celciuc
 Lock Step Size;;
-0.001;0.001;0.001;0.001;;
+0.001;0.001;0.001;0.001;0.001;;
 
 ### This is the minimum power required to be read from teh wavemeter to perform laser
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--15;-15;-15;-15;;
+-15;-15;-15;-15;-15;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-21.1;30.0;27.0;;
+22.0;25.0;25.0;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -126,7 +126,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-2;5;17;26;24;25;6;7;;
+2;5;17;8;20;24;25;26;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
@@ -136,13 +136,13 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.5;0.5;0.1;;
+0.75;0.75;0.5;;
 Etalon Scan Limits;;
 0;0;0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-90;90;90;;
+120;120;120;;
 Etalon Scan Steps;;
 2;2;2;;
 
@@ -150,7 +150,7 @@ Etalon Scan Steps;;
 Laser To Scan;;
 0;1;2;;
 Etalon To Scan;;
-0;0;0;;
+0;0;1;;
 
 
 ### File paths to the data storage and data logging locations and functions.
