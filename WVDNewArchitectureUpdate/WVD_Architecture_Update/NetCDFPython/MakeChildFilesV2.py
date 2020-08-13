@@ -570,7 +570,7 @@ def processWS(FileName,NetCDFOutputPath,Header):
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
     PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ,'Container']    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'TestingData' ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps','ContainerLogging']
+    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'MCSDataV2'   ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps','ContainerLogging']
     FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt'              ,'.txt']
 #    PathTypes = ['QuantumComposer'   ]    
 #    FileTypes = ['QuantumComposerOps']
