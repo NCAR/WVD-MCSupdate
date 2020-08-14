@@ -34,15 +34,15 @@ Wavelength;;
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
 Tolerance;;
-0.0001;0.0001;0.0002;;
+0.00005;0.00005;0.0001;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-20.78;28.73;25;;
+20.545;28.725;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-138;130;145;;
+145;130;161;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -80,11 +80,11 @@ Locking Type;;
 Lock Step Size;;
 0.001;0.001;0.001;;
 
-### This is the minimum power required to be read from teh wavemeter to perform laser
+### This is the minimum power required to be read from the wavemeter to perform laser
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--100;-100;-15;;
+-15;-15;-15;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-25;;
+30.35;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -131,24 +131,24 @@ Thor8000 Slots;;
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
 Wavemeter Comm Port;;
-EXFO;4;-1;-1;-1;;
+192.168.0.166;23;1000;122;1000;;
 
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-1.4;;
+1;;
 Etalon Scan Limits;;
 0;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-420;;
+100;;
 Etalon Scan Steps;;
 2;;
 
 ### 
 Laser To Scan;;
-1;;
+0;;
 Etalon To Scan;;
 0;;
 
