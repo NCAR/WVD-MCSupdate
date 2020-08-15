@@ -73,7 +73,7 @@ def processContainer(FileName,NetCDFOutputPath,Header):
     VariableColumn      = [1,0,2,3,4] # column in the data file to find these variables
     Transpose           = [False,False,False,False,False]
     VariableDimension   = [('time'),('time'),('time'),('time'),('time')]
-    VariableType        = ['float32','float32','float32','float32','float32']
+    VariableType        = ['float64','float32','float32','float32','float32']
     VariableUnit        = ['Fractional days since Jan. 1. 2000','Unitless','Unitless','Unitless','Unitless']
     VariableDescription = ['Fractional days since Jan. 1. 2000',
                            'Type of function reporting status',
