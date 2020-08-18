@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
 ### the time between scan steps in seconds. 
 Misc;; 
-15; 1000; 1; 0; 8; 3;;
+15; 1000; 1; 0; 9; 3;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-25.0;25.0;25.0;25.0;25.0;;
+27.639;29.235;18.865;25.0;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-75;75;75;75;75;;
+95;100;90;130;75;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -70,7 +70,7 @@ Locking On;;
 1;1;1;0;0;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
-### usin ga single step or PID control method (1 = single step and 0 = PID)
+### using a single step or PID control method (1 = single step and 0 = PID)
 Locking Type;;
 1;1;1;1;1;;
 
