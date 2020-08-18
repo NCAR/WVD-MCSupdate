@@ -61,7 +61,7 @@ def processContainer(FileName,NetCDFOutputPath,Header):
     print("Making Container Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed 
-    DataType = ['f','f','f','f','f'] 
+    DataType = ['str','f','f','f','f'] 
     VarData = DFF.ConvertAlphaNumericFile(DFF.ReadAndPadTextFile(FileName),DataType)
     # Defining file attributes
     FileType              = 'Container'
@@ -73,9 +73,10 @@ def processContainer(FileName,NetCDFOutputPath,Header):
     VariableColumn      = [1,0,2,3,4] # column in the data file to find these variables
     Transpose           = [False,False,False,False,False]
     VariableDimension   = [('time'),('time'),('time'),('time'),('time')]
-    VariableType        = ['float64','float32','float32','float32','float32']
-    VariableUnit        = ['Fractional days since Jan. 1. 2000','Unitless','Unitless','Unitless','Unitless']
-    VariableDescription = ['Fractional days since Jan. 1. 2000',
+    VariableType        = ['float64','U','float32','float32','float32']
+    VariableUnit        = ['float','U','float32','float32','b']
+    VariableUnit        = ['Fractional Hours','Unitless','Unitless','Unitless','Unitless']
+    VariableDescription = ['The time of collected data in UTC hours from the start of the day',
                            'Type of function reporting status',
                            'Number of elements currently reported in the child command queue',
                            'Number of elements currently reported in the child response queue',
