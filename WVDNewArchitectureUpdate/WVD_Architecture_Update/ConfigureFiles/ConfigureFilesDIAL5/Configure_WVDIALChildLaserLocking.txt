@@ -5,7 +5,7 @@ This file is used to define the initial state of the template in the Water Vapor
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
 Outter Tab Names;;
-Wavelength Settings; Wavelength Status; Data Saving; Data Plotting;;
+Wavelength Settings; Scan Details; Wavelength Status; Data Saving; Data Plotting;;
 
 ### These settings just set the names of the inner tab controller so the user knows
 ### what is contained in each large piece
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-21.80;25.00;;
+21.90;25.00;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)

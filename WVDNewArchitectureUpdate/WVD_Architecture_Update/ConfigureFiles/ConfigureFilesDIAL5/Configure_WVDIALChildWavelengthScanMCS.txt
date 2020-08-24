@@ -46,7 +46,7 @@ ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-7000;7000;7000;7000;7000;7000;7000;7000;;
+8000;8000;8000;8000;8000;8000;8000;8000;;
 
 ### This is a control to set the counter to count on the rising or falling edge 
 ### of the input TTL pulse. 1 = falling and 0 = rising
