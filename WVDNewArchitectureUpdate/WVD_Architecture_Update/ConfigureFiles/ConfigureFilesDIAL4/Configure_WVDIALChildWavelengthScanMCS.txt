@@ -46,7 +46,7 @@ ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-7000;7000;7000;7000;7000;7000;7000;7000;;
+8000;8000;8000;8000;8000;8000;8000;8000;;
 
 ### This is a control to set the counter to count on the rising or falling edge 
 ### of the input TTL pulse. 1 = falling and 0 = rising
@@ -64,7 +64,7 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;1;0;0;0;0;;
+1;0;0;0;0;0;;
 
 ### This is the number of pulses to accumulate. Specifically this number is N and
 ### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
@@ -129,7 +129,7 @@ Time Reset;;
 FilePaths;;
 .\Data\ReceiverScan\;
 MCSDataV2;
-ReceiverScanPower;
+MCSPowerV2;
 MCSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;

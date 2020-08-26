@@ -5,7 +5,7 @@ This file is used to define the initial state of the template in the Water Vapor
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
 Outter Tab Names;;
-Wavelength Settings; Scan Settingss; Wavelength Status; Data Saving; Data Plotting;;
+Wavelength Settings; Scan Settings; Wavelength Status; Data Saving; Data Plotting;;
 
 ### These settings just set the names of the inner tab controller so the user knows
 ### what is contained in each large piece
@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19900;828.29780;828.29365;;
+828.19900;828.29815;828.29365;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-30.302;32.803;25;;
+30.272;32.791;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -91,7 +91,7 @@ Min Locking Power;;
 ### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
 ### would check the first laser 4 times before checking the other. 
 Scan Strategy;;
-0;1;0;1;2;;
+0;1;;
 
 ### The type of etalonthat is being used. This corresponds to the typedefintion 
 ### TypeDef_EtalonTypes.ctl
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-22.25;;
+21.80;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -126,7 +126,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-2;5;16;15;24;28;28;28;;
+5;2;17;28;28;28;24;28;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
