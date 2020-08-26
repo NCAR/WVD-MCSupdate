@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
 ### the time between scan steps in seconds. 
 Misc;; 
-15; 1000; 1; 0; 1; 3;;
+15; 1000; 1; 0; 7; 3;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.36;25.857;25;;
+27.403;25.903;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-21.75;;
+21.80;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -126,7 +126,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-5;2;17;28;24;28;28;28;;
+5;2;17;28;28;28;24;28;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
@@ -170,5 +170,5 @@ ScanLogging;
 
 ### The location of the electrical switch used to flip the Opto-electric switches
 Hardware Switch Location;;
-192.168.0.50;9500;2000;-1;20;;
+192.168.0.140;1616;1000;-1;20;;
 
