@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
 ### the time between scan steps in seconds. 
 Misc;; 
-15; 1000; 1; 0; 1; 2;;
+15; 1000; 1; 0; 9; 2;;
 
 ### The type of laser that is being used. This corresponds to the typedefintion 
 ### TypeDef_LaserTypes.ctl
@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-24.089;28.042;25;;
+23.619;28.042;25;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-100;120;100;;
+115;120;100;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -80,11 +80,11 @@ Locking Type;;
 Lock Step Size;;
 0.001;0.001;0.001;;
 
-### This is the minimum power required to be read from teh wavemeter to perform laser
+### This is the minimum power required to be read from the wavemeter to perform laser
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--15;-15;-15;;
+-20;-20;-20;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
@@ -126,7 +126,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-2;5;15;16;28;28;24;28;;
+2;5;17;28;28;28;24;28;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
@@ -142,7 +142,7 @@ Etalon Scan Limits;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-150;150;;
+120;120;;
 Etalon Scan Steps;;
 2;2;;
 
@@ -151,8 +151,6 @@ Laser To Scan;;
 0;1;;
 Etalon To Scan;;
 0;0;;
-
-
 
 
 ### File paths to the data storage and data logging locations and functions.
