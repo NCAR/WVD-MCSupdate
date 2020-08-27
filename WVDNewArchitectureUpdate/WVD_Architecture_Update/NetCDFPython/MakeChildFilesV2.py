@@ -71,7 +71,7 @@ def processContainer(FileName,NetCDFOutputPath,Header):
     # Defining variable descriptions to be written
     VariableName        = ['time','FunctionType','LastCheckin','CQueueEl','RQueueEl','Status']
     VariableColumn      = [1,0,2,3,4,5] # column in the data file to find these variables
-    Transpose           = [False,False,False,False,False]
+    Transpose           = [False,False,False,False,False,False]
     VariableDimension   = [('time'),('time'),('time'),('time'),('time'),('time')]
     VariableType        = ['float64','U','float32','float32','float64','float32']
     VariableUnit        = ['float','U','float','float32','float32','b']
