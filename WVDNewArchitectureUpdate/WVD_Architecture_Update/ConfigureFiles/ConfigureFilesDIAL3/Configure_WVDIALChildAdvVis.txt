@@ -4,7 +4,7 @@ This file is used to define the initial state of advanced visualization routines
 
 ### 
 Tab Names;;
-Main; Water Vapor; Water Vapor Low; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main; Water Vapor; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -15,11 +15,10 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;
-.\AdvancedVisV2.llb\ControlSystemWVLowPlotting.vi;;
+.\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;;
 
 Function Types;;
-0;0;;
+0;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
