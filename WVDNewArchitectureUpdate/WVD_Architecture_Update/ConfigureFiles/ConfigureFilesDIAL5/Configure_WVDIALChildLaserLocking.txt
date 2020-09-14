@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.729;29.006;24.009;29.557;25.0;25.0;;
+27.685;28.965;23.980;29.521;25.0;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-21.90;25.00;;
+21.80;25.00;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -144,13 +144,13 @@ Etalon Scan Limits;;
 Laser Scan Steps;;
 120;120;120;120;;
 Etalon Scan Steps;;
-2;2;2;2;;
+1;1;1;1;;
 
 ### 
 Laser To Scan;;
 0;1;2;3;;
 Etalon To Scan;;
-0;0;1;1;;
+0;0;0;1;;
 
 
 ### File paths to the data storage and data logging locations and functions.
