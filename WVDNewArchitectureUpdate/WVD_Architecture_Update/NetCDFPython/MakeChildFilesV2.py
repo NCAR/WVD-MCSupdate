@@ -14,6 +14,23 @@ import NCARMCSFunctions      as NMF
 import numpy                 as np
 import SharedPythonFunctions as SPF
 
+def ThermocoupleMap(Types):    
+    Strings = []
+    for Type in Types:
+        if   Type == 0: String = "Unknown"
+        elif Type == 1: String = "Empty"
+        elif Type == 2: String = "OpticalBench"
+        elif Type == 3: String = "HVACSource"
+        elif Type == 4: String = "HVACReturn"
+        elif Type == 5: String = "Window"
+        elif Type == 6: String = "WindowHeaterFan"
+        elif Type == 7: String = "WVEtalonHeatSink"
+        elif Type == 8: String = "HSRLEtalonHeatSink"
+        elif Type == 9: String = "HSRLOven"
+        else:         	  String = "Unassigned"
+        Strings.append(String)
+    return Strings
+
 #%%################################# General ##################################
 #def processGeneral()
     
@@ -177,6 +194,43 @@ def processHK(FileName,NetCDFOutputPath,Header):
                         FileDimensionSize,FileTime       ,FileType           , 
                         VarData          ,VariableColumn ,VariableDescription,
                         VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
+    
+def processHKV2(FileName,NetCDFOutputPath,Header):
+    print("Making Housekeeping Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
+    # Reading data file and returning a padded array as needed  
+    VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float)  
+    # Determining the location of the thermocouples
+    LocString = bin(int(FileName.split('_')[1])).lstrip('0b') 
+    Locations = ThermocoupleMap([int(LocString[I*4:I*4+4],2) for I in range(len(LocString)/4)])
+    Locations.reverse()
+    Locations = np.array(Locations).astype(np.str)   
+    # Defining file attributes
+    FileType              = 'HKeep'
+    FileDescription       = 'Housekeeping data file: Thermocouples monitoring internal temperature of container'
+    FileDimensionNames    = ['time', 'nSensors','nSensorLabels']
+    FileDimensionSize     = [len(VarData[:,1]), len(VarData[1,:])-1, len(Locations)]
+    # Pushing Thermocouple locations into data file structure
+    A = list(np.asarray(range(len(VarData[1,:])-1))+1)
+    VarData = [VarData[:,0],np.transpose(VarData[:,A]),Locations]
+    # Defining variable descriptions to be written
+    VariableName        = ['time','Temperature','ThermocoupleLocations']
+    VariableColumn      = [0,1,2] # column in the data file to find these variables
+    Transpose           = [False,False,False]
+    VariableDimension   = [('time'),('nSensors','time'),('nSensorLabels')]
+    VariableType        = ['float','float32','U']
+    VariableUnit        = ['Fractional Hours','Celcius','Unitless']
+    VariableDescription = ['The time of collected data in UTC hours from the start of the day',
+                           'Temperature at various points within the container',
+                           'Location of the thermocouples']
+    # Writing the netcdf file 
+    DFF.WriteNetCDFFile(NetCDFOutputPath ,Header         , Transpose         ,
+                        FileDate         ,FileDescription,FileDimensionNames ,
+                        FileDimensionSize,FileTime       ,FileType           , 
+                        VarData          ,VariableColumn ,VariableDescription,
+                        VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
+
+
     
 #%%################################# Etalon ################################### 
 def processHumidity(FileName,NetCDFOutputPath,Header):
@@ -571,9 +625,9 @@ def processWS(FileName,NetCDFOutputPath,Header):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,NetCDFPath,Header):
     # Defining the files to be written
-    PathTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ,'Container']    
-    FileTypes = ['UPS' ,'Housekeeping','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'MCSDataV2'   ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps','ContainerLogging']
-    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt'              ,'.txt']
+    PathTypes = ['UPS' ,'Housekeeping','Housekeeping'  ,'WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ,'Container']    
+    FileTypes = ['UPS' ,'Housekeeping','HousekeepingV2','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'MCSDataV2'   ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps','ContainerLogging']
+    FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt'              ,'.txt']
 #    PathTypes = ['QuantumComposer'   ]    
 #    FileTypes = ['QuantumComposerOps']
 #    FileExts  = ['.txt']
@@ -592,6 +646,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                     elif FileType == 'Etalon':             processEtalons(File,NetCDFPath,Header)
                     elif FileType == 'EtalonScanData':     processEtalonScan(File,NetCDFPath,Header)
                     elif FileType == 'Housekeeping':       processHK(File,NetCDFPath,Header)
+                    elif FileType == 'HousekeepingV2':     processHKV2(File,NetCDFPath,Header)
                     elif FileType == 'Humidity':           processHumidity(File,NetCDFPath,Header)
                     elif FileType == 'LaserLocking':       processLL(File,NetCDFPath,Header)
                     elif FileType == 'LaserScanData':      processLaserScan(File,NetCDFPath,Header)
