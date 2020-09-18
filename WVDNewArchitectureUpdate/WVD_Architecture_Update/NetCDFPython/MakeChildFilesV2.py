@@ -196,13 +196,13 @@ def processHK(FileName,NetCDFOutputPath,Header):
                         VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     
 def processHKV2(FileName,NetCDFOutputPath,Header):
-    print("Making Housekeeping Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    print("Making HousekeepingV2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float)  
     # Determining the location of the thermocouples
-    LocString = bin(int(FileName.split('_')[1])).lstrip('0b') 
-    Locations = ThermocoupleMap([int(LocString[I*4:I*4+4],2) for I in range(len(LocString)/4)])
+    LocString = bin(int(FileName.split('_')[-4])).lstrip('0b') 
+    Locations = ThermocoupleMap([int(LocString[I*4:I*4+4],2) for I in list(range(8))])
     Locations.reverse()
     Locations = np.array(Locations).astype(np.str)   
     # Defining file attributes
@@ -628,8 +628,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
     PathTypes = ['UPS' ,'Housekeeping','Housekeeping'  ,'WeatherStation','LaserLocking','LaserLocking','MCS'        ,'MCS'         ,'MCS'      ,'MCS'       ,'HumiditySensor','ReceiverScan','ReceiverScan','ReceiverScan' ,'ReceiverScan'  ,'QuantumComposer'   ,'Container']    
     FileTypes = ['UPS' ,'Housekeeping','HousekeepingV2','WeatherStation','LaserLocking','Etalon'      ,'TestingData','TestingPower','MCSDataV2','MCSPowerV2','Humidity'      ,'MCSDataV2'   ,'Wavemeter'   ,'LaserScanData','EtalonScanData','QuantumComposerOps','ContainerLogging']
     FileExts  = ['.txt','.txt'        ,'.txt'          ,'.txt'          ,'.txt'        ,'.txt'        ,'.bin'       ,'.bin'        ,'.bin'     ,'.bin'      ,'.txt'          ,'.bin'        ,'.txt'        ,'.txt'         ,'.txt'          ,'.txt'              ,'.txt']
-#    PathTypes = ['QuantumComposer'   ]    
-#    FileTypes = ['QuantumComposerOps']
+#    PathTypes = ['Housekeeping'   ]    
+#    FileTypes = ['HousekeepingV2']
 #    FileExts  = ['.txt']
     # Looping over all the file types of interest
     for PathType,FileType,FileExt in zip(PathTypes, FileTypes,FileExts): 
