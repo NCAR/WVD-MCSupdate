@@ -6,19 +6,23 @@ This file is used to define the initial state of the Weather Station in the Wate
 Thermocouple Comm Port;;
 192.168.0.165;502;3000;-1;-1;;
 
-
 ### These are miscilaneous variables that are read and used as default values
 ### by the weather station. These are currently: the update period of the weather 
 ### station in seconds, the time to wait between write and read of the comm port,
 ### The number of measurments to save, and the number of weather station variables
 ### to keep. 
 Child Variables;;
-8;900;3;;
+8;900;8;;
+
+### Locations of the thermocouples in the ADAM module. For translation of the numbers
+### see TypeDef_ThermocoupleLocations.ctl.
+Thermocouple Locations;;
+0;0;0;0;0;0;0;0;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
 .\Data\Housekeeping\;
-Housekeeping;
+HousekeepingV2;
 HKLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
