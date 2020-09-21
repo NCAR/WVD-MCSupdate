@@ -196,13 +196,16 @@ def processHK(FileName,NetCDFOutputPath,Header):
                         VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     
 def processHKV2(FileName,NetCDFOutputPath,Header):
+    MaxThermocouples = 8
+    BitsPerLocation  = 4
     print("Making HousekeepingV2 Data File", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     (FileDate,FileTime,MPDNum) = DFF.FindFileDateAndTime(FileName,True)
     # Reading data file and returning a padded array as needed  
     VarData = np.array(DFF.ReadAndPadTextFile(FileName)).astype(np.float)  
     # Determining the location of the thermocouples
-    LocString = bin(int(FileName.split('_')[-4])).lstrip('0b') 
-    Locations = ThermocoupleMap([int(LocString[I*4:I*4+4],2) for I in list(range(8))])
+    LocString = '{:'+str(MaxThermocouples*BitsPerLocation)+'b}'
+    LocString = LocString.format(int(FileName.split('_')[-4])).replace(' ','0')
+    Locations = ThermocoupleMap([int(LocString[I*BitsPerLocation:I*BitsPerLocation+BitsPerLocation],2) for I in list(range(MaxThermocouples))])
     Locations.reverse()
     Locations = np.array(Locations).astype(np.str)   
     # Defining file attributes
