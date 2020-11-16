@@ -1,0 +1,31 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the Weather Station in the Water Vapor DIAL Main labview program. 
+
+### This is where the Labview VISA communications should find the weather station.
+Current Monitor Comm Port;;
+192.168.0.164;502;3000;-1;-1;;
+
+### These are miscilaneous variables that are read and used as default values
+### by the weather station. These are currently: the update period of the weather 
+### station in seconds, the time to wait between write and read of the comm port,
+### The number of measurments to save, and the number of weather station variables
+### to keep. 
+Child Variables;;
+8;900;8;;
+
+### Locations of the thermocouples in the ADAM module. For translation of the numbers
+### see TypeDef_ThermocoupleLocations.ctl.
+Current Monitor Locations;;
+0;1;2;3;4;5;6;7;;
+
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\Current\;
+CurrentMonitoring;
+CurrentLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+
+
