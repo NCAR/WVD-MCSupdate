@@ -39,7 +39,7 @@ WV Channels;;
 ### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
 ### Max Range [m], Profile Time [min], and Scan Max Range [m]
 WV Range and Time;;
-60; 15; 37.5; 12000; 5; 2000;;
+60; 15; 37.5; 15000; 5; 2000;;
 
 ### Plot Labels
 WV Profile Labels;;
@@ -63,7 +63,7 @@ WVLow Channels;;
 ### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
 ### Max Range [m], Profile Time [min], and Scan Max Range [m]
 WVLow Range and Time;;
-60; 15; 37.5; 12000; 5; 2000;;
+60; 15; 37.5; 15000; 5; 2000;;
 
 ### Plot Labels
 WVLow Profile Labels;;
@@ -87,7 +87,7 @@ KHSRL Channels;;
 ### are in order: Time To Save [min]; WV Calculation Time [sec]; Range Res [m];
 ### Max Range [m], Profile Time [min], and Scan Max Range [m]
 KHSRL Range and Time;;
-60; 15; 37.5; 12000; 5; 2000;;
+60; 15; 37.5; 15000; 5; 2000;;
 
 ### Plot Labels
 KHSRL Profile Labels;;
