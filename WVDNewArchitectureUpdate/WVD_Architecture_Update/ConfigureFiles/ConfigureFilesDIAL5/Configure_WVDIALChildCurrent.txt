@@ -12,12 +12,12 @@ Current Monitor Comm Port;;
 ### The number of measurments to save, and the number of weather station variables
 ### to keep. 
 Child Variables;;
-7;900;3;;
+7;900;5;;
 
 ### Locations of the thermocouples in the ADAM module. For translation of the numbers
-### see TypeDef_ThermocoupleLocations.ctl.
+### see TypeDef_CurrentMonitorLocations.ctl.
 Current Monitor Locations;;
-2;6;3;;
+2;6;3;4;5;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
