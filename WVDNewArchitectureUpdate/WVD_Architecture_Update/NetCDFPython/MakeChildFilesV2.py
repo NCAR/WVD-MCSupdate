@@ -372,7 +372,7 @@ def processMCSData(FileName,NetCDFOutputPath,Header):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
-        print('An error occured when reading the data file.')
+        print('An error occurred when reading the data file.')
 
 #%%################################ MCS Data ##################################
 def processMCSDataV2(FileName,NetCDFOutputPath,Header):
@@ -413,7 +413,7 @@ def processMCSDataV2(FileName,NetCDFOutputPath,Header):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
-        print('An error occured when reading the data file.')
+        print('An error occurred when reading the data file.')
         
 #%%################################ MCS Data ##################################
 def processMCSScanDataV2(FileName,NetCDFOutputPath,Header):
@@ -454,7 +454,7 @@ def processMCSScanDataV2(FileName,NetCDFOutputPath,Header):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
-        print('An error occured when reading the data file.')
+        print('An error occurred when reading the data file.')
         
 #%%############################### MCS Power ##################################
 def processMCSPower(FileName,NetCDFOutputPath,Header):
@@ -491,7 +491,7 @@ def processMCSPower(FileName,NetCDFOutputPath,Header):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
-        print('An error occured when reading the data file.')
+        print('An error occurred when reading the data file.')
         
 #%%############################### MCS Power ##################################
 def processMCSPowerV2(FileName,NetCDFOutputPath,Header):
@@ -528,7 +528,7 @@ def processMCSPowerV2(FileName,NetCDFOutputPath,Header):
                             VarData          ,VariableColumn ,VariableDescription,
                             VariableDimension,VariableName   , VariableType      , VariableUnit,MPDNum)
     else:                # Some error is reported
-        print('An error occured when reading the data file.')
+        print('An error occurred when reading the data file.')
 
 #%%################################## UPS #####################################
 def processUPS(FileName,NetCDFOutputPath,Header):

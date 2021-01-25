@@ -453,7 +453,7 @@ def openSocket():
     global sock
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,RX_BUFF_LEN) # Set Rx buffer to accomodate pack of 12 histograms (144kB)
+        sock.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,RX_BUFF_LEN) # Set Rx buffer to accommodate pack of 12 histograms (144kB)
         sock.settimeout(READBACK_TIMEOUT)  # set timeout
         printAndLog('Socket Rx Buffer: %s Bytes' % str(sock.getsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF)))
 
