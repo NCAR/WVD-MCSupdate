@@ -60,13 +60,13 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                 # Looking for files and looping over them
                 FileList = SPF.getFiles(Where2FindData , FileBase, FileExt, ThenDate, ThenTime)               
                 for File in FileList:
-                    processGeneral(FolderType,FileType,File,NetCDFPath,Header) 
-#                    try:
-#                        processGeneral(FolderType,FileType,File,NetCDFPath,Header) 
-#                    except:
-#                        print('Failed')
-#                        writeString = 'WARNING: Failure to process ' + FolderType + ' data - ' + \
-#                                      FolderType + ' file = ' + str(File) + ' - ' + str(NowTime) + \
-#                                      '\n' + str(sys.exc_info()[0]) + '\n\n'
-#                        print(writeString)
-##                         
+#                    processGeneral(FolderType,FileType,File,NetCDFPath,Header) 
+                    try:
+                        processGeneral(FolderType,FileType,File,NetCDFPath,Header) 
+                    except:
+                        print('Failed')
+                        writeString = 'WARNING: Failure to process ' + FolderType + ' data - ' + \
+                                      FolderType + ' file = ' + str(File) + ' - ' + str(NowTime) + \
+                                      '\n' + str(sys.exc_info()[0]) + '\n\n'
+                        print(writeString)
+                        
