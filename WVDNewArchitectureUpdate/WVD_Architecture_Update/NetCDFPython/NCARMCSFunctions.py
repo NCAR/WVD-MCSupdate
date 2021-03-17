@@ -6,9 +6,7 @@
 # error is recognized, then data arrays containing all of the file information 
 # are returned. 
 
-import os
-#import sys
-import struct
+import os, struct, DefineFileElements as Define
 
 #%%
 def ParseMCSCountsHeader(Header,ChannelAssign):
@@ -79,7 +77,7 @@ def ParseMCSCountsHeaderV2(Header,ChannelAssign):
     Timestamp = struct.unpack('>d',Header[0:8])[0]
     # Reading the number of channels and the MPD Number
 #            MPDNum    = ord(Header[8:9])
-    ChannelMap = MCSPhotonCountMap(ord(Header[9:10]))
+    ChannelMap = Define.MCSPhotonCountMapV2(ord(Header[9:10]))
     # Checking that the header word is there and equal to 0x4D430000
     if ''.join('{:08b}'.format(ord(Header[i:i+1])) for i in range(10,14)) != \
        ''.join('{:08b}'.format(ord(x))             for x in '\x00\x00\x43\x4D'):
@@ -111,8 +109,7 @@ def ReadMCSCounts(Bins,File,ReadIndex,ExpectedChannel):
         data = File.read(4)
         ReadIndex = ReadIndex+4          
         if ord(data[3:4])/16 != ExpectedChannel:
-            # Write warning that says the header and data main body do not
-            # have the same channel number
+            # Warning that header & data body don't have same channel number
             ReadError = 'The MCS count channel and header channel do not match. ~RS'
             print(ReadError)
             return([],[],ReadError)
@@ -300,7 +297,8 @@ def ReadMCSPowerFile(Powerfile, Channels=12):
             # Bytes 138-140 (null), 141 (End of transmission), 142 (Carriage 
             # return), 143 (Line Feed), 144 (Carriage return), 145 (Line Feed)
     # Return the data arrays read from the file
-    return(AccumExp,Demux,PowerCh,RTime,Timestamp,ChannelAssign,'')
+#    return(AccumExp,Demux,PowerCh,RTime,Timestamp,ChannelAssign,'')
+    return(Timestamp,PowerCh,AccumExp,Demux,RTime,ChannelAssign,'')
 
 def ReadMCSPowerFileV2(Powerfile):            
     # Variables for running the loop
@@ -324,7 +322,7 @@ def ReadMCSPowerFileV2(Powerfile):
             # Reading the channel map
             ChannelMap = []  
             for m in range(NChannels): 
-                ChannelMap.append(MCSPowerMap(ord(file.read(1))))
+                ChannelMap.append(Define.MCSPowerMapV2(ord(file.read(1))))
             ReadIndex += NChannels
             # Checking that the header word is there and equal to 0x4D430000
             if ''.join('{:08b}'.format(ord(file.read(1))) for i in range(0,4)) != \
@@ -365,46 +363,5 @@ def ReadMCSPowerFileV2(Powerfile):
             FirstTime = False
             Count += 1
     # Return the data arrays read from the file
-    return(AccumExp,Demux,Power,RTime,Timestamp,ChannelMap,'')
-    
-#%% MCS Maps    
-def MCSPowerMap(Type):
-    if   Type == 1: String = 'Unknown'
-    elif Type == 2: String = 'WVOnline'
-    elif Type == 3: String = 'WVOffline'
-    elif Type == 4: String = 'O2Online'
-    elif Type == 5: String = 'O2Offline'
-    elif Type == 6: String = 'HSRL'
-    else:         	String = 'Unassigned'
-    return String
-
-def MCSPhotonCountMap(Type):
-    if   Type ==  1: String = 'Unknown'
-################## WV DIAL ##################
-    elif Type ==  2: String = 'WVOnline'
-    elif Type ==  3: String = 'WVOnlineLow'
-    elif Type ==  4: String = 'WVOffline'
-    elif Type ==  5: String = 'WVOfflineLow'
-################## O2 DIAL without Built In HSRL ##################
-    elif Type ==  6: String = 'O2Online'
-    elif Type ==  7: String = 'O2OnlineLow'
-    elif Type ==  8: String = 'O2Offline'
-    elif Type ==  9: String = 'O2OfflineLow'
-################## O2 With Built In HSRL ##################
-    elif Type == 10: String = 'O2OnlineMol'
-    elif Type == 11: String = 'O2OnlineMolLow'
-    elif Type == 12: String = 'O2OnlineComb'
-    elif Type == 13: String = 'O2OnlineCombLow'
-    elif Type == 14: String = 'O2OfflineMol'
-    elif Type == 15: String = 'O2OfflineMolLow'
-    elif Type == 16: String = 'O2OfflineComb'
-    elif Type == 17: String = 'O2OfflineCombLow'
-################## Stand Alone HSRL ##################
-    elif Type == 18: String = 'HSRLMol'
-    elif Type == 19: String = 'HSRLMolLow'
-    elif Type == 20: String = 'HSRLCombined'
-    elif Type == 21: String = 'HSRLCombinedLow'
-################## Default ##################
-    else:         	 String = 'Unassigned'
-    return String
-    
+#    return(AccumExp,Demux,Power,RTime,Timestamp,ChannelMap,'')
+    return(Timestamp,Power,AccumExp,Demux,RTime,ChannelMap,'')
