@@ -50,7 +50,7 @@ def main(WorkingDir,RSyncTargetDir,HoursBack,RSync):
         # Copy NetCDF files to external drive
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         try:
-            if RSync == 1:
+            if RSync == '1':
                 Response = DoRSync(os.getcwd(),RSyncTargetDir,WarningFile,ErrorFile)
             else:
                 Response = 'No RSync Requested'
@@ -78,10 +78,10 @@ if __name__ == '__main__':
     except:
         HoursBack = 3
     try:
-        RSync = sys.argv[4] if is_number(sys.argv[4]) else 0
+        RSync = sys.argv[4] if is_number(sys.argv[4]) else '0'
     except:
-        RSync = 0
-
+        RSync = '0'
+    
     # Running main program
     main(WorkingDir,RSyncTargetDir,HoursBack,RSync)
 

@@ -6,7 +6,7 @@
 #       1) Files where the data are jagged arrays instead of full are filled 
 #          with a bad data marker (-1000000000) to make all rows the same size
 
-import datetime, os
+import datetime, os, sys
 import numpy                 as np
 import DataFileFunctions     as DFF
 import DefineFileElements    as Define
