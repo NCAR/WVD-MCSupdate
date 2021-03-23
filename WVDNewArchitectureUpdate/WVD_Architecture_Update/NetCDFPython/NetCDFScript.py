@@ -26,7 +26,7 @@ def readHeaderInfo(WorkingDir):
          
 
 #%%  Main program 
-def main(WorkingDir,RSyncTargetDir,HoursBack):
+def main(WorkingDir,RSyncTargetDir,HoursBack,RSync):
     print ("Start Processing: The date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     # Creating timestamps used to find which files should be processed
     NowTime  = SPF.getFractionalHours(0)
@@ -50,8 +50,11 @@ def main(WorkingDir,RSyncTargetDir,HoursBack):
         # Copy NetCDF files to external drive
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         try:
-            12#Response = DoRSync(os.getcwd(),RSyncTargetDir,WarningFile,ErrorFile)
-            #print(Response)
+            if RSync == 1:
+                Response = DoRSync(os.getcwd(),RSyncTargetDir,WarningFile,ErrorFile)
+            else:
+                Response = 'No RSync Requested'
+            print(Response)
         except:
             writeString = "WARNING: unable to RSync to external hard drive - "+str(NowTime) + '\n' + str(sys.exc_info()[0]) + '\n\n'
             SPF.Write2ErrorFile(WarningFile, writeString)        
@@ -74,6 +77,11 @@ if __name__ == '__main__':
         HoursBack = sys.argv[3] if is_number(sys.argv[3]) else 3
     except:
         HoursBack = 3
+    try:
+        RSync = sys.argv[4] if is_number(sys.argv[4]) else 0
+    except:
+        RSync = 0
+
     # Running main program
-    main(WorkingDir,RSyncTargetDir,HoursBack)
+    main(WorkingDir,RSyncTargetDir,HoursBack,RSync)
 

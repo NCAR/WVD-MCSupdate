@@ -19,7 +19,11 @@ HoursToBackProcess;;
 
 ### how frequently do we want to check 
 UpdatePeriodMin;;
-5;;
+10;;
+
+### Run the sync to an external hard drive (0: no, 1: yes)
+RSync;;
+1;;
 
 ### paths to error and comment logging
 FilePaths;;
