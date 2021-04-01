@@ -173,7 +173,7 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None):
 'LaserScan': {'FType':        'ReceiverScanLaser',
               'FDescription': 'Laser Scanning data file',
               'FDimNames':    ['time'],
-              'FDimSize':     [len(List1d)],
+              'FDimSize':     [len(List1d[1])],
               'Transpose':    [False]*5,
               'VarName':      ['time','LaserName','TempDesired','TempMeas','Current'],
               'VarCol':       [7,0,4,5,6],
