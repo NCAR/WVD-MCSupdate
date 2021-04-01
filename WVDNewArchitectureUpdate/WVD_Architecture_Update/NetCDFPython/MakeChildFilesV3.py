@@ -25,7 +25,7 @@ def processGeneral(FolderType,FileType,FileName,NetCDFOutputPath,Header):
     if isinstance(VarData,np.ndarray):
         ArrayData = VarData; 
     elif isinstance(VarData,list):
-        if FileType in ['MCS','MCSV2']:
+        if FileType in ['MCS','MCSV2','MCSScanV2']:
             List2d = VarData;
         else:
             List1d = VarData;
@@ -45,10 +45,10 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                          'MCS':            [['MCSDataV2','.bin','MCSV2'],
                                             ['MCSPowerV2','.bin','PowerV2']],
                          'QuantumComposer':[['QuantumComposerOps','.txt','Clock']],
-#                         'ReceiverScan':   [['MCSDataV2','.bin','MCSV2'],
-#                                            ['Wavemeter','.txt','Wavemeter'],
-#                                            ['LaserScanData','.txt','LaserScan']],
-#                                            ['EtalonScanData','.txt','EtalonScan']],
+                         'ReceiverScan':   [['MCSDataV2','.bin','MCSScanV2'],
+                                            ['Wavemeter','.txt','Wavemeter'],
+                                            ['LaserScanData','.txt','LaserScan'],
+                                            ['EtalonScanData','.txt','EtalonScan']],
                          'UPS':            [['UPS','.txt','UPS']],
                          'WeatherStation': [['WeatherStation','.txt','WStation']]}
     # Looping over all possible file types and looking for files matching that

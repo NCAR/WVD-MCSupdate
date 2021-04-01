@@ -85,7 +85,7 @@ def WriteNetCDFFileV2(LocalNetCDFOutputPath,Header,Attr,FileDate,FileTime,MPDUni
     # Write a brief description of file
     DataFile.description = Attr['FDescription']
     # Load up header information for file
-
+    
     # Creating dimensions
     for m in range(len(Attr['FDimNames'])):
         DataFile.createDimension(Attr['FDimNames'][m],Attr['FDimSize'][m])
@@ -142,16 +142,16 @@ def ReadAndPadTextFile(FileName):
 def ReadFileGeneral(FileName, FolderType, FileType):
     VarData = []
     # Read file based on its type 
-    if FolderType in {'Housekeeping','HumiditySensor','UPS','Wavemeter','WeatherStation'}:
+    if FileType in {'HKV2','Humidity','UPS','Wavemeter','WStation'}:
         # File contains only numbers so read simply
-        VarData = np.array(ReadAndPadTextFile(FileName)).astype(np.float)       
+        VarData = np.array(ReadAndPadTextFile(FileName)).astype(np.float)  
         # Parse out location information for files containing such info
         if FileType == 'HKV2':
             Thermocouples = len(VarData[1,:])-1
             VarData = [VarData[:,0],np.transpose(VarData[:,list(np.asarray(range(Thermocouples))+1)]),
                        ConvertLocationNumber2Strings(FileName,4,Thermocouples,'Thermocouple')]        
-    elif FolderType in {'Container','EtalonScal','LaserLocking','LaserScan','MCS','MCSScanV2'}:    
-        # Determing the file structure        
+    elif FileType in {'Container','Etalon','LL','LaserScan','EtalonScan','MCSV2','PowerV2','MCSScanV2'}:  
+        # Determing the file structure 
         DataType = Define.DefineFileStructure(FileType)       
         # Defining which function to call
         MapDictonary = {'MCS':'ReadMCSPhotonCountFile','Power':'ReadMCSPowerFile','PowerV2':'ReadMCSPowerFileV2', 
@@ -162,7 +162,7 @@ def ReadFileGeneral(FileName, FolderType, FileType):
             VarData = ConvertAlphaNumericFile(ReadAndPadTextFile(FileName),DataType)
         else:
             VarData = ConvertAlphaNumericFile(list(getattr(NMF,MapDictonary[FileType])(FileName)),DataType,False)
-    elif FolderType == 'QuantumComposer':
+    elif FileType == 'Clock':
         # Reading data file and returning a padded array as needed 
         FileData = [' '.join(Line).split() for Line in ReadAndPadTextFile(FileName)]
         VarData = np.array(FileData).astype(np.float) 
