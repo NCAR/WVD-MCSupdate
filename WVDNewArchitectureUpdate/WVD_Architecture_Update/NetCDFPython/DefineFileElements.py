@@ -271,7 +271,7 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None):
 } 
     # Adding elements for the etalon scan 
     FileAtributes['EtalonScan'] = copy.deepcopy(FileAtributes['Etalon'])
-    FileAtributes['EtalonScan']['FType'] ='ReceiverScanEtalonShouldntBe'
+    FileAtributes['EtalonScan']['FType'] ='ReceiverScanEtalon'
     FileAtributes['EtalonScan']['FDescription'] = 'Etalon scan data file'
     # Adding elements for the second version of the MCS data
     FileAtributes['MCSV2'] = copy.deepcopy(FileAtributes['MCS'])
