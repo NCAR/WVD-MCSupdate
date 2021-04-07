@@ -70,8 +70,7 @@ def FindFileDateAndTime(FileName,Print=False):
     FileDate = FileName[-19:-11]
     FileTime = FileName[-10:-4]
     MPDNum   = FileName[-22:-20]
-    if Print:
-        print ('  File date: ' + FileDate + ', File time:' + FileTime)
+    if Print: print ('  File date: ' + FileDate + ', File time:' + FileTime)
     return (FileDate,FileTime,MPDNum)
 
 #%%
@@ -90,22 +89,15 @@ def WriteNetCDFFileV2(LocalNetCDFOutputPath,Header,Attr,FileDate,FileTime,MPDUni
     for m in range(len(Attr['FDimNames'])):
         DataFile.createDimension(Attr['FDimNames'][m],Attr['FDimSize'][m])
     # Writing individual variables
-    if (type(VarData) == list):      # File was an alpha-numeric file or contained complicated data
-        for m in range(len(Attr['VarName'])):
-            if Attr['Transpose'][m]:
-                # transposing the data arrays 
-                VarData[Attr['VarCol'][m]] = np.transpose(VarData[Attr['VarCol'][m]])
-            CreateAndPlaceNetCDFVariable(DataFile, VarData[Attr['VarCol'][m]],Attr['VarDescrip'][m], 
-                                         Attr['VarDim'][m],Attr['VarName'][m],Attr['VarType'][m],Attr['VarUnit'][m])
-    else:
-        for m in range(len(Attr['VarName'])):# File only contained numbers
-            if Attr['Transpose'][m]:
-                # transposing the data arrays
-                CreateAndPlaceNetCDFVariable(DataFile, np.transpose(VarData[:,Attr['VarCol'][m]]),Attr['VarDescrip'][m], 
-                                         Attr['VarDim'][m],Attr['VarName'][m],Attr['VarType'][m],Attr['VarUnit'][m])
-            else:
-                CreateAndPlaceNetCDFVariable(DataFile, VarData[:,Attr['VarCol'][m]], Attr['VarDescrip'][m], 
-                                         Attr['VarDim'][m],Attr['VarName'][m],Attr['VarType'][m],Attr['VarUnit'][m])
+    for m in range(len(Attr['VarName'])):# File only contained numbers
+        # Determining if the data to write should be transposed or not
+        if (type(VarData) == list): 
+            Data2Write = np.transpose(VarData[Attr['VarCol'][m]]) if Attr['Transpose'][m] else VarData[Attr['VarCol'][m]]
+        else:
+            Data2Write = np.transpose(VarData[:,Attr['VarCol'][m]]) if Attr['Transpose'][m] else VarData[:,Attr['VarCol'][m]]
+        # Placing the variables in the netcdf file
+        CreateAndPlaceNetCDFVariable(DataFile, Data2Write, Attr['VarDescrip'][m],Attr['VarDim'][m],
+                                     Attr['VarName'][m],Attr['VarType'][m],Attr['VarUnit'][m])
     # Close file
     DataFile.close()
    
@@ -114,8 +106,8 @@ def WriteNetCDFFileV2(LocalNetCDFOutputPath,Header,Attr,FileDate,FileTime,MPDUni
 # all lines are the same length. If they are not, it pads the lines that are 
 # shorter with bad values
 def ReadAndPadTextFile(FileName):
-    # Defining the original data array
-    Data = []
+    # Defining the data lists 
+    Data = []; Len = []; Padded = []
     # Opening the file to be read
     with open(FileName,'r') as file:     # opening the file as read only
         for line in file:                # Looping over all lines in the file
@@ -123,11 +115,8 @@ def ReadAndPadTextFile(FileName):
             if len(line.split('\t')) > 0: # Reading each non-zero length line
                 Data.append(line.split('\t'))
     # Determining the needed size of the array
-    Len = []
     for m in range(len(Data)): Len.append(len(Data[m]))
     ArrayWidth = max(Len)
-    # Defining a padded data array
-    Padded = []
     # Looping over all lines in the data array
     for m in range(len(Data)):
         # Checking if the data is the correct size or too small
