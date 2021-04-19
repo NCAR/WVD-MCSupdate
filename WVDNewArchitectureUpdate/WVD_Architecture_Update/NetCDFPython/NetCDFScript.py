@@ -24,7 +24,6 @@ def readHeaderInfo(WorkingDir):
     with open(os.path.join(WorkingDir,"ConfigureFiles","Configure_WVDIALPythonNetCDFHeader.txt")) as f:
         return list(csv.reader(f, delimiter="\t"))
          
-
 #%%  Main program 
 def main(WorkingDir,RSyncTargetDir,HoursBack,RSync):
     print ("Start Processing: The date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
