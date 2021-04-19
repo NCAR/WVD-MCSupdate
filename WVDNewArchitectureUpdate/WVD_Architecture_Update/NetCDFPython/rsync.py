@@ -13,7 +13,6 @@ def DoRSync(syncFrom, syncTo,WarningFile=None,ErrorFile=None):
     stdout = process.communicate()[0]
     return stdout.decode('utf-8')
 
-
 if __name__ == '__main__':
     # Default directories to rsync
     syncFrom = 'C:\\Users\\h2odial\\WVD-MCSupdate\\WVDNewArchitectureUpdate\\WVD_Architecture_Update\\Data'
