@@ -143,8 +143,9 @@ def ReadFileGeneral(FileName, FolderType, FileType):
         # Determing the file structure 
         DataType = Define.DefineFileStructure(FileType)       
         # Defining which function to call
-        MapDictonary = {'MCS':'ReadMCSPhotonCountFile','Power':'ReadMCSPowerFile','PowerV2':'ReadMCSPowerFileV2', 
-                        'MCSV2':'ReadMCSPhotonCountFileV2','MCSScanV2':'ReadMCSPhotonCountFileV2'}
+        MapDictonary = {'MCS':'ReadMCSPhotonCountFile','MCSV2':'ReadMCSPhotonCountFileV2',
+                        'Power':'ReadMCSPowerFile','PowerV2':'ReadMCSPowerFileV2', 
+                        'MCSScanV2':'ReadMCSPhotonCountFileV2'}
         MapDictonary = defaultdict(lambda:"NotMCS",MapDictonary)
         # Converting file
         if MapDictonary[FileType]=="NotMCS":            
