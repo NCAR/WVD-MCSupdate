@@ -1,7 +1,6 @@
 from __future__ import print_function
 import os, sys, datetime
 
-
 #%% Write an error message to a file
 def Write2ErrorFile(ErrorFile, writeString):
     ensure_dir(ErrorFile)
@@ -11,8 +10,7 @@ def Write2ErrorFile(ErrorFile, writeString):
 #%% Makes sure a directory exists or creates it
 def ensure_dir(file_path):
     directory = os.path.dirname(file_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    if not os.path.exists(directory): os.makedirs(directory)
 #%% Checking data directory for all possible files 
 def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
     DayList = os.listdir(DataPath)
@@ -34,11 +32,10 @@ def getFiles(DataPath, dataname, datatype, ThenDate, ThenTime):
     FileList.sort()
     return FileList
 #%% Determine the time of data in fractional hours
-def getFractionalHours(HoursBack):
-    return float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%H")) + \
-           float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%M"))/60 + \
-           float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%S"))/3600 + \
-           float((datetime.datetime.utcnow()-datetime.timedelta(hours=float(HoursBack))).strftime("%f"))/3600000000
+def getFractionalHours(HoursBack):  
+    Time2Use = datetime.datetime.utcnow() - datetime.timedelta(hours=float(HoursBack)) 
+    Types = ["%H","%M","%S","%f"]; Conversions = [1,60,3600,3600000000]
+    return sum([float(Time2Use.strftime(Type))/Div for Type, Div in zip(Types,Conversions)])   
 #%% Converting windows file paths to paths that can be understood by cwrsync
 def convertString2CWSyntax(String):
     Before, After = String.split(":\\",1)
