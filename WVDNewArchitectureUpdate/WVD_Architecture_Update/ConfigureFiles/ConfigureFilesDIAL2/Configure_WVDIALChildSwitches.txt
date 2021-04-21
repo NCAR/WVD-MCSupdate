@@ -4,11 +4,11 @@ This file is used to define the initial state of the template in the Water Vapor
 
 ### Number of switches to control
 Switch Number;;
-2;;
+1;;
 
 ### Switch positions
 Switch Positions;;
-1;1;;
+1;;
 
 
 

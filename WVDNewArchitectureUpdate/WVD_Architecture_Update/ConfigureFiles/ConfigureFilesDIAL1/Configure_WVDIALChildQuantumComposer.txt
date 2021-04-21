@@ -67,16 +67,16 @@ Receiver Scan Single Channel;;
 ### The time to delay the start of the MCS from the time of the laser pulse. 
 ### Units are in [micro seconds]
 Air Lag;;
-0.0;;
+0;;
 Receiver Scan Air Lag;;
-0.0;;
+0;;
 
 ### The time to delay the end of the detector gate from the time of the laser
 ### pulse. Units are in [micro seconds]
 Bang Lag;;
-0.15;;
+0.150;;
 Receiver Scan Bang Lag;;
-0.15;;
+0.150;;
 
 ### The duty cycle to run the offline laser. Value is between 0 (laser off) and
 ### 1 (laser on). Online duty cycle is just 1 - this value.

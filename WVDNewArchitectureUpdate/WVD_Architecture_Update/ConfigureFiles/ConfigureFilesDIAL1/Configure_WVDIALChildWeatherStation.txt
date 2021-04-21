@@ -17,8 +17,8 @@ TCP Info;;
 ### These are miscilaneous variables that are read and used as default values
 ### by the weather station. These are currently: the update period of the weather 
 ### station in seconds, the time to wait between write and read of the comm port,
-### The number of measurments to save, the number of weather station variables
-### to keep, and the weather station communication protocol. 
+### The number of measurments to save, and the number of weather station variables
+### to keep. 
 Child Variables;;
 5;50;1440;4;;
 

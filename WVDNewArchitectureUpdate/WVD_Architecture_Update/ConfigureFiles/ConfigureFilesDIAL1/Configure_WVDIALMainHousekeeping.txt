@@ -6,7 +6,7 @@ This file is used to define the initial state of the Water Vapor DIAL Main labvi
 ### The tag "Unused" tells the container not to populate a tab. Note that this 
 ### command is case sensitive.
 Tab Names;;
-Main Controls; Thermocouple; Current; Humidity; UPS; Weather Station; Unused; Unused; Unused; Unused; Unused;;
+Main Controls; Thermocouple; Current; Humidity; UPS; Weather Station; Data NetCDF; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -21,10 +21,11 @@ Relative File Paths;;
 .\IndividualChildControl.llb\ChildControl_CurrentMonitor.vi;
 .\IndividualChildControl.llb\ChildControl_Humidity.vi;
 .\IndividualChildControl.llb\ChildControl_UPS.vi;
-.\IndividualChildControl.llb\ChildControl_WeatherStation.vi;;
+.\IndividualChildControl.llb\ChildControl_WeatherStation.vi;
+.\NetCDFWriter.llb\ControlSystemNetCDF.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
 Function Types;;
-0;12;23;18;13;5;;
+0;12;23;18;13;5;7;;
 
