@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19100;828.29015;769.7958;770.1085;828.29865;770.1085;;
+828.19100;828.29015;769.7958;770.1085;828.19100;828.19100;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -84,14 +84,14 @@ Lock Step Size;;
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--15;-15;-20;-15;-15;-15;;
+-15;-15;-15;-15;-15;-15;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
 ### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
 ### would check the first laser 4 times before checking the other. 
 Scan Strategy;;
-0;1;2;3;;
+0;1;2;3;0;1;2;3;4;5;;
 
 ### The type of etalonthat is being used. This corresponds to the typedefintion 
 ### TypeDef_EtalonTypes.ctl
