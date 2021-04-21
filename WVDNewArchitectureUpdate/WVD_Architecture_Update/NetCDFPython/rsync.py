@@ -15,7 +15,7 @@ def DoRSync(syncFrom, syncTo,WarningFile=None,ErrorFile=None):
 
 if __name__ == '__main__':
     # Default directories to rsync
-    syncFrom = 'C:\\Users\\h2odial\\WVD-MCSupdate\\WVDNewArchitectureUpdate\\WVD_Architecture_Update\\Data'
+    syncFrom = 'C:\\Users\\h2odial\\WVD-MCSupdate\\WVDNewArchitectureUpdate\\WVD_Architecture_Update'
     syncTo   = 'D:\\MPDBackup'
     # Performing the rsyncing with no logging
     Output = DoRSync(syncFrom, syncTo)
