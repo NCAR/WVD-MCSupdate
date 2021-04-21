@@ -45,7 +45,7 @@ def main(WorkingDir,RSyncTargetDir,HoursBack,RSync):
         ThenTime = float(SPF.getFractionalHours(HoursBack))
         ThenDate = (datetime.datetime.utcnow() - datetime.timedelta(hours=float(HoursBack))).strftime("%Y%m%d")
         # Making the netcdf child files
-        makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,WorkingDir,NetCDFPath,readHeaderInfo(WorkingDir))
+        makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,WorkingDir,NetCDFPath,'')
         # Copy NetCDF files to external drive
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         try:
