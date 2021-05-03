@@ -17,10 +17,10 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\Template.llb\ControlSystemTemplate.vi;;
+.\HardwareConfigure.llb\ConfigureSystemThor8000.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
 Function Types;;
-0;8;;
+0;21;;
 
