@@ -27,8 +27,8 @@ def DefineDataTypeMap():
 #%% Defining maps for placement of measurement elements (defined in labview)
 def DefineCurrentMap():  
     # Defining known locations
-    return({0:"Unknown",1:"Empty",2: "MainInput",3: "HVAC",
-            4:"PowerStrip",5:"WallHeater",6:"WindowHeaterFan"})
+    return({0:"Unknown",1:"Empty",2: "SystemInput",3: "HVAC",
+            4:"WallHeaters",5:"WindowHeaterFan",6:"WallPowerStrip"})
 def DefineThermocoupleMap():  
     # Defining known locations
     return({0:"Unknown"   ,1:"Empty" ,2:"OpticalBench"   ,3:"HVACSource", 
@@ -96,6 +96,19 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None):
                                'Number of elements currently reported in the child command queue',
                                'Number of elements currently reported in the child response queue',
                                'Status of the child. Bit tested with the order: Child exiting, Child COmmanded Stop, Child Responding']},
+'Current':   {'FType':        'Current',
+              'FDescription': 'Housekeeping data file: Current monitoring of major MPD elements',
+              'FDimNames':    ['time', 'nSensors','nSensorLabels'],
+              'FDimSize':     [len(List1d[0]),len(List1d[2]),len(List1d[2])],
+              'Transpose':    [False]*3,
+              'VarName':      ['time','Current','CurrentMonitorLocations'],
+              'VarCol':       [0,1,2],
+              'VarDim':       [('time'),('nSensors','time'),('nSensorLabels')],
+              'VarType':      ['float','float32','U'],
+              'VarUnit':      ['Fractional Hours','Amps','Unitless'],
+              'VarDescrip':   ['The time of collected data in UTC hours from the start of the day',
+                               'Read current from measurement collars. Note: Must be multiplied by 2 to match Dranitz calibration.',
+                               'Location of the thermocouples']},
 'Etalon':    {'FType':        'Etalon',
               'FDescription': 'Etalon data file',
               'FDimNames':    ['time'],
