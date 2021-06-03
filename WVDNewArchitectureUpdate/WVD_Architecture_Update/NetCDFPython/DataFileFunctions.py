@@ -135,14 +135,11 @@ def ReadFileGeneral(FileName, FolderType, FileType):
         # File contains only numbers so read simply
         VarData = np.array(ReadAndPadTextFile(FileName)).astype(np.float)  
         # Parse out location information for files containing such info
-        if FileType == 'HKV2':
+        if FileType in {'Current','HKV2'}:
+            ProcessMap={'Current':'Current','HKV2':'Thermocouple' }
             Locations = len(VarData[1,:])-1
             VarData = [VarData[:,0],np.transpose(VarData[:,list(np.asarray(range(Locations))+1)]),
-                       ConvertLocationNumber2Strings(FileName,4,Locations,'Thermocouple')]   
-        elif FileType == 'Current':
-            Locations = len(VarData[1,:])-1
-            VarData = [VarData[:,0],np.transpose(VarData[:,list(np.asarray(range(Locations))+1)]),
-                       ConvertLocationNumber2Strings(FileName,4,Locations,'Current')]      
+                       ConvertLocationNumber2Strings(FileName,4,Locations,ProcessMap[FileType])]        
     elif FileType in {'Container','Etalon','LL','LaserScan','EtalonScan','MCSV2','PowerV2','MCSScanV2'}:  
         # Determing the file structure 
         DataType = Define.DefineFileStructure(FileType)       
