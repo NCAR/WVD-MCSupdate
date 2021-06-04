@@ -5,7 +5,9 @@
 # cases:
 #       1) Files where the data are jagged arrays instead of full are filled 
 #          with a bad data marker (-1000000000) to make all rows the same size
-
+#       2) Thermocouple & Current data files have the location of the elements 
+#          in the raw file name but as a variable in the netcdf file
+#%% Importing needed modules
 import datetime, os, sys
 import numpy                 as np
 import DataFileFunctions     as DFF

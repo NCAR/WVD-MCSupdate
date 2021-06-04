@@ -1,6 +1,8 @@
 # Written By: Robert Stillwell
 # Written For: National Center for Atmospheric Research
-
+# These functions are used to define the raw and netcdf file structure and the 
+# contents as dictonaries. 
+#%% Importing needed modules
 import numpy as np
 import copy
 from   collections import defaultdict

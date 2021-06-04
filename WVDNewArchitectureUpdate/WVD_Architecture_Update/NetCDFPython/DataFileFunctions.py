@@ -2,6 +2,7 @@
 # Written For: National Center for Atmospheric Research
 # These functions are used to open, read, and write data files needed for the 
 # MicroPulse DIAL lidar system. 
+#%% Importing needed modules
 import os
 from   netCDF4     import Dataset
 from   collections import defaultdict
@@ -9,7 +10,6 @@ import DefineFileElements    as Define
 import SharedPythonFunctions as SPF
 import NCARMCSFunctions      as NMF
 import numpy                 as np
-
 #%% 
 # This function takes a list of data (rows are individual measurments) and 
 # reshapes it into a list of data (rows are each measurement type) with each 

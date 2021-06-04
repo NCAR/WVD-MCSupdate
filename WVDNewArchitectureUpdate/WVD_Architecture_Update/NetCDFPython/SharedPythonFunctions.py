@@ -1,6 +1,9 @@
+# Written By: Brad Schoenrock, Robert Stillwell
+# Written For: National Center for Atmospheric Research
+# These functions are used to do simple tasks for the main NetCDF script.
+#%% Importing needed modules
 from __future__ import print_function
 import os, sys, datetime
-
 #%% Write an error message to a file
 def Write2ErrorFile(ErrorFile, writeString):
     ensure_dir(ErrorFile)
