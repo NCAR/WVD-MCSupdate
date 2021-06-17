@@ -1,0 +1,114 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the NCAR MCS in the WVD labview program. 
+
+### UDP communication location of MCS - IP address of MCS; Status port; Heartbeat port;
+Power monitoring port; Bulk data frames port;; 
+UDP Comms;;
+192.168.0.198;54000;54003;54004;54002;;
+
+###  TypeDef_MCSPhotonCountingMap.ctl
+Data Hardware Connectivity;;
+2;0;0;0;0;0;0;0;4;0;0;0;;
+
+### TypeDef_MCSPowerMap.ctl
+Power Hardware Connectivity;;
+2;0;0;0;0;0;3;0;0;0;0;0;;
+
+
+################################################################################
+### Setting the state of the MCS digital controls. These are all array elements
+### and all index from lowest to highest
+Channel Number;;
+0;1;2;3;4;5;6;7;;
+
+### Here 1 = on and 0 = off
+Enable;;
+1;0;0;0;0;0;0;0;;
+
+### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
+Demux;;
+1;0;0;0;0;0;0;0;;
+
+### Options are 0-3. Numbers outside this will default to 0
+Demux Select;;
+0;0;0;0;0;0;0;0;;
+
+### Options are 0-2. Numbers outside this will default to 0
+Sync Select;;
+0;0;0;0;0;0;0;0;;
+
+### This is a control to set the counter to count on the rising or falling edge 
+### of the input TTL pulse. 1 = falling and 0 = rising
+Polarity;;
+0;0;0;0;0;0;0;0;;
+
+### This is a control to set the counter to count on the rising or falling edge 
+### of the input TTL pulse. 1 = falling and 0 = rising
+Demux Polarity;;
+0;0;0;0;0;0;0;0;;
+################################################################################
+### Setting the state of the MCS power monitoring. These are all array elements
+### and all indexed from lowest to highest
+Channel Number;;
+0;1;2;3;4;5;;
+
+### Here 1 = on and 0 = off
+Enable;;
+1;0;0;0;0;0;;
+
+### This is the number of pulses to accumulate. Specifically this number is N and
+### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
+### numbers will be rounded.
+Accumulation Exponent;;
+8;0;0;0;0;0;;
+
+### Options are 0-3. Numbers outside this will default to 0
+Demux Select;;
+0;3;3;3;3;3;;
+################################################################################
+### Setting whether the sync fires on the rising or falling edge of the pulse
+### Rising edge = 0, falling edge = 1
+Sync Input Polarity;;
+0;0;0;;
+
+### Setting whether the demuxer fires on the rising or falling edge of the pulse
+### Rising edge = 0, falling edge = 1
+Din Demux Polarity;;
+0;0;0;0;;
+
+### Telling the MCS to reset itself. This should default to off (off = 0, on = 1)
+User Reset;;
+0;;
+
+### Order is: TotalPulsePerSync, ChannelPulsePerSync, SleepConfig, 
+### ArtificialDeadTime, SyncCounterLength, RelativeTimeStep
+TCSPC Settup;;
+0;0;0;0;65535;200000;;
+
+### Voltage thresholds. Order is: Din, Demux In, Sync In, and Rower Reference. Valid
+### range is 0-65535 with non-integers rounded and default values: 
+### respectively 
+Voltage Thresholds;;
+26208;26208;26208;20960;;
+
+### Test Modes. Order is: Data Input Test Mode, Sync Test Mode, DemuxTestMode, 
+### Power Monitoring test mode, PowerMonAccumMode, ChannelTestModePulsePeriod, 
+### SyncTestModePulsePeriod, Power Pulse Reject Config
+Test Modes;;
+0;0;0;0;0;0;0;0;;
+
+### Reset the MCS relative timer on startup. 0 = no, 1 = yes
+Time Reset;;
+0;;
+
+################################################################################
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\TCSPC\;
+TCSPCStatus;
+TCSPCHeartbeat;
+MCSPowerV2;
+TCSPCBulkData;
+MCSLogging;;
+
