@@ -1,11 +1,10 @@
-#NetCDF writer for NCAR WVD system
-#Brad Schoenrock
-#Feb. 2018
-# useage:
-# python MyScript.py [working directory containing Data folder] 
-#                    [location to write files]
-#                    [how many hours back in time to process]
-# Importing needed modules
+# Written By: Brad Schoenrock, Robert Stillwell
+# Written For: National Center for Atmospheric Researc
+# This is the main function used to convert MPD data from their raw data format 
+# to netcdf file format. When called from labview, the function is called with 
+# 4 arguements: the working directory, the target directory for rsyncing, the 
+# number of hours to back process, & a boolean defining if rsyncing is desired.
+#%% Importing needed modules
 import os, sys, csv, math, datetime, SharedPythonFunctions as SPF
 from rsync import DoRSync
 from MakeChildFilesV3 import makeNetCDF
