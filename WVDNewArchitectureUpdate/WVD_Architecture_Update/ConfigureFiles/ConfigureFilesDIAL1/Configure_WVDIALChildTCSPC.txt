@@ -55,7 +55,7 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;0;0;0;0;0;;
+0;0;0;0;0;1;;
 
 ### This is the number of pulses to accumulate. Specifically this number is N and
 ### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
