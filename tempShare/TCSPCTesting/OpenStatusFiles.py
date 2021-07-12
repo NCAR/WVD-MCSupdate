@@ -73,5 +73,5 @@ def ReadTCSPCHeartBeat(FileName):
 
 
 if __name__ == '__main__':
-    FileName = 'TCSPCHeartbeat_03_20210623_100000.bin'
+    FileName = 'TCSPCHeartbeat_01_20210707_230000.bin'
     Data = ReadTCSPCHeartBeat(FileName)
