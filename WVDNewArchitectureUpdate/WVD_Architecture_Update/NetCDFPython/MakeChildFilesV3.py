@@ -27,7 +27,7 @@ def processGeneral(FolderType,FileType,FileName,NetCDFOutputPath,Header):
     if isinstance(VarData,np.ndarray):
         ArrayData = VarData; 
     elif isinstance(VarData,list):
-        if FileType in ['MCS','MCSV2','MCSScanV2']:
+        if FileType in ['MCS','MCSV2','MCSScanV2','TCSPC']:
             List2d = VarData;
         else:
             List1d = VarData;
@@ -52,8 +52,10 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                                             ['Wavemeter','.txt','Wavemeter'],
                                             ['LaserScanData','.txt','LaserScan'],
                                             ['EtalonScanData','.txt','EtalonScan']],
+                         'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
                          'UPS':            [['UPS','.txt','UPS']],
                          'WeatherStation': [['WeatherStation','.txt','WStation']]}
+#    FileTypes2Process = {'TCSPC':          [['TCSPCFastData','.bin','TCSPC']]}
     # Looping over all possible file types and looking for files matching that
     for FolderType in FileTypes2Process:
         for FileBase, FileExt, FileType in FileTypes2Process[FolderType]:
