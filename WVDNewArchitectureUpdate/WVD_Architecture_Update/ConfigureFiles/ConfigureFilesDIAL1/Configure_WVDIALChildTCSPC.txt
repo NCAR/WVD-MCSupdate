@@ -5,7 +5,7 @@ This file is used to define the initial state of the NCAR MCS in the WVD labview
 ### UDP communication location of MCS - IP address of MCS; Status port; Heartbeat port;
 Power monitoring port; Bulk data frames port;; 
 UDP Comms;;
-192.168.0.198;54000;54003;54004;54002;;
+192.168.0.198;54000;54003;54004;54001;;
 
 ###  TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
