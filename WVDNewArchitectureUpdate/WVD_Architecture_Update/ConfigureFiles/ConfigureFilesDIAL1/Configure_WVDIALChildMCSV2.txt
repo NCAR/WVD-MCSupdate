@@ -12,11 +12,11 @@ Channel Multiplier Controls;;
 
 ###  TypeDef_MCSPhotonCountingMMap.ctl
 Data Hardware Connectivity;;
-4;18;20;0;0;0;0;0;2;0;0;0;;
+4;16;14;0;0;0;0;0;2;12;10;0;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
-2;6;0;0;0;0;3;0;0;0;0;0;;
+2;4;0;0;0;0;3;5;0;0;0;0;;
 
 
 ################################################################################
@@ -31,7 +31,7 @@ Enable;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-1;0;0;0;2;2;2;2;;
+1;1;1;0;2;2;2;2;;
 
 ### Options are 0-2. Numbers outside this will default to 0
 Sync Select;;
@@ -74,7 +74,7 @@ Accumulation Exponent;;
 
 ### Options are 0-3. Numbers outside this will default to 0
 Demux Select;;
-0;1;3;3;3;3;;
+0;0;3;3;3;3;;
 ################################################################################
 ### Setting whether the sync fires on the rising or falling edge of the pulse
 ### Rising edge = 0, falling edge = 1
