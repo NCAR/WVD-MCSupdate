@@ -52,7 +52,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                                             ['Wavemeter','.txt','Wavemeter'],
                                             ['LaserScanData','.txt','LaserScan'],
                                             ['EtalonScanData','.txt','EtalonScan']],
-                         'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
+                     #    'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
                          'UPS':            [['UPS','.txt','UPS']],
                          'WeatherStation': [['WeatherStation','.txt','WStation']]}
 #    FileTypes2Process = {'TCSPC':          [['TCSPCFastData','.bin','TCSPC']]}
