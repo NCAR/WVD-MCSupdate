@@ -7,6 +7,7 @@
 # are returned. 
 
 import math, os, struct, DefineFileElements as Define
+import pdb
 
 #%%
 def ParseMCSCountsHeader(Header,ChannelAssign):
@@ -430,11 +431,11 @@ def ReadTimeTagPayload(Payload):
     Data[4].append(PayloadSize)
     # Packet Counter from Word02
     Data[5].append(ord(Payload[11:12])*2**8 + ord(Payload[10:11])) 
-#    # Unpacking time stamps and the meta-data therewith
-#    for Index in range(0,int(PayloadSize/4)):
-#        A = list(UnpackPulseFrame(Payload[32+(Index*4):32+((Index+1)*4)]))
-#        for SubIndex in range(0,len(A)):
-#            Data[SubIndex+6].append(A[SubIndex])
+    # Unpacking time stamps and the meta-data therewith
+    for Index in range(0,int(PayloadSize/4)):
+        A = list(UnpackPulseFrame(Payload[32+(Index*4):32+((Index+1)*4)]))
+        for SubIndex in range(0,len(A)):
+            Data[SubIndex+6].append(A[SubIndex])
     # If there are no observed errors, return the data as a tuple    
     if any(Error):
         return([],True)

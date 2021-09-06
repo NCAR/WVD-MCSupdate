@@ -8,7 +8,7 @@
 #       2) Thermocouple & Current data files have the location of the elements 
 #          in the raw file name but as a variable in the netcdf file
 #%% Importing needed modules
-import datetime, os, sys
+import datetime, os, sys, pdb
 import numpy                 as np
 import DataFileFunctions     as DFF
 import DefineFileElements    as Define
@@ -23,16 +23,18 @@ def processGeneral(FolderType,FileType,FileName,NetCDFOutputPath,Header):
     # Reading data file 
     VarData = DFF.ReadFileGeneral(FileName,FolderType,FileType)
     # Filling data arrays needed to define file attributes
-    ArrayData=None; List1d=None; List2d=None;
+    ArrayData=None; List1d=None; List2d=None; ListOther=None
     if isinstance(VarData,np.ndarray):
         ArrayData = VarData; 
     elif isinstance(VarData,list):
-        if FileType in ['MCS','MCSV2','MCSScanV2','TCSPC']:
+        if FileType in ['MCS','MCSV2','MCSScanV2']:
             List2d = VarData;
+        elif FileType in ['TCSPC']:
+            ListOther = VarData;
         else:
             List1d = VarData;
     # Defining file attributes and variable attributes
-    Attributes = Define.DefineNetCDFFileAttributes(ArrayData,List1d,List2d)   
+    Attributes = Define.DefineNetCDFFileAttributes(ArrayData,List1d,List2d,ListOther)      
     # Writing the netcdf file 
     DFF.WriteNetCDFFileV2(NetCDFOutputPath,Header,Attributes[FileType],FileDate,FileTime,MPDNum,VarData)
     
@@ -52,10 +54,10 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                                             ['Wavemeter','.txt','Wavemeter'],
                                             ['LaserScanData','.txt','LaserScan'],
                                             ['EtalonScanData','.txt','EtalonScan']],
-                     #    'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
+                         'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
                          'UPS':            [['UPS','.txt','UPS']],
                          'WeatherStation': [['WeatherStation','.txt','WStation']]}
-#    FileTypes2Process = {'TCSPC':          [['TCSPCFastData','.bin','TCSPC']]}
+#    FileTypes2Process = {'TCSPC':          [['TCSPC','.bin','TCSPC']]}
     # Looping over all possible file types and looking for files matching that
     for FolderType in FileTypes2Process:
         for FileBase, FileExt, FileType in FileTypes2Process[FolderType]:

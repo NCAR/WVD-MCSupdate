@@ -3,7 +3,7 @@
 # These functions are used to open, read, and write data files needed for the 
 # MicroPulse DIAL lidar system. 
 #%% Importing needed modules
-import os
+import os, pdb
 from   netCDF4     import Dataset
 from   collections import defaultdict
 import DefineFileElements    as Define
@@ -84,7 +84,7 @@ def WriteNetCDFFileV2(LocalNetCDFOutputPath,Header,Attr,FileDate,FileTime,MPDUni
     # Write a brief description of file
     DataFile.description = Attr['FDescription']
     # Load up header information for file
-    
+
     # Creating dimensions
     for m in range(len(Attr['FDimNames'])):
         DataFile.createDimension(Attr['FDimNames'][m],Attr['FDimSize'][m])

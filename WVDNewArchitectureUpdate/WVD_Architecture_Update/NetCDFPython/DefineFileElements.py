@@ -15,7 +15,8 @@ def DefineFileStructure(Type):
                 'LL':             ['str','f','f','b','f','f','f','f','f','f'],
                 'LaserScan':      ['str','str','str','str','f','f','f','f','f','str'],
                 'MCS':            ['f','str','f','f','f','f','f','f','f','f','Pass'],
-                'Power':          ['f','f','f','f','f','str','Pass']}
+                'Power':          ['f','f','f','f','f','str','Pass'],
+                'TCSPC':          ['f','f','f','f','f','f','f','f','f','f','f','f']}
     # Defining variables that have the same file type as others
     FileType['EtalonScan'] = copy.deepcopy(FileType['Etalon'])
     FileType['MCSV2']      = copy.deepcopy(FileType['MCS'])
@@ -52,11 +53,12 @@ def MCSPhotonCountMapV2(Type):
     MCSMap = defaultdict(lambda:'Unassigned',MCSMap)
     return MCSMap[Type]
 #%% Defining all of the information to be written into netcdf files
-def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None):
+def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None,ListOther=None):
     # Checking for input data and padding with junk as needed
     ArrayData = np.empty((2,3))             if ArrayData is None else ArrayData
-    List1d = [[1,1],[2,2],[3,3],[4,4],[5,5],6]  if List1d is None else List1d
-    List2d = [[[0]]*3 for i in range(10)]   if List2d is None else List2d 
+    List1d    = [[1,1],[2,2],[3,3],[4,4],[5,5],6]  if List1d is None else List1d
+    List2d    = [[[0]]*3 for i in range(10)]   if List2d is None else List2d 
+    ListOther = [[[0]]*3 for i in range(10)]   if ListOther is None else ListOther 
     # Defining the file attributes as a nested dictonary
     FileAtributes = \
 {'Clock':    {'FType':        'Clock',
@@ -236,43 +238,27 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None):
                                'Relative time counter, 20 bit time value relative to the most recent system reset (or time reset)',
                                'Number of shots to accumulate to average out the power (2^#)',
                                'The source of the demuxing signal used to split power measurements']},
-#'TCSPC':     {'FType':        'TCSPCBulk',
-#              'FDescription': 'Time correlated single photon counting time tag data files',
-#              'FDimNames':    ['time','Payload'],
-#              'FDimSize':     [len(List2d[0]),len(List2d[1][0])],
-#              'Transpose':    [False]*11,
-#              'VarName':      ['time','RTime','chPulseConverter','syncPulseCounter','Status','PacketCount','Type','SyncNum','Channel_RelTime','TimeTag','PayloadStatus'],
-#              'VarCol':       [0,1,2,3,4,6,7,8,9,10,11],
-#              'VarDim':       [('time'),('time'),('time'),('time'),('time'),('time'),('time','Payload'),('time','Payload'),('time','Payload'),('time','Payload'),('time','Payload')],
-#              'VarType':      ['float','int32','int32','int32','int32','int16','int8','int8','int8','int16','int8'],
-#              'VarUnit':      ['Fractional Hours','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless'],
-#              'VarDescrip':   ['The time of collected data in UTC hours from the start of the day',
-#                               'Relative time counter from the packet header',
-#                               'Channel pulse counter from the packet header',
-#                               'Sync pulse counter from the packet header',
-#                               'Pulse header status',
-#                               'Packet counter from the packet header',
-#                               'Pulse word type (0 = none, 1 = sync, 2 = channel, 3 = data loss)',
-#                               'Physical sync channel to which this event applies',
-#                               'Either: channel number for the channel word or relative time counter for the sync word',
-#                               'Either: time stamp for the channel word or sync pulse counter for the sync word',
-#                               'Payload status']},
 'TCSPC':     {'FType':        'TCSPCBulk',
               'FDescription': 'Time correlated single photon counting time tag data files',
               'FDimNames':    ['time','Payload'],
-              'FDimSize':     [len(List2d[0]),len(List2d[1][0])],
-              'Transpose':    [False]*11,
-              'VarName':      ['time','RTime','chPulseConverter','syncPulseCounter','Status','PacketCount'],
-              'VarCol':       [0,1,2,3,4,6],
-              'VarDim':       [('time'),('time'),('time'),('time'),('time'),('time')],
-              'VarType':      ['float','int32','int32','int32','int32','int16'],
-              'VarUnit':      ['Fractional Hours','Unitless','Unitless','Unitless','Unitless','Unitless'],
+              'FDimSize':     [len(ListOther[0]),len(ListOther[7][0])],
+              'Transpose':    [False]*6 + [False]*5,
+              'VarName':      ['time','RTime','chPulseCounter','syncPulseCounter','Status','PacketCount','Type','SyncNum','Channel_RelTime','TimeTag','PayloadStatus'],
+              'VarCol':       [0,1,2,3,4,6,7,8,9,10,11],
+              'VarDim':       [('time'),('time'),('time'),('time'),('time'),('time'),('time','Payload'),('time','Payload'),('time','Payload'),('time','Payload'),('time','Payload')],
+              'VarType':      ['float','uint32','uint32','uint32','uint32','uint16','uint8','uint8','uint8','uint16','uint8'],
+              'VarUnit':      ['Fractional Hours','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless','Unitless'],
               'VarDescrip':   ['The time of collected data in UTC hours from the start of the day',
                                'Relative time counter from the packet header',
                                'Channel pulse counter from the packet header',
                                'Sync pulse counter from the packet header',
                                'Pulse header status',
-                               'Packet counter from the packet header']},
+                               'Packet counter from the packet header',
+                               'Pulse word type (0 = none, 1 = sync, 2 = channel, 3 = data loss)',
+                               'Physical sync channel to which this event applies',
+                               'Either: channel number for the channel word or relative time counter for the sync word',
+                               'Either: time stamp for the channel word or sync pulse counter for the sync word',
+                               'Payload status']},
 'UPS':       {'FType':        'UPS',
               'FDescription': 'UPS data file',
               'FDimNames':    ['time'],
