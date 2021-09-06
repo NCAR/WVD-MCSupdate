@@ -1,6 +1,7 @@
 
 import struct, math, itertools, glob
 import numpy as np
+import TCSPCPacketInfo as TTInfo
 
 # This function is used to convert a 4 byte word into a 32 bit number. The word
 # contained in the sub-list D.
@@ -27,21 +28,21 @@ def CheckHeaderFooter(Data,Start,End,Check):
 def UnpackPulseFrame(D):
     # Converting byte literal into a string and reversing so that its indices 
     # match Josh's documentation
-    BitString = CreateRString(D,4,0)[::-1]
+    Bits = CreateRString(D,4,0)[::-1]
     # Defining the types of time stamps possible
     BitStringTypes = {'00':0,'01':1,'10':2,'11':3}
     # Unpacking payload information
-    Sync   = int(BitString[30:32][::-1],2)
-    Type   = BitStringTypes[BitString[28:30][::-1]]
-    Status = int(BitString[24:28][::-1])
-    TDiff  = int(BitString[0:16][::-1],2)
+    TDiff  = int(Bits[0:16][::-1],2)
+    Status = int(Bits[24:28][::-1])
+    Sync   = int(Bits[30:32][::-1],2)
+    Type   = BitStringTypes[Bits[28:30][::-1]]
     if Type == 2:
-        Channel_RTime = int(math.log2(int(BitString[16:24][::-1],2)))
+        Channel_RTime = int(math.log2(int(Bits[16:24][::-1],2)))
     elif Type == 1:
-        Channel_RTime = int(BitString[16:24][::-1],2)
+        Channel_RTime = int(Bits[16:24][::-1],2)
     else:
         Channel_RTime = -1
-        
+    # Return data from the payload
     return(Type,Sync,Channel_RTime,TDiff,Status)
 
 # This function uses the pre-defined TCSPC bulk data frame structure and parses
@@ -62,11 +63,11 @@ def ReadTimeTagPayload(Payload):
     Data[4].append(PayloadSize)
     # Packet Counter from Word02
     Data[5].append(ord(Payload[11:12])*2**8 + ord(Payload[10:11])) 
-    # Unpacking time stamps and the meta-data therewith
-    for Index in range(0,int(PayloadSize/4)):
-        A = list(UnpackPulseFrame(Payload[32+(Index*4):32+((Index+1)*4)]))
-        for SubIndex in range(0,len(A)):
-            Data[SubIndex+6].append(A[SubIndex])
+#    # Unpacking time stamps and the meta-data therewith
+#    for Index in range(0,int(PayloadSize/4)):
+#        A = list(UnpackPulseFrame(Payload[32+(Index*4):32+((Index+1)*4)]))
+#        for SubIndex in range(0,len(A)):
+#            Data[SubIndex+6].append(A[SubIndex])
     # If there are no observed errors, return the data as a tuple    
     if any(Error):
         return([],True)
@@ -108,59 +109,43 @@ def ReadTCSPCTimeTags(FileName):
 
 
 def ReadTestFile(FileName):
+    print('Checking: ' + FileName)
     # Reading file 
     FullData = ReadTCSPCTimeTags(FileName)
     # Unpacking packet counter for initial check of data flow
-    TimeStamp = np.array(FullData[0])
-    TimeStamp = (TimeStamp - TimeStamp[0])*60*60
-    Packets   = np.array(list(itertools.chain(*FullData[6])))
-    PStart = Packets[0]
-    PEnd   = Packets[-1]
-    # Making packet counter monotonically increase
-    A = np.where(np.diff(Packets) < 0)
-    for index in range(0,len(A[0])):
-        Packets[A[0][index]+1:] = Packets[A[0][index]+1:] + 65536
-    # Last number minus first number divided by the number of entries
-    RecordedFraction = (len(Packets)-1)/(Packets[-1] - Packets[0])
+    Packets = np.array(list(itertools.chain(*FullData[6])))
+    # Finding where the packet counter does not monotonically increase
+    A = np.where(np.diff(Packets) < 0)    
+    # Total number of packets divided by the difference from the first to the 
+    # last packet. Note that the 
+    PStart  = Packets[0]; PEnd = Packets[-1]; PEndMono = Packets[-1] + 65536*(len(A[0]))
+    RecordedFraction = (len(Packets)-1)/(PEndMono - PStart) 
+    Missing = (PEndMono - PStart) - (len(Packets)-1)
     if RecordedFraction<1:
-        print(FileName)
-        print([(len(Packets)-1),(Packets[-1] - Packets[0])])
+        print('------File With Dropped Packets------')
+        print([(len(Packets)-1),(PEndMono - PStart), Missing])
+        print('-------------------------------------')
     # Return loaded information
-    return(PStart,PEnd,RecordedFraction,Packets[0],Packets[-1],FullData)
+    return(PStart,PEnd,PEndMono,Missing,RecordedFraction)
 
 
 if __name__ == '__main__':
-    Counter = 0
-    Start   = []; End = []; Frac = []; Total = []
-    for file in glob.glob("*.bin"):
-        # Reading data file and storing data as lists
-        S, E, F, T1, T2, Data = ReadTestFile(file)
-        Start.append(S)
-        End.append(E)
-        Frac.append(F)
-        Total.append(T2-T1)
-        # Removing temporary data
-        del S, E, F, T1, T2
-        # Checking if user requests early exit
-        if Counter >= 0:
-            break
-        Counter += 1
+    # Determinging the names of all the possible files
+    FileList = glob.glob('E:\\TCSPC\\20210819\\' + 'TCSPC_*.bin')
+    FileList.sort()
+    # Running the file reader for all files 
+    Start,End,EndMono,Missing,Frac = zip(*[ReadTestFile(FileList[F]) for F in range(0,len(FileList))])
 
-    del Counter, file    
-      
-    print(Frac)
-    print(np.array(Start[1:])-np.array(End[0:-1]))
-    print(sum(np.array(Total)))
+
+#    # Saving data as a list of numpy arrays    
+#    FinalData = [np.array(Data[Index][:]) for Index in range(len(Data)-1)]
+
+    # Determinging
+    FileTimes, PPS = TTInfo.PacketWriteSpeed(FileList)
+    #  Plotting loading stats
+    TTInfo.PlotLoadStats(FileList, Missing, PPS)
+    # Outputting the percent of packets received
+    print(sum(Missing))
+    print(sum((np.array(EndMono)-np.array(Start))))
+    print((sum((np.array(EndMono)-np.array(Start)))-sum(Missing))/sum((np.array(EndMono)-np.array(Start)))*100)
     
-    V00_PacketTimeStamps = np.array(Data[0][:])  # Header: Size ->(# of packets x 1)
-    V01_RTimeStamps      = np.array(Data[1][:])  # Header: Size ->(# of packets x 1)
-    V02_chPulseCounter   = np.array(Data[2][:])  # Header: Size ->(# of packets x 1)
-    V03_syncPulseCounter = np.array(Data[3][:])  # Header: Size ->(# of packets x 1)
-    V04_PacketStatus     = np.array(Data[4][:])  # Header: Size ->(# of packets x 1)
-    V05_PayloadSize      = np.array(Data[5][:])  # Header: Size ->(# of packets x 1)
-    V06_PacketCounter    = np.array(Data[6][:])  # Header: Size ->(# of packets x 1) 
-    V07_Type             = np.array(Data[7][:])  # Body:   Size ->(# of packets x 256)
-    V08_SyncNum          = np.array(Data[8][:])  # Body:   Size ->(# of packets x 256)
-    V09_ChannelNum_RTime = np.array(Data[9][:])  # Body:   Size ->(# of packets x 256)
-    V10_TimeTag          = np.array(Data[10][:]) # Body:   Size ->(# of packets x 256)
-    V11_Status           = np.array(Data[11][:])
