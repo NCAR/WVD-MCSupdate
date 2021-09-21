@@ -16,7 +16,7 @@ Data Hardware Connectivity;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
-2;0;0;0;0;0;3;0;0;0;0;0;;
+3;0;0;0;0;0;2;0;0;0;0;0;;
 
 ################################################################################
 ### Setting the state of the MCS digital controls. These are all array elements
