@@ -7,7 +7,7 @@
 #%% Importing needed modules
 import os, sys, csv, math, datetime, SharedPythonFunctions as SPF
 from rsync import DoRSync
-from MakeChildFilesV3 import makeNetCDF
+#from MakeChildFilesV3 import makeNetCDF
 
 #%% Simple utilities 
 #checks if a value is a number
@@ -24,7 +24,7 @@ def readHeaderInfo(WorkingDir):
         return list(csv.reader(f, delimiter="\t"))
          
 #%%  Main program 
-def main(WorkingDir,RSyncTargetDir,HoursBack,RSync):
+def main(WorkingDir,RSyncTargetDirs,HoursBack,RSync):
     print ("Start Processing: The date and time is - ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
     # Creating timestamps used to find which files should be processed
     NowTime  = SPF.getFractionalHours(0)
@@ -49,7 +49,10 @@ def main(WorkingDir,RSyncTargetDir,HoursBack,RSync):
         print ("RSync files to backup drive ", datetime.datetime.utcnow().strftime("%H:%M:%S"))
         try:
             if RSync == '1':
-                Response = DoRSync(os.getcwd(),RSyncTargetDir,WarningFile,ErrorFile)
+                Response = ''
+                for RSyncTargetDir in RSyncTargetDirs:
+                    Response += DoRSync(os.getcwd(),RSyncTargetDir,WarningFile,ErrorFile)
+                    Response += '\n'
             else:
                 Response = 'No RSync Requested'
             print(Response)
@@ -68,18 +71,20 @@ if __name__ == '__main__':
     except:
         WorkingDir = 'C:\\Users\\h2odial\\WVD-MCSupdate\\WVDNewArchitectureUpdate\\WVD_Architecture_Update'
     try: 
-        RSyncTargetDir = sys.argv[2]
+        RSyncTargetDirs = []
+        for m in range(4,len(sys.argv)):
+            RSyncTargetDirs.append(sys.argv[m])
     except:
-        RSyncTargetDir = 'D:\\MPDBackup'   
+        RSyncTargetDirs = ['D:\\MPDBackup']
     try:
-        HoursBack = sys.argv[3] if is_number(sys.argv[3]) else 3
+        HoursBack = sys.argv[2] if is_number(sys.argv[2]) else 3
     except:
         HoursBack = 3
     try:
-        RSync = sys.argv[4] if is_number(sys.argv[4]) else '0'
+        RSync = sys.argv[3] if is_number(sys.argv[3]) else '0'
     except:
         RSync = '0'
-    
+           
     # Running main program
     main(WorkingDir,RSyncTargetDir,HoursBack,RSync)
 
