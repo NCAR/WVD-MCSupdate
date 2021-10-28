@@ -7,7 +7,7 @@
 #%% Importing needed modules
 import os, sys, csv, math, datetime, SharedPythonFunctions as SPF
 from rsync import DoRSync
-#from MakeChildFilesV3 import makeNetCDF
+from MakeChildFilesV3 import makeNetCDF
 
 #%% Simple utilities 
 #checks if a value is a number
@@ -86,5 +86,5 @@ if __name__ == '__main__':
         RSync = '0'
            
     # Running main program
-    main(WorkingDir,RSyncTargetDir,HoursBack,RSync)
+    main(WorkingDir,RSyncTargetDirs,HoursBack,RSync)
 
