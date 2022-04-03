@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19600;828.29515;769.7958;770.1085;828.19100;828.19100;;
+828.19200;828.29115;769.7958;770.1085;828.19100;828.19100;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.507;27.303;16.203;21.288;25.0;25.0;;
+27.472;27.279;16.247;21.328;25.0;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-110;105;75;79;115;130;;
+110;105;75;79;115;140;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-20.0;31.0;;
+19.80;31.0;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -148,9 +148,9 @@ Etalon Scan Steps;;
 
 ### 
 Laser To Scan;;
-2;3;0;1;;
+0;1;2;3;;
 Etalon To Scan;;
-1;1;0;0;;
+0;0;1;1;;
 
 
 ### File paths to the data storage and data logging locations and functions.

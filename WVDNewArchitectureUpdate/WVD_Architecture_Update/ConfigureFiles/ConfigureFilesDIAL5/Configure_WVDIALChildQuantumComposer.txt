@@ -117,7 +117,7 @@ Receiver Scan Switch Rise Time;;
 ### is plugged in to each of the output ports. The definition can be found in 
 ### TypeDef_QuantumComposerChannelType.ctl. 
 Quantum Composer Channels;;
-2;10;14;17;0;20;23;6;;
+2;10;14;17;7;20;23;6;;
 
 ### The state of the run/stop button for each Quantum Composer. 1 = run, 0 = stop
 Run/Stop State;;
