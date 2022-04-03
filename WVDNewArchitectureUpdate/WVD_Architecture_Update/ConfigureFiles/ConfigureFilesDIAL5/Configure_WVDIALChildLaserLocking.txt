@@ -142,7 +142,7 @@ Etalon Scan Limits;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-150;150;150;150;;
+120;120;120;120;;
 Etalon Scan Steps;;
 2;2;2;2;;
 
