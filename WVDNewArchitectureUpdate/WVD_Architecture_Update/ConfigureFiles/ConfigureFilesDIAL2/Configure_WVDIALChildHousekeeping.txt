@@ -17,7 +17,7 @@ Child Variables;;
 ### Locations of the thermocouples in the ADAM module. For translation of the numbers
 ### see TypeDef_ThermocoupleLocations.ctl.
 Thermocouple Locations;;
-2;3;4;5;6;7;;
+2;4;3;5;6;7;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
