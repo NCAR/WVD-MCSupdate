@@ -98,3 +98,18 @@ Time [UTC]; Background Counts;;
 
 KHSRL Contour Labels;;
 Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+
+###########################################################################################################
+### Scan Sub Child
+
+### These variables tell the subchild what details to use for the plots. They
+### are in order: Scans to hold; Scan Max Range;
+Scan Details;;
+5; 2000;;
+
+### Plot Labels
+Scan Time Series Labels;;
+Time [UTC]; Background Counts; Time [UTC]; Wavelength [nm];;
+
+Scan Labels;;
+Wavelength [nm]; Background Counts;;
