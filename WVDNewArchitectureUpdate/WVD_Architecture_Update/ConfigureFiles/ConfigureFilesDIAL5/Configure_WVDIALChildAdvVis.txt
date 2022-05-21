@@ -41,7 +41,7 @@ Scan Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Scan Relative File Paths;;
-.\AdvancedVisV2.llb\ControlSystemO2Plotting.vi;;
+.\AdvancedVisV2.llb\ControlSystemScanPlotting.vi;;
 
 Scan Function Types;;
 0;;

@@ -28,6 +28,31 @@ AdvVisLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
+####################################### ScanningOps 
+Scan Tab Names;;
+Main; Scan Plotting; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+
+### In its current state, these two variables are the width and height of the 
+### tab containers. This location is, however, a catch all for data you need to 
+### read in quickly from this configure file
+Scan Global Variables;;
+445;950;;
+
+### This is the relative file path(s) (identified by the .\) to the program(s) 
+### that the container should populate the tabs with
+Scan Relative File Paths;;
+.\AdvancedVisV2.llb\ControlSystemScanPlotting.vi;;
+
+Scan Function Types;;
+0;;
+
+### File paths to the data storage and data logging locations and functions.
+Scan FilePaths;;
+.\Data\AdvVis\;
+AdvVisLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
 ###########################################################################################################
 ### Water Vapor Sub Child
 ### This variable tells the subchild what photon counting channels to use as 
