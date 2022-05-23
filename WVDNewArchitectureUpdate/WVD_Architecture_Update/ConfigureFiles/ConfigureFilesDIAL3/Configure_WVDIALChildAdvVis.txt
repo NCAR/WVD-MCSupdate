@@ -105,7 +105,7 @@ Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude 
 ### These variables tell the subchild what details to use for the plots. They
 ### are in order: Scans to hold; Scan Max Range;
 Scan Details;;
-5; 2000;;
+5; 2000; 20;;
 
 ### Plot Labels
 Scan Time Series Labels;;
