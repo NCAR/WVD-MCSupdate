@@ -4,7 +4,7 @@ This file is used to define the initial state of the Weather Station in the Wate
 
 ### This is where the Labview VISA communications should find the weather station.
 Thermocouple Comm Port;;
-192.168.0.86;-1;750;-1;-1;;
+192.168.0.230;-1;750;-1;-1;;
 
 
 ### These are miscilaneous variables that are read and used as default values
