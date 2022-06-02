@@ -13,7 +13,7 @@ IP Address;;
 ### mode. The second is slow update time and is how often to check the complete
 ### Quantum Composer state. 
 Timing;; 
-15; 150;;
+15; 450;;
 
 ### Initial state of the quantum composer box(s). Each value corresponds 
 ### to a different timing state.
@@ -95,9 +95,9 @@ Receiver Scan Switch Rate;;
 ### The duration of the pulse (duration of the current pulse delivered to the 
 ### TSOA). Units are [micro seconds]. 
 Pulse Duration;;
-0.625;;
+1.000;;
 Receiver Scan Pulse Duration;;
-0.625;;
+1.000;;
 
 ### The pulse repetition frequency of all laser pulses. Units are in [Hz]
 PRF;;
