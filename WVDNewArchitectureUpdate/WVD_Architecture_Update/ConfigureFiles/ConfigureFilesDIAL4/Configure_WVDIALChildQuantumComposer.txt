@@ -95,7 +95,7 @@ Receiver Scan Switch Rate;;
 ### The duration of the pulse (duration of the current pulse delivered to the 
 ### TSOA). Units are [micro seconds]. 
 Pulse Duration;;
-1.000;;
+0.800;;
 Receiver Scan Pulse Duration;;
 1.000;;
 
