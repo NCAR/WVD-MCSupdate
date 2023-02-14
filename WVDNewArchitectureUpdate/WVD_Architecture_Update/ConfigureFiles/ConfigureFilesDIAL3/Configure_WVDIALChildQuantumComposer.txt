@@ -20,9 +20,9 @@ Timing;;
 ### The type of lidar system running. See TypeDef_QuantumComposerUserOptions.ctl
 ### to convert integer numbers to definitions.
 DriveType;;
-1;;
+5;;
 Receiver Scan DriveType;;
-1;;
+5;;
 
 ### How to run the TSOA. See TypeDef_QuantumComposerUserOptions.ctl
 ### to convert integer numbers to definitions.
@@ -88,14 +88,14 @@ Receiver Scan Duty Cycle;;
 ### The rate at which the systems interleaves online and offline pulses. Units 
 ### are in [Hz]
 Switch Rate;;
-100;;
+4000;;
 Receiver Scan Switch Rate;;
-100;;
+4000;;
 
 ### The duration of the pulse (duration of the current pulse delivered to the 
 ### TSOA). Units are [micro seconds]. 
 Pulse Duration;;
-0.800;;
+1;;
 Receiver Scan Pulse Duration;;
 1.000;;
 
@@ -117,7 +117,7 @@ Receiver Scan Switch Rise Time;;
 ### is plugged in to each of the output ports. The definition can be found in 
 ### TypeDef_QuantumComposerChannelType.ctl. 
 Quantum Composer Channels;;
-2;10;14;17;0;20;23;6;;
+2;10;14;17;0;29;26;6;;
 
 ### The state of the run/stop button for each Quantum Composer. 1 = run, 0 = stop
 Run/Stop State;;
