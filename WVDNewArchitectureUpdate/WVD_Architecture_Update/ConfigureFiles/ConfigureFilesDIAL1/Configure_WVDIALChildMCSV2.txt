@@ -12,11 +12,11 @@ Channel Multiplier Controls;;
 
 ###  TypeDef_MCSPhotonCountingMMap.ctl
 Data Hardware Connectivity;;
-4;12;10;0;0;0;0;0;2;16;14;0;;
+4;12;10;5;0;0;0;0;2;16;14;3;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
-2;4;0;0;0;0;3;5;0;0;0;0;;
+3;4;0;0;0;0;2;5;0;0;0;0;;
 
 
 ################################################################################
@@ -27,11 +27,11 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;1;1;0;0;0;0;0;;
+1;1;1;1;0;0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-1;1;1;0;2;2;2;2;;
+1;1;1;1;2;2;2;2;;
 
 ### Options are 0-2. Numbers outside this will default to 0
 Sync Select;;
