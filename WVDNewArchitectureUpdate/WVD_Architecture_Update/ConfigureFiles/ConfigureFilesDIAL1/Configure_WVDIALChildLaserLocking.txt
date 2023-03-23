@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.242;13.925;14.037;20.895;;
+27.229;14.002;15.099;19.308;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-110;90;90;90;;
+110;90;85;100;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -84,7 +84,7 @@ Lock Step Size;;
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--15;-15;-15;-15;;
+-13;-13;-13;-13;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-19.00;22.5;;
+20.0;23.5;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -126,7 +126,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-5;2;28;14;11;28;24;27;;
+5;2;28;11;14;28;24;27;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
