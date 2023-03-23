@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-24.624;26.441;25;25;;
+24.739;26.276;9.829;15.930;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-105;105;75;75;;
+105;105;95;95;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-19.7;25;;
+19.7;30.5;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -126,7 +126,7 @@ Thor8000 Locations;;
 ### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
-5;2;11;14;28;27;24;28;;
+2;5;11;14;28;27;24;28;;
 
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
@@ -136,7 +136,7 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.12;0.75;0.75;0.75;0.75;;
+0.75;0.75;0.75;0.75;0.12;;
 Etalon Scan Limits;;
 0;0;0;0;0;;
 
@@ -148,9 +148,9 @@ Etalon Scan Steps;;
 
 ### 
 Laser To Scan;;
-3;3;2;1;0;;
+0;1;2;3;3;;
 Etalon To Scan;;
-1;1;1;0;0;;
+0;0;1;1;1;;
 
 ### File paths to the data storage and data logging locations and functions.
 Wavemeter File Paths;;

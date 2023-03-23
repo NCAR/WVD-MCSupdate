@@ -12,12 +12,12 @@ Thermocouple Comm Port;;
 ### The number of measurments to save, and the number of weather station variables
 ### to keep. 
 Child Variables;;
-8;900;6;;
+8;900;8;;
 
 ### Locations of the thermocouples in the ADAM module. For translation of the numbers
 ### see TypeDef_ThermocoupleLocations.ctl.
 Thermocouple Locations;;
-2;4;3;5;6;7;;
+2;4;3;5;6;7;8;9;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
