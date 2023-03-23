@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.4402;27.2497;16.2276;21.3056;25.0;25.0;;
+27.46;14.93;16.18;21.27;25.0;25.0;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-110;105;75;79;115;140;;
+110;85;75;79;115;140;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-19.4;31.0;;
+20;29.5;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
