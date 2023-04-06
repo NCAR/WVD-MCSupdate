@@ -13,7 +13,7 @@ Misc;;
 
 ###
 Communication Ports;;
-COM3;COM4;COM5;COM6;;
+COM4;COM5;COM6;COM8;;
 
 ###
 Current Source;;
@@ -77,7 +77,7 @@ Max Current;;
 
 ###
 Serial Number;;
-22A10271;22A10270;21A10283;22A10269;;
+21A10079;21A10029;21A10164;21A10165;;
  
 ###
 Scan Current;;
