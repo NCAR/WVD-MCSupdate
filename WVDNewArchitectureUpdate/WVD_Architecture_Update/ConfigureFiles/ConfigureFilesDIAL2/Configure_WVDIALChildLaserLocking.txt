@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-24.179;27.97;16.44;13.234;;
+23.84;27.961;15.378;13.234;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-95;120;80;80;;
+95;120;73;77;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
