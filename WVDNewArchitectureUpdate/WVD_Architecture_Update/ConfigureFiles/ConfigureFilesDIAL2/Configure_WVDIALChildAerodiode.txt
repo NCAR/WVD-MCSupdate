@@ -37,7 +37,7 @@ Laser Power;;
 
 ###
 Current;;
-50;50;50;50;;
+180;140;190;190;;
 
 ###
 Offset Current;;
@@ -81,7 +81,7 @@ Serial Number;;
  
 ###
 Scan Current;;
-60;50;95;75;;
+65;55;55;63;;
 
 
 ### File paths to the data storage and data logging locations and functions.
