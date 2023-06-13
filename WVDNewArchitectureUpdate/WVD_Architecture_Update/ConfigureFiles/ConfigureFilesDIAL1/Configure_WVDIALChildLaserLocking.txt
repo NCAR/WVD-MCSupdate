@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.19100;828.29015;769.79542;770.10812;;
+828.19500;828.29415;769.79542;770.10812;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -38,11 +38,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.229;14.002;15.099;20.125;;
+27.255;14.048;13.907;21.603;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-110;90;85;100;;
+110;90;95;115;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -84,7 +84,7 @@ Lock Step Size;;
 ### locking. This value is compared to the value read by the wavemeter. The units will
 ### be dBm
 Min Locking Power;;
--13;-13;-13;-13;;
+-20;-20;-20;-20;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
@@ -100,7 +100,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees celcius
 Etalon Temperature;;
-20.0;23.5;;
+20.1;23.5;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -131,7 +131,7 @@ Thor8000 Slots;;
 ### The comm port that the wavemeter can be found at. For the future, this can change
 ### to an IP address fairly easily. 
 Wavemeter Comm Port;;
-192.168.0.166;23;1000;122;1000;;
+192.168.0.176;23;1000;122;1000;;
 
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
