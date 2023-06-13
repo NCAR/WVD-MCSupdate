@@ -13,7 +13,7 @@ Misc;;
 
 ###
 Communication Ports;;
-COM5;COM6;COM7;COM8;;
+COM3;COM4;COM5;COM6;;
 
 ###
 Current Source;;
@@ -37,7 +37,7 @@ Laser Power;;
 
 ###
 Current;;
-180;140;190;190;;
+180;140;210;217;;
 
 ###
 Offset Current;;
@@ -81,7 +81,7 @@ Serial Number;;
  
 ###
 Scan Current;;
-65;55;55;63;;
+98;149;113;130;;
 
 
 ### File paths to the data storage and data logging locations and functions.

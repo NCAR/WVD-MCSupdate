@@ -29,7 +29,7 @@ Laser Types;;
 
 ### The exact desired wavelengths of the lasers in nanometers
 Wavelength;;
-828.193;828.29215;769.79542;770.10812;;
+828.195;828.29415;769.79542;770.10812;;
 
 ### The exact tolerance allowed for locking...how far off can the lasers be before 
 ### the locking program attempts to lock them...in nanometers
@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-24.22;28.01;16.96;13.321;;
+24.309;28.077;17.001;13.369;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
