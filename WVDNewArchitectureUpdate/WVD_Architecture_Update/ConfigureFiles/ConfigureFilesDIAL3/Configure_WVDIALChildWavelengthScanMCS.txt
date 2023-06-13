@@ -12,11 +12,11 @@ Channel Multiplier Controls;;
 
 ###  TypeDef_MCSPhotonCountingMMap.ctl
 Data Hardware Connectivity;;
-4;12;10;0;0;0;0;0;2;16;14;0;;
+4;16;14;0;0;0;0;0;2;12;10;0;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
-2;4;0;0;0;0;3;5;0;0;0;0;;
+3;5;0;0;0;0;2;4;0;0;0;0;;
 
 
 ################################################################################
