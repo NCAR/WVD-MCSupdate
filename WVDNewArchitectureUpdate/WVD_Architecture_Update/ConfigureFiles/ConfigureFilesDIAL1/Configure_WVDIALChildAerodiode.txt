@@ -37,7 +37,7 @@ Laser Power;;
 
 ###
 Current;;
-180;180;200;200;;
+180;180;216;225;;
 
 ###
 Offset Current;;
@@ -69,11 +69,11 @@ Interlock;;
 
 ###
 Max Mean Current;;
-150;150;250;250;;
+150;150;300;300;;
 
 ###
 Max Current;;
-250;250;250;250;;
+250;250;300;300;;
 
 ###
 Serial Number;;
@@ -81,7 +81,7 @@ Serial Number;;
  
 ###
 Scan Current;;
-60;50;95;75;;
+60;50;96;75;;
 
 
 ### File paths to the data storage and data logging locations and functions.
