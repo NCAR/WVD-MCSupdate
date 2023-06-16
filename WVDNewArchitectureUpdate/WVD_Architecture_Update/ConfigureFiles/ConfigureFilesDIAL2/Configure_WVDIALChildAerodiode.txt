@@ -33,11 +33,11 @@ Delay Line;;
 
 ###
 Laser Power;;
-0;0;0;0;;
+1;1;1;1;;
 
 ###
 Current;;
-180;140;210;217;;
+180;140;210;217.5;;
 
 ###
 Offset Current;;
@@ -81,7 +81,7 @@ Serial Number;;
  
 ###
 Scan Current;;
-98;149;113;130;;
+97.5;150;112.5;130;;
 
 
 ### File paths to the data storage and data logging locations and functions.
