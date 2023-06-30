@@ -92,10 +92,10 @@ KHSRL Range and Time;;
 
 ### Plot Labels
 KHSRL Profile Labels;;
-Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Not in use; Altitude [k]; Not in use;;
 
 KHSRL Time Series Labels;;
 Time [UTC]; Background Counts;;
 
 KHSRL Contour Labels;;
-Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+Combined Counts (Time [UTC]); Altitude [m]; Molecular Counts (Time [UTC]); Altitude [m]; Combined NRB (Time [UTC]); Altitude [m]; Molecular NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
