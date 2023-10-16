@@ -40,7 +40,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-130;140;215;210;;
+130;140;230;225;;
 
 ###
 Offset Current;;
@@ -87,7 +87,7 @@ Serial Number;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Scan Current;;
-32.5;65;77.5;75;;
+57.5;90;77.5;75;;
 
 
 ### File paths to the data storage and data logging locations and functions.
