@@ -13,7 +13,7 @@ Misc;;
 
 ###
 Communication Ports;;
-COM6;COM7;COM8;COM9;;
+COM4;COM7;COM6;COM5;;
 
 ###
 Current Source;;
@@ -40,7 +40,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-130;140;230;225;;
+170;180;210;180;;
 
 ###
 Offset Current;;
@@ -80,14 +80,14 @@ Max Current;;
 
 ###
 Serial Number;;
-2210270;2210268;2210272;2210269;;
+2310132;2310131;2310134;2210267;;
  
 ### The current has to be set as an integer percent of the maximum current. Therefore
 ### the current setting may need to be changed to match this. For example, with a max
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Scan Current;;
-57.5;90;77.5;75;;
+75;80;80;75;;
 
 
 ### File paths to the data storage and data logging locations and functions.

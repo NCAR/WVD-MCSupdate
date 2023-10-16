@@ -40,7 +40,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-180;140;210;217.5;;
+180;150;210;217.5;;
 
 ###
 Offset Current;;
