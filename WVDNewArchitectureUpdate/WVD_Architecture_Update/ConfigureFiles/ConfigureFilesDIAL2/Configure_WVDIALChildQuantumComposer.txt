@@ -1,10 +1,12 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the NetCDF writer in the Water Vapor DIAL Main labview program.
-Note that some settings can be for operations or for the receiver scans. Both are loaded and one is selected based
-on the desired setup from the user. 
+This file is used to define the initial state of the MPD master clock labview program.
+Note that some settings can be for operations or for the receiver scans. Both are loaded
+and one is selected based on the desired setup from the user.
 
-### IP address of quantum composer, and port number
+### This is where the Labview code should find the quantum composer. The elements are:
+### 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
+### 5) Bytes to read.
 IP Address;;
 192.168.0.136; 2101; 1500; -1; 50;;
 
@@ -15,10 +17,8 @@ IP Address;;
 Timing;; 
 15; 450;;
 
-### Initial state of the quantum composer box(s). Each value corresponds 
-### to a different timing state.
-### The type of lidar system running. See TypeDef_QuantumComposerUserOptions.ctl
-### to convert integer numbers to definitions.
+### The type of lidar system running, i.e. the installed hardware. See
+### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers to definitions.
 DriveType;;
 4;;
 Receiver Scan DriveType;;
@@ -31,7 +31,7 @@ TSOA;;
 Receiver Scan TSOA;;
 1;;
 
-### How to run the online 1x1 switch (if availible). See 
+### How to run the online 1x1 switch (if available). See
 ### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
 ### to definitions.
 Online 1x1;;
@@ -39,7 +39,7 @@ Online 1x1;;
 Receiver Scan Online 1x1;;
 3;;
 
-### How to run the offline 1x1 switch (if availible). See 
+### How to run the offline 1x1 switch (if available). See
 ### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
 ### to definitions.
 Offline 1x1;;
@@ -47,7 +47,7 @@ Offline 1x1;;
 Receiver Scan Offline 1x1;;
 3;;
 
-### How to run the detector gate (if availible). See 
+### How to run the detector gate (if available). See
 ### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
 ### to definitions.
 Gate;;
@@ -56,7 +56,7 @@ Receiver Scan Gate;;
 0;;
 
 ### Testing mode that allows the user to turn off online/offline channels
-### to focus on only the single item, or switch. See 
+### to focus on only the single item, or switch. See
 ### TypeDef_QuantumComposerUserOptions.ctl to convert integer numbers 
 ### to definitions.
 Single Channel;;
@@ -65,53 +65,52 @@ Receiver Scan Single Channel;;
 0;;
 
 ### The time to delay the start of the MCS from the time of the laser pulse. 
-### Units are in [micro seconds]
+### Units are in microseconds
 Air Lag;;
-0.0;;
+0;;
 Receiver Scan Air Lag;;
-0.0;;
+0;;
 
 ### The time to delay the end of the detector gate from the time of the laser
-### pulse. Units are in [micro seconds]
+### pulse. Units are in microseconds
 Bang Lag;;
-0.15;;
+0.150;;
 Receiver Scan Bang Lag;;
-0.15;;
+0.150;;
 
 ### The duty cycle to run the offline laser. Value is between 0 (laser off) and
-### 1 (laser on). Online duty cycle is just 1 - this value.
+### 1 (laser on). Online duty cycle is just equal to 1 - this value.
 Duty Cycle;;
 0.5;;
 Receiver Scan Duty Cycle;;
 0.5;;
 
 ### The rate at which the systems interleaves online and offline pulses. Units 
-### are in [Hz]
+### are in Hz
 Switch Rate;;
 4000;;
 Receiver Scan Switch Rate;;
 4000;;
 
 ### The duration of the pulse (duration of the current pulse delivered to the 
-### TSOA). Units are [micro seconds]. 
+### TSOA). Units are microseconds.
 Pulse Duration;;
 1;;
 Receiver Scan Pulse Duration;;
-1.000;;
+1;;
 
-### The pulse repetition frequency of all laser pulses. Units are in [Hz]
+### The pulse repetition frequency of all laser pulses. Units are in Hz
 PRF;;
 8000;;
 Receiver Scan PRF;;
 8000;;
 
 ### The rise time of the electro-optical switches from closed to open. Units
-### are in [micro seconds].
+### are in microseconds.
 Switch Rise Time;;
 0.2;;
 Receiver Scan Switch Rise Time;;
 0.2;;
-
 
 ### Quantum composer map. This tells the Quantum Composer what type of channel
 ### is plugged in to each of the output ports. The definition can be found in 
@@ -119,11 +118,15 @@ Receiver Scan Switch Rise Time;;
 Quantum Composer Channels;;
 1;9;13;6;7;28;25;8;;
 
-### The state of the run/stop button for each Quantum Composer. 1 = run, 0 = stop
+### The state of the run/stop button for each Quantum Composer (1 = run, 0 = stop)
 Run/Stop State;;
 1;;
 
-### Paths to error and comment logging
+### File paths to the data storage and data logging locations and functions. The order is
+### 1) Where to write the raw data, 2) What base name to call the overview data files,
+### 3) What base name to call the detailed data files, 4) What base name to call the
+### logging files, 5) Where to find the user logging program, and 6) Where to find the
+### user permissions program
 FilePaths;;
 .\Data\QuantumComposer\;
 QuantumComposerOps;
