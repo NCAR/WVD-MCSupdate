@@ -1,28 +1,34 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the Weather Station in the Water Vapor DIAL Main labview program. 
+This file is used to define the initial state of the MPD main weather station labview program.
 
 ### This is the communication protocol to use for the weather station.
-### RS485 to USB = 0, RS485 to Ethernet = 1
+### (RS485-to-USB = 0, RS485-to-Ethernet = 1)
 Communication Protocol;;
 1;;
 
-### This is where the Labview VISA communications should find the weather station.
+### This is where the Labview code should find the weather station (if using USB).
 Comm Port;;
 COM15;;
 
+### This is where the Labview code should find the weather station (if using TCP).
+### The elements here are: 1) IP Address, 2) Port, 3) Communication timeout in [ms],
+### 4) Header bytes, and 5) Bytes to read if the element is an IP address.
 TCP Info;;
 192.168.0.110;4760;100;-1;-1;;
 
-### These are miscilaneous variables that are read and used as default values
-### by the weather station. These are currently: the update period of the weather 
-### station in seconds, the time to wait between write and read of the comm port,
-### The number of measurments to save, the number of weather station variables
-### to keep, and the weather station communication protocol. 
+### These are miscellaneous variables that are read and used as default values
+### by the weather station. These are currently: 1) the update period of the weather
+### station in seconds, 2) the time to wait between write and read of the comm port,
+### 3) The number of measurements to save, and 4) the number of weather station
+### variables to keep.
 Child Variables;;
 5;50;1440;4;;
 
-### File paths to the data storage and data logging locations and functions.
+### File paths to the data storage and data logging locations and functions. The order is
+### 1) Where to write the raw data, 2) What base name to call the weather station data files,
+### 3) What base name to call the logging files, 4) Where to find the user logging program,
+### and 5) Where to find the user permissions program
 FilePaths;;
 .\Data\WeatherStation\;
 WeatherStation;
@@ -35,6 +41,3 @@ WSLogging;
 ### we keep autoscaling the plots.
 Plot Bounds;;
 1;2;3;4;5;6;7;8;;
-
-
-
