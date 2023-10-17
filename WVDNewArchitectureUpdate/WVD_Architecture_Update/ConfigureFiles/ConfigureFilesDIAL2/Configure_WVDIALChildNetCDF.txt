@@ -1,12 +1,11 @@
-Written By: BradSchoenrock
+Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the NetCDF writer in the Water Vapor DIAL Main labview program. 
+This file is used to define the initial state of the MPD main NetCDF File Writer labview program.
 
-### VariousPaths are paths to the - 
-### working directory of the MCS - 
-### path to python executable - 
-### path to python script - 
-### path where output NetCDFs are written (will make the "Data\" for you beyond this base path)
+### File paths needed for data writing and backup. The order is: 1) Working directory of the MCS
+### program (here "." Is just a relative path from where it is called), 2) Absolute file path to
+### Python, 3) Relative file path to the NetCDF writer script, 4) First backup drive location,
+### and 5) Second backup drive location
 VariousPaths;;
 .;
 C:\Users\h2odial\Anaconda3\python.exe;
@@ -14,19 +13,22 @@ C:\Users\h2odial\Anaconda3\python.exe;
 D:\MPDBackup;
 E:\MPDBackup;;
 
-### how many hours of data do we want to back process
+### The number of hours of data to back process
 HoursToBackProcess;;
 3;;
 
-### how frequently do we want to check 
+### How frequently do we want to run the python program in minutes
 UpdatePeriodMin;;
 10;;
 
-### Run the sync to an external hard drive (0: no, 1: yes)
+### Run the sync to the external hard drives (0: no, 1: yes)
 RSync;;
 1;;
 
-### paths to error and comment logging
+### File paths to the data storage and data logging locations and functions. The order is
+### 1) Where to write the raw data, 2) What base name to call the NetCDF writer data files,
+### 3) What base name to call the logging files, 4) Where to find the user logging program,
+### and 5) Where to find the user permissions program
 FilePaths;;
 .\Data\NetCDFChild\;
 NetCDFChild;
