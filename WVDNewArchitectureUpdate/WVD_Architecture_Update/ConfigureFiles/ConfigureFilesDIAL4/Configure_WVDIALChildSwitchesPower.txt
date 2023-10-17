@@ -1,18 +1,15 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the template in the Water Vapor DIAL Main labview program. 
+This file is used to define the initial state of the MPD main PDU switch labview program.
 
-### Number of switch units to control
+### Number of switch units to control in each instrument
 Switch Number;;
 2;;
 
-### Number of switchs in each unit
+### Number of switched outlets in each PDU unit
 Unit Size;;
 8;;
 
-## IP Addresses of the switches
+### IP Addresses of the switches
 IP Addresses;;
-192.168.0.131; 192.168.0.130;;
-
-
-
+192.168.0.130; 192.168.0.131;;
