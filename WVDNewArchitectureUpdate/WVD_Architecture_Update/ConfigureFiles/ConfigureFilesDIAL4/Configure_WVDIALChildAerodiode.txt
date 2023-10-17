@@ -1,100 +1,111 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the template in the Water Vapor DIAL Main labview program.
+This file is used to define the initial state of the MPD main pulsed TWA labview program.
 
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
 Outter Tab Names;;
 Connection Details; Desired State; Current State; Testing;;
 
-### Software Testing (0 = No, 1 = Yes); Hardware Interupt (0 = No, 1 = Yes)
+### These are miscellaneous settings needed for the Aerodiode program. They are:
+### 1) Software Testing (0 = No, 1 = Yes), and 2) Hardware Interrupt (0 = No, 1 = Yes)
 Misc;; 
 0;1;;
 
-###
+### The comm ports used by each of the Aerodiode device drivers. Note that these are in
+### order to match the Seed diodes. That order is typically WV-Online, WV-Offline,
+### O2-Online, and O2-Offline
 Communication Ports;;
 COM4;COM7;COM6;COM5;;
 
-###
+### The source of the current for the Aerodiode to use (0 = External, 1 = Internal)
 Current Source;;
 1;1;1;1;;
 
-###
+### The mode for the current driver to use (0 = Pulsed, 1 = CW)
 Control Mode;;
 0;0;0;0;;
 
-###
+### The synchronization source for the Aerodiode to use (0 = TTL, 1 = Low-voltage
+### differential signaling, 2 = Internal)
 Synchro;;
 0;0;0;0;;
 
-###
+### The Aerodiode delay line (0 = None, 1 = Internal)
 Delay Line;;
 0;0;0;0;;
 
-###
+### Power the laser on or off (0 = Off, 1 = On)
 Laser Power;;
 1;1;1;1;;
 
-### The current has to be set as an integer percent of the maximum current. Therefore
+### The current to drive each of the diodes at in units of milliamps. Note that the
+### current has to be set as an integer percent of the maximum current. Therefore
 ### the current setting may need to be changed to match this. For example, with a max
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
 170;180;210;180;;
 
-###
+### The offset of the Aerodiode pulsed or CW drive current in milliamps
 Offset Current;;
 0;0;0;0;;
 
-###
+### The width of the desired pulses in picoseconds. Note that this is not used in the
+### TTL synchro mode but it set as a safeguard incase internal mode is selected.
 Pulse Width;;
 100000;100000;100000;100000;;
 
-###
+### The temperature to stabilize each diode to in units of Celsius
 Temperature;;
 25;25;25;25;;
 
-###
+### The delay of the diodes when set in internal mode in units of picoseconds.
 Delay Out;;
 0;0;0;0;;
 
-###
+### The frequency of the diodes when set in internal mode in units of Hz. Note that
+### this is not used in the TTL synchro mode but it set as a safeguard incase internal
+### mode is selected.
 Frequency;;
 8000;8000;8000;8000;;
 
-###
+### The gain used to read the internal power monitor (don't change this).
 Monitor Gain;;
 10;10;10;10;;
 
-###
+### The value of the internal interlock for the Aerodiode driver (0 = Off, 1 = Interlocked)
 Interlock;;
 0;0;0;0;;
 
-###
+### The maximum mean current that the Aerodiode driver can supply in units of milliamps. Note
+### that the actual current needs to be an integer multiple of this value as a percent, i.e.
+### picking a reasonably round number here is helpful.
 Max Mean Current;;
 150;150;150;150;;
 
-###
+### The maximum absolute current that the Aerodiode driver can supply in units of milliamps.
 Max Current;;
 250;250;250;250;;
 
-###
+### The serial numbers of each Aerodiode device. This must match the order of the comm ports
+### above to communicate with the devices. This is insurance against comm ports being reassigned
 Serial Number;;
 2310132;2310131;2310134;2210267;;
- 
-### The current has to be set as an integer percent of the maximum current. Therefore
+
+### The current to drive each of the diodes at in units of milliamps. Note that the
+### current has to be set as an integer percent of the maximum current. Therefore
 ### the current setting may need to be changed to match this. For example, with a max
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Scan Current;;
 75;80;80;75;;
 
-
-### File paths to the data storage and data logging locations and functions.
+### File paths to the data logging locations for the Aerodiode controller. The order is
+### 1) Where to write the raw data, 2) What base name to call the logging data files, 3)
+### Where to find the user logging program, and 4) Where to find the user permissions program
 Aerodiode File Paths;;
 .\Data\LaserLocking\;
 AerodiodeLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
-
-
