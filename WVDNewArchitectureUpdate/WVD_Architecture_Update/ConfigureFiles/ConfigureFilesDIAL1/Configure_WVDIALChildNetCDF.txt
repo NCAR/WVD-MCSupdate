@@ -21,7 +21,7 @@ HoursToBackProcess;;
 UpdatePeriodMin;;
 10;;
 
-### Run the sync to the external hard drives (0: no, 1: yes)Configure_WVDIALChildNetCDF.txt
+### Run the sync to the external hard drives (0: no, 1: yes)
 RSync;;
 1;;
 
