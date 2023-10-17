@@ -1,6 +1,6 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the template in the Water Vapor DIAL Main labview program.
+This file is used to define the initial state of the MPD main laser locking labview program.
 
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
@@ -12,31 +12,33 @@ Wavelength Settings; Scan Settings; Wavelength Status; Data Saving; Data Plottin
 Inner Tab Names;;
 Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 
-### These are miscilaneous settings needed for the laser locking program. They are:
-### the time between checks of the etalons in seconds, the number of data scans to 
-### keep and plot, whether to check the lasers or not (1 = yes and 0 = no) even if
-### they should not be locked, and whether the program is running in software testing
-### mode or as standard (this option is currently not set up), what type of switch
-### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), and
-### the time between scan steps in seconds. 
+### These are miscellaneous settings needed for the laser locking program. They are:
+### 1) the time between checks of the etalons in seconds, 2) the number of data scans to
+### keep and plot, 3) whether to check the lasers or not (1 = yes and 0 = no) even if
+### they should not be locked, 4) whether the program is running in software testing
+### mode or as standard (this option is currently not set up), 5) what type of switch
+### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), 6) the
+### time between locking steps in seconds, and 7) The wave meter offset in nanometers
 Misc;; 
 15; 1000; 1; 0; 9; 3; 0.00011;;
 
-### The type of laser that is being used. This corresponds to the typedefintion 
-### TypeDef_LaserTypes.ctl
+### The type of laser that is being used. This corresponds to the type definition
+### TypeDef_LaserTypes.ctl. Note locking and scanning definitions are referenced to this
+### laser order.
 Laser Types;;
 0;1;3;4;;
 
-### The exact desired wavelengths of the lasers in nanometers
+### The exact desired wavelengths of the lasers in nanometers (note that the wavelength
+### is in vacuum)
 Wavelength;;
 828.19500;828.29415;769.79542;770.10812;;
 
-### The exact tolerance allowed for locking...how far off can the lasers be before 
-### the locking program attempts to lock them...in nanometers
+### The exact tolerance allowed for locking, i.e. how far off can the lasers be before
+### the locking program attempts to lock them in nanometers
 Tolerance;;
 0.00005;0.00005;0.00005;0.00005;;
 
-### The desired starting temperature of the lasers, in degrees celcius
+### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
 24.886;32.274;14.581;20.277;;
 
@@ -70,35 +72,35 @@ Locking On;;
 1;1;1;1;;
 
 ### This is a boolean operator to set whether the lasers should try to lock themselves 
-### usin ga single step or PID control method (1 = single step and 0 = PID)
+### using a single step or PID control method (1 = single step and 0 = PID)
 Locking Type;;
 1;1;1;1;;
 
 ### This is the current and only locking method for locking the laser. This is the 
 ### temperature step size to take when trying to temperature tune the lasers in 
-### degrees celciuc
+### degrees Celsius
 Lock Step Size;;
 0.001;0.001;0.001;0.001;;
 
-### This is the minimum power required to be read from teh wavemeter to perform laser
-### locking. This value is compared to the value read by the wavemeter. The units will
-### be dBm
+### This is the minimum power required to be read from the wavemeter to perform laser
+### locking. This value is compared to the value read by the wavemeter. The units are
+### dBm
 Min Locking Power;;
 -15;-15;-15;-15;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
-### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check 
-### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;; 
-### would check the first laser 4 times before checking the other. 
+### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check
+### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;;
+### would check the first laser 4 times before checking the other.
 Scan Strategy;;
 0;1;2;3;;
 
-### The type of etalonthat is being used. This corresponds to the typedefintion 
+### The type of etalon that is being used. This corresponds to the type definition
 ### TypeDef_EtalonTypes.ctl
 Etalon Types;;
 0;3;;
 
-### The desired temperatures of the etalons in degrees celcius
+### The desired temperatures of the etalons in degrees Celsius
 Etalon Temperature;;
 20.4;29;;
 
@@ -107,7 +109,11 @@ Etalon Temperature;;
 Etalon TEC On;;
 1;1;;
 
-### File paths to the data storage and data logging locations and functions.
+### File paths to the data storage and data logging locations and functions. The order is
+### 1) Where to write the raw data, 2) What base name to call the laser data files, 3)
+### What base name to call the etalon data files, 4) What base name to call the logging
+### files, 5) Where to find the User Logging program, and 6) Where to find the user
+### permissions program
 File Paths;;
 .\Data\LaserLocking\;
 LaserLockingData;
@@ -118,18 +124,21 @@ LaserLogging;
 
 ### This is the computer location to find the Thor 8000 box. If multiple boxes are
 ### desired, there should be multiple locations. This is likely the GPIB port that the 
-### GPIB to USB cable is associated with.
+### GPIB to USB cable is associated with. The order is: 1) Type of communication (0=
+### USB, 1 = Ethernet), 2) Location string
 Thor8000 Locations;;
 0;GPIB0::10::INSTR;;
 
 ### The type of control plugged into each slot in the Thor 8000 box. These numbers 
-### correspond to the typedefinition: TypeDef_Thor8000ControlType.ctl. This is needed
+### correspond to the type definition: TypeDef_Thor8000ControlType.ctl. This is needed
 ### as a map between the local arrays to labview and the locations of the hardware.
 Thor8000 Slots;;
 2;5;11;14;28;28;24;27;;
 
-### The comm port that the wavemeter can be found at. For the future, this can change
-### to an IP address fairly easily. 
+### The communication location that the wavemeter can be found at. The elements here
+### are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes,
+### and 5) Bytes to read if the element is an IP address. If not, the entry is just a
+### single value with the comm port number.
 Wavemeter Comm Port;;
 192.168.0.166;23;1000;122;1000;;
 
@@ -146,13 +155,17 @@ Laser Scan Steps;;
 Etalon Scan Steps;;
 2;2;2;2;2;;
 
-### 
+### The array location of the desired laser or etalon to scan
 Laser To Scan;;
 3;3;2;1;0;;
 Etalon To Scan;;
 1;1;1;0;0;;
 
-### File paths to the data storage and data logging locations and functions.
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the wavemeter. The order is 1) Where to write the raw data,
+### 2) What base name to call the wavemeter data files, 3) What base name to call the
+### logging data files, 4) Where to find the User Logging program, and 5) Where to
+### find the user permissions program
 Wavemeter File Paths;;
 .\Data\ReceiverScan\;
 Wavemeter;
@@ -160,6 +173,11 @@ WavemeterLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the laser/etalon. The order is 1) Where to write the raw data,
+### 2) What base name to call the laser data files, 3) What base name to call the
+### etalon data files, 4) What base name to call the logging data files, 5) Where to
+### find the User Logging program, and 6) Where to find the user permissions program
 Scan File Paths;;
 .\Data\ReceiverScan\;
 LaserScanData;
@@ -168,7 +186,9 @@ ScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
-### The location of the electrical switch used to flip the Opto-electric switches
+### The location of the electrical switch used to flip the Opto-electric switches.
+### The elements here are: 1) IP Address, 2) Port, 3) Communication timeout in [ms],
+### 4) Header bytes, and 5) Bytes to read if the element is an IP address.
 Hardware Switch Location;;
 192.168.0.140;1616;1000;-1;20;;
 
