@@ -1,25 +1,28 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the Weather Station in the Water Vapor DIAL Main labview program. 
+This file is used to define the initial state of the MPD main UPS labview program.
 
-### This is where the Labview VISA communications should find the weather station.
+### This is where the Labview code should find the UPS. The elements here are:
+### 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes,
+### and 5) Bytes to read if the element is an IP address.
 Thermocouple Comm Port;;
 192.168.0.86;-1;750;-1;-1;;
 
-
-### These are miscilaneous variables that are read and used as default values
-### by the UPS. These are currently: the update period of the UPS in seconds, and
-### the number of measurments to save.
+### These are miscellaneous variables that are read and used as default values
+### by the UPS. These are currently: 1) the update period of the UPS in seconds,
+### 2) the number of measurements to save, 3) The minimum battery percent before
+### a shutdown is triggered, and 4) The number of measurements required with the
+### UPS on battery before the shutdown will be allowed.
 Child Variables;;
 8;3600;10;50;;
 
-### File paths to the data storage and data logging locations and functions.
+### File paths to the data storage and data logging locations and functions. The order
+### is 1) Where to write the raw data, 2) What base name to call the UPS data files,
+### 3) What base name to call the logging files, 4) Where to find the user logging
+### program, and 5) Where to find the user permissions program
 FilePaths;;
 .\Data\UPS\;
 UPS;
 UPSLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
-
-
-
