@@ -1,8 +1,8 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the template in the Water Vapor DIAL Main labview program. 
+This file is used to define the initial state of the MPD main Child Template labview program.
 
-### This is designed as a catch all in case a child needs a miscilaeneous variable 
+### This is designed as a catch all in case a child needs a miscellaneous variable
 ### but it is currently the window width and height to set the child to at runtime
 Global Variables;;
 630;943;;
@@ -10,16 +10,13 @@ Global Variables;;
 ### This is an example of the file structure that the configure file reader is 
 ### expecting. The data should come in a 2 line set with a descriptive, unique header
 ### and data below. The endline character is a set of two semicolons ";;" where the 
-### deliminator of the data is a single semi-colon ";".
+### delimiter of the data is a single semi-colon ";".
 Local Variables 1;;
 0;1;;
 
 ### This is an example of the file structure that the configure file reader is 
 ### expecting. The data should come in a 2 line set with a descriptive, unique header
 ### and data below. The endline character is a set of two semicolons ";;" where the 
-### deliminator of the data is a single semi-colon ";".
+### delimiter of the data is a single semi-colon ";".
 Local Variables 2;;
 ;;
-
-
-
