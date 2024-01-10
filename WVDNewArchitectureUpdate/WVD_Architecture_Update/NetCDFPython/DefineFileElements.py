@@ -36,7 +36,7 @@ def DefineThermocoupleMap():
     # Defining known locations
     return({0:"Unknown"   ,1:"Empty" ,2:"OpticalBench"   ,3:"HVACSource", 
             4:"HVACReturn",5:"Window",6:"WindowHeaterFan",7:"WVEtalonHeatSink",
-            8:"HSRLEtalonHeatSink",9:"HSRLOven"})
+            8:"HSRLEtalonHeatSink",9:"HSRLOven",10:"HSRLHeatSink"})
 #%% Defining maps for laser and detector channels (defined in labview)
 def MCSPowerMapV2(Type):
     MCSPowerMap = {1:'Unknown',2:'WVOnline',3:'WVOffline',4:'O2Online',5:'O2Offline',6:'HSRL'}
