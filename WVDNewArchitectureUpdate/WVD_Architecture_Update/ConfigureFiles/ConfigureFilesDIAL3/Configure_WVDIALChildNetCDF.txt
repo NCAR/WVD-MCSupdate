@@ -10,6 +10,8 @@ VariousPaths;;
 .;
 C:\Users\h2odial\Anaconda3\python.exe;
 .\NetCDFPython\NetCDFScript.py;
+.\NetCDFPython\rsyncDirect.py;
+D:\MPDBackup;
 E:\MPDBackup;;
 
 ### The number of hours of data to back process
@@ -18,7 +20,7 @@ HoursToBackProcess;;
 
 ### How frequently do we want to run the python program in minutes
 UpdatePeriodMin;;
-10;;
+10;720;;
 
 ### Run the sync to the external hard drives (0: no, 1: yes)
 RSync;;
