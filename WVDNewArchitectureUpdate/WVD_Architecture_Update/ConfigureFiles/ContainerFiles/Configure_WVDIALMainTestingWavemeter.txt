@@ -17,7 +17,7 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\IndividualChildControl.llb\ChildControl_Wavemeter.vi;;
+.\IndividualChildControl.llb\ChildControl_WavemeterConstantComms.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
