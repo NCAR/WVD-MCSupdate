@@ -74,7 +74,7 @@ WV Channels;;
 ### are in order: 1) Time To Save [min], 2) WV Calculation Time [sec], 3) Range Res [m],
 ### 4) Max Range [m], 5) Profile Time [min], and 6) Scan Max Range [m]
 WV Range and Time;;
-60; 15; 37.5; 15000; 5; 2000;;
+60; 15; 7.5; 15000; 5; 2000;;
 
 ### Plot Labels
 WV Profile Labels;;
