@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-29.305;27.790;9.761;15.919;;
+29.298000;27.782000;9.755000;15.912000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -191,4 +191,3 @@ ScanLogging;
 ### 4) Header bytes, and 5) Bytes to read if the element is an IP address.
 Hardware Switch Location;;
 192.168.0.140;1616;1000;-1;30;;
-
