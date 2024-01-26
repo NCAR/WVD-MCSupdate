@@ -114,7 +114,7 @@ Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude 
 ### This variable tells the subchild what photon counting channels to use as 
 ### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
 KHSRL Channels;;
-14;16;;
+14;16;10;12;;
 
 ### These variables tell the sub-child what resolution to use for the plots. They
 ### are in order: 1) Time To Save [min], 2) WV Calculation Time [sec], 3) Range Res [m],
@@ -124,13 +124,13 @@ KHSRL Range and Time;;
 
 ### Plot Labels
 KHSRL Profile Labels;;
-Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Backscatter Ratio [ ]; Altitude [m]; Overlap Function;;
 
 KHSRL Time Series Labels;;
 Time [UTC]; Background Counts;;
 
 KHSRL Contour Labels;;
-Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Overlap Function [Unitless] (Time [UTC]); Altitude [m]; Backscatter Ratio [Unitless] (Time [UTC]); Altitude [m];;
 
 ############################################################################################
 ###------------------------------- Receiver Scan Sub Child ------------------------------###
