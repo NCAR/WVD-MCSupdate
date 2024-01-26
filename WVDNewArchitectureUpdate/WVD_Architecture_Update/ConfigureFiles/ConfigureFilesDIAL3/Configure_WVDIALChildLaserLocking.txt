@@ -191,3 +191,37 @@ ScanLogging;
 ### 4) Header bytes, and 5) Bytes to read if the element is an IP address.
 Hardware Switch Location;;
 192.168.0.140;1616;1000;-1;30;;
+
+### The current tolerance with which to scan the original current. For example
+### if the value is 1, the scan will run from the original current +- 1 milliamp
+### The etalon will be ignored
+Laser Scan Limits -- Current;;
+1.5;;
+Etalon Scan Limits -- Current;;
+0;;
+
+### The number of steps to take when scanning the laser current. The etalon will
+### be ignored
+Laser Scan Steps -- Current;;
+60;;
+Etalon Scan Steps -- Current;;
+1;;
+
+### The array location of the desired laser current to scan. The etalon will be ignored
+Laser To Scan -- Current;;
+3;;
+Etalon To Scan -- Current;;
+1;;
+
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the laser/etalon. The order is 1) Where to write the raw data,
+### 2) What base name to call the laser data files, 3) What base name to call the
+### etalon data files, 4) What base name to call the logging data files, 5) Where to
+### find the User Logging program, and 6) Where to find the user permissions program
+Current Scan File Paths;;
+.\Data\ReceiverScan\;
+LaserCurrentScanData;
+EtalonCurrentScanData;
+CurrentScanLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
