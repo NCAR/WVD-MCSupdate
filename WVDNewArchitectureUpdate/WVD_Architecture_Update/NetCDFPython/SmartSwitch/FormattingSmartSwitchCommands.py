@@ -237,11 +237,11 @@ if __name__ == '__main__':
       B.Timers[Timers.Timer_0.value].SetFullPulse(300, 20, 1)  # WV TSOA
       B.Timers[Timers.Timer_1.value].SetFullPulse(300, 30, 1)  # On/Off TWA
       B.Timers[Timers.Timer_2.value].SetFullPulse(290, 40, 1)  # Gate
-#      B.Timers[Timers.Timer_3.value].SetFullPulse(300,100, 1)  # Sync 1
-      B.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 0
+      B.Timers[Timers.Timer_3.value].SetFullPulse(300,100, 1)  # Sync 1
+#      B.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 0
       B.Timers[Timers.Timer_5.value].SetFullPulse(300, 20, 1)  # O2 TSOA (Gate Temp)
-      B.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-#      B.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+#      B.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+      B.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
                                                                # Flag 6: RF1, Flag 7: RF2
       B.dacA = 52428
       B.dacB = 65535
@@ -260,6 +260,6 @@ if __name__ == '__main__':
       PulseDefs.append(C)
     
       # Writting (or reading) pulse definitions
-      ReadWriteAllPulseDefinitions(T,PulseDefs,Start=1,Stop=1,Read=False,HReadable=False)
+      ReadWriteAllPulseDefinitions(T,PulseDefs,Start=0,Stop=0,Read=False,HReadable=False)
 
       T.Disconnect()

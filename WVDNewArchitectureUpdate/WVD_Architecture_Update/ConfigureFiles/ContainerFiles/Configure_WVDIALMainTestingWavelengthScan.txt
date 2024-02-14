@@ -18,7 +18,7 @@ Global Variables;;
 ### that the container should populate the tabs with
 Relative File Paths;;
 .\MCS_NCARV2.llb\MCSControl_V02.vi;
-.\IndividualChildControl.llb\ChildControl_Wavemeter.vi;
+.\IndividualChildControl.llb\ChildControl_WavemeterConstantComms.vi;
 .\WavelengthLocking.llb\ControlSystemWavelengthLocking.vi;
 .\AdvancedVisV2.llb\ControlSystemAdvancedVisualization.vi;;
 
