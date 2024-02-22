@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), 6) the
 ### time between locking steps in seconds, and 7) The wave meter offset in nanometers
 Misc;; 
-15; 1000; 1; 0; 9; 3; 0.00014;;
+15; 1000; 1; 0; 9; 3; 0.00010;;
 
 ### The type of laser that is being used. This corresponds to the type definition
 ### TypeDef_LaserTypes.ctl. Note locking and scanning definitions are referenced to this
@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-29.298000;27.782000;9.755000;15.912000;;
+29.268000;27.743000;9.729000;15.883000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
