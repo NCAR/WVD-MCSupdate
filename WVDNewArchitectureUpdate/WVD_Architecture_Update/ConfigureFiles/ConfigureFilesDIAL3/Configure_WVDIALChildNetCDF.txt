@@ -24,7 +24,7 @@ UpdatePeriodMin;;
 
 ### Run the sync to the external hard drives (0: no, 1: yes)
 RSync;;
-0;;
+1;;
 
 ### File paths to the data storage and data logging locations and functions. The order is
 ### 1) Where to write the raw data, 2) What base name to call the NetCDF writer data files,
