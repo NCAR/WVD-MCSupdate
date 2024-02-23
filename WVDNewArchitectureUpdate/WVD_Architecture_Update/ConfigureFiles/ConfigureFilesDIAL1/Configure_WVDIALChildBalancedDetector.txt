@@ -6,11 +6,11 @@ This file is used to define the initial state of the MPD main thermocouple labvi
 ### period (time between data readings); number of samples per reading; pysical location of
 ### the balanced detector
 Balanced Detector Settings;;
-0.2;5;Dev1/ai0;3000;;
+0.2;5;Dev2/ai0;3000;;
 
 ### 
 FilePaths;;
-.\Data\BalancedDetector\;
+.\Data\HyperfineScan\;
 BalancedDetector;
 BalancedDetLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;

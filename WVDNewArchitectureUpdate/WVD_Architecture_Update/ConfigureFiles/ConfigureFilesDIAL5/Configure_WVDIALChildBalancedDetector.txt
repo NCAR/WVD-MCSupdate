@@ -10,7 +10,7 @@ Balanced Detector Settings;;
 
 ### 
 FilePaths;;
-.\Data\BalancedDetector\;
+.\Data\HyperfineScan\;
 BalancedDetector;
 BalancedDetLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
