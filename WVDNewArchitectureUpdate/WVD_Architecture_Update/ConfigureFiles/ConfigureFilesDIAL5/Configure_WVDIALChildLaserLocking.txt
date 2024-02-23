@@ -161,6 +161,19 @@ WavemeterLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
+Hyperfine File Paths;;
+.\Data\HyperfineScan\;
+Wavemeter;
+WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the laser/etalon. The order is 1) Where to write the raw data,
+### 2) What base name to call the laser data files, 3) What base name to call the
+### etalon data files, 4) What base name to call the logging data files, 5) Where to
+### find the User Logging program, and 6) Where to find the user permissions program
 Scan File Paths;;
 .\Data\ReceiverScan\;
 LaserScanData;
@@ -200,7 +213,7 @@ Etalon To Scan -- Current;;
 ### etalon data files, 4) What base name to call the logging data files, 5) Where to
 ### find the User Logging program, and 6) Where to find the user permissions program
 Current Scan File Paths;;
-.\Data\ReceiverScan\;
+.\Data\HyperfineScan\;
 LaserCurrentScanData;
 EtalonCurrentScanData;
 CurrentScanLogging;
