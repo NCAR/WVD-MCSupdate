@@ -6,7 +6,7 @@ This file is used to define the initial state of the Water Vapor DIAL Main labvi
 ### The tag "Unused" tells the container not to populate a tab. Note that this 
 ### command is case sensitive.
 Tab Names;;
-Main Controls; Wavemeter; Balanced Detector; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main Controls; Laser Control; Wavemeter; Balanced Detector; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -17,11 +17,12 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
+.\WavelengthLocking.llb\ControlSystemWavelengthLocking.vi;
 .\IndividualChildControl.llb\ChildControl_WavemeterConstantComms.vi;
 .\IndividualChildControl.llb\ChildControl_BalancedDetector.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
 Function Types;;
-0;10;26;;
+0;9;10;26;;
 
