@@ -131,7 +131,7 @@ def ReadAndPadTextFile(FileName):
 def ReadFileGeneral(FileName, FolderType, FileType):
     VarData = []
     # Read file based on its type 
-    if FileType in {'Current','HKV2','Humidity','UPS','Wavemeter','WStation'}:
+    if FileType in {'BDetector','Current','HKV2','Humidity','UPS','Wavemeter','WStation'}:
         # File contains only numbers so read simply
         VarData = np.array(ReadAndPadTextFile(FileName)).astype(np.float)  
         # Parse out location information for files containing such info

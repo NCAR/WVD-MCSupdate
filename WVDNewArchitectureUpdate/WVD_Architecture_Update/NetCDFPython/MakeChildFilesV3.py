@@ -34,7 +34,7 @@ def processGeneral(FolderType,FileType,FileName,NetCDFOutputPath,Header):
         else:
             List1d = VarData;
     # Defining file attributes and variable attributes
-    Attributes = Define.DefineNetCDFFileAttributes(ArrayData,List1d,List2d,ListOther)      
+    Attributes = Define.DefineNetCDFFileAttributes(ArrayData,List1d,List2d,ListOther)
     # Writing the netcdf file 
     DFF.WriteNetCDFFileV2(NetCDFOutputPath,Header,Attributes[FileType],FileDate,FileTime,MPDNum,VarData)
     
@@ -45,6 +45,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                          'Current':        [['Current','.txt','Current']],
                          'Housekeeping':   [['HousekeepingV2','.txt','HKV2']],
                          'HumiditySensor': [['Humidity','.txt','Humidity']],
+                         'HyperfineScan':  [['BalancedDetector','.txt','BDetector']],
                          'LaserLocking':   [['LaserLocking','.txt','LL'],
                                             ['Etalon',      '.txt','Etalon']],
                          'MCS':            [['MCSDataV2','.bin','MCSV2'],
@@ -65,7 +66,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
             Where2FindData = os.path.join(WorkingDir,'Data',FolderType)           
             if os.path.isdir(Where2FindData):
                 # Looking for files and looping over them
-                FileList = SPF.getFiles(Where2FindData , FileBase, FileExt, ThenDate, ThenTime)               
+                FileList = SPF.getFiles(Where2FindData , FileBase, FileExt, ThenDate, ThenTime)
                 for File in FileList:
                     try:
                         processGeneral(FolderType,FileType,File,NetCDFPath,Header) 

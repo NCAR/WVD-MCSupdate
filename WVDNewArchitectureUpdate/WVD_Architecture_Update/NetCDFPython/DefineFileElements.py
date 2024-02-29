@@ -61,7 +61,19 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None,ListOther=
     ListOther = [[[0]]*3 for i in range(10)]   if ListOther is None else ListOther 
     # Defining the file attributes as a nested dictonary
     FileAtributes = \
-{'Clock':    {'FType':        'Clock',
+{'BDetector':{'FType':       'BalancedDetector',
+             'FDescription': 'Data file from a balanced detector from Doppler free setup',
+             'FDimNames':    ['time', 'nSensors'],
+             'FDimSize':     [len(ArrayData[:,1]),len(ArrayData[1,:])-1],
+             'Transpose':    [False,True],
+             'VarName':      ['time','Voltage'],
+             'VarCol':       [0,[m+1 for m in range(len(ArrayData[1,:])-1)]],
+             'VarDim':       [('time'),('nSensors','time')],
+             'VarType':      ['float','float32'],
+             'VarUnit':      ['Fractional Hours','Voltage'],
+             'VarDescrip':   ['The time of collected data in UTC hours from the start of the day',
+                              'Voltage of the differential channel of the balanced detector']},
+ 'Clock':    {'FType':        'Clock',
               'FDescription': 'Master clock  data file',
               'FDimNames':    ['time'],
               'FDimSize':     [len(ArrayData[:,1])],
