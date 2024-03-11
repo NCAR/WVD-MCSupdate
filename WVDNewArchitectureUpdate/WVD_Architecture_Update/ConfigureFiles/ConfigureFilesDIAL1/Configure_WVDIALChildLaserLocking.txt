@@ -211,7 +211,7 @@ Etalon Scan Limits -- Current;;
 ### The number of steps to take when scanning the laser current. The etalon will
 ### be ignored
 Laser Scan Steps -- Current;;
-200;;
+100;;
 Etalon Scan Steps -- Current;;
 1;;
 
