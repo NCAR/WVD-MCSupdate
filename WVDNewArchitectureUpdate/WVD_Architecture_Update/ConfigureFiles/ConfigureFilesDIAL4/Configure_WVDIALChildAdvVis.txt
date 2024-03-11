@@ -6,7 +6,7 @@ This file is used to define the initial state of the MPD main advanced visualiza
 ### These settings just set the names of the tab controller so the user knows
 ### what is contained in each large piece
 Tab Names;;
-Main; Water Vapor; K HSRL; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main; Water Vapor; K HSRL; Water Vapor #2; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
@@ -18,7 +18,8 @@ Global Variables;;
 ### that the container should populate the tabs with
 Relative File Paths;;
 .\AdvancedVisV2.llb\ControlSystemWVPlotting.vi;
-.\AdvancedVisV2.llb\ControlSystemO2Plotting.vi;;
+.\AdvancedVisV2.llb\ControlSystemO2Plotting.vi;
+.\AdvancedVisV2.llb\ControlSystemWVLowPlotting.vi;;
 
 ### Not used
 Function Types;;
