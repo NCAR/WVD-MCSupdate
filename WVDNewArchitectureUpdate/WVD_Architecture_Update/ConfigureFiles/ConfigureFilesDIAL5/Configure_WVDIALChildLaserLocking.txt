@@ -38,7 +38,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees celcius
 Temperature;;
-27.61;14;15.74;21.66;;
+27.567000;14.003000;15.763000;21.670000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -142,7 +142,7 @@ Etalon Scan Limits;;
 
 ### The number of steps to take when scanning the laser or etalon
 Laser Scan Steps;;
-120;120;120;120;120;;
+60;60;60;60;60;;
 Etalon Scan Steps;;
 2;2;2;2;2;;
 
