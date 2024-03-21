@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-30.675000;11.573000;17.018000;13.394000;;
+30.674000;11.572000;16.233000;13.400000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -145,7 +145,7 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.12;0.75;0.75;0.75;0.75;;
+0.12;0.375;0.375;0.375;0.375;;
 Etalon Scan Limits;;
 0;0;0;0;0;;
 
