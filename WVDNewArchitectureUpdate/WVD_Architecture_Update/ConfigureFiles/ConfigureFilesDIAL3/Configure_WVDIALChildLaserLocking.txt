@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-29.333000;27.830000;9.807000;15.971000;;
+29.296000;27.781000;9.769000;15.923000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -102,7 +102,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees Celsius
 Etalon Temperature;;
-19.4;29.75;;
+19.2;29.75;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -145,7 +145,7 @@ Wavemeter Comm Port;;
 ### The temperature tolerance with which to scan the original temperature. For example
 ### if the value is 1, the scan will run from the original temp +- 1 degree C
 Laser Scan Limits;;
-0.12;0.75;0.75;0.75;0.75;;
+0.12;0.375;0.375;0.375;0.375;;
 Etalon Scan Limits;;
 0;0;0;0;0;;
 
