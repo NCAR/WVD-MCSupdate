@@ -45,7 +45,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-180;180;252;225;;
+180;180;250;225;;
 
 ### The offset of the Aerodiode pulsed or CW drive current in milliamps
 Offset Current;;
@@ -82,11 +82,11 @@ Interlock;;
 ### that the actual current needs to be an integer multiple of this value as a percent, i.e.
 ### picking a reasonably round number here is helpful.
 Max Mean Current;;
-150;150;300;300;;
+250;250;250;250;;
 
 ### The maximum absolute current that the Aerodiode driver can supply in units of milliamps.
 Max Current;;
-250;250;300;300;;
+250;250;250;250;;
 
 ### The serial numbers of each Aerodiode device. This must match the order of the comm ports
 ### above to communicate with the devices. This is insurance against comm ports being reassigned
@@ -99,7 +99,7 @@ Serial Number;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Scan Current;;
-62.5;75;57;51;;
+62.5;75;65;50;;
 
 ### File paths to the data logging locations for the Aerodiode controller. The order is
 ### 1) Where to write the raw data, 2) What base name to call the logging data files, 3)
