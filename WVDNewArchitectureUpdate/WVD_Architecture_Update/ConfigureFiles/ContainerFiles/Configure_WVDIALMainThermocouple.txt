@@ -6,7 +6,7 @@ This file is used to define the initial state of the Water Vapor DIAL Main labvi
 ### The tag "Unused" tells the container not to populate a tab. Note that this 
 ### command is case sensitive.
 Tab Names;;
-Main Controls; Thermocouples; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+Main; Thermocouples; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
 
 ### In its current state, these two variables are the width and height of the 
 ### tab containers. This location is, however, a catch all for data you need to 
