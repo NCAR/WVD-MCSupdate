@@ -55,17 +55,17 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-0;0;0;0;0;1;;
+1;0;0;0;0;1;;
 
 ### This is the number of pulses to accumulate. Specifically this number is N and
 ### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
 ### numbers will be rounded.
 Accumulation Exponent;;
-8;0;0;0;0;0;;
+8;0;0;0;0;8;;
 
 ### Options are 0-3. Numbers outside this will default to 0
 Demux Select;;
-0;3;3;3;3;3;;
+0;3;3;3;3;0;;
 ################################################################################
 ### Setting whether the sync fires on the rising or falling edge of the pulse
 ### Rising edge = 0, falling edge = 1
