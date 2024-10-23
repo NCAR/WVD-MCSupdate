@@ -7,7 +7,7 @@ Created on Wed Jan 18 15:48:32 2023
 """
 from copy import deepcopy
 from enum import Enum, unique
-from ClassDef_Communications import TCP
+from ClassDef_Communications import TCP, UDP
 
 #%% Defining enums for settings
 @unique
@@ -219,48 +219,9 @@ def ReadWriteAllPulseDefinitions(Conn,PulseDefs,Start=0,Stop=0,Pulses2Execute=0,
 #%% Formatting string commands to be sent to the Smart Switch
 if __name__ == '__main__':
       # Instantiating a TCP connection
-      Connection = TCP(IPAdd='192.168.0.199',Port=2222,Timeout=1,HeaderLen=-1,BodyLen=-1,TermChar='\r\n')
+      Connection = UDP(IPAdd='0.0.0.0',Port=24599,Timeout=1,HeaderLen=-1,BodyLen=-1,TermChar='\r\n')
       Connection.Connect()
-
-      # Instantiating a default pulse block definition
-      A = PulseBlockDefinition()
-      B = deepcopy(A); C = deepcopy(A)
-      ############## Creating unique pulse definitions ##############
-      PulseDefs = []
-      # Timer 0 (Long pulses)
-      A.Timers[Timers.Timer_0.value].SetFullPulse(300, 100, 1) # WV TSOA
-      A.Timers[Timers.Timer_1.value].SetFullPulse(300, 110, 1) # On/Off TWA
-      A.Timers[Timers.Timer_2.value].SetFullPulse(290, 120, 1) # Gate
-      A.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 0
-      A.Timers[Timers.Timer_5.value].SetFullPulse(300, 100, 1) # O2 TSOA (Gate Temp)
-      A.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-                                                               # Flag 6: RF1, Flag 7: RF2
-      A.dacA = 52428
-      A.dacB = 65535
-      PulseDefs.append(A)
-
-      # Timer 1 (Short Pulses)
-      B.Timers[Timers.Timer_0.value].SetFullPulse(300, 20, 1)  # WV TSOA
-      B.Timers[Timers.Timer_1.value].SetFullPulse(300, 30, 1)  # On/Off TWA
-      B.Timers[Timers.Timer_2.value].SetFullPulse(290, 30, 1)  # Gate
-      B.Timers[Timers.Timer_3.value].SetFullPulse(300,100, 1)  # Sync 1
-      B.Timers[Timers.Timer_5.value].SetFullPulse(300, 20, 1)  # O2 TSOA (Gate Temp)
-      B.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-                                                               # Flag 6: RF1, Flag 7: RF2
-      B.dacA = 52428
-      B.dacB = 65535
-      PulseDefs.append(B)
       
-      # Timer 2 (Scan Mode)
-      C.Timers[Timers.Timer_1.value].SetFullPulse(300, 2000, 1) # On/Off TWA
-      C.Timers[Timers.Timer_4.value].SetFullPulse(300, 2000, 1) # Sync 0
-      C.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);      # Flag 2 & 20: Timer 2 Inverted,
-                                                                # Flag 6: RF1, Flag 7: RF2
-      C.dacA = 52428
-      C.dacB = 65535
-      PulseDefs.append(C)
+      SendRead(Connection,'r00000040')
     
-      # Writting (or reading) pulse definitions
-      ReadWriteAllPulseDefinitions(Connection,PulseDefs,Start=0,Stop=0,Read=False,HReadable=False)
-
       Connection.Disconnect()

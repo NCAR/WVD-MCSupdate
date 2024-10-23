@@ -159,6 +159,7 @@ class UDP(Comms):
     # Calling the inherited "Connect" method but specifying socket type as UDP
     def Connect(self):
         super().Connect('SOCK_DGRAM')
+        self._Socket.bind((self.IPAddress, int(self.Port)))
     # Calling inherited "Read" method but specifying reading method for UDP 
     def Read(self,*args, **kwargs):
         return(super().Read(ReadType='recvfrom',*args, **kwargs)[0])  
