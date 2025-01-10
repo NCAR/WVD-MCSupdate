@@ -13,7 +13,7 @@ IP Address;;
 ### 5) Required cadance 6) Limit of relative humidity, 7) 1= Allow heaters to turn on or
 ### 0=Don't allow heaters on and finally 8) the number of humidity sensor variables to keep.
 Child Variables;;
-4;4500;300;10;12;50;1;4;;
+4;4500;300;10;12;50;1;5;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
