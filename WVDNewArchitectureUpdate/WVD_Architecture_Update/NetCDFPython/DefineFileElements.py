@@ -26,8 +26,8 @@ def DefineFileStructure(Type):
     return(FileType[Type])
 #%% Defining the data type map
 def DefineDataTypeMap():
-    return({'str': np.str,'b': np.bool,'Pass':'Pass', 
-            'float': np.float,'float32':np.float,'f':np.float})
+    return({'str': str,'b': bool,'Pass':'Pass', 
+            'float': float,'float32':float,'f':float})
 #%% Defining maps for placement of measurement elements (defined in labview)
 def DefineCurrentMap():  
     # Defining known locations
