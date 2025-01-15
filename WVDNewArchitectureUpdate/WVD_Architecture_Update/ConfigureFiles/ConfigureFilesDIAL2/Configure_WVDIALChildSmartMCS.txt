@@ -1,0 +1,186 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the NCAR MCS in the WVD labview program. 
+
+### UDP communication location of MCS - IP address of MCS; port number;; 
+UDP Comms;;
+192.168.0.199;24599;;
+
+### default state for multiplying one channel - channel number; multiplication factor;; - 1;1;; by default tells the first channel to not scale at all.  
+Channel Multiplier Controls;;
+1;1;;
+
+### Where each channel is plugged in. Note that this is in 4 rows to correspond
+### to the 4 instantiations used to access all 24 channels. Key can be found in 
+### TypeDef_MCSPhotonCountingMap.ctl
+Data Hardware Connectivity;;
+2;10;12; 4;14;16;
+3;11;13; 5;15;17;
+0; 0; 0; 0; 0; 0;
+0; 0; 0; 0; 0; 0;;
+
+### TypeDef_MCSPowerMap.ctl
+Power Hardware Connectivity;;
+2;4;12;14;0;0;3; 5;13;15;0;0;
+7;9;17;19;0;0;8;10;18;20;0;0;
+0;0; 0; 0;0;0;0; 0; 0; 0;0;0;
+0;0; 0; 0;0;0;0; 0; 0; 0;0;0;;
+
+################################################################################
+### Setting the state of the MCS digital controls. These are all array elements
+### and all index from lowest to highest
+
+### How to devide up the MCS channels. 1) Number of physical channels, 2) Number 
+### of versions of the MCS code running on the FPGA, 3) Number of physical power
+### channels
+Instantiation Size;;
+3;4;6;;
+
+Channel Number;;
+ 0; 1; 2;
+ 6; 7; 8;
+12;13;14;
+18;19;20;;
+
+### Here 1 = on and 0 = off
+Enable;;
+1;1;1;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
+Demux;;
+1;1;1;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Options are 0-2. Numbers outside this will default to 0
+Sync Select;;
+0;0;0;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Bin timing is in 5 ns incriments with valid range 10-20475. Numbers outside this
+### range will be set to 250 and values not even multiples of 5 will be rounded to the 
+### nearest multiple
+ns Per Bin;;
+250;250;250;
+ 50; 50; 50;
+250;250;250;
+250;250;250;;
+
+### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
+### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
+Shots Per Profile;;
+16000;16000;16000;
+ 8000; 8000; 8000;
+16000;16000;16000;
+16000;16000;16000;;
+
+### This is a control to set the counter to count on the rising or falling edge 
+### of the input TTL pulse. 1 = falling and 0 = rising
+Polarity;;
+0;0;0;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Used as a reset for the MCS. Not needed to use for standard use and should just 
+### be set to 0. 1 = reset activeand 0 = reset not active
+Reset Accumulator;;
+0;0;0;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Setting whether the sync fires on the rising or falling edge of the pulse
+### Rising edge = 0, falling edge = 1
+Sync Input Polarity;;
+0;0;0;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Setting whether the demuxer fires on the rising or falling edge of the pulse
+### Rising edge = 0, falling edge = 1
+Din Demux Polarity;;
+0;0;0;
+0;0;0;
+0;0;0;
+0;0;0;;
+
+### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
+### will be set to 560 and non-integer values will be rounded
+Number Of Bins;;
+480;2400;480;480;;
+
+### Relative time stamp used for the MCS. This should default to 20000000
+Relative Time Step;;
+20000000;20000000;20000000;20000000;;
+
+### Telling the MCS to reset itself. This should default to off (off = 0, on = 1)
+User Reset;;
+0;0;0;0;;
+
+### Telling the MCS to reset its relative time counter. This should default to off 
+### (off = 0, on = 1)
+Time Reset;;
+0;0;0;0;;
+
+
+################################################################################
+### Setting the state of the MCS power monitoring. These are all array elements
+### and all indexed from lowest to highest
+Channel Number;;
+ 0; 1; 2; 3; 4; 5;
+ 6; 7; 8; 9;10;11;
+12;13;14;15;16;17;
+18;19;20;21;22;23;;
+
+### Here 1 = on and 0 = off
+Power Enable;;
+1;1;1;1;0;0;
+1;1;1;1;0;0;
+0;0;0;0;0;0;
+0;0;0;0;0;0;;
+
+### This is the number of pulses to accumulate. Specifically this number is N and
+### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
+### numbers will be rounded.
+Accumulation Exponent;;
+8;8;8;8;0;0;
+8;8;8;8;0;0;
+0;0;0;0;0;0;
+0;0;0;0;0;0;;
+
+### Options are 0-3. Numbers outside this will default to 0
+Demux Select;;
+0;0;0;0;3;3;
+0;0;0;0;3;3;
+3;3;3;3;3;3;
+3;3;3;3;3;3;;
+
+### Mode to take power measurements. 0 = 2^N pulses, 1 = all pulses in 50 milliseconds
+### Default value is 0
+Power Monitoring Accumulation Mode;;
+0;0;0;0;;
+
+Power Test Mode;;
+0;0;0;0;;
+
+Power Monitoring Reject Coniguration;;
+0;0;0;0;;
+
+################################################################################
+### File paths to the data storage and data logging locations and functions.
+FilePaths;;
+.\Data\MCS\;
+SmartMCSData;
+SmartMCSPower;
+MCSLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
