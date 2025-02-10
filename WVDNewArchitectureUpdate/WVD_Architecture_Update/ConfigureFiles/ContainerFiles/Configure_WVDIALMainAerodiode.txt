@@ -17,7 +17,7 @@ Global Variables;;
 ### This is the relative file path(s) (identified by the .\) to the program(s) 
 ### that the container should populate the tabs with
 Relative File Paths;;
-.\Aerodiode.llb\ChildControl_Aerodiode.vi;;
+.\Aerodiode64.llb\ChildControl_Aerodiode.vi;;
 
 ### These numbers correspond to the TypeDef_MainControlSystem.ctl. They tell 
 ### the main container what to populate the tabs with.
