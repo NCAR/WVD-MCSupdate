@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
       # Instantiating a default pulse block definition
       A = PulseBlockDefinition()
-      B = deepcopy(A); C = deepcopy(A)
+      B = deepcopy(A); C = deepcopy(A); D = deepcopy(A);
       ############## Creating unique pulse definitions ##############
       PulseDefs = []
       # Timer 0 (Long pulses)
@@ -226,7 +226,7 @@ if __name__ == '__main__':
       A.Timers[Timers.Timer_1.value].SetFullPulse(300, 110, 1) # On/Off TWA
       A.Timers[Timers.Timer_2.value].SetFullPulse(290, 120, 1) # Gate
       A.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 0
-      A.Timers[Timers.Timer_5.value].SetFullPulse(300, 100, 1) # O2 TSOA (Gate Temp)
+      A.Timers[Timers.Timer_5.value].SetFullPulse(300, 100, 1) # O2 TSOA
       A.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
                                                                # Flag 6: RF1, Flag 7: RF2
       A.dacA = 52428
@@ -238,24 +238,30 @@ if __name__ == '__main__':
       B.Timers[Timers.Timer_1.value].SetFullPulse(300, 30, 1)  # On/Off TWA
       B.Timers[Timers.Timer_2.value].SetFullPulse(290, 30, 1)  # Gate
       B.Timers[Timers.Timer_3.value].SetFullPulse(300,100, 1)  # Sync 1
-      B.Timers[Timers.Timer_5.value].SetFullPulse(300, 20, 1)  # O2 TSOA (Gate Temp)
+      B.Timers[Timers.Timer_5.value].SetFullPulse(300, 20, 1)  # O2 TSOA
       B.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
                                                                # Flag 6: RF1, Flag 7: RF2
       B.dacA = 52428
       B.dacB = 65535
       PulseDefs.append(B)
       
-      # Timer 2 (Scan Mode)
-      #C.Timers[Timers.Timer_0.value].SetFullPulse(300, 0, 1) # WV TSOA
+      # Timer 2 (Long Pulse Scan Mode)
       C.Timers[Timers.Timer_1.value].SetFullPulse(300, 2000, 1) # On/Off TWA
-#      A.Timers[Timers.Timer_2.value].SetFullPulse(290, 120, 1) # Gate
       C.Timers[Timers.Timer_4.value].SetFullPulse(300, 2000, 1) # Sync 0
-#      A.Timers[Timers.Timer_5.value].SetFullPulse(300, 100, 1) # O2 TSOA (Gate Temp)
       C.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
                                                                # Flag 6: RF1, Flag 7: RF2
       C.dacA = 52428
       C.dacB = 65535
       PulseDefs.append(C)
+      
+      # Timer 3 (Short Pulse Scan Mode)
+      D.Timers[Timers.Timer_1.value].SetFullPulse(300, 2000, 1) # On/Off TWA
+      D.Timers[Timers.Timer_3.value].SetFullPulse(300, 2000, 1) # Sync 0
+      D.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+                                                               # Flag 6: RF1, Flag 7: RF2
+      D.dacA = 52428
+      D.dacB = 65535
+      PulseDefs.append(D)
     
       # Writting (or reading) pulse definitions
       ReadWriteAllPulseDefinitions(T,PulseDefs,Start=0,Stop=0,Read=False,HReadable=False)
