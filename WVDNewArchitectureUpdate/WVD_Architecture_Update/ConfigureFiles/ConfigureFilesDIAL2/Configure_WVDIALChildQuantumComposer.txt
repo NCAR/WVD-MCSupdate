@@ -88,7 +88,7 @@ Receiver Scan Duty Cycle;;
 ### The rate at which the systems interleaves online and offline pulses. Units 
 ### are in Hz
 Switch Rate;;
-40;;
+4000;;
 Receiver Scan Switch Rate;;
 4000;;
 

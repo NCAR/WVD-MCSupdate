@@ -38,4 +38,4 @@ Plot Bounds;;
 ### here are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
 ### 5) Bytes to read if the element is an IP address.
 Switch IP Address;;
-192.168.0.145; 1616; 1000; -1; 20;;
+192.168.0.145; 16161; 1000; -1; 20;;
