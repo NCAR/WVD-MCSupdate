@@ -44,15 +44,15 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;1;1;
-1;1;1;
+1;0;0;
+1;0;0;
 0;0;0;
 0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-1;1;1;
-1;1;1;
+1;0;0;
+1;0;0;
 0;0;0;
 0;0;0;;
 
@@ -68,7 +68,7 @@ Sync Select;;
 ### nearest multiple
 ns Per Bin;;
 250;250;250;
- 50; 50; 50;
+250;250;250;
 250;250;250;
 250;250;250;;
 
@@ -76,7 +76,7 @@ ns Per Bin;;
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
 16000;16000;16000;
- 8000; 8000; 8000;
+32000;32000;32000;
 16000;16000;16000;
 16000;16000;16000;;
 
@@ -115,7 +115,7 @@ Din Demux Polarity;;
 ### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
 ### will be set to 560 and non-integer values will be rounded
 Number Of Bins;;
-480;2400;480;480;;
+480;400;480;480;;
 
 ### Relative time stamp used for the MCS. This should default to 20000000
 Relative Time Step;;
