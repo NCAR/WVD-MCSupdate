@@ -14,17 +14,17 @@ Channel Multiplier Controls;;
 ### to the 4 instantiations used to access all 24 channels. Key can be found in 
 ### TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
- 2; 0; 0; 4; 0; 0;
- 3; 0; 0; 5; 0; 0;
-10;12; 0;14;16; 0;
-11;13; 0;15;17; 0;;
+ 2;10;12; 4;14;16;
+ 3;11;13; 5;15;17;
+ 0; 0; 0; 0; 0; 0;
+ 0; 0; 0; 0; 0; 0;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
-2;4;12;14;0;0;3; 5;13;15;0;0;
-7;9;17;19;0;0;8;10;18;20;0;0;
-0;0; 0; 0;0;0;0; 0; 0; 0;0;0;
-0;0; 0; 0;0;0;0; 0; 0; 0;0;0;;
+ 2; 4; 0; 0;12;14; 3; 5; 0; 0;13;15;
+ 7; 9;17;19; 0; 0; 8;10;18;20; 0; 0;
+ 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;
+ 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;;
 
 ################################################################################
 ### Setting the state of the MCS digital controls. These are all array elements
@@ -45,16 +45,16 @@ Channel Number;;
 ### Here 1 = on and 0 = off
 Enable;;
 1;0;0;
-1;0;0;
-1;1;0;
-1;1;0;;
+1;1;1;
+0;0;0;
+0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
 1;0;0;
-1;0;0;
-1;1;0;
-1;1;0;;
+1;1;1;
+0;0;0;
+0;0;0;;
 
 ### Options are 0-2. Numbers outside this will default to 0
 Sync Select;;
@@ -75,10 +75,10 @@ ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-8000;8000;8000;
-8000;8000;8000;
-8000;8000;8000;
-8000;8000;8000;;
+16000;16000;16000;
+16000;16000;16000;
+16000;16000;16000;
+16000;16000;16000;;
 
 ### This is a control to set the counter to count on the rising or falling edge 
 ### of the input TTL pulse. 1 = falling and 0 = rising
@@ -142,8 +142,8 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Power Enable;;
-1;0;0;0;0;0;
-1;0;0;0;0;0;
+1;1;0;0;1;1;
+1;1;1;1;0;0;
 0;0;0;0;0;0;
 0;0;0;0;0;0;;
 
@@ -151,15 +151,15 @@ Power Enable;;
 ### the number of pulses acculated is 2^N. Valid range is 0-15 and all non-integer
 ### numbers will be rounded.
 Accumulation Exponent;;
-8;8;8;8;0;0;
-8;8;8;8;0;0;
+8;8;8;8;8;8;
+8;8;8;8;8;8;
 0;0;0;0;0;0;
 0;0;0;0;0;0;;
 
 ### Options are 0-3. Numbers outside this will default to 0
 Demux Select;;
-0;0;0;0;3;3;
-0;0;0;0;3;3;
+0;0;0;0;0;0;
+0;0;0;0;0;0;
 3;3;3;3;3;3;
 3;3;3;3;3;3;;
 
