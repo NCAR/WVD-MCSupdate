@@ -180,7 +180,7 @@ FilePaths;;
 .\Data\MCS\;
 SmartMCSData;
 SmartMCSPower;
-MCSLogging;
+SmartMCSState;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 

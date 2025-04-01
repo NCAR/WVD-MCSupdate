@@ -120,8 +120,9 @@ Start Stop Blocks;;
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
 .\Data\SmartSwitch\;
-SmartSwitchData;
-SmartSwitchLogging;
+SmartSwitchDataUnused;
+SmartSwitchPowerUnused;
+SmartSwitchState;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
