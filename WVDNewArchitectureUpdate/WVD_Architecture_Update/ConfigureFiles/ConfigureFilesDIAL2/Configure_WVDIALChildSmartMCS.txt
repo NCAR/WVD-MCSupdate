@@ -6,9 +6,10 @@ This file is used to define the initial state of the NCAR MCS in the WVD labview
 UDP Comms;;
 192.168.0.199;24599;24599;;
 
-### default state for multiplying one channel - channel number; multiplication factor;; - 1;1;; by default tells the first channel to not scale at all.  
-Channel Multiplier Controls;;
-1;1;;
+### Constants   1) Power measurements to keep, 2) Power measurements to downsample, 
+### 3) Temperature measurements to keep, 4) Save data 1:True, 0:False
+Program Constants;;
+1800;20;1080;1;;
 
 ### Where each channel is plugged in. Note that this is in 4 rows to correspond
 ### to the 4 instantiations used to access all 24 channels. Key can be found in 
