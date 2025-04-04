@@ -93,6 +93,14 @@ Min Locking Power;;
 Scan Strategy;;
 0;1;2;3;;
 
+### This is an array describing where the lasers are plugged into the optical switch.
+### Previous versions of the code assumed that the array location is the same as the
+### location in the optical switch. This allows for that to be untrue. If for example,
+### just want to lock a single laser in the 3rd port of the switch, this allows that
+### function. Currently the MPDs are set up to make this redundent.
+Optical Switch Map;;
+0;1;2;3;;
+
 ### The type of etalonthat is being used. This corresponds to the typedefintion 
 ### TypeDef_EtalonTypes.ctl
 Etalon Types;;
