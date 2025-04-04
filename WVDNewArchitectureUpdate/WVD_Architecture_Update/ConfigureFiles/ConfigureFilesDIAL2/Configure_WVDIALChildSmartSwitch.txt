@@ -111,9 +111,11 @@ DAC Offline 2;;
 Timer Map;;
 1;2;3;4;5;6;0;0;0;7;8;9;0;0;0;0;;
 
-### The timer blocks to cycle between. 1) Starting block, 2) Ending block
+### The timer blocks to cycle between. 1) Starting block, 2) Ending block, 3) How to cycle those
+### blocks: 1: Force blocks to be the same, 0: Allow blocks to be different. Note that this control
+### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
-0;0;;
+0;0;1;;
 
 
 ################################################################################
