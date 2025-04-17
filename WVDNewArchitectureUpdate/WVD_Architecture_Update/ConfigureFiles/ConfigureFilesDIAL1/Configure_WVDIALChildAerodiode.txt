@@ -16,7 +16,7 @@ Misc;;
 ### order to match the Seed diodes. That order is typically WV-Online, WV-Offline,
 ### O2-Online, and O2-Offline
 Communication Ports;;
-COM4;COM5;COM6;COM8;;
+COM8;COM9;COM4;COM6;;
 
 ### The source of the current for the Aerodiode to use (0 = External, 1 = Internal)
 Current Source;;
@@ -45,7 +45,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-180;180;250;225;;
+200;180;170;190;;
 
 ### The offset of the Aerodiode pulsed or CW drive current in milliamps
 Offset Current;;
@@ -91,7 +91,7 @@ Max Current;;
 ### The serial numbers of each Aerodiode device. This must match the order of the comm ports
 ### above to communicate with the devices. This is insurance against comm ports being reassigned
 Serial Number;;
-2110079;2110029;2110165;2110164;;
+2110029;2110079;2110165;2110164;;
 
 ### The current to drive each of the diodes at in units of milliamps. Note that the
 ### current has to be set as an integer percent of the maximum current. Therefore
@@ -99,7 +99,7 @@ Serial Number;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Scan Current;;
-62.5;75;65;50;;
+92.5;85;55;60;;
 
 ### File paths to the data logging locations for the Aerodiode controller. The order is
 ### 1) Where to write the raw data, 2) What base name to call the logging data files, 3)
