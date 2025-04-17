@@ -53,7 +53,7 @@ def ConvertLocationNumber2Strings(FileName,BPL,MaxLoc,Type):
     # Defining a dictonary with a default value
     MapDictonary = defaultdict(lambda:"Unassigned",getattr(Define,'Define'+Type+'Map')())
     # Parsing the Location bits using the BitsPerLocation  
-    return(np.array([MapDictonary[Type] for Type in reversed(Types)]).astype(np.str))
+    return(np.array([MapDictonary[Type] for Type in reversed(Types)]).astype(str))
     
 #%%
 # This function simply places the information needed for each variable within
@@ -133,7 +133,7 @@ def ReadFileGeneral(FileName, FolderType, FileType):
     # Read file based on its type 
     if FileType in {'BDetector','Current','HKV2','Humidity','UPS','Wavemeter','WStation'}:
         # File contains only numbers so read simply
-        VarData = np.array(ReadAndPadTextFile(FileName)).astype(np.float)  
+        VarData = np.array(ReadAndPadTextFile(FileName)).astype(float)  
         # Parse out location information for files containing such info
         if FileType in {'Current','HKV2'}:
             ProcessMap={'Current':'Current','HKV2':'Thermocouple' }
@@ -156,5 +156,5 @@ def ReadFileGeneral(FileName, FolderType, FileType):
     elif FileType == 'Clock':
         # Reading data file and returning a padded array as needed 
         FileData = [' '.join(Line).split() for Line in ReadAndPadTextFile(FileName)]
-        VarData = np.array(FileData).astype(np.float) 
+        VarData = np.array(FileData).astype(float) 
     return(VarData)
