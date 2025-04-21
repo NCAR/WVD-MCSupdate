@@ -28,17 +28,10 @@ def main(WorkingDir,RSyncTargetDirs,HoursBack,RSync):
     print ("Start Processing: The date and time is - ", datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S"))
     # Creating timestamps used to find which files should be processed
     NowTime  = SPF.getFractionalHours(0)
-<<<<<<< Updated upstream
     NowDate  = datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S")
     LastTime = math.ceil(SPF.getFractionalHours(1))
     # creating Error file variable for use if needed 
     FileEnding = NowDate + '_' + datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S") + '.txt'
-=======
-    NowDate  = datetime.datetime.now(datetime.UTC).strftime("%Y%m%d")
-    LastTime = math.ceil(SPF.getFractionalHours(1))
-    # creating Error file variable for use if needed 
-    FileEnding = NowDate + '_' + datetime.datetime.now(datetime.UTC).strftime("%H%M%S") + '.txt'
->>>>>>> Stashed changes
     ErrorFile = os.path.join(WorkingDir,"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+FileEnding)
     WarningFile = os.path.join(WorkingDir,"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+FileEnding)
     # Processing files
