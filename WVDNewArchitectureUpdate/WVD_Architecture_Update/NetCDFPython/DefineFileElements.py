@@ -274,7 +274,7 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None,ListOther=
                                'String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)',
                                'Number of shots to accumulate to average out the power (2^#)',
                                'The source of the demuxing signal used to split power measurements']},
-'PowerV3':   {'FType':        'Power',
+'PowerV3':   {'FType':        'PowerV3',
               'FDescription': 'Multi-channel scalar (MCX) power monitor data file',
               'FDimNames':    ['time','nChannels','allChannels'],
               'FDimSize':     [len(List1d[0]),len(List1d[1]),len(List1d[1])*4],
