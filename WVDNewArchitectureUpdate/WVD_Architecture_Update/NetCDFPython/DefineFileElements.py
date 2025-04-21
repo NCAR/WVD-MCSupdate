@@ -23,6 +23,7 @@ def DefineFileStructure(Type):
     FileType['MCSV2']      = copy.deepcopy(FileType['MCS'])
     FileType['MCSScanV2']  = copy.deepcopy(FileType['MCS'])
     FileType['PowerV2']    = copy.deepcopy(FileType['Power'])
+    FileType['PowerV3']    = copy.deepcopy(FileType['Power'])
     return(FileType[Type])
 #%% Defining the data type map
 def DefineDataTypeMap():
@@ -40,7 +41,10 @@ def DefineThermocoupleMap():
             8:"HSRLEtalonHeatSink",9:"HSRLOven",10:"HSRLHeatSink"})
 #%% Defining maps for laser and detector channels (defined in labview)
 def MCSPowerMapV2(Type):
-    MCSPowerMap = {1:'Unknown',2:'WVOnline',3:'WVOffline',4:'O2Online',5:'O2Offline',6:'HSRL'}
+    MCSPowerMap = {1:'Unknown', 2:'WVOnline',         3:'WVOffline',         4:'O2Online',         5:'O2Offline',         6:'HSRL',
+                                7:'WVOnlineShort',    8:'WVOfflineShort',    9:'O2OnlineShort',   10:'O2OfflineShort',   11:'HSRLShort',
+                               12:'WVOnlineTWA',     13:'WVOfflineTWA',     14:'O2OnlineTWA',     15:'O2OfflineTWA',     16:'HSRLTWA',
+                               17:'WVOnlineTWAShort',18:'WVOfflineTWAShort',19:'O2OnlineTWAShort',20:'O2OfflineTWAShort',21:'HSRLTWAShort'}
     MCSPowerMap = defaultdict(lambda:'Unassigned',MCSPowerMap)
     return MCSPowerMap[Type]
 
@@ -265,11 +269,28 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None,ListOther=
               'VarType':      ['float','float32','float32','U','float32','float32'],
               'VarUnit':      ['Fractional Hours','Unitless','Pin count','Unitless','Unitless','Unitless'],
               'VarDescrip':   ['The time of collected data in UTC hours from the start of the day',
+                               'Relative time counter, 20 bit time value relative to the most recent system reset (or time reset)',
                                'Raw pin count from the MCS analog detectors (must be converted to power by _______)',
                                'String value defining what hardware was connected to each of the 12 MCS analog detection channels (Choices are: WVOnline, WVOffline, HSRL, O2Online, O2Offline, or Unknown)',
-                               'Relative time counter, 20 bit time value relative to the most recent system reset (or time reset)',
                                'Number of shots to accumulate to average out the power (2^#)',
                                'The source of the demuxing signal used to split power measurements']},
+'PowerV3':   {'FType':        'Power',
+              'FDescription': 'Multi-channel scalar (MCX) power monitor data file',
+              'FDimNames':    ['time','nChannels','allChannels'],
+              'FDimSize':     [len(List1d[0]),len(List1d[1]),len(List1d[1])*4],
+              'Transpose':    [False]*7,
+              'VarName':      ['time','RTime','Power','ChannelAssignment','AccumEx','Demux','MCSInstance'],
+              'VarCol':       [0,4,1,5,2,3,6],
+              'VarDim':       [('time'),('time'),('nChannels','time'),('allChannels'),('nChannels','time'),('nChannels','time'),('time')],
+              'VarType':      ['float','float32','float32','U','float32','float32','float32'],
+              'VarUnit':      ['Fractional Hours','Unitless','Pin count','Unitless','Unitless','Unitless','Unitless'],
+              'VarDescrip':   ['The time of collected data in UTC hours from the start of the day',
+                               'Relative time counter, 20 bit time value relative to the most recent system reset (or time reset)',
+                               'Voltage measured by the power meter',
+                               'String value defining what hardware was connected to each of the MCS analog detection channels',
+                               'Number of shots to accumulate to average out the power (2^#)',
+                               'The source of the demuxing signal used to split power measurements',
+                               'Which MCS instance power data is coming from']},
 'TCSPC':     {'FType':        'TCSPCBulk',
               'FDescription': 'Time correlated single photon counting time tag data files',
               'FDimNames':    ['time','Payload'],

@@ -140,12 +140,12 @@ def ReadFileGeneral(FileName, FolderType, FileType):
             Locations = len(VarData[1,:])-1
             VarData = [VarData[:,0],np.transpose(VarData[:,list(np.asarray(range(Locations))+1)]),
                        ConvertLocationNumber2Strings(FileName,4,Locations,ProcessMap[FileType])]        
-    elif FileType in {'Container','Etalon','LL','LaserScan','CurrentScan','EtalonScan','MCSV2','PowerV2','MCSScanV2','TCSPC'}:
+    elif FileType in {'Container','Etalon','LL','LaserScan','CurrentScan','EtalonScan','MCSV2','PowerV2','PowerV3','MCSScanV2','TCSPC'}:
         # Determing the file structure 
         DataType = Define.DefineFileStructure(FileType)       
         # Defining which function to call
         MapDictonary = {'MCS':'ReadMCSPhotonCountFile','MCSV2':'ReadMCSPhotonCountFileV2',
-                        'Power':'ReadMCSPowerFile','PowerV2':'ReadMCSPowerFileV2', 
+                        'Power':'ReadMCSPowerFile','PowerV2':'ReadMCSPowerFileV2','PowerV3':'ReadMCSPowerFileV3',
                         'MCSScanV2':'ReadMCSPhotonCountFileV2', 'TCSPC': 'ReadTCSPCTimeTags'}
         MapDictonary = defaultdict(lambda:"NotMCS",MapDictonary)
         # Converting file

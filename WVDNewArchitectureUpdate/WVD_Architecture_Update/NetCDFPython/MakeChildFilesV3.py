@@ -50,7 +50,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                                             ['LaserCurrentScan','.txt','CurrentScan']],
                          'LaserLocking':   [['LaserLocking','.txt','LL'],
                                             ['Etalon',      '.txt','Etalon']],
-                         'MCS':            [['MCSDataV2','.bin','MCSV2'],
+                         'MCS':            [['SmartMCSPower','.bin','PowerV3'],
+                                            ['MCSDataV2','.bin','MCSV2'],
                                             ['MCSPowerV2','.bin','PowerV2']],
                          'QuantumComposer':[['QuantumComposerOps','.txt','Clock']],
                          'ReceiverScan':   [['MCSDataV2','.bin','MCSScanV2'],
@@ -65,7 +66,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
     for FolderType in FileTypes2Process:
         for FileBase, FileExt, FileType in FileTypes2Process[FolderType]:
             # Defining the file base path expected
-            Where2FindData = os.path.join(WorkingDir,'Data',FolderType)           
+            Where2FindData = os.path.join(WorkingDir,'Data',FolderType)
             if os.path.isdir(Where2FindData):
                 # Looking for files and looping over them
                 FileList = SPF.getFiles(Where2FindData , FileBase, FileExt, ThenDate, ThenTime)
