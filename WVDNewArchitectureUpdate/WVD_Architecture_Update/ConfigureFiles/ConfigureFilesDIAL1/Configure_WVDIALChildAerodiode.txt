@@ -45,7 +45,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-200;180;170;190;;
+200;180;190;230;;
 
 ### The offset of the Aerodiode pulsed or CW drive current in milliamps
 Offset Current;;
