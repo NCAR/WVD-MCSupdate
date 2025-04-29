@@ -392,6 +392,9 @@ def ReadMCSPowerFileV3(Powerfile):
             for m in range(NChannels):
                 ChannelMap.append(Define.MCSPowerMapV2(ord(file.read(1))))
             ReadIndex += NChannels
+            # Reading the size of the data packet
+            DataBytes = ord(file.read(1)); ReadIndex += 1;
+            DataChannels = int((DataBytes - 12)/4)
             # Checking that the header word is there and equal to 0x4D430000
             if ''.join('{:08b}'.format(ord(file.read(1))) for i in range(0,4)) != \
                ''.join('{:08b}'.format(ord(x))            for x in '\x00\x00\x50\x4D'):
@@ -404,7 +407,7 @@ def ReadMCSPowerFileV3(Powerfile):
             RTime.append(ord(Data[0:1])+ord(Data[1:2])*2**8+((ord(Data[2:3])%2**4)*2**16))
             Instance.append(ord(Data[2:3])//2**4)
             # Reading the power information
-            for m in range(int(NChannels/4)):
+            for m in range(DataChannels):
                 # Reading data from the file
                 Data = file.read(4); ReadIndex += 4;
                 # Pre-allocating 2d-power list, accumulation exponent list, and demux list
