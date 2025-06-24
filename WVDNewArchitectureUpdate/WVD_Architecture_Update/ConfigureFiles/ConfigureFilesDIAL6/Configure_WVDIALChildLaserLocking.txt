@@ -1,0 +1,235 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the MPD main laser locking labview program.
+
+### These settings just set the names of the tab controller so the user knows
+### what is contained in each large piece
+Outter Tab Names;;
+Wavelength Settings; Scan Details; Wavelength Status; Data Saving; Data Plotting;;
+
+### These settings just set the names of the inner tab controller so the user knows
+### what is contained in each large piece
+Inner Tab Names;;
+Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
+
+### These are miscellaneous settings needed for the laser locking program. They are:
+### 1) the time between checks of the etalons in seconds, 2) the number of data scans to
+### keep and plot, 3) whether to check the lasers or not (1 = yes and 0 = no) even if
+### they should not be locked, 4) whether the program is running in software testing
+### mode or as standard (this option is currently not set up), 5) what type of switch
+### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), 6) the
+### time between locking steps in seconds, and 7) The wave meter offset in nanometers
+Misc;; 
+15; 1000; 1; 0; 9; 3; -0.00036;;
+
+### The type of laser that is being used. This corresponds to the type definition
+### TypeDef_LaserTypes.ctl. Note locking and scanning definitions are referenced to this
+### laser order.
+Laser Types;;
+2;;
+
+### The exact desired wavelengths of the lasers in nanometers (note that the wavelength
+### is in vacuum)
+Wavelength;;
+780.2467;;
+
+### The exact tolerance allowed for locking, i.e. how far off can the lasers be before
+### the locking program attempts to lock them in nanometers
+Tolerance;;
+0.00005;;
+
+### The desired starting temperature of the lasers, in degrees Celsius
+Temperature;;
+16.45000;;
+
+### The current that the diode controller should use, in milliamps
+Current;;
+160;;
+
+### This is currently not being used but these should be the proportional gain constants
+### for each laser to do locking via PID control
+P Gain;;
+0;;
+
+### This is currently not being used but these should be the integral gain constants
+### for each laser to do locking via PID control
+I Gain;;
+3;;
+
+### This is currently not being used but these should be the derivative gain constants
+### for each laser to do locking via PID control
+D Gain;;
+6;;
+
+### This is the maximum allowable time that a laser is allowed to try to lock itself 
+### before it times out, in seconds. 
+Time Limit;;
+30;;
+
+### This is a boolean operator to set whether the lasers should try to lock themselves
+### or just simply check their status (1 = yes lock and 0 = just check)
+Locking On;;
+1;;
+
+### This is a boolean operator to set whether the lasers should try to lock themselves 
+### using a single step or PID control method (1 = single step and 0 = PID)
+Locking Type;;
+1;;
+
+### This is the current and only locking method for locking the laser. This is the 
+### temperature step size to take when trying to temperature tune the lasers in 
+### degrees Celsius
+Lock Step Size;;
+0.001;;
+
+### This is the minimum power required to be read from the wavemeter to perform laser
+### locking. This value is compared to the value read by the wavemeter. The units are
+### dBm
+Min Locking Power;;
+-20;;
+
+### This is an array describing how the lasers should try to lock themselves. These 
+### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check
+### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;;
+### would check the first laser 4 times before checking the other.
+Scan Strategy;;
+0;;
+
+### The type of etalon that is being used. This corresponds to the type definition
+### TypeDef_EtalonTypes.ctl
+Etalon Types;;
+1;;
+
+### The desired temperatures of the etalons in degrees Celsius
+Etalon Temperature;;
+25.2;;
+
+### This is a boolean operator to tell the program whether to turn the TEC's on or off
+### (1 = on and 0 = off)
+Etalon TEC On;;
+1;;
+
+### File paths to the data storage and data logging locations and functions. The order is
+### 1) Where to write the raw data, 2) What base name to call the laser data files, 3)
+### What base name to call the etalon data files, 4) What base name to call the logging
+### files, 5) Where to find the User Logging program, and 6) Where to find the user
+### permissions program
+File Paths;;
+.\Data\LaserLocking\;
+LaserLockingData;
+EtalonData;
+LaserLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+### This is the computer location to find the Thor 8000 box. If multiple boxes are
+### desired, there should be multiple locations. This is likely the GPIB port that the 
+### GPIB to USB cable is associated with. The order is: 1) Type of communication (0=
+### USB, 1 = Ethernet), 2) Location string
+Thor8000 Locations;;
+0;GPIB0::10::INSTR;;
+
+### The type of control plugged into each slot in the Thor 8000 box. These numbers 
+### correspond to the type definition: TypeDef_Thor8000ControlType.ctl. This is needed
+### as a map between the local arrays to labview and the locations of the hardware.
+Thor8000 Slots;;
+8;25;28;28;28;28;28;28;;
+
+### The communication location that the wavemeter can be found at. The elements here
+### are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes,
+### and 5) Bytes to read if the element is an IP address. If not, the entry is just a
+### single value with the comm port number.
+Wavemeter Comm Port;;
+192.168.0.166;23;1000;122;1000;;
+
+### The temperature tolerance with which to scan the original temperature. For example
+### if the value is 1, the scan will run from the original temp +- 1 degree C
+Laser Scan Limits;;
+0.375;0.12;;
+Etalon Scan Limits;;
+0;0;;
+
+### The number of steps to take when scanning the laser or etalon
+Laser Scan Steps;;
+60;60;;
+Etalon Scan Steps;;
+2;2;;
+
+### The array location of the desired laser or etalon to scan
+Laser To Scan;;
+0;0;;
+Etalon To Scan;;
+0;0;;
+
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the wavemeter. The order is 1) Where to write the raw data,
+### 2) What base name to call the wavemeter data files, 3) What base name to call the
+### logging data files, 4) Where to find the User Logging program, and 5) Where to
+### find the user permissions program
+Wavemeter File Paths;;
+.\Data\ReceiverScan\;
+Wavemeter;
+WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+Hyperfine File Paths;;
+.\Data\HyperfineScan\;
+Wavemeter;
+WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the laser/etalon. The order is 1) Where to write the raw data,
+### 2) What base name to call the laser data files, 3) What base name to call the
+### etalon data files, 4) What base name to call the logging data files, 5) Where to
+### find the User Logging program, and 6) Where to find the user permissions program
+Scan File Paths;;
+.\Data\ReceiverScan\;
+LaserScanData;
+EtalonScanData;
+ScanLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+### The location of the electrical switch used to flip the Opto-electric switches.
+### The elements here are: 1) IP Address, 2) Port, 3) Communication timeout in [ms],
+### 4) Header bytes, and 5) Bytes to read if the element is an IP address.
+Hardware Switch Location;;
+192.168.0.140;1616;1000;-1;30;;
+
+### The current tolerance with which to scan the original current. For example
+### if the value is 1, the scan will run from the original current +- 1 milliamp
+### The etalon will be ignored
+Laser Scan Limits -- Current;;
+1.0;;
+Etalon Scan Limits -- Current;;
+0;;
+
+### The number of steps to take when scanning the laser current. The etalon will
+### be ignored
+Laser Scan Steps -- Current;;
+120;;
+Etalon Scan Steps -- Current;;
+1;;
+
+### The array location of the desired laser current to scan. The etalon will be ignored
+Laser To Scan -- Current;;
+3;;
+Etalon To Scan -- Current;;
+1;;
+
+### File paths to the data storage and data logging locations and functions for the
+### receiver scan for the laser/etalon. The order is 1) Where to write the raw data,
+### 2) What base name to call the laser data files, 3) What base name to call the
+### etalon data files, 4) What base name to call the logging data files, 5) Where to
+### find the User Logging program, and 6) Where to find the user permissions program
+Current Scan File Paths;;
+.\Data\HyperfineScan\;
+LaserCurrentScanData;
+EtalonCurrentScanData;
+CurrentScanLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;

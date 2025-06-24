@@ -1,0 +1,17 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the MPD main thermocouple labview program.
+
+### Settings used to control the balanced detector's data seat. Variables are: Detector wait 
+### period (time between data readings); number of samples per reading; pysical location of
+### the balanced detector
+Balanced Detector Settings;;
+0.2;5;Dev1/ai0;10000;;
+
+### 
+FilePaths;;
+.\Data\HyperfineScan\;
+BalancedDetector;
+BalancedDetLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;

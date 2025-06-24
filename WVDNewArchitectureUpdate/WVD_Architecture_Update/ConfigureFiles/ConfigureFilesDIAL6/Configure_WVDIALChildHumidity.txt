@@ -1,0 +1,42 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the MPD main humidity sensor labview program.
+
+### This is where the Labview code should find the humidity sensor. The elements here are:
+### 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and 5) Bytes
+### to read if the element is an IP address.
+IP Address;;
+192.168.0.170; 161; 750; -1; -1;;
+
+### These are miscellaneous variables that are read and used as default values
+### by the humidity sensor. These are currently: 1) the update period of the humidity
+### sensor in seconds, 2) the number of measurements to save, and then requirements to
+### turn on the hygrostat including: 3) Measurements to average, 4) Required run time,
+### 5) Required cadance 6) Limit of relative humidity, 7) 1= Allow heaters to turn on or
+### 0=Don't allow heaters on and finally 8) the number of humidity sensor variables to keep.
+Child Variables;;
+4;4500;300;10;12;50;0;5;;
+
+
+### File paths to the data storage and data logging locations and functions. The order is
+### 1) Where to write the raw data, 2) What base name to call the humidity sensor data files,
+### 3) What base name to call the logging files, 4) Where to find the user logging program,
+### and 5) Where to find the user permissions program
+FilePaths;;
+.\Data\HumiditySensor\;
+Humidity;
+HumLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+### This is currently unused but was intended to be used as the starting point to 
+### set the initial state of the plot bounds. It is likely not necessary if
+### we keep autoscaling the plots.
+Plot Bounds;;
+1;2;3;4;5;6;7;8;;
+
+### This is where the Labview code should find the switch to turn on the hygrostat. The elements
+### here are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
+### 5) Bytes to read if the element is an IP address.
+Switch IP Address;;
+192.168.0.145; 16161; 1000; -1; 20;;

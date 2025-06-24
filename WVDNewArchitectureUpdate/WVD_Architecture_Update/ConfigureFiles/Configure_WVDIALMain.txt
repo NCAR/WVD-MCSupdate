@@ -31,4 +31,4 @@ ContainerLogging;;
 
 ### the name of the dial unit used to grab the correct config files
 Unit Name;;
-DIAL2;;
+DIAL6;;
