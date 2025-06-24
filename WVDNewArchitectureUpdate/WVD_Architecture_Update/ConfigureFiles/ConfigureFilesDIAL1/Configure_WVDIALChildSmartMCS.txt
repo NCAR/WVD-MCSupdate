@@ -16,7 +16,7 @@ Program Constants;;
 ### TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
  2;12;10; 4;16;14;
- 0; 0; 0; 0; 0; 0;
+ 3;13;11; 5;17;15;
  0; 0; 0; 0; 0; 0;
  0; 0; 0; 0; 0; 0;;
 
@@ -46,14 +46,14 @@ Channel Number;;
 ### Here 1 = on and 0 = off
 Enable;;
 1;1;1;
-0;0;0;
+1;1;1;
 0;0;0;
 0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
 1;1;1;
-0;0;0;
+1;1;1;
 0;0;0;
 0;0;0;;
 
@@ -116,7 +116,7 @@ Din Demux Polarity;;
 ### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
 ### will be set to 560 and non-integer values will be rounded
 Number Of Bins;;
-560;400;300;200;;
+560;560;300;200;;
 
 ### Relative time stamp used for the MCS. This should default to 20000000
 Relative Time Step;;
