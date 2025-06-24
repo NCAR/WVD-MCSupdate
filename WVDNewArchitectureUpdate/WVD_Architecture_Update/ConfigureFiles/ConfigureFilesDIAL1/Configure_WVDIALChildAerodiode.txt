@@ -16,7 +16,7 @@ Misc;;
 ### order to match the Seed diodes. That order is typically WV-Online, WV-Offline,
 ### O2-Online, and O2-Offline
 Communication Ports;;
-COM8;COM9;COM4;COM6;;
+COM8;COM9;COM10;COM11;;
 
 ### The source of the current for the Aerodiode to use (0 = External, 1 = Internal)
 Current Source;;
