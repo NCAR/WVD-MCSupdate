@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-31.092000;16.614000;18.003000;13.375000;;
+31.137000;16.680000;18.850000;13.437000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -101,7 +101,7 @@ Scan Strategy;;
 ### just want to lock a single laser in the 3rd port of the switch, this allows that
 ### function. Currently the MPDs are set up to make this redundent.
 Optical Switch Map;;
-0;1;2;3;;
+1;0;2;3;;
 
 ### The type of etalon that is being used. This corresponds to the type definition
 ### TypeDef_EtalonTypes.ctl
