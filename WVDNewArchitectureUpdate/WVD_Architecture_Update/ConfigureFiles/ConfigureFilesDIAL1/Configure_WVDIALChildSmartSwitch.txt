@@ -35,7 +35,7 @@ Total Pulses;;
 
 ### Duration of the TSOA pulse. Units are [us]
 Pulse Duration;;
-1;1;;
+1;0.5;;
 
 ### Boolean value to force the trigger to happen at the center of the TSOA pulse. 
 ### 0: Start trigger with the start of the TSOA, 1: Move trigger to the center of the 
@@ -115,7 +115,7 @@ Timer Map;;
 ### blocks: 1: Force blocks to be the same, 0: Allow blocks to be different. Note that this control
 ### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
-0;0;1;;
+0;1;0;;
 
 
 ################################################################################
