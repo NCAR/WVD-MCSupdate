@@ -7,6 +7,7 @@ Created on Wed Jan 18 15:48:32 2023
 """
 from copy import deepcopy
 from enum import Enum, unique
+from time import sleep
 from ClassDef_Communications import TCP
 
 #%% Defining enums for settings
@@ -163,10 +164,10 @@ class PulseTimer:
     
 class PulseBlockDefinition(WordFormatter):
     def __init__(self):
-        self.PulseRepTime     = 12500    # Pulse repetition time [in fpga cycles]
-        self.PulseNum         = 2       # Generate this many pulses
+        self.PulseRepTime     = 14200    # Pulse repetition time [in fpga cycles]
+        self.PulseNum         = 1        # Generate this many pulses
         self.OfflineNum       = 1        # Number of online pulses 
-        self.OnlineNum        = 1        # Number of offline pulses
+        self.OnlineNum        = 0        # Number of offline pulses
         self.BlockPostTime    = 0        # Time at the end of the group of pulses, [in cycles]
         self.ControlFlags     = 0        # Set the CONTROL_FLAGS output to this value
         self.dacA             = 52428    # Set DAC voltage A to these values
@@ -213,55 +214,72 @@ def ReadWriteAllPulseDefinitions(T,PulseDefs,Start=0,Stop=0,Pulses2Execute=0,Rea
 #%% Formatting string commands to be sent to the Smart Switch
 if __name__ == '__main__':
       # Instantiating a TCP connection
-      T = TCP(IPAdd='192.168.0.143',Port=2222,Timeout=1,HeaderLen=-1,BodyLen=-1,TermChar='\r\n')
+      T = TCP(IPAdd='192.168.0.150',Port=2222,Timeout=1,HeaderLen=-1,BodyLen=-1,TermChar='\r\n')
       T.Connect()
 
       # Instantiating a default pulse block definition
       A = PulseBlockDefinition()
-      B = deepcopy(A); C = deepcopy(A); D = deepcopy(A);
+      B = deepcopy(A); C = deepcopy(A); D = deepcopy(A); E = deepcopy(A);
       ############## Creating unique pulse definitions ##############
       PulseDefs = []
-      # Timer 0 (Long pulses)
-      A.Timers[Timers.Timer_0.value].SetFullPulse(300, 100, 1) # WV TSOA
-      A.Timers[Timers.Timer_1.value].SetFullPulse(300, 110, 1) # On/Off TWA
-      A.Timers[Timers.Timer_2.value].SetFullPulse(290, 120, 1) # Gate
-      A.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 0
-      A.Timers[Timers.Timer_5.value].SetFullPulse(300, 100, 1) # O2 TSOA
-      A.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-                                                               # Flag 6: RF1, Flag 7: RF2
-      A.dacA = 52428
-      A.dacB = 65535
+      # Timer 0 (Parallel TSOA)
+      A.Timers[Timers.Timer_0.value].SetFullPulse(300, 110, 1) # TWA
+      A.Timers[Timers.Timer_1.value].SetFullPulse(300, 100, 1) # TSOA
+      A.Timers[Timers.Timer_2.value].SetFullPulse(290, 125, 1) # Gate
+      A.Timers[Timers.Timer_3.value].SetFullPulse(300, 100, 1) # Sync 0
+#      A.Timers[Timers.Timer_4.value].SetFullPulse(300, 140, 1) # Sync 1
+      A.ControlFlags = (1<<2) + (1<<5) + (0<<6) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+                                                               # Flag 5: RF1, Flag 6: RF2
+      A.OfflineNum       = 0        # Number of online pulses
+      A.OnlineNum        = 1        # Number of offline pulses
       PulseDefs.append(A)
 
-      # Timer 1 (Short Pulses)
-      B.Timers[Timers.Timer_0.value].SetFullPulse(300, 20, 1)  # WV TSOA
-      B.Timers[Timers.Timer_1.value].SetFullPulse(300, 30, 1)  # On/Off TWA
-      B.Timers[Timers.Timer_2.value].SetFullPulse(290, 30, 1)  # Gate
-      B.Timers[Timers.Timer_3.value].SetFullPulse(300,100, 1)  # Sync 1
-      B.Timers[Timers.Timer_5.value].SetFullPulse(300, 20, 1)  # O2 TSOA
-      B.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-                                                               # Flag 6: RF1, Flag 7: RF2
-      B.dacA = 52428
-      B.dacB = 65535
+      # Timer 1 (Perpendicular TSOA )
+      B.Timers[Timers.Timer_0.value].SetFullPulse(300, 110, 1) # TWA
+      B.Timers[Timers.Timer_1.value].SetFullPulse(300, 100, 1) # TSOA
+      B.Timers[Timers.Timer_2.value].SetFullPulse(300, 120, 1) # Gate
+      B.Timers[Timers.Timer_3.value].SetFullPulse(300, 100, 1) # Sync 0
+#      B.Timers[Timers.Timer_4.value].SetFullPulse(300, 140, 1) # Sync 1
+      B.ControlFlags = (1<<2) + (1<<5) + (0<<6) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+                                                                # Flag 5: RF1, Flag 6: RF2
+      B.OfflineNum       = 1        # Number of online pulses
+      B.OnlineNum        = 0        # Number of offline pulses
       PulseDefs.append(B)
       
-      # Timer 2 (Long Pulse Scan Mode)
-      C.Timers[Timers.Timer_1.value].SetFullPulse(300, 2000, 1) # On/Off TWA
-      C.Timers[Timers.Timer_4.value].SetFullPulse(300, 2000, 1) # Sync 0
-      C.ControlFlags = (1<<2) + (1<<6) + (0<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-                                                               # Flag 6: RF1, Flag 7: RF2
-      C.dacA = 52428
-      C.dacB = 65535
+      # Timer 2 (Parallel TSOA - Short Pulses)
+      C.Timers[Timers.Timer_1.value].SetFullPulse(300, 20, 1) # TSOA
+      C.Timers[Timers.Timer_2.value].SetFullPulse(300, 40, 1) # Gate
+#      C.Timers[Timers.Timer_3.value].SetFullPulse(300, 130, 1) # Sync 0
+      C.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 1
+      C.ControlFlags = (1<<2) + (0<<5) + (1<<6) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+                                                                # Flag 5: RF1, Flag 6: RF2
+      C.OfflineNum       = 0        # Number of online pulses
+      C.OnlineNum        = 1        # Number of offline pulses
       PulseDefs.append(C)
-      
-      # Timer 3 (Short Pulse Scan Mode)
-      D.Timers[Timers.Timer_1.value].SetFullPulse(300, 2000, 1) # On/Off TWA
-      D.Timers[Timers.Timer_3.value].SetFullPulse(300, 2000, 1) # Sync 0
-      D.ControlFlags = (1<<2) + (0<<6) + (1<<7) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
-                                                               # Flag 6: RF1, Flag 7: RF2
-      D.dacA = 52428
-      D.dacB = 65535
+
+      # Timer 3 (Perpendicular TSOA - Short Pulses )
+      D.Timers[Timers.Timer_1.value].SetFullPulse(300, 20, 1) # TSOA
+      D.Timers[Timers.Timer_2.value].SetFullPulse(300, 40, 1) # Gate
+#      D.Timers[Timers.Timer_3.value].SetFullPulse(300, 130, 1) # Sync 0
+      D.Timers[Timers.Timer_4.value].SetFullPulse(300, 100, 1) # Sync 1
+      D.ControlFlags = (1<<2) + (0<<5) + (1<<6) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+                                                                # Flag 5: RF1, Flag 6: RF2
+      D.OfflineNum       = 1        # Number of online pulses
+      D.OnlineNum        = 0        # Number of offline pulses
       PulseDefs.append(D)
+
+      # Timer 4 (Receiver scan)
+      E.Timers[Timers.Timer_0.value].SetFullPulse(300, 2000, 1) # TWA
+      #A.Timers[Timers.Timer_1.value].SetFullPulse(300, 100, 1) # TSOA
+      #A.Timers[Timers.Timer_2.value].SetFullPulse(290, 125, 1) # Gate
+      E.Timers[Timers.Timer_3.value].SetFullPulse(300, 100, 1) # Sync 0
+#      A.Timers[Timers.Timer_4.value].SetFullPulse(300, 140, 1) # Sync 1
+      E.ControlFlags = (1<<2) + (1<<5) + (0<<6) + (1<<20);     # Flag 2 & 20: Timer 2 Inverted,
+                                                               # Flag 5: RF1, Flag 6: RF2
+      E.OfflineNum       = 0        # Number of online pulses
+      E.OnlineNum        = 1        # Number of offline pulses
+      PulseDefs.append(E)
+
     
       # Writting (or reading) pulse definitions
       ReadWriteAllPulseDefinitions(T,PulseDefs,Start=0,Stop=0,Read=False,HReadable=False)
