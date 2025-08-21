@@ -8,7 +8,7 @@ and one is selected based on the desired setup from the user.
 ### 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
 ### 5) Bytes to read.
 IP Address;;
-192.168.0.136; 2101; 1500; -1; 50;;
+192.168.0.150; 2222; 1500; -1; 50;;
 
 ### Update times used to check the quantum composer. The first number is the 
 ### Fast update time which is how often to check if the system is in run/stop 
