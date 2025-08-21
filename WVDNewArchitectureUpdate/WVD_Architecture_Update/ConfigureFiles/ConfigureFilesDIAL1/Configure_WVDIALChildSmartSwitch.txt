@@ -31,7 +31,7 @@ Duty Cycle;;
 
 ### Total number of pulses to run for each pulse block
 Total Pulses;;
-4;2;;
+2;2;;
 
 ### Duration of the TSOA pulse. Units are [us]
 Pulse Duration;;
