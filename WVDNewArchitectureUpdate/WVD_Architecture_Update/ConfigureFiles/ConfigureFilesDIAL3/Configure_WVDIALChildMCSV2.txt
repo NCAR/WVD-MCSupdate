@@ -45,7 +45,7 @@ ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-16000;16000;16000;16000;16000;16000;16000;16000;;
+14000;14000;14000;14000;14000;14000;14000;14000;;
 
 ### This is a control to set the counter to count on the rising or falling edge 
 ### of the input TTL pulse. 1 = falling and 0 = rising
@@ -88,7 +88,7 @@ Din Demux Polarity;;
 ### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
 ### will be set to 560 and non-integer values will be rounded
 Number Of Bins;;
-490;;
+560;;
 
 ### Telling the MCS to reset itself. This should default to off (off = 0, on = 1)
 User Reset;;
