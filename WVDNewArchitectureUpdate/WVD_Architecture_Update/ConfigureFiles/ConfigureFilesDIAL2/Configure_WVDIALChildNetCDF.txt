@@ -8,7 +8,7 @@ This file is used to define the initial state of the MPD main NetCDF File Writer
 ### and 5) Second backup drive location
 VariousPaths;;
 .;
-C:\Users\h2odial\Anaconda3\python.exe;
+C:\Users\mpd\Anaconda3\python.exe;
 .\NetCDFPython\NetCDFScript.py;
 .\NetCDFPython\rsyncDirect.py;
 D:\MPDBackup;
