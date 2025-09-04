@@ -88,9 +88,9 @@ Receiver Scan Duty Cycle;;
 ### The rate at which the systems interleaves online and offline pulses. Units 
 ### are in Hz
 Switch Rate;;
-40;;
+3521.125;;
 Receiver Scan Switch Rate;;
-4000;;
+3521.125;;
 
 ### The duration of the pulse (duration of the current pulse delivered to the 
 ### TSOA). Units are microseconds.
@@ -101,9 +101,9 @@ Receiver Scan Pulse Duration;;
 
 ### The pulse repetition frequency of all laser pulses. Units are in Hz
 PRF;;
-8000;;
+7042.25;;
 Receiver Scan PRF;;
-8000;;
+7042.25;;
 
 ### The rise time of the electro-optical switches from closed to open. Units
 ### are in microseconds.
