@@ -15,15 +15,15 @@ Program Constants;;
 ### to the 4 instantiations used to access all 24 channels. Key can be found in 
 ### TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
- 2;10;12; 4;14;16;
- 3;11;13; 5;15;17;
+ 2;12;10; 4;16;14;
+ 3;13;11; 5;17;15;
  0; 0; 0; 0; 0; 0;
  0; 0; 0; 0; 0; 0;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
  2; 4; 0; 0;12;14; 3; 5; 0; 0;13;15;
- 7; 9; 0; 0;17;19; 8;10; 0; 0;18;20;
+ 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;
  0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;
  0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0;;
 
@@ -45,15 +45,27 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;0;0;
 1;1;1;
+1;1;1;
+0;0;0;
+0;0;0;;
+
+Receiver Scan Enable;;
+1;1;1;
+0;0;0;
 0;0;0;
 0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-1;0;0;
 1;1;1;
+1;1;1;
+0;0;0;
+0;0;0;;
+
+Receiver Scan Demux;;
+1;1;1;
+0;0;0;
 0;0;0;
 0;0;0;;
 
@@ -64,10 +76,22 @@ Sync Select;;
 0;0;0;
 0;0;0;;
 
+Receiver Scan Sync Select;;
+0;0;0;
+0;0;0;
+0;0;0;
+0;0;0;;
+
 ### Bin timing is in 5 ns incriments with valid range 10-20475. Numbers outside this
 ### range will be set to 250 and values not even multiples of 5 will be rounded to the 
 ### nearest multiple
 ns Per Bin;;
+50;50;50;
+50;50;50;
+50;50;50;
+50;50;50;;
+
+Receiver Scan ns Per Bin;;
 250;250;250;
 250;250;250;
 250;250;250;
@@ -76,10 +100,16 @@ ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-16000;16000;16000;
-16000;16000;16000;
-16000;16000;16000;
-16000;16000;16000;;
+14000;14000;14000;
+14000;14000;14000;
+14000;14000;14000;
+14000;14000;14000;;
+
+Receiver Scan Shots Per Profile;;
+7000;7000;7000;
+7000;7000;7000;
+7000;7000;7000;
+7000;7000;7000;;
 
 ### This is a control to set the counter to count on the rising or falling edge 
 ### of the input TTL pulse. 1 = falling and 0 = rising
@@ -116,7 +146,10 @@ Din Demux Polarity;;
 ### Number of bins to accumulate. Valid range is 2-4095. Values outside of this 
 ### will be set to 560 and non-integer values will be rounded
 Number Of Bins;;
-480;400;300;200;;
+2800;2800;2800;2800;;
+
+Receiver Scan Number Of Bins;;
+100;100;100;100;;
 
 ### Relative time stamp used for the MCS. This should default to 20000000
 Relative Time Step;;
@@ -144,7 +177,7 @@ Channel Number;;
 ### Here 1 = on and 0 = off
 Power Enable;;
 1;1;0;0;1;1;
-1;1;0;0;1;1;
+0;0;0;0;0;0;
 0;0;0;0;0;0;
 0;0;0;0;0;0;;
 
@@ -179,7 +212,15 @@ Power Monitoring Reject Coniguration;;
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
 .\Data\MCS\;
-SmartMCSData;
+MCSDataV2;
+SmartMCSPower;
+SmartMCSState;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+Receiver Scan FilePaths;;
+.\Data\ReceiverScan\;
+MCSDataV2;
 SmartMCSPower;
 SmartMCSState;
 .\ContainerResources.llb\Log_SetUserComment.vi;
