@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), 6) the
 ### time between locking steps in seconds, and 7) The wave meter offset in nanometers
 Misc;; 
-15; 1000; 1; 0; 9; 3; 0.00018;;
+15; 1000; 1; 0; 9; 3; 0.00012;;
 
 ### The type of laser that is being used. This corresponds to the type definition
 ### TypeDef_LaserTypes.ctl. Note locking and scanning definitions are referenced to this
@@ -31,7 +31,7 @@ Laser Types;;
 ### The exact desired wavelengths of the lasers in nanometers (note that the wavelength
 ### is in vacuum)
 Wavelength;;
-828.19600;828.29515;769.7962;770.1085;;
+828.19800;828.29715;769.7962;770.1085;;
 
 ### The exact tolerance allowed for locking, i.e. how far off can the lasers be before
 ### the locking program attempts to lock them in nanometers
@@ -40,11 +40,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-29.402000;25.253000;9.796000;15.930000;;
+29.462000;14.131000;9.809000;15.939000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-120;110;100;96;;
+120;100;100;96;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -95,6 +95,14 @@ Min Locking Power;;
 Scan Strategy;;
 0;1;2;3;;
 
+### This is an array describing where the lasers are plugged into the optical switch.
+### Previous versions of the code assumed that the array location is the same as the
+### location in the optical switch. This allows for that to be untrue. If for example,
+### just want to lock a single laser in the 3rd port of the switch, this allows that
+### function. Currently the MPDs are set up to make this redundent.
+Optical Switch Map;;
+0;1;2;3;;
+
 ### The type of etalon that is being used. This corresponds to the type definition
 ### TypeDef_EtalonTypes.ctl
 Etalon Types;;
@@ -102,7 +110,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees Celsius
 Etalon Temperature;;
-20.0;29.75;;
+40.0;29.5;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
@@ -203,14 +211,14 @@ Hardware Switch Location;;
 ### if the value is 1, the scan will run from the original current +- 1 milliamp
 ### The etalon will be ignored
 Laser Scan Limits -- Current;;
-1.0;;
+1.5;;
 Etalon Scan Limits -- Current;;
 0;;
 
 ### The number of steps to take when scanning the laser current. The etalon will
 ### be ignored
 Laser Scan Steps -- Current;;
-60;;
+120;;
 Etalon Scan Steps -- Current;;
 1;;
 

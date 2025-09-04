@@ -105,12 +105,11 @@ def ParseMCSCountsHeaderV2(Header,ChannelAssign):
 
 #%%
 def ReadMCSCounts(Bins,File,ReadIndex,ExpectedChannel):
-    ExpectedChannel = ExpectedChannel % 6
     # Reading the data from the MCS
     DataArray = []
     for v in range(0, Bins):
         data = File.read(4)
-        ReadIndex = ReadIndex+4          
+        ReadIndex = ReadIndex+4
         if ord(data[3:4])/16 != ExpectedChannel:
             # Warning that header & data body don't have same channel number
             ReadError = 'The MCS count channel and header channel do not match. ~RS'
