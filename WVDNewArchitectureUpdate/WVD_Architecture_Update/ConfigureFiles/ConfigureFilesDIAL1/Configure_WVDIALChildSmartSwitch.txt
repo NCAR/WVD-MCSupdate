@@ -55,7 +55,7 @@ Extra TWA;;
 Extra Gate;;
 0.1;0.1;;
 
-### Which sync to use to tell teh MCS to start. Options are: 0, 1, 2, or 3.
+### Which sync to use to tell the MCS to start. Options are: 0, 1, 2, or 3.
 Sync;;
 0;0;;
 
@@ -106,7 +106,7 @@ DAC Online 2;;
 DAC Offline 2;;
 65535;65535;;
 
-### A map to used to define to define what is connected to each SmartSwitch timer. Definitions
+### A map to used to define what is connected to each SmartSwitch timer. Definitions
 ### are provided in: TypeDef_SmartSwitchTimerType.ctl. 
 Timer Map;;
 1;2;3;4;5;6;0;0;0;7;8;9;0;0;0;0;;
