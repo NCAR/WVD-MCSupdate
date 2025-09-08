@@ -20,22 +20,37 @@ Size;;
 PRF;;
 7000;7000;;
 
+Receiver Scan PRF;;
+7000;;
+
 ### Time after pulse block is executed to wait. Units are [us]
 Block Post Time;;
 0;0;;
+
+Receiver Scan Block Post Time;;
+0;;
 
 ### Duty cycle of online/offline laser to use. This is specifically duty cycle of the 
 ### offline laser where the online will be the compliment. 
 Duty Cycle;;
 0.5;0.5;;
 
+Receiver Scan Duty Cycle;;
+0.5;;
+
 ### Total number of pulses to run for each pulse block
 Total Pulses;;
 2;2;;
 
+Receiver Scan Total Pulses;;
+2;;
+
 ### Duration of the TSOA pulse. Units are [us]
 Pulse Duration;;
 1;0.5;;
+
+Receiver Scan Pulse Duration;;
+20;;
 
 ### Boolean value to force the trigger to happen at the center of the TSOA pulse. 
 ### 0: Start trigger with the start of the TSOA, 1: Move trigger to the center of the 
@@ -43,11 +58,17 @@ Pulse Duration;;
 Center Pulse;;
 0;0;;
 
+Receiver Scan Center Pulse;;
+0;;
+
 ### Extra time to add to the Traveling Wave Amplifier. This value is tacked onto the end
 ### of the pulse such that the TWA pulse length is Pulse Duration + Extra TWA. Units are
 ### [us]
 Extra TWA;;
 0.1;0.1;;
+
+Receiver Scan Extra TWA;;
+0;;
 
 ### Extra time to add to the Gate. This value is tacked onto the start and the end
 ### of the pulse such that the gate pulse length is Pulse Duration + Extra TWA + 2x
@@ -55,9 +76,15 @@ Extra TWA;;
 Extra Gate;;
 0.1;0.1;;
 
+Receiver Scan Extra Gate;;
+0;;
+
 ### Which sync to use to tell the MCS to start. Options are: 0, 1, 2, or 3.
 Sync;;
 0;0;;
+
+Receiver Scan Sync;;
+0;;
 
 ### Which MCS instance to target. In the current firmware, data channels 0-5 reside on  
 ### MCS 0, data channels 6-11 reside on MCS 1, data channels 12-17 reside on MCS 2, and 
@@ -65,22 +92,37 @@ Sync;;
 MCS Instance;;
 0;1;;
 
+Receiver Scan MCS Instance;;
+0;;
+
 ### Boolean value for how the TSOA Key should be implimented. For now, please just leave 
 ### as 1. Other options will cause software issues. 
 TSOA Key;;
 1;1;;
 
+Receiver Scan TSOA Key;;
+1;;
+
 ### Option defining how the TSOA should pulse. 0: Operations, 1: Off
 TSOA Setting;;
 0;0;;
+
+Receiver Scan TSOA Setting;;
+1;;
+
+### Option defining how the Gate should pulse. 0: Operations, 1: Off
+Gate Setting;;
+0;0;;
+
+Receiver Scan Gate Setting;;
+1;;
 
 ### Option defining how the 1x1 switch should pulse. 0: Operations, 1: Off
 1x1 Setting;;
 0;0;;
 
-### Option defining how the Gate should pulse. 0: Operations, 1: Off
-Gate Setting;;
-0;0;;
+Receiver Scan 1x1 Setting;;
+0;;
 
 ### Used to scale the output power for the TWA. This setting is for DAC output 0 and is 
 ### meant to be hooked to the WV Online laser. Variable is 16 bits so the bounds are 0 -> 
@@ -88,11 +130,17 @@ Gate Setting;;
 DAC Online 1;;
 65535;65535;;
 
+Receiver Scan DAC Online 1;;
+20000;;
+
 ### Used to scale the output power for the TWA. This setting is for DAC output 1 and is 
 ### meant to be hooked to the WV Offline laser. Variable is 16 bits so the bounds are 0 -> 
 ### 65535. To convert to voltage: Voltage = 5 x Value/65535. 
 DAC Offline 1;;
 65535;65535;;
+
+Receiver Scan DAC Offline 1;;
+20000;;
 
 ### Used to scale the output power for the TWA. This setting is for DAC output 2 and is 
 ### meant to be hooked to the O2 Online laser. Variable is 16 bits so the bounds are 0 -> 
@@ -100,11 +148,17 @@ DAC Offline 1;;
 DAC Online 2;;
 65535;65535;;
 
+Receiver Scan DAC Online 2;;
+20000;;
+
 ### Used to scale the output power for the TWA. This setting is for DAC output 3 and is 
 ### meant to be hooked to the O2 Offline laser. Variable is 16 bits so the bounds are 0 -> 
 ### 65535. To convert to voltage: Voltage = 5 x Value/65535. 
 DAC Offline 2;;
 65535;65535;;
+
+Receiver Scan DAC Offline 2;;
+20000;;
 
 ### A map to used to define what is connected to each SmartSwitch timer. Definitions
 ### are provided in: TypeDef_SmartSwitchTimerType.ctl. 
@@ -116,6 +170,9 @@ Timer Map;;
 ### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
 0;1;0;;
+
+Receiver Scan Start Stop Blocks;;
+0;0;1;;
 
 
 ################################################################################
