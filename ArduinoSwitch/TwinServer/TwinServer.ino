@@ -110,7 +110,7 @@ void executeRequest(EthernetClient* client, String* request){
   char command = parseUserCommand(request);
   // 'w********': Writes the output pins of device, 
   // 'l********': Does the same but only allows writting to pin 7/8/9
-  if('l' == command || 'w' == command) {
+  if('L' == command || 'w' == command) {
     String writeVals = request->substring(1,9);
     for(int i = 0; i < BUF_SIZE; i++) {
       int pinState = writeVals.charAt(i);
@@ -122,10 +122,13 @@ void executeRequest(EthernetClient* client, String* request){
     sendResponse(client, "k");
   }
   // 'h*': Sets pin 6 of the device (intended to be wired to the hygrostat)
-  else if('h' == command) {
+  else if('h' == command || 'S' == command) {
     String writeVals = request->substring(1,2);
     int pinState = writeVals.charAt(0);
-    int pinNum = 6;
+    int pinNum = 2;
+    if ('h' == command){
+      int pinNum = 6;
+    }
     setDigital(pinState, pinNum);
     sendResponse(client, "k");
   }
