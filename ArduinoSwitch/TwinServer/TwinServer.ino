@@ -125,7 +125,7 @@ void executeRequest(EthernetClient* client, String* request){
   else if('h' == command || 'S' == command) {
     String writeVals = request->substring(1,2);
     int pinState = writeVals.charAt(0);
-    int pinNum = 2;
+    int pinNum = 6;
     if ('h' == command){
       int pinNum = 6;
     }
