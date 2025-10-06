@@ -21,7 +21,7 @@ if __name__ == '__main__':
     ParentDir = os.path.join(LogPath,DailyFolder)
     
     # Definign the file paths to rsync
-    syncFrom = '/cygdrive/c/Users/h2odial/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data/'
+    syncFrom = '/cygdrive/c/Users/mpd/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data/'
     syncToA   = '/cygdrive/d/MPDBackup/'
     syncToB   = '/cygdrive/e/MPDBackup/'
     
