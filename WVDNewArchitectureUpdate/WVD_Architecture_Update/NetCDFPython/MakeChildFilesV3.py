@@ -42,24 +42,25 @@ def processGeneral(FolderType,FileType,FileName,NetCDFOutputPath,Header):
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,WorkingDir,NetCDFPath,Header):
     # Defining the files to be written (File base name, file extension, local file type tag))
     FileTypes2Process = {'Container':      [['ContainerLogging','.txt','Container']],
-                         'Current':        [['Current','.txt','Current']],
-                         'Housekeeping':   [['HousekeepingV2','.txt','HKV2']],
-                         'HumiditySensor': [['Humidity','.txt','Humidity']],
-                         'HyperfineScan':  [['BalancedDetector','.txt','BDetector'],
+                          'Current':        [['Current','.txt','Current']],
+                          'Housekeeping':   [['HousekeepingV2','.txt','HKV2']],
+                          'HumiditySensor': [['Humidity','.txt','Humidity']],
+                          'HyperfineScan':  [['BalancedDetector','.txt','BDetector'],
                                             ['Wavemeter','.txt','Wavemeter'],
                                             ['LaserCurrentScan','.txt','CurrentScan']],
-                         'LaserLocking':   [['LaserLocking','.txt','LL'],
+                          'LaserLocking':   [['LaserLocking','.txt','LL'],
                                             ['Etalon',      '.txt','Etalon']],
-                         'MCS':            [['MCSDataV2','.bin','MCSV2'],
+                          'MCS':            [['MCSDataV2','.bin','MCSV2'],
                                             ['MCSPowerV2','.bin','PowerV2']],
-                         'QuantumComposer':[['QuantumComposerOps','.txt','Clock']],
-                         'ReceiverScan':   [['MCSDataV2','.bin','MCSScanV2'],
+                          'QuantumComposer':[['QuantumComposerOps','.txt','Clock']],
+                          'ReceiverScan':   [['MCSDataV2','.bin','MCSScanV2'],
                                             ['Wavemeter','.txt','Wavemeter'],
                                             ['LaserScanData','.txt','LaserScan'],
                                             ['EtalonScanData','.txt','EtalonScan']],
-                         #'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
-                         'UPS':            [['UPS','.txt','UPS']],
-                         'WeatherStation': [['WeatherStation','.txt','WStation']]}
+                          #'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
+                          'UPS':            [['UPS','.txt','UPS']],
+                          'WeatherStation': [['WeatherStation','.txt','WStation']]}
+    # FileTypes2Process = {'MCS':            [['MCSDataV2','.bin','MCSV2']],}
 #    FileTypes2Process = {'TCSPC':          [['TCSPC','.bin','TCSPC']]}
     # Looping over all possible file types and looking for files matching that
     for FolderType in FileTypes2Process:

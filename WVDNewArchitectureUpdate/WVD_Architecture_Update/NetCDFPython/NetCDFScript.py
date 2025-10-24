@@ -69,7 +69,7 @@ if __name__ == '__main__':
     try: 
         WorkingDir = sys.argv[1]
     except:
-        WorkingDir = 'C:\\Users\\h2odial\\WVD-MCSupdate\\WVDNewArchitectureUpdate\\WVD_Architecture_Update'
+        WorkingDir = 'C:\\Users\\mpd\\WVD-MCSupdate\\WVDNewArchitectureUpdate\\WVD_Architecture_Update'
     try: 
         RSyncTargetDirs = []
         for m in range(4,len(sys.argv)):
