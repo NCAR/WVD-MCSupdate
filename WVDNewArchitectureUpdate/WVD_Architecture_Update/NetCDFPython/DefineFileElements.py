@@ -55,7 +55,13 @@ def MCSPhotonCountMapV2(Type):
               10:'O2OnlineMol',11:'O2OnlineMolLow',12:'O2OnlineComb',13:'O2OnlineCombLow',      # O2 Online HSRL/DIAL
               14:'O2OfflineMol',15:'O2OfflineMolLow',16:'O2OfflineComb',17:'O2OfflineCombLow',  # O2 Offline HSRL/DIAL
               18:'HSRLMol',19:'HSRLMolLow',20:'HSRLCombined',21:'HSRLCombinedLow',              # Standalone HSRL
-              22:'HSRLMolCross',23:'HSRLMolLowCross',24:'HSRLCombCross',25:'HSRLCombLowCross'}  # Polarization HSRL
+              22:'WVOnline01',      23:'WVOnline02',      24:'WVOnline03',
+              25:'WVOffline01',     26:'WVOffline02',     27:'WVOnline03',
+              28:'O2OnlineMol01',   29:'O2OnlineMol02',   30:'O2OnlineMol03',
+              31:'O2OnlineComb01',  32:'O2OnlineComb02',  33:'O2OnlineComb03',
+              34:'O2OfflineMol01',  35:'O2OfflineMol02',  36:'O2OfflineMol03',
+              37:'O2OfflineComb01', 38:'O2OfflineComb02', 39:'O2OfflineComb03',
+              40:'HSRLMolCross',41:'HSRLMolLowCross',42:'HSRLCombinedCross',43:'HSRLCombinedLowCross'}  # Polarization HSRL
     MCSMap = defaultdict(lambda:'Unassigned',MCSMap)
     return MCSMap[Type]
 #%% Defining all of the information to be written into netcdf files
