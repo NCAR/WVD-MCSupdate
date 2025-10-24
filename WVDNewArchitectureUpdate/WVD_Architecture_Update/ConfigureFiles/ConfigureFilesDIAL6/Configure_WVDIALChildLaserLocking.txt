@@ -101,7 +101,7 @@ Scan Strategy;;
 ### just want to lock a single laser in the 3rd port of the switch, this allows that
 ### function. Currently the MPDs are set up to make this redundent.
 Optical Switch Map;;
-0;1;2;3;;
+0;;
 
 ### The type of etalon that is being used. This corresponds to the type definition
 ### TypeDef_EtalonTypes.ctl
