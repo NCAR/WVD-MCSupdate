@@ -1,0 +1,148 @@
+Written By: Robert Stillwell
+Written For: NCAR
+This file is used to define the initial state of the MPD main advanced visualization labview program.
+
+####################################### Standard Ops #######################################
+### These settings just set the names of the tab controller so the user knows
+### what is contained in each large piece
+Tab Names;;
+Main; HSRL; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+
+### In its current state, these two variables are the width and height of the 
+### tab containers. This location is, however, a catch all for data you need to 
+### read in quickly from this configure file
+Global Variables;;
+445;950;;
+
+### This is the relative file path(s) (identified by the .\) to the program(s) 
+### that the container should populate the tabs with
+Relative File Paths;;
+.\AdvancedVisV2.llb\ControlSystemO2Plotting.vi;;
+
+### Not used
+Function Types;;
+0;;
+
+### File paths to the data logging locations and functions. The order is 1) Where to write
+### the raw data, 2) What base name to call the logging files, 3) Where to find the user
+### logging program, and 4) Where to find the user permissions program
+FilePaths;;
+.\Data\AdvVis\;
+AdvVisLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+####################################### Scanning Ops #######################################
+### These settings just set the names of the tab controller so the user knows
+### what is contained in each large piece
+Scan Tab Names;;
+Main; Scan Plotting; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused; Unused;;
+
+### In its current state, these two variables are the width and height of the
+### tab containers. This location is, however, a catch all for data you need to
+### read in quickly from this configure file
+Scan Global Variables;;
+445;950;;
+
+### This is the relative file path(s) (identified by the .\) to the program(s)
+### that the container should populate the tabs with
+Scan Relative File Paths;;
+.\AdvancedVisV2.llb\ControlSystemScanPlotting.vi;;
+
+### Not used
+Scan Function Types;;
+0;;
+
+### File paths to the data logging locations and functions. The order is 1) Where to write
+### the raw data, 2) What base name to call the logging files, 3) Where to find the user
+### logging program, and 4) Where to find the user permissions program
+Scan FilePaths;;
+.\Data\AdvVis\;
+AdvVisLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+
+############################################################################################
+###-------------------------------- Water Vapor Sub Child -------------------------------###
+### This variable tells the subchild what photon counting channels to use as 
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
+WV Channels;;
+2;4;;
+
+### These variables tell the sub-child what resolution to use for the plots. They
+### are in order: 1) Time To Save [min], 2) WV Calculation Time [sec], 3) Range Res [m],
+### 4) Max Range [m], 5) Profile Time [min], and 6) Scan Max Range [m]
+WV Range and Time;;
+60; 15; 37.5; 15000; 5; 2000;;
+
+### Plot Labels
+WV Profile Labels;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
+
+WV Time Series Labels;;
+Time [UTC]; Background Counts;;
+
+WV Contour Labels;;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+
+############################################################################################
+###-------------------------- Water Vapor Low Altitude Sub Child ------------------------###
+### This variable tells the subchild what photon counting channels to use as 
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
+WVLow Channels;;
+3;5;;
+
+### These variables tell the sub-child what resolution to use for the plots. They
+### are in order: 1) Time To Save [min], 2) WV Calculation Time [sec], 3) Range Res [m],
+### 4) Max Range [m], 5) Profile Time [min], and 6) Scan Max Range [m]
+WVLow Range and Time;;
+60; 15; 37.5; 15000; 5; 2000;;
+
+### Plot Labels
+WVLow Profile Labels;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Absolute Humidity [g/m^3]; Altitude [k]; Optical Depth;;
+
+WVLow Time Series Labels;;
+Time [UTC]; Background Counts;;
+
+WVLow Contour Labels;;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Optical Depth (Time [UTC]); Altitude [m]; Absolute Humidity [g/m^2] (Time [UTC]); Altitude [m];;
+
+############################################################################################
+###--------------------------------- O2 HSRL Sub Child ----------------------------------###
+### This variable tells the subchild what photon counting channels to use as 
+### the online and offline. Definitions can be found at: TypeDef_MCSPhotonCountingMap.ctl
+KHSRL Channels;;
+18;20;;
+
+### These variables tell the sub-child what resolution to use for the plots. They
+### are in order: 1) Time To Save [min], 2) WV Calculation Time [sec], 3) Range Res [m],
+### 4) Max Range [m], 5) Profile Time [min], and 6) Scan Max Range [m]
+KHSRL Range and Time;;
+60; 15; 37.5; 15000; 5; 2000;;
+
+### Plot Labels
+KHSRL Profile Labels;;
+Counts; Altitude [m]; Normalized Relative Backscatter; Altitude [m]; Backscatter Ratio [ ]; Altitude [m]; Overlap Function;;
+
+KHSRL Time Series Labels;;
+Time [UTC]; Background Counts;;
+
+KHSRL Contour Labels;;
+Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude [m]; Online NRB (Time [UTC]); Altitude [m]; Offline NRB (Time [UTC]); Altitude [m]; Overlap Function [Unitless] (Time [UTC]); Altitude [m]; Backscatter Ratio [Unitless] (Time [UTC]); Altitude [m];;
+
+############################################################################################
+###------------------------------- Receiver Scan Sub Child ------------------------------###
+### These variables tell the sub-child what details to use for the plots. They
+### are in order: 1) Scans to hold, 2) Scan Max Range in meters, and 3) The index to use from
+### the end of the profile to define the background
+Scan Details;;
+5; 2000; 20;;
+
+### Plot Labels
+Scan Time Series Labels;;
+Time [UTC]; Background Counts; Time [UTC]; Wavelength [nm];;
+
+Scan Labels;;
+Wavelength [nm]; Background Counts;;
+
