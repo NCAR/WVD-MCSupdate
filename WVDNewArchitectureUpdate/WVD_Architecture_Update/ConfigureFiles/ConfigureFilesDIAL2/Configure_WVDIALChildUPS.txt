@@ -6,7 +6,7 @@ This file is used to define the initial state of the MPD main UPS labview progra
 ### 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes,
 ### and 5) Bytes to read if the element is an IP address.
 Thermocouple Comm Port;;
-192.168.0.231;-1;750;-1;-1;;
+192.168.0.142;-1;750;-1;-1;;
 
 ### These are miscellaneous variables that are read and used as default values
 ### by the UPS. These are currently: 1) the update period of the UPS in seconds,

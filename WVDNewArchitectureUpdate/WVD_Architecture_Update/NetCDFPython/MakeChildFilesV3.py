@@ -50,8 +50,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                                             ['LaserCurrentScan','.txt','CurrentScan']],
                          'LaserLocking':   [['LaserLocking','.txt','LL'],
                                             ['Etalon',      '.txt','Etalon']],
-                         'MCS':            [['SmartMCSPower','.bin','PowerV3'],
-                                            ['MCSDataV2','.bin','MCSV2'],
+                         'MCS':            [['MCSDataV2','.bin','MCSV2'],
                                             ['MCSPowerV2','.bin','PowerV2']],
                          'QuantumComposer':[['QuantumComposerOps','.txt','Clock']],
                          'ReceiverScan':   [['MCSDataV2','.bin','MCSScanV2'],
@@ -61,7 +60,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                          #'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
                          'UPS':            [['UPS','.txt','UPS']],
                          'WeatherStation': [['WeatherStation','.txt','WStation']]}
-#    FileTypes2Process = {'TCSPC':          [['TCSPC','.bin','TCSPC']]}
+
     # Looping over all possible file types and looking for files matching that
     for FolderType in FileTypes2Process:
         for FileBase, FileExt, FileType in FileTypes2Process[FolderType]:

@@ -87,9 +87,10 @@ def ParseMCSCountsHeaderV2(Header,ChannelAssign):
         return ([],[],[],[],[],[],[],[],[],ErrorResponse)
     # Bytes 14-15 -> Profiles per histogram
     ProfPerHist = ord(Header[15:16])*2**8 + ord(Header[14:15])
+    MCSInstance = ord(Header[16:17])%16
     # Byte 17 -> Sync and Channel
     Sync     = ord(Header[17:18])%16
-    Channel  = (ord(Header[17:18])-Sync)//16
+    Channel  = (ord(Header[17:18])-Sync)//16 + MCSInstance*6
     # Bytes 18-19 -> Counts per bin * 5ns per count
     NsPerBin = (ord(Header[19:20])*2**8 + ord(Header[18:19]))*5
     # Bytes 20-21 -> Number of bins
@@ -108,7 +109,7 @@ def ReadMCSCounts(Bins,File,ReadIndex,ExpectedChannel):
     DataArray = []
     for v in range(0, Bins):
         data = File.read(4)
-        ReadIndex = ReadIndex+4          
+        ReadIndex = ReadIndex+4
         if ord(data[3:4])/16 != ExpectedChannel:
             # Warning that header & data body don't have same channel number
             ReadError = 'The MCS count channel and header channel do not match. ~RS'

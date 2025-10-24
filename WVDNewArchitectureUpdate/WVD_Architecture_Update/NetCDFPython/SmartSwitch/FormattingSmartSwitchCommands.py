@@ -163,7 +163,7 @@ class PulseTimer:
     
 class PulseBlockDefinition(WordFormatter):
     def __init__(self):
-        self.PulseRepTime     = 12500    # Pulse repetition time [in fpga cycles]
+        self.PulseRepTime     = 14200    # Pulse repetition time [in fpga cycles]
         self.PulseNum         = 2       # Generate this many pulses
         self.OfflineNum       = 1        # Number of online pulses 
         self.OnlineNum        = 1        # Number of offline pulses
@@ -213,7 +213,7 @@ def ReadWriteAllPulseDefinitions(T,PulseDefs,Start=0,Stop=0,Pulses2Execute=0,Rea
 #%% Formatting string commands to be sent to the Smart Switch
 if __name__ == '__main__':
       # Instantiating a TCP connection
-      T = TCP(IPAdd='192.168.0.143',Port=2222,Timeout=1,HeaderLen=-1,BodyLen=-1,TermChar='\r\n')
+      T = TCP(IPAdd='192.168.0.150',Port=2222,Timeout=1,HeaderLen=-1,BodyLen=-1,TermChar='\r\n')
       T.Connect()
 
       # Instantiating a default pulse block definition
