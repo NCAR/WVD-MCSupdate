@@ -15,10 +15,10 @@ Program Constants;;
 ### to the 4 instantiations used to access all 24 channels. Key can be found in 
 ### TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
-18;20;0;0;0;0;
-40;42;0;0;0;0;
-19;21;0;0;0;0;
-41;43;0;0;0;0;;
+42;40;0;20;18;0;
+43;41;0;21;19;0;
+ 0; 0;0; 0; 0;0;
+ 0; 0;0; 0; 0;0;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
@@ -58,7 +58,7 @@ Receiver Scan Enable;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-0;0;0;
+1;1;0;
 0;0;0;
 0;0;0;
 0;0;0;;
