@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-9.456000;17.982000;14.663000;17.332000;;
+9.438000;17.954000;14.637000;17.310000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
@@ -93,6 +93,14 @@ Min Locking Power;;
 ### each of the 3 lasers once before returning to the original. The scan: 0;0;0;0;1;;
 ### would check the first laser 4 times before checking the other.
 Scan Strategy;;
+0;1;2;3;;
+
+### This is an array describing where the lasers are plugged into the optical switch.
+### Previous versions of the code assumed that the array location is the same as the
+### location in the optical switch. This allows for that to be untrue. If for example,
+### just want to lock a single laser in the 3rd port of the switch, this allows that
+### function. Currently the MPDs are set up to make this redundent.
+Optical Switch Map;;
 0;1;2;3;;
 
 ### The type of etalon that is being used. This corresponds to the type definition
