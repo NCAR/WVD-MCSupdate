@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # Definign the file paths to rsync
     syncFrom = '/cygdrive/c/Users/mpd/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data/'
     syncToA   = '/cygdrive/d/MPDBackup/'
-    syncToB   = '/cygdrive/e/MPDBackup/'
+    syncToB   = '/cygdrive/g/MPDBackup/'
     
     # Defining the text to help the user understand the data file 
     Header = "========================Calling Rsyncing========================\n" + \
