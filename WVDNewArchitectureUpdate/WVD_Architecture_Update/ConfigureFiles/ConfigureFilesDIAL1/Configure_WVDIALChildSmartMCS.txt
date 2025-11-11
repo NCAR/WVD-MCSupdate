@@ -100,10 +100,10 @@ Receiver Scan ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-3500;3500;3500;
-3500;3500;3500;
-3500;3500;3500;
-3500;3500;3500;;
+7000;7000;7000;
+7000;7000;7000;
+7000;7000;7000;
+7000;7000;7000;;
 
 Receiver Scan Shots Per Profile;;
 7000;7000;7000;

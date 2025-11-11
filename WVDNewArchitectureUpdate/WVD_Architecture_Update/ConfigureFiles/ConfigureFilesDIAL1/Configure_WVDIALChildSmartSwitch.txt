@@ -47,7 +47,7 @@ Receiver Scan Total Pulses;;
 
 ### Duration of the TSOA pulse. Units are [us]
 Pulse Duration;;
-1;0.75;0.5;0.25;;
+1;0.25;0.5;0.75;;
 
 Receiver Scan Pulse Duration;;
 20;;
@@ -90,7 +90,7 @@ Receiver Scan Sync;;
 ### MCS 0, data channels 6-11 reside on MCS 1, data channels 12-17 reside on MCS 2, and 
 ### data channels 18-23 reside on MCS 3. Options are: 0, 1, 2, or 3.
 MCS Instance;;
-0;1;2;3;;
+0;3;2;1;;
 
 Receiver Scan MCS Instance;;
 0;;
@@ -169,7 +169,7 @@ Timer Map;;
 ### blocks: 1: Force blocks to be the same, 0: Allow blocks to be different. Note that this control
 ### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
-0;3;0;;
+0;1;0;;
 
 Receiver Scan Start Stop Blocks;;
 0;0;1;;
