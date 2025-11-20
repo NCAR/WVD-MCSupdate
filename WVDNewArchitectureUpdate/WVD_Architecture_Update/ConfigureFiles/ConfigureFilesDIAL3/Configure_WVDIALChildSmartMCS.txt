@@ -16,9 +16,9 @@ Program Constants;;
 ### TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
  2;12;10; 4;16;14;
- 3;13;11; 5;17;15;
- 0; 0; 0; 0; 0; 0;
- 0; 0; 0; 0; 0; 0;;
+22;31;28;25;37;34;
+23;32;29;26;38;35;
+24;33;30;27;39;36;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
@@ -47,8 +47,8 @@ Channel Number;;
 Enable;;
 1;1;1;
 1;1;1;
-0;0;0;
-0;0;0;;
+1;1;1;
+1;1;1;;
 
 Receiver Scan Enable;;
 1;1;1;
@@ -60,8 +60,8 @@ Receiver Scan Enable;;
 Demux;;
 1;1;1;
 1;1;1;
-0;0;0;
-0;0;0;;
+1;1;1;
+1;1;1;;
 
 Receiver Scan Demux;;
 1;1;1;
@@ -149,7 +149,7 @@ Number Of Bins;;
 2800;2800;2800;2800;;
 
 Receiver Scan Number Of Bins;;
-100;100;100;100;;
+60;60;60;60;;
 
 ### Relative time stamp used for the MCS. This should default to 20000000
 Relative Time Step;;
