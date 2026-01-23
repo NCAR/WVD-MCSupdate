@@ -22,6 +22,7 @@ def DefineFileStructure(Type):
     FileType['EtalonScan'] = copy.deepcopy(FileType['Etalon'])
     FileType['MCSV2']      = copy.deepcopy(FileType['MCS'])
     FileType['MCSScanV2']  = copy.deepcopy(FileType['MCS'])
+    FileType['MCSScanV3']  = copy.deepcopy(FileType['MCS'])
     FileType['PowerV2']    = copy.deepcopy(FileType['Power'])
     FileType['PowerV3']    = copy.deepcopy(FileType['Power'])
     return(FileType[Type])
@@ -416,5 +417,9 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None,ListOther=
     FileAtributes['MCSScanV2']['FType'] ='ReceiverScanMCS'
     FileAtributes['MCSScanV2']['FDescription'] = 'Multi-channel scalar (MCS) photon count histogram data file'
     FileAtributes['PowerV2'] = copy.deepcopy(FileAtributes['Power'])
+    # Pulsed scan info
+    FileAtributes['MCSScanV3'] = copy.deepcopy(FileAtributes['MCSScanV2'])
+    FileAtributes['MCSScanV3']['FType'] ='ReceiverScanMCSV2'
+    FileAtributes['MCSScanV3']['FDescription'] = 'Multi-channel scalar (MCS) photon count histogram data file'
     # Returning data for use elsewhere
     return(FileAtributes)
