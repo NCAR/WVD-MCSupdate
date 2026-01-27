@@ -9,7 +9,7 @@ TCP Info;;
 
 ### Set point of AC imbedded in the HVAC system. Units are Farenheit.
 Cooling Setpoint;;
-72;;
+75;;
 
 ### Set point difference of AC and heat imbedded in the HVAC system. Units are Farenheit.
 Set Point Differential;;
@@ -36,7 +36,7 @@ Probe Displayed;;
 ### in seconds, the number of measurments to save, and the number of variables
 ### to keep. 
 Child Variables;;
-10;900;4;;
+10;2160;4;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
