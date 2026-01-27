@@ -46,7 +46,7 @@ Channel Number;;
 ### Here 1 = on and 0 = off
 Enable;;
 1;1;0;
-0;0;0;
+1;1;0;
 0;0;0;
 0;0;0;;
 
@@ -59,7 +59,7 @@ Receiver Scan Enable;;
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
 1;1;0;
-0;0;0;
+1;1;0;
 0;0;0;
 0;0;0;;
 
