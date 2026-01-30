@@ -47,10 +47,10 @@ Receiver Scan Total Pulses;;
 
 ### Duration of the TSOA pulse. Units are [us]
 Pulse Duration;;
-1;0.25;0.5;0.75;;
+1;0.2;0.5;0.75;;
 
 Receiver Scan Pulse Duration;;
-20;;
+3;;
 
 ### Boolean value to force the trigger to happen at the center of the TSOA pulse. 
 ### 0: Start trigger with the start of the TSOA, 1: Move trigger to the center of the 
@@ -108,7 +108,7 @@ TSOA Setting;;
 0;0;0;0;;
 
 Receiver Scan TSOA Setting;;
-1;;
+0;;
 
 ### Option defining how the Gate should pulse. 0: Operations, 1: Off
 Gate Setting;;
@@ -169,7 +169,7 @@ Timer Map;;
 ### blocks: 1: Force blocks to be the same, 0: Allow blocks to be different. Note that this control
 ### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
-0;1;0;;
+0;0;1;;
 
 Receiver Scan Start Stop Blocks;;
 0;0;1;;
