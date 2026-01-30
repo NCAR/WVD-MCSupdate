@@ -20,7 +20,7 @@ Laser Temperatures; Laser Wavelengths; Etalon Temperatures; Laser Seed Power;;
 ### to use for the wavemeter (see TypeDef_WavemeterSwitchType.ctl for details), 6) the
 ### time between locking steps in seconds, and 7) The wave meter offset in nanometers
 Misc;; 
-15; 1000; 1; 0; 9; 3; -0.00036;;
+15; 1000; 1; 0; 9; 3; -0.00016;;
 
 ### The type of laser that is being used. This corresponds to the type definition
 ### TypeDef_LaserTypes.ctl. Note locking and scanning definitions are referenced to this
@@ -31,7 +31,7 @@ Laser Types;;
 ### The exact desired wavelengths of the lasers in nanometers (note that the wavelength
 ### is in vacuum)
 Wavelength;;
-828.19400;828.29315;769.7962;770.1085;;
+828.19000;828.28915;769.7962;770.1085;;
 
 ### The exact tolerance allowed for locking, i.e. how far off can the lasers be before
 ### the locking program attempts to lock them in nanometers
@@ -40,11 +40,11 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius
 Temperature;;
-13.522000;15.195000;17.655000;24.023000;;
+13.403000;15.075000;17.344000;23.678000;;
 
 ### The current that the diode controller should use, in milliamps
 Current;;
-85;86;87;102;;
+85;86;100;115;;
 
 ### This is currently not being used but these should be the proportional gain constants
 ### for each laser to do locking via PID control
@@ -110,7 +110,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees Celsius
 Etalon Temperature;;
-40.0;22.8;;
+39.1;22.8;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1 = on and 0 = off)
