@@ -12,7 +12,7 @@ Channel Multiplier Controls;;
 
 ###  TypeDef_MCSPhotonCountingMMap.ctl
 Data Hardware Connectivity;;
-2;12;10;0;0;0;0;0;4;16;14;0;;
+2;12;10;3;0;0;0;0;4;16;14;5;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
@@ -27,11 +27,11 @@ Channel Number;;
 
 ### Here 1 = on and 0 = off
 Enable;;
-1;1;1;0;0;0;0;0;;
+1;1;1;1;0;0;0;0;;
 
 ### Here 1 = Demux on, 0 = Demux off, and 2 = Demux unavailible 
 Demux;;
-1;1;1;0;2;2;2;2;;
+1;1;1;1;2;2;2;2;;
 
 ### Options are 0-2. Numbers outside this will default to 0
 Sync Select;;
@@ -46,7 +46,7 @@ ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-4000;4000;4000;4000;4000;4000;4000;4000;;
+3500;3500;3500;3500;3500;3500;3500;3500;;
 
 ### This is a control to set the counter to count on the rising or falling edge 
 ### of the input TTL pulse. 1 = falling and 0 = rising
