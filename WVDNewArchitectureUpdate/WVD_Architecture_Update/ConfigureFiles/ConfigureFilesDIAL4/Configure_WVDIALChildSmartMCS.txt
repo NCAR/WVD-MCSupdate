@@ -226,3 +226,11 @@ SmartMCSState;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
 
+Pulsed Scan FilePaths;;
+.\Data\PulsedScan\;
+MCSDataV2;
+SmartMCSPower;
+SmartMCSState;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
+

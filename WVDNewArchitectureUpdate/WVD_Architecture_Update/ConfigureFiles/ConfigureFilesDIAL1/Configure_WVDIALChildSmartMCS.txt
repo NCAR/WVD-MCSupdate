@@ -227,8 +227,8 @@ SmartMCSState;
 .\ContainerResources.llb\Idle_Password.vi;;
 
 Pulsed Scan FilePaths;;
-.\Data\ReceiverScan\;
-MCSDataV3;
+.\Data\PulsedScan\;
+MCSDataV2;
 SmartMCSPower;
 SmartMCSState;
 .\ContainerResources.llb\Log_SetUserComment.vi;
