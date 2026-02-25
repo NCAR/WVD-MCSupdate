@@ -17,7 +17,6 @@ IP Address;;
 Child Variables;;
 4;4500;300;10;12;50;0;5;;
 
-
 ### File paths to the data storage and data logging locations and functions. The order is
 ### 1) Where to write the raw data, 2) What base name to call the humidity sensor data files,
 ### 3) What base name to call the logging files, 4) Where to find the user logging program,
