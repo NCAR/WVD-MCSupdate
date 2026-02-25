@@ -16,9 +16,9 @@ Program Constants;;
 ### TypeDef_MCSPhotonCountingMap.ctl
 Data Hardware Connectivity;;
  2;12;10; 4;16;14;
-22;31;28;25;37;34;
  0; 0; 0; 0; 0; 0;
- 0; 0; 0; 0; 0; 0;;
+ 0; 0; 0; 0; 0; 0;
+22;31;28;25;37;34;;
 
 ### TypeDef_MCSPowerMap.ctl
 Power Hardware Connectivity;;
