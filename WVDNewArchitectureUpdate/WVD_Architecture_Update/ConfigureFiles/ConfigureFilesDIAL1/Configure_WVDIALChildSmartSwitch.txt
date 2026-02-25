@@ -81,7 +81,7 @@ Pulsed Scan Extra TWA;;
 ### of the pulse such that the gate pulse length is Pulse Duration + Extra TWA + 2x
 ### Extra Gate. Units are [us]
 Extra Gate;;
-0.1;0.1;0.1;0.1;;
+0.15;0.15;0.15;0.15;;
 Receiver Scan Extra Gate;;
 0;;
 Pulsed Scan Extra Gate;;
