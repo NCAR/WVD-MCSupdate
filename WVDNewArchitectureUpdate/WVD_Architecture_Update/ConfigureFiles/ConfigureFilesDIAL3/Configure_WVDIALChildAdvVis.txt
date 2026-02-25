@@ -138,7 +138,7 @@ Online Counts (Time [UTC]); Altitude [m]; Offline Counts (Time [UTC]); Altitude 
 ### are in order: 1) Scans to hold, 2) Scan Max Range in meters, and 3) The index to use from
 ### the end of the profile to define the background
 Scan Details;;
-5; 2000; 20;;
+5; 2000; 200;;
 
 ### Plot Labels
 Scan Time Series Labels;;

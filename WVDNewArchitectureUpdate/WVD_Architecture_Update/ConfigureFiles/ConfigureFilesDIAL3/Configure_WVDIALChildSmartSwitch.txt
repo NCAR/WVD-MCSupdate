@@ -87,6 +87,7 @@ Receiver Scan Extra Gate;;
 Pulsed Scan Extra Gate;;
 0;;
 
+
 ### Which sync to use to tell the MCS to start. Options are: 0, 1, 2, or 3.
 Sync;;
 0;0;0;0;;
@@ -187,7 +188,7 @@ Timer Map;;
 ### blocks: 1: Force blocks to be the same, 0: Allow blocks to be different. Note that this control
 ### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
-0;0;1;;
+0;1;0;;
 Receiver Scan Start Stop Blocks;;
 0;0;1;;
 Pulsed Scan Start Stop Blocks;;
