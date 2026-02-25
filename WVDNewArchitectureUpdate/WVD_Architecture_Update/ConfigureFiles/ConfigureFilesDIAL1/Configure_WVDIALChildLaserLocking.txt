@@ -254,3 +254,10 @@ EtalonPulsedScanData;
 PulsedScanLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
+
+Pulsed Scan Wavemeter File Paths;;
+.\Data\PulsedScan\;
+Wavemeter;
+WavemeterLogging;
+.\ContainerResources.llb\Log_SetUserComment.vi;
+.\ContainerResources.llb\Idle_Password.vi;;
