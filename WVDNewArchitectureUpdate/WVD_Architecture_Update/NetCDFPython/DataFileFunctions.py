@@ -131,7 +131,7 @@ def ReadAndPadTextFile(FileName):
 def ReadFileGeneral(FileName, FolderType, FileType):
     VarData = []
     # Read file based on its type 
-    if FileType in {'BDetector','Current','HKV2','Humidity','HVAC','UPS','Wavemeter','WStation'}:
+    if FileType in {'BDetector','Current','HKV2','Humidity','HVAC','UPS','Wavemeter','WavemeterPulsedScan','CurrentScanWavemeter','WStation'}:
         # File contains only numbers so read simply
         VarData = np.array(ReadAndPadTextFile(FileName)).astype(float)  
         # Parse out location information for files containing such info
@@ -140,7 +140,7 @@ def ReadFileGeneral(FileName, FolderType, FileType):
             Locations = len(VarData[1,:])-1
             VarData = [VarData[:,0],np.transpose(VarData[:,list(np.asarray(range(Locations))+1)]),
                        ConvertLocationNumber2Strings(FileName,4,Locations,ProcessMap[FileType])]        
-    elif FileType in {'Container','Etalon','LL','LaserScan','CurrentScan','EtalonScan','MCSV2','PowerV2','PowerV3','MCSScanV2','MCSScanV3','TCSPC'}:
+    elif FileType in {'Container','Etalon','LL','LaserScan','LaserPulsedScan','CurrentScan','EtalonScan','EtalonPulsedScan','MCSV2','PowerV2','PowerV3','MCSScanV2','MCSScanV3','TCSPC'}:
         # Determing the file structure 
         DataType = Define.DefineFileStructure(FileType)       
         # Defining which function to call

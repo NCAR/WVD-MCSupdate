@@ -19,12 +19,14 @@ def DefineFileStructure(Type):
                 'Power':          ['f','f','f','f','f','str','Pass'],
                 'TCSPC':          ['f','f','f','f','f','f','f','f','f','f','f','f']}
     # Defining variables that have the same file type as others
-    FileType['EtalonScan'] = copy.deepcopy(FileType['Etalon'])
-    FileType['MCSV2']      = copy.deepcopy(FileType['MCS'])
-    FileType['MCSScanV2']  = copy.deepcopy(FileType['MCS'])
-    FileType['MCSScanV3']  = copy.deepcopy(FileType['MCS'])
-    FileType['PowerV2']    = copy.deepcopy(FileType['Power'])
-    FileType['PowerV3']    = copy.deepcopy(FileType['Power'])
+    FileType['EtalonScan']      = copy.deepcopy(FileType['Etalon'])
+    FileType['EtalonPulsedScan']= copy.deepcopy(FileType['Etalon'])
+    FileType['LaserPulsedScan'] = copy.deepcopy(FileType['LaserScan'])
+    FileType['MCSV2']           = copy.deepcopy(FileType['MCS'])
+    FileType['MCSScanV2']       = copy.deepcopy(FileType['MCS'])
+    FileType['MCSScanV3']       = copy.deepcopy(FileType['MCS'])
+    FileType['PowerV2']         = copy.deepcopy(FileType['Power'])
+    FileType['PowerV3']         = copy.deepcopy(FileType['Power'])
     return(FileType[Type])
 #%% Defining the data type map
 def DefineDataTypeMap():
@@ -411,6 +413,23 @@ def DefineNetCDFFileAttributes(ArrayData=None,List1d=None,List2d=None,ListOther=
     FileAtributes['EtalonScan'] = copy.deepcopy(FileAtributes['Etalon'])
     FileAtributes['EtalonScan']['FType'] ='ReceiverScanEtalon'
     FileAtributes['EtalonScan']['FDescription'] = 'Etalon scan data file'
+
+    FileAtributes['EtalonPulsedScan'] = copy.deepcopy(FileAtributes['EtalonScan'])
+    FileAtributes['EtalonPulsedScan']['FType'] ='PulsedScanEtalon'
+
+    # Adding elements for the pulsed laser scan
+    FileAtributes['LaserPulsedScan'] = copy.deepcopy(FileAtributes['LaserScan'])
+    FileAtributes['LaserPulsedScan']['FType'] ='PulsedScanLaser'
+    FileAtributes['LaserPulsedScan']['FDescription'] = 'Laser scan data file'
+
+    # Adding elements for the pulsed laser scan
+    FileAtributes['WavemeterPulsedScan'] = copy.deepcopy(FileAtributes['Wavemeter'])
+    FileAtributes['WavemeterPulsedScan']['FType'] ='PulsedScanWavemeter'
+
+    FileAtributes['CurrentScanWavemeter'] = copy.deepcopy(FileAtributes['Wavemeter'])
+    FileAtributes['CurrentScanWavemeter']['FType'] ='CurrentScanWavemeter'
+
+
     # Adding elements for the second version of the MCS data
     FileAtributes['MCSV2'] = copy.deepcopy(FileAtributes['MCS'])
     FileAtributes['MCSScanV2'] = copy.deepcopy(FileAtributes['MCS'])
