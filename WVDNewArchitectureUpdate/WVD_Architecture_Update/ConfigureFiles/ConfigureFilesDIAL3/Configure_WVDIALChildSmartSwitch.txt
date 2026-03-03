@@ -188,7 +188,7 @@ Timer Map;;
 ### blocks: 1: Force blocks to be the same, 0: Allow blocks to be different. Note that this control
 ### will not check the configure file input but first be enacted when the user tries to change blocks
 Start Stop Blocks;;
-0;1;0;;
+0;0;1;;
 Receiver Scan Start Stop Blocks;;
 0;0;1;;
 Pulsed Scan Start Stop Blocks;;
