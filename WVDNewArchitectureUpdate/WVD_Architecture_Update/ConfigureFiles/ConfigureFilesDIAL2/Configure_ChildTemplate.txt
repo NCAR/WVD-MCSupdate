@@ -1,6 +1,6 @@
 Written By: Robert Stillwell
 Written For: NCAR
-This file is used to define the initial state of the MPD main Child Template labview program.
+This file is used to define the initial state of the MPD child template labview program.
 
 ### This is designed as a catch all in case a child needs a miscellaneous variable
 ### but it is currently the window width and height to set the child to at runtime
