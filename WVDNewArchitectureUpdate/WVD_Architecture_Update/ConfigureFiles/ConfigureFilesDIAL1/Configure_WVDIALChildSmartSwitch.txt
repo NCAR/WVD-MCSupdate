@@ -5,7 +5,7 @@ This file is used to define the initial state of the NCAR Smart Switch in the WV
 ### UDP communication location of the Smart Switch - 1) IP address, 2) port number (bind),
 ### 3) port number (send);; 
 UDP Comms;;
-192.168.0.199;24499;24599;;
+192.168.0.200;24499;24599;;
 
 ################################################################################
 ### Setting the state of the clock digital controls. These are all array elements

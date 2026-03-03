@@ -4,7 +4,7 @@ This file is used to define the initial state of the NCAR MCS in the WVD labview
 
 ### UDP communication location of MCS - IP address of MCS; port number (bind); port number (send);; 
 UDP Comms;;
-192.168.0.199;24599;24599;;
+192.168.0.200;24599;24599;;
 
 ### Constants   1) Power measurements to keep, 2) Power measurements to downsample, 
 ### 3) Temperature measurements to keep, 4) Save data 1:True, 0:False
