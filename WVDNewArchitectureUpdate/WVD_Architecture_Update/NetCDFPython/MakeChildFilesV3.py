@@ -44,7 +44,7 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
     FileTypes2Process = {'Container':      [['ContainerLogging','.txt','Container']],
                          'Current':        [['Current','.txt','Current']],
                          'Housekeeping':   [['HousekeepingV2','.txt','HKV2']],
-                         'HumiditySensor': [['Humidity','.txt','Humidity']],
+                         #'HumiditySensor': [['Humidity','.txt','Humidity']],
                          'HVAC':           [['HVACData','.txt','HVAC']],
                          'HyperfineScan':  [['BalancedDetector','.txt','BDetector'],
                                             ['Wavemeter','.txt','CurrentScanWavemeter'],
@@ -65,8 +65,8 @@ def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,
                                             ['LaserPulsedScanData','.txt','LaserPulsedScan'],
                                             ['EtalonPulsedScanData','.txt','EtalonPulsedScan']],
                          #'TCSPC':          [['TCSPCFastData','.bin','TCSPC']],
-                         'UPS':            [['UPS','.txt','UPS']],
-                         'WeatherStation': [['WeatherStation','.txt','WStation']]}
+                         #'UPS':            [['UPS','.txt','UPS']],
+                        } #'WeatherStation': [['WeatherStation','.txt','WStation']]}
 
     # Looping over all possible file types and looking for files matching that
     for FolderType in FileTypes2Process:
