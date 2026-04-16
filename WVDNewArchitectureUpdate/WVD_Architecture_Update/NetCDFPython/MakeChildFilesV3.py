@@ -41,7 +41,7 @@ def processGeneral(FolderType,FileType,FileName,NetCDFOutputPath,Header):
 #%%
 def makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,WorkingDir,NetCDFPath,Header):
     # Defining the files to be written (File base name, file extension, local file type tag))
-    FileTypes2Process = {'Container':      [['ContainerLogging','.txt','Container']],
+    FileTypes2Process = {#'Container':      [['ContainerLogging','.txt','Container']],
                          #'Current':        [['Current','.txt','Current']],
                          #'Housekeeping':   [['HousekeepingV2','.txt','HKV2']],
                          #'HumiditySensor': [['Humidity','.txt','Humidity']],
