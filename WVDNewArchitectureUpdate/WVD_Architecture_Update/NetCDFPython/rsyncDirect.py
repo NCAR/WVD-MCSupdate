@@ -22,8 +22,7 @@ if __name__ == '__main__':
     
     # Definign the file paths to rsync
     syncFrom = '/cygdrive/c/Users/mpd/WVD-MCSupdate/WVDNewArchitectureUpdate/WVD_Architecture_Update/Data/'
-    syncToA   = '/cygdrive/d/MPDBackup/'
-    syncToB   = '/cygdrive/g/MPDBackup/'
+    syncToA   = '/cygdrive/g/MPDBackup/'
     
     # Defining the text to help the user understand the data file 
     Header = "========================Calling Rsyncing========================\n" + \
@@ -31,8 +30,6 @@ if __name__ == '__main__':
              
     # Perform rsync to data drive A
     OutA,ErrA = RunProcess(syncFrom,syncToA)
-    # Perform rsync to data drive B
-    OutB,ErrB = RunProcess(syncFrom,syncToB)
     
     time.sleep(5)
     
@@ -45,6 +42,6 @@ if __name__ == '__main__':
         if not os.path.exists(ParentDir):
             os.makedirs(ParentDir)
         with open(os.path.join(ParentDir,FileName),"w") as textfile:
-            textfile.write(Header+OutA+ErrA+OutB+ErrB+Footer)
+            textfile.write(Header+OutA+ErrA+Footer)
     except:
         pass
