@@ -20,7 +20,7 @@ Data Hardware Connectivity;;
  2;12;10; 4;16;14;
  0; 0; 0; 0; 0; 0;
  0; 0; 0; 0; 0; 0;
-24;33;30;27;39;36;;
+22;31;28;25;37;34;;
 
 ### Where each power channel is plugged in. Note that this is in 4 rows to correspond
 ### to the 4 instantiations used to access all 24 channels. Key can be found in
@@ -104,10 +104,10 @@ Receiver Scan ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-14000;14000;14000;
-14000;14000;14000;
-14000;14000;14000;
-14000;14000;14000;;
+7000;7000;7000;
+7000;7000;7000;
+7000;7000;7000;
+7000;7000;7000;;
 Receiver Scan Shots Per Profile;;
 7000;7000;7000;
 7000;7000;7000;
