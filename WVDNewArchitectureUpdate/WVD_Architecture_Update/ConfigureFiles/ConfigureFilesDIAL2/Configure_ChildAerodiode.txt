@@ -96,7 +96,7 @@ Serial Number;;
 ### The current to drive each of the diodes at in units of milliamps. Note that the
 ### current has to be set as an integer percent of the maximum current.
 Scan Current;;
-112.5;90.0;85.0;85.0;;
+112.5;90.0;75;75;;
 
 ### File paths to the data logging locations for the Aerodiode controller. The order is
 ### 1) Where to write the raw data, 2) What base name to call the logging data files, 3) Where
