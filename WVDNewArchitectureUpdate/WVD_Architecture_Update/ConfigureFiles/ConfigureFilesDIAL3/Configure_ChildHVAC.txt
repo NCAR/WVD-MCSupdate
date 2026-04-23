@@ -4,11 +4,11 @@ This file is used to define the initial state of the HVAC in the MPD labview pro
 
 ### This is the ethernet address of the Modbus-RTU to ethernet converter.
 TCP Info;;
-192.168.0.111;4761;100;-1;-1;;
+192.168.0.110;4761;100;-1;-1;;
 
 ### Set point of AC imbedded in the HVAC system. Units are Farenheit.
 Cooling Setpoint;;
-80;;
+75;;
 
 ### Set point difference of AC and heat imbedded in the HVAC system. Units are Farenheit.
 Set Point Differential;;
@@ -32,10 +32,10 @@ Probe Displayed;;
 
 ### These are miscellaneous variables that are read and used as default values
 ### by the HVAC child. These are currently: 1) the update period of the reader
-### in seconds, 2) the number of measurments to save, and 3) the number of variables
-### to keep. 
+### in seconds, 2) the number of measurments to save, 3) the number of variables
+### to keep, and 4) HVAC unit (0: Celsius, 1:Fahrenheit).
 Child Variables;;
-10;2160;4;;
+10;2160;8;0;;
 
 ### File paths to the data storage and data logging locations and functions.
 FilePaths;;
