@@ -12,7 +12,7 @@ const int ServerNum = 3;
 unsigned int Count = 0;
 
 // Ethernet settings for the Arduino device
-byte mac[6] = { 0xBA, 0xBE, 0x00, 0x01, 0x02, 0x03}; // Mac address of device
+byte mac[6] = {0xBA, 0xBE, 0x00, 0x01, 0x02, 0x03}; // Mac address of device
 IPAddress ip(192, 168, 0, 140);                      // IP Address of device 
 
 // Defining the TCP connections
@@ -104,6 +104,19 @@ boolean respondToTCPConnection(EthernetClient* client, boolean alreadyConnected)
   return alreadyConnected;
 }
 
+// Listens to TCP port and formats incoming messages (all messages must end with a New Line Character)
+String readRequest(EthernetClient* client){
+	String request = "";    // Defining a string to hold the request
+  while (client->available()){
+    char c = client->read();
+    if ('\n' == c){
+      return request;
+    }
+    request += c;
+  }
+	return request;
+}
+
 //Executes requests based on the incoming messages
 void executeRequest(EthernetClient* client, String* request){
   // Check what type of user command is requested
@@ -122,12 +135,15 @@ void executeRequest(EthernetClient* client, String* request){
     sendResponse(client, "k");
   }
   // 'h*': Sets pin 6 of the device (intended to be wired to the hygrostat)
-  else if('h' == command || 'S' == command) {
+  // 'S*': Sets pin 2 of the device (intended to be wired to the shutter)
+  // 't*': Sets pin 5 of the device (intended to be wired to the temperature monitor)
+  else if('h' == command || 'S' == command || 't' == command) {
     String writeVals = request->substring(1,2);
     int pinState = writeVals.charAt(0);
-    int pinNum = 2;
-    if ('h' == command){
-      pinNum = 6;
+    switch(command){
+      case 'h': pinNum = 6; break;
+      case 't': pinNum = 5; break;
+      default:  pinNum = 2; break;
     }
     setDigital(pinState, pinNum);
     sendResponse(client, "k");
@@ -151,19 +167,6 @@ void setDigital(int pinState, int pinNum){
   } else if(pinState == '0'){ 
     digitalWrite(pinNum, LOW);
   }
-}
-
-// Listens to TCP port and formats incoming messages (all messages must end with a New Line Character)
-String readRequest(EthernetClient* client){
-	String request = "";    // Defining a string to hold the request
-  while (client->available()){
-    char c = client->read();
-    if ('\n' == c){
-      return request;
-    }
-    request += c;
-  }
-	return request;
 }
 
 //Seperates the command from the incoming message
