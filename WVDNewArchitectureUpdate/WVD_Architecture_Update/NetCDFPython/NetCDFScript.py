@@ -8,6 +8,7 @@
 import os, sys, csv, math, datetime, SharedPythonFunctions as SPF
 from rsync import DoRSync
 from MakeChildFilesV3 import makeNetCDF
+from NISTClock import check_time_difference
 
 #%% Simple utilities 
 #checks if a value is a number
@@ -29,11 +30,13 @@ def main(WorkingDir,RSyncTargetDirs,HoursBack,RSync):
     # Creating timestamps used to find which files should be processed
     NowTime  = SPF.getFractionalHours(0)
     NowDate  = datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S")
+    DateStr  = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%d')
     LastTime = math.ceil(SPF.getFractionalHours(1))
     # creating Error file variable for use if needed 
     FileEnding = NowDate + '_' + datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S") + '.txt'
     ErrorFile = os.path.join(WorkingDir,"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+FileEnding)
     WarningFile = os.path.join(WorkingDir,"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+FileEnding)
+    TimeOffsetFile = os.path.join(WorkingDir,"Data","Clock",str(DateStr),"NistOffset_"+str(DateStr)+"_"+datetime.datetime.now(datetime.timezone.utc).strftime('%H')+'0000.txt')
     # Processing files
     LocalOutputPath = os.path.join(WorkingDir,"Data","")
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
@@ -45,6 +48,8 @@ def main(WorkingDir,RSyncTargetDirs,HoursBack,RSync):
         ThenDate = (datetime.datetime.now(datetime.UTC) - datetime.timedelta(hours=float(HoursBack))).strftime("%Y%m%d")
         # Making the netcdf child files
         makeNetCDF(ThenDate,ThenTime,NowDate,NowTime,LastTime,WarningFile,ErrorFile,WorkingDir,NetCDFPath,'')
+        # Making the nist offset file
+        check_time_difference(TimeOffsetFile)
         # Copy NetCDF files to external drive
         print ("RSync files to backup drive ", datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S"))
         try:
