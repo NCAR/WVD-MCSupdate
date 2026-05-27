@@ -140,10 +140,10 @@ void executeRequest(EthernetClient* client, String* request){
   else if('h' == command || 'S' == command || 't' == command) {
     String writeVals = request->substring(1,2);
     int pinState = writeVals.charAt(0);
+    int pinNum = 2;
     switch(command){
       case 'h': pinNum = 6; break;
       case 't': pinNum = 5; break;
-      default:  pinNum = 2; break;
     }
     setDigital(pinState, pinNum);
     sendResponse(client, "k");
