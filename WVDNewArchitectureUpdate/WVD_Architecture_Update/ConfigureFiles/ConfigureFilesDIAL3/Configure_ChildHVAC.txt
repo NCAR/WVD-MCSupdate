@@ -8,7 +8,7 @@ TCP Info;;
 
 ### Set point of AC imbedded in the HVAC system. Units are Farenheit.
 Cooling Setpoint;;
-25;;
+27;;
 
 ### Set point difference of AC and heat imbedded in the HVAC system. Units are Farenheit.
 Set Point Differential;;
@@ -16,7 +16,7 @@ Set Point Differential;;
 
 ###
 Set Point Aux;;
-22;;
+24;;
 
 ###
 Set Point Aux Differential;;
