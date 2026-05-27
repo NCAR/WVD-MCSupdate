@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius.
 Temperature;;
-9.441000;17.973000;20.634000;17.322000;;
+9.425000;17.981000;20.647000;17.327000;;
 
 ### The current that the diode controller should use, in milliamps.
 Current;;
@@ -109,7 +109,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees Celsius.
 Etalon Temperature;;
-40.5;44.2;;
+40.2;44.0;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1: on and 0: off).
