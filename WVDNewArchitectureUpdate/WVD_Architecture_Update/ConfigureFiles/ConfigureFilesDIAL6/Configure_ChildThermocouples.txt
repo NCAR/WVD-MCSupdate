@@ -37,4 +37,4 @@ HKLogging;
 ### are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
 ### 5) Bytes to read.
 Switch IP Address;;
-192.168.0.140;1618;3000;-1;-1;;
+192.168.0.140;1618;3000;-1;30;;
