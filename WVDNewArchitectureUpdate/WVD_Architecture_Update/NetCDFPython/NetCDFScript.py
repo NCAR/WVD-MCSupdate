@@ -26,7 +26,7 @@ def readHeaderInfo(WorkingDir):
 
 def GetMPDNum():
     p = pathlib.Path(os.getcwd())
-    File2Read = os.path.join(*p.parts[:-1],'ConfigureFiles','Configure_WVDIALMain.txt')
+    File2Read = os.path.join(*p.parts[:],'ConfigureFiles','Configure_WVDIALMain.txt')
     with open(File2Read) as f:
         MPDNum = (list(f)[-1])[4:-2]
     return('{0:02d}'.format(int(MPDNum)))
