@@ -5,7 +5,7 @@
 # 4 arguements: the working directory, the target directory for rsyncing, the 
 # number of hours to back process, & a boolean defining if rsyncing is desired.
 #%% Importing needed modules
-import os, sys, csv, math, datetime, SharedPythonFunctions as SPF
+import os, sys, csv, math, datetime, pathlib, SharedPythonFunctions as SPF
 from rsync import DoRSync
 from MakeChildFilesV3 import makeNetCDF
 from NISTClock import check_time_difference
@@ -23,6 +23,13 @@ def is_number(n):
 def readHeaderInfo(WorkingDir):
     with open(os.path.join(WorkingDir,"ConfigureFiles","Configure_WVDIALPythonNetCDFHeader.txt")) as f:
         return list(csv.reader(f, delimiter="\t"))
+
+def GetMPDNum():
+    p = pathlib.Path(os.getcwd())
+    File2Read = os.path.join(*p.parts[:-1],'ConfigureFiles','Configure_WVDIALMain.txt')
+    with open(File2Read) as f:
+        MPDNum = (list(f)[-1])[4:-2]
+    return('{0:02d}'.format(int(MPDNum)))
          
 #%%  Main program 
 def main(WorkingDir,RSyncTargetDirs,HoursBack,RSync):
@@ -36,7 +43,7 @@ def main(WorkingDir,RSyncTargetDirs,HoursBack,RSync):
     FileEnding = NowDate + '_' + datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S") + '.txt'
     ErrorFile = os.path.join(WorkingDir,"Data","Errors",str(NowDate),"NetCDFPythonErrors_"+FileEnding)
     WarningFile = os.path.join(WorkingDir,"Data","Warnings",str(NowDate),"NetCDFPythonWarnings_"+FileEnding)
-    TimeOffsetFile = os.path.join(WorkingDir,"Data","Clock",str(DateStr),"NistOffset_"+str(DateStr)+"_"+datetime.datetime.now(datetime.timezone.utc).strftime('%H')+'0000.txt')
+    TimeOffsetFile = os.path.join(WorkingDir,"Data","Clock",str(DateStr),"NistOffset_"+GetMPDNum()+'_'+str(DateStr)+"_"+datetime.datetime.now(datetime.timezone.utc).strftime('%H')+'0000.txt')
     # Processing files
     LocalOutputPath = os.path.join(WorkingDir,"Data","")
     if os.path.isdir(LocalOutputPath): # the first should be the directory where the Data folder is located.
