@@ -2,7 +2,7 @@ Written By: Robert Stillwell
 Written For: NCAR
 This file is used to define the initial state of the MPD thermocouple labview program.
 
-### This is where the Labview program should find the weather station. The elements here
+### This is where the Labview program should find the thermocouples. The elements here
 ### are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
 ### 5) Bytes to read.
 Thermocouple Comm Port;;
@@ -10,10 +10,12 @@ Thermocouple Comm Port;;
 
 ### These are miscellaneous variables that are read and used as default values
 ### by the thermocouple program. These are currently: 1) The update period of the
-### thermocouples in seconds, 2) The number of measurements to save, and 3) The number of
-### thermocouples present.
+### thermocouples in seconds, 2) The number of measurements to save, 3) The number of
+### thermocouples present, 4) The thermocouple to use for controlling automatic 
+### heating, 5) The minimum temperature before automatic heating, and 6) Whether to
+### allow automatic heating.
 Child Variables;;
-8;900;8;;
+8;900;8;3;10;0;;
 
 ### Locations of the thermocouples in the module. For translation of the numbers
 ### see TypeDef_ThermocoupleLocations.ctl.
@@ -30,3 +32,9 @@ HousekeepingV2;
 HKLogging;
 .\ContainerResources.llb\Log_SetUserComment.vi;
 .\ContainerResources.llb\Idle_Password.vi;;
+
+### This is where the Labview program should find the switch that turns on heaters. The elements
+### are: 1) IP Address, 2) Port, 3) Communication timeout in [ms], 4) Header bytes, and
+### 5) Bytes to read.
+Switch IP Address;;
+192.168.0.140;1618;3000;-1;-1;;
