@@ -51,7 +51,7 @@ Pulsed Scan Total Pulses;;
 
 ### Duration of the TSOA pulse. Units are [us].
 Pulse Duration;;
-1;1;0.25;0.25;;
+1;0.25;1;0.25;;
 Receiver Scan Pulse Duration;;
 20;;
 Pulsed Scan Pulse Duration;;
@@ -99,7 +99,7 @@ Pulsed Scan Sync;;
 ### MCS 0, data channels 6-11 reside on MCS 1, data channels 12-17 reside on MCS 2, and 
 ### data channels 18-23 reside on MCS 3. Options are: 0, 1, 2, or 3.
 MCS Instance;;
-0;1;2;3;;
+0;2;1;3;;
 Receiver Scan MCS Instance;;
 0;;
 Pulsed Scan MCS Instance;;
