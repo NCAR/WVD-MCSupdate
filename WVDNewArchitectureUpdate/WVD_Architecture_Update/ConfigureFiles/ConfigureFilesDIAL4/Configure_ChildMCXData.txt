@@ -18,9 +18,9 @@ Program Constants;;
 ### TypeDef_MCSPhotonCountingMap.ctl.
 Data Hardware Connectivity;;
  2;12;10; 4;16;14;
- 0; 0; 0; 0; 0; 0;
- 0; 0; 0; 0; 0; 0;
-22;31;28;25;37;34;;
+22;31;28;25;37;34;
+23;32;29;26;38;35;
+24;33;30;27;39;36;;
 
 ### Where each power channel is plugged in. Note that this is in 4 rows to correspond
 ### to the 4 instantiations used to access all 24 channels. Key can be found in
@@ -104,10 +104,10 @@ Receiver Scan ns Per Bin;;
 ### Number of shots for the MCS to integrate. The valid range is 1-32767. Numbers 
 ### outside this range will be set to 14000. Non-integrer numbers will be rounded. 
 Shots Per Profile;;
-7000;7000;7000;
-7000;7000;7000;
-7000;7000;7000;
-7000;7000;7000;;
+10500;10500;10500;
+10500;10500;10500;
+10500;10500;10500;
+10500;10500;10500;;
 Receiver Scan Shots Per Profile;;
 7000;7000;7000;
 7000;7000;7000;
