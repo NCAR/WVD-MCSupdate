@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius.
 Temperature;;
-9.425000;17.981000;20.647000;17.327000;;
+9.498000;18.027000;20.662000;17.361000;;
 
 ### The current that the diode controller should use, in milliamps.
 Current;;
@@ -85,7 +85,7 @@ Lock Step Size;;
 ### locking. This value is compared to the value read by the wavemeter. The units are
 ### dBm.
 Min Locking Power;;
--20;-15;-15;-15;;
+-20;-20;-20;-20;;
 
 ### This is an array describing how the lasers should try to lock themselves. These 
 ### numbers correspond to the array location of each laser. The scan: 0;1;2;; would check
