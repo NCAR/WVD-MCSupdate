@@ -15,7 +15,7 @@ Thermocouple Comm Port;;
 ### heating, 5) The minimum temperature before automatic heating, and 6) Whether to
 ### allow automatic heating.
 Child Variables;;
-8;900;8;3;10;1;;
+8;900;8;3;10;0;;
 
 ### Locations of the thermocouples in the module. For translation of the numbers
 ### see TypeDef_ThermocoupleLocations.ctl.
