@@ -118,7 +118,7 @@ Pulsed Scan TSOA Key;;
 TSOA Setting;;
 0;0;;
 Receiver Scan TSOA Setting;;
-1;;
+0;;
 Pulsed Scan TSOA Setting;;
 0;;
 
@@ -134,7 +134,7 @@ Pulsed Scan Gate Setting;;
 1x1 Setting;;
 0;0;;
 Receiver Scan 1x1 Setting;;
-0;;
+1;;
 Pulsed Scan 1x1 Setting;;
 0;;
 
