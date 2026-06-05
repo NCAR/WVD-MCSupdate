@@ -45,7 +45,7 @@ Laser Power;;
 ### of 250 mA, current setting needs to be in steps of 2.5. This is most important
 ### when running the Configure Receiver Scan program. 
 Current;;
-249;249;189;300;;
+249;249;138;189;;
 
 ### The offset of the Aerodiode pulsed or CW drive current in milliamps.
 Offset Current;;
@@ -96,7 +96,7 @@ Serial Number;;
 ### The current to drive each of the diodes at in units of milliamps. Note that the
 ### current has to be set as an integer percent of the maximum current.
 Scan Current;;
-129;129;60;72;;
+129;129;69;84;;
 
 ### File paths to the data logging locations for the Aerodiode controller. The order is
 ### 1) Where to write the raw data, 2) What base name to call the logging data files, 3) Where

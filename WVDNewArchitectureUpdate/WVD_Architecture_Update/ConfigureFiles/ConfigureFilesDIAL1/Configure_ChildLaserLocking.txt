@@ -31,7 +31,7 @@ Laser Types;;
 ### The exact desired wavelengths of the lasers in nanometers (note that the wavelength
 ### is in vacuum).
 Wavelength;;
-828.19200;828.29115;769.8991;770.1085;;
+828.19400;828.29315;769.8991;770.1085;;
 
 ### The tolerance allowed for locking, i.e. how far off can the lasers be before the
 ### locking program attempts to lock them in nanometers.
@@ -40,7 +40,7 @@ Tolerance;;
 
 ### The desired starting temperature of the lasers, in degrees Celsius.
 Temperature;;
-13.541000;15.209000;19.228000;23.732000;;
+13.534000;15.204000;19.191000;23.693000;;
 
 ### The current that the diode controller should use, in milliamps.
 Current;;
@@ -109,7 +109,7 @@ Etalon Types;;
 
 ### The desired temperatures of the etalons in degrees Celsius.
 Etalon Temperature;;
-39.3;44.2;;
+39.8;43.9;;
 
 ### This is a boolean operator to tell the program whether to turn the TEC's on or off
 ### (1: on and 0: off).
