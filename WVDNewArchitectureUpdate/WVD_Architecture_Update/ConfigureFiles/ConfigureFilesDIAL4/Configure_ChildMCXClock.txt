@@ -51,7 +51,7 @@ Pulsed Scan Total Pulses;;
 
 ### Duration of the TSOA pulse. Units are [us].
 Pulse Duration;;
-1;0.25;1;0.25;;
+1.5;0.3;1.5;0.3;;
 Receiver Scan Pulse Duration;;
 20;;
 Pulsed Scan Pulse Duration;;
